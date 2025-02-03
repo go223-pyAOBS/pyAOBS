@@ -1,17 +1,12 @@
 """
-Seismic Processing Package
+pyAOBS - Python Active-source Ocean Bottom Seismology package
 
-This package provides tools for seismic data processing and visualization.
-
-Main components:
-- visualization: Tools for visualizing seismic data and velocity models
-    - ZeltModelVisualizer: For Zelt velocity models
-    - GridModelVisualizer: For grid format models
-    - GridModelProcessor: For processing grid models
-- model_building: Tools for building and setting up velocity models
-- processors: Tools for seismic data processing
-- utils: Utility functions and helpers
+Author: Haibo Huang
+Date: 2025
 """
+
+from . import model_building
+from . import visualization
 
 __version__ = '0.1.0'
 __author__ = 'Haibo Huang'

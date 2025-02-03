@@ -23,7 +23,7 @@ class TestZeltModelVisualizer(unittest.TestCase):
     def setUpClass(cls):
         """设置测试环境"""
         # 使用已有的模型文件
-        cls.model_file = Path('./v.in')
+        cls.model_file = Path('../pyAOBS_out/v.in')
         if not cls.model_file.exists():
             raise FileNotFoundError(f"找不到模型文件: {cls.model_file}")
         
@@ -37,7 +37,7 @@ class TestZeltModelVisualizer(unittest.TestCase):
         """每个测试用例开始前执行"""
         # # 创建可视化器，加载下层网格（速度模型）
         self.grid_visualizer = GridModelVisualizer(
-            grid_file="./output/test_grids/twt_model.grd",
+            grid_file="../pyAOBS_out/output/test_grids/twt_model.grd",
             output_dir=str(self.output_dir)
         )
         # 加载cpt文件
@@ -55,7 +55,7 @@ class TestZeltModelVisualizer(unittest.TestCase):
         # # 使用 Matplotlib 绘制叠加图
         self.grid_visualizer.plot_with_matplotlib(
             output_fig=str(self.output_dir / "matplotlib_overlay_south.pdf"),
-            upper_grid_file="./su_outputs/grid_offset_south.grd",
+            upper_grid_file="../pyAOBS_out/su_outputs/grid_offset_south.grd",
             lower_cmap=self.cmap_lower,  # 使用加载的cpt颜色映射
             upper_cmap=self.cmap_upper,
             upper_transparency=0.8,
@@ -101,7 +101,7 @@ class TestZeltModelVisualizer(unittest.TestCase):
         # 使用已有的网格文件进行测试
         self.grid_visualizer.plot_xarray(
             output_fig=output_file,
-            data="./output/test_grids/twt_model.grd",
+            data="../pyAOBS_out/output/test_grids/twt_model.grd",
             title="Xarray Plot Test",
             colorbar_label="Value",
             clim=[5, 95],  # 使用5-95百分位数范围
@@ -127,7 +127,7 @@ class TestZeltModelVisualizer(unittest.TestCase):
         print(f"\nXarray图像已保存到: {output_file}")
         
         # 测试使用xarray数据集作为输入
-        with xr.open_dataset("./output/test_grids/twt_model.grd") as ds:
+        with xr.open_dataset("../pyAOBS_out/output/test_grids/twt_model.grd") as ds:
             output_file_2 = str(self.output_dir / "xarray_plot_dataset.pdf")
             self.grid_visualizer.plot_xarray(
                 output_fig=output_file_2,

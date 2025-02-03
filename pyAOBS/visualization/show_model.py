@@ -14,6 +14,7 @@ import os
 from matplotlib.colors import LinearSegmentedColormap
 
 from pyAOBS.model_building.zeltform import ZeltVelocityModel2d,EnhancedZeltModel
+from pyAOBS.model_building.tomoform import SlownessMesh2D
 
 class ZeltModelVisualizer:
     """用于可视化 Zelt 速度模型的类。
@@ -1229,10 +1230,10 @@ class GridModelVisualizer:
                     xlabel: str = "Distance (km)",
                     ylabel: str = "Depth (km)",
                     plot_interfaces: bool = False,
-                    model: Optional[Union[ZeltVelocityModel2d, EnhancedZeltModel]] = None,
-                    interface_color: str = 'black',
-                    interface_linewidth: float = 0.5,
-                    interface_linestyle: str = ':',
+                    model: Optional[Union[ZeltVelocityModel2d, EnhancedZeltModel, SlownessMesh2D]] = None,
+                    interface_color: Union[str, List[str]] = 'black',
+                    interface_linewidth: Union[float, List[float]] = 0.5,
+                    interface_linestyle: Union[str, List[str]] = '-',
                     plot_contours: bool = False,
                     contour_interval: Optional[float] = None,
                     contour_levels: Optional[List[float]] = None,
@@ -1243,39 +1244,38 @@ class GridModelVisualizer:
                     contour_label_fontsize: float = 8,
                     contour_inline: bool = True,
                     contour_inline_spacing: float = 5) -> None:
-        """使用 Matplotlib 绘制 xarray 数据。
+        """Plot xarray dataset using matplotlib
         
         Args:
-            output_fig (str): 输出图像路径
-            data (Union[xr.Dataset, str]): 要绘制的xarray数据集或.grd文件路径
-            figsize (Tuple[float, float]): 图像大小
-            cmap (str): 颜色映射，可以是：
-                     1. matplotlib内置颜色映射名称
-                     2. .cpt文件路径
-            title (Optional[str]): 图像标题
-            colorbar_label (Optional[str]): 色标标签
-            plot_region (Optional[Tuple]): 绘图区域 (xmin, xmax, zmin, zmax)
-            clim (Optional[List[float]]): 数据值范围 [clip1, clip2] in percent
-            colorbar_orientation (str): 色标方向，'vertical' 或 'horizontal'
-            colorbar_fraction (float): 色标相对于主图的大小比例
-            colorbar_pad (float): 色标与主图的间距
-            xlabel (str): x轴标签
-            ylabel (str): y轴标签
-            plot_interfaces (bool): 是否绘制界面
-            model (Optional[Union[ZeltVelocityModel2d, EnhancedZeltModel]]): Zelt模型对象
-            interface_color (str): 界面线条颜色
-            interface_linewidth (float): 界面线条宽度
-            interface_linestyle (str): 界面线条样式
-            plot_contours (bool): 是否绘制等值线
-            contour_interval (Optional[float]): 等值线间隔，如果未指定则自动计算
-            contour_levels (Optional[List[float]]): 自定义等值线水平，优先级高于contour_interval
-            contour_colors (Union[str, List[str]]): 等值线颜色，可以是单个颜色或颜色列表
-            contour_linewidths (Union[float, List[float]]): 等值线宽度，可以是单个值或列表
-            contour_linestyles (Union[str, List[str]]): 等值线样式，可以是单个样式或样式列表
-            contour_label_fmt (str): 等值线标签格式化字符串
-            contour_label_fontsize (float): 等值线标签字体大小
-            contour_inline (bool): 是否在等值线上绘制标签
-            contour_inline_spacing (float): 等值线标签间距
+            output_fig (str): Output figure path
+            figsize (Tuple[float, float]): Figure size in inches (width, height)
+            lower_cmap (str): Colormap for lower grid
+            upper_grid_file (Optional[str]): Path to upper grid file
+            upper_cmap (str): Colormap for upper grid
+            upper_transparency (float): Transparency for upper grid
+            title (Optional[str]): Title for the plot
+            colorbar_label (Optional[str]): Label for the colorbar
+            plot_region (Optional[Tuple]): Plot region as [xmin, xmax, zmin, zmax]
+            lower_clim (Optional[List[float]]): Lower data value range [vmin, vmax]
+            upper_clim (Optional[List[float]]): Upper data value range [clip1, clip2]
+            colorbar_orientation (str): Orientation for the colorbar
+            colorbar_fraction (float): Fraction of the figure for the colorbar
+            colorbar_pad (float): Padding between colorbar and main plot
+            plot_interfaces (bool): Whether to plot interfaces
+            model: Optional model instance for interface plotting
+            interface_color: Color(s) for interface lines
+            interface_linewidth: Width(s) of interface lines
+            interface_linestyle: Style(s) of interface lines
+            plot_contours (bool): Whether to plot contours
+            contour_interval (Optional[float]): Interval between contour lines
+            contour_levels (Optional[List[float]]): Levels for contour lines
+            contour_colors (Union[str, List[str]]): Colors for contour lines
+            contour_linewidths (Union[float, List[float]]): Widths for contour lines
+            contour_linestyles (Union[str, List[str]]): Styles for contour lines
+            contour_label_fmt (str): Format for contour labels
+            contour_label_fontsize (float): Fontsize for contour labels
+            contour_inline (bool): Whether to plot inline labels
+            contour_inline_spacing (float): Spacing for inline labels
         """
         import matplotlib.pyplot as plt
         
@@ -1374,13 +1374,27 @@ class GridModelVisualizer:
                           inline_spacing=contour_inline_spacing)
         
         # 如果需要绘制界面
-        if plot_interfaces and model:
-            for i in range(len(model.depth_nodes)):
-                x_coords, z_coords = model.get_layer_geometry(i)
-                plt.plot(x_coords, z_coords,
-                        color=interface_color,
-                        linewidth=interface_linewidth,
-                        linestyle=interface_linestyle)
+        if plot_interfaces and model is not None:
+            interfaces = self.get_model_interfaces(model)
+            
+            # 处理界面样式参数
+            if isinstance(interface_color, str):
+                interface_color = [interface_color] * len(interfaces)
+            if isinstance(interface_linewidth, (int, float)):
+                interface_linewidth = [interface_linewidth] * len(interfaces)
+            if isinstance(interface_linestyle, str):
+                interface_linestyle = [interface_linestyle] * len(interfaces)
+                
+            # 绘制每个界面
+            for i, interface in enumerate(interfaces):
+                plt.plot(interface['x'], interface['z'],
+                        color=interface_color[i],
+                        linewidth=interface_linewidth[i],
+                        linestyle=interface_linestyle[i],
+                        label=interface.get('label', f'Interface {i+1}'))
+            
+            if len(interfaces) > 1:  # 如果有多个界面，添加图例
+                plt.legend(loc='best', fontsize='small')
         
         # 设置标题和轴标签
         if title:
@@ -1403,8 +1417,40 @@ class GridModelVisualizer:
         if isinstance(data, str):
             data.close()
 
+    def get_model_interfaces(self, model: Union[ZeltVelocityModel2d, EnhancedZeltModel, SlownessMesh2D, None] = None) -> List[Dict[str, np.ndarray]]:
+        """从不同类型的模型中获取界面数据
 
-    
+        Args:
+            model: ZeltVelocityModel2d、EnhancedZeltModel或SlownessMesh2D实例
+
+        Returns:
+            List[Dict[str, np.ndarray]]: 界面数据列表，每个界面包含'x'和'z'坐标数组
+        """
+        if model is None:
+            return []
+            
+        interfaces = []
+        
+        if isinstance(model, (ZeltVelocityModel2d, EnhancedZeltModel)):
+            # 添加所有层界面
+            for i in range(len(model.depth_nodes)):
+                x_coords, z_coords = model.get_layer_geometry(i)
+                interfaces.append({
+                    'x': x_coords,
+                    'z': z_coords,
+                    'label': f'Layer {i+1}'
+                })
+                
+        elif isinstance(model, SlownessMesh2D):
+            # 添加地形界面
+            interfaces.append({
+                'x': model.xpos,
+                'z': model.topo,
+                'label': 'Topography'
+            })
+                
+        return interfaces
+
 class GridModelProcessor:
     """A class for processing and converting grid format velocity models.
     
@@ -1785,6 +1831,347 @@ class GridModelProcessor:
         if self.velocity_grid is not None:
             self.velocity_grid.close()
             self.velocity_grid = None
+
+    def calculate_velocity_gradient(self, 
+                                  output_file: Optional[str] = None,
+                                  smooth_sigma: Optional[float] = None) -> Tuple[xr.Dataset, xr.Dataset]:
+        """计算速度场的水平和垂直梯度。
+        
+        参数:
+            output_file (Optional[str]): 如果提供，将结果保存到此文件（不含扩展名）
+            smooth_sigma (Optional[float]): 如果提供，在计算梯度前对速度场进行高斯平滑的标准差
+            
+        返回:
+            Tuple[xr.Dataset, xr.Dataset]: 水平梯度和垂直梯度数据集
+            
+        异常:
+            ValueError: 如果未加载速度网格
+        """
+        if self.velocity_grid is None:
+            raise ValueError("未加载速度网格")
+            
+        # 获取速度数据和网格间距
+        velocity = self.velocity_grid.velocity.values
+        dx = float(self.velocity_grid.x[1] - self.velocity_grid.x[0])
+        dz = float(self.velocity_grid.z[1] - self.velocity_grid.z[0])
+        
+        # 如果需要，进行平滑处理
+        if smooth_sigma is not None:
+            from scipy.ndimage import gaussian_filter
+            velocity = gaussian_filter(velocity, sigma=smooth_sigma)
+        
+        # 计算梯度
+        from numpy import gradient
+        grad_x, grad_z = gradient(velocity, dx, dz)
+        
+        # 创建水平梯度数据集
+        grad_x_grid = xr.Dataset(
+            data_vars={
+                'grad_x': (('z', 'x'), grad_x)
+            },
+            coords=self.velocity_grid.coords
+        )
+        
+        # 创建垂直梯度数据集
+        grad_z_grid = xr.Dataset(
+            data_vars={
+                'grad_z': (('z', 'x'), grad_z)
+            },
+            coords=self.velocity_grid.coords
+        )
+        
+        # 如果指定了输出文件，保存结果
+        if output_file:
+            grad_x_path = self.output_dir / f"{output_file}_gradx.grd"
+            grad_z_path = self.output_dir / f"{output_file}_gradz.grd"
+            grad_x_grid.to_netcdf(grad_x_path)
+            grad_z_grid.to_netcdf(grad_z_path)
+            
+        return grad_x_grid, grad_z_grid
+        
+    def calculate_gradient_magnitude(self,
+                                   output_file: Optional[str] = None,
+                                   smooth_sigma: Optional[float] = None) -> xr.Dataset:
+        """计算速度梯度的幅度。
+        
+        参数:
+            output_file (Optional[str]): 如果提供，将结果保存到此文件
+            smooth_sigma (Optional[float]): 如果提供，在计算梯度前对速度场进行高斯平滑的标准差
+            
+        返回:
+            xr.Dataset: 梯度幅度数据集
+        """
+        # 计算水平和垂直梯度
+        grad_x_grid, grad_z_grid = self.calculate_velocity_gradient(smooth_sigma=smooth_sigma)
+        
+        # 计算梯度幅度
+        grad_magnitude = np.sqrt(
+            grad_x_grid.grad_x.values**2 + 
+            grad_z_grid.grad_z.values**2
+        )
+        
+        # 创建梯度幅度数据集
+        grad_mag_grid = xr.Dataset(
+            data_vars={
+                'grad_magnitude': (('z', 'x'), grad_magnitude)
+            },
+            coords=self.velocity_grid.coords
+        )
+        
+        # 如果指定了输出文件，保存结果
+        if output_file:
+            output_path = self.output_dir / output_file
+            grad_mag_grid.to_netcdf(output_path)
+            
+        return grad_mag_grid
+        
+    def calculate_gradient_direction(self,
+                                   output_file: Optional[str] = None,
+                                   smooth_sigma: Optional[float] = None) -> xr.Dataset:
+        """计算速度梯度的方向。
+        
+        参数:
+            output_file (Optional[str]): 如果提供，将结果保存到此文件
+            smooth_sigma (Optional[float]): 如果提供，在计算梯度前对速度场进行高斯平滑的标准差
+            
+        返回:
+            xr.Dataset: 梯度方向数据集（角度，以度为单位）
+        """
+        # 计算水平和垂直梯度
+        grad_x_grid, grad_z_grid = self.calculate_velocity_gradient(smooth_sigma=smooth_sigma)
+        
+        # 计算梯度方向（弧度）
+        grad_direction = np.arctan2(
+            grad_z_grid.grad_z.values,
+            grad_x_grid.grad_x.values
+        )
+        
+        # 转换为度
+        grad_direction = np.degrees(grad_direction)
+        
+        # 创建梯度方向数据集
+        grad_dir_grid = xr.Dataset(
+            data_vars={
+                'grad_direction': (('z', 'x'), grad_direction)
+            },
+            coords=self.velocity_grid.coords
+        )
+        
+        # 如果指定了输出文件，保存结果
+        if output_file:
+            output_path = self.output_dir / output_file
+            grad_dir_grid.to_netcdf(output_path)
+            
+        return grad_dir_grid
+
+    def plot_velocity_profiles(self,
+                             output_fig: str,
+                             x_locations: List[float],
+                             figsize: Tuple[float, float] = (10, 8),
+                             title: Optional[str] = None,
+                             xlabel: str = "Velocity (km/s)",
+                             ylabel: str = "Depth (km)",
+                             line_styles: Optional[List[str]] = None,
+                             line_colors: Optional[List[str]] = None,
+                             line_widths: Optional[List[float]] = None,
+                             labels: Optional[List[str]] = None,
+                             plot_region: Optional[Tuple[float, float, float, float]] = None,
+                             grid: bool = True,
+                             legend: bool = True,
+                             legend_loc: str = 'best',
+                             dpi: int = 300) -> None:
+        """在指定的 x 位置绘制速度-深度剖面。
+        
+        参数:
+            output_fig (str): 输出图像路径
+            x_locations (List[float]): 要绘制剖面的 x 位置列表
+            figsize (Tuple[float, float]): 图像大小
+            title (Optional[str]): 图像标题
+            xlabel (str): x轴标签
+            ylabel (str): y轴标签
+            line_styles (Optional[List[str]]): 线型列表
+            line_colors (Optional[List[str]]): 线条颜色列表
+            line_widths (Optional[List[float]]): 线宽列表
+            labels (Optional[List[str]]): 图例标签列表
+            plot_region (Optional[Tuple]): 绘图区域 [vmin, vmax, zmin, zmax]
+            grid (bool): 是否显示网格
+            legend (bool): 是否显示图例
+            legend_loc (str): 图例位置
+            dpi (int): 图像分辨率
+        """
+        if self.velocity_grid is None:
+            raise ValueError("未加载速度网格")
+            
+        import matplotlib.pyplot as plt
+        
+        # 创建图形
+        plt.figure(figsize=figsize)
+        
+        # 设置默认样式
+        if line_styles is None:
+            line_styles = ['-'] * len(x_locations)
+        if line_colors is None:
+            line_colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+        if line_widths is None:
+            line_widths = [1.0] * len(x_locations)
+        if labels is None:
+            labels = [f'x = {x:.1f} km' for x in x_locations]
+            
+        # 获取深度坐标
+        z_coords = self.velocity_grid.z.values
+        
+        # 绘制每个位置的剖面
+        for i, x in enumerate(x_locations):
+            # 找到最近的x坐标索引
+            x_idx = np.abs(self.velocity_grid.x.values - x).argmin()
+            
+            # 获取该位置的速度剖面
+            velocity_profile = self.velocity_grid.velocity.values[:, x_idx]
+            
+            # 绘制剖面
+            plt.plot(velocity_profile, z_coords,
+                    linestyle=line_styles[i % len(line_styles)],
+                    color=line_colors[i % len(line_colors)],
+                    linewidth=line_widths[i % len(line_widths)],
+                    label=labels[i])
+            
+        # 设置绘图区域
+        if plot_region:
+            plt.xlim(plot_region[0], plot_region[1])
+            plt.ylim(plot_region[3], plot_region[2])  # 注意：反转顺序以保持深度向下增加
+            
+        # 添加网格
+        if grid:
+            plt.grid(True, linestyle='--', alpha=0.5)
+            
+        # 添加图例
+        if legend:
+            plt.legend(loc=legend_loc)
+            
+        # 设置标题和轴标签
+        if title:
+            plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        
+        # 保存图像
+        plt.savefig(output_fig, dpi=dpi, bbox_inches='tight')
+        plt.close()
+        
+    def plot_velocity_comparison(self,
+                               output_fig: str,
+                               other_grid_file: str,
+                               x_locations: List[float],
+                               figsize: Tuple[float, float] = (10, 8),
+                               title: Optional[str] = None,
+                               xlabel: str = "Velocity (km/s)",
+                               ylabel: str = "Depth (km)",
+                               line_styles: Optional[List[str]] = None,
+                               line_colors: Optional[List[str]] = None,
+                               line_widths: Optional[List[float]] = None,
+                               labels: Optional[List[str]] = None,
+                               plot_region: Optional[Tuple[float, float, float, float]] = None,
+                               grid: bool = True,
+                               legend: bool = True,
+                               legend_loc: str = 'best',
+                               dpi: int = 300) -> None:
+        """比较两个速度模型在指定位置的剖面。
+        
+        参数:
+            output_fig (str): 输出图像路径
+            other_grid_file (str): 要比较的另一个网格文件路径
+            x_locations (List[float]): 要比较的 x 位置列表
+            figsize (Tuple[float, float]): 图像大小
+            title (Optional[str]): 图像标题
+            xlabel (str): x轴标签
+            ylabel (str): y轴标签
+            line_styles (Optional[List[str]]): 线型列表
+            line_colors (Optional[List[str]]): 线条颜色列表
+            line_widths (Optional[List[float]]): 线宽列表
+            labels (Optional[List[str]]): 图例标签列表
+            plot_region (Optional[Tuple]): 绘图区域 [vmin, vmax, zmin, zmax]
+            grid (bool): 是否显示网格
+            legend (bool): 是否显示图例
+            legend_loc (str): 图例位置
+            dpi (int): 图像分辨率
+        """
+        if self.velocity_grid is None:
+            raise ValueError("未加载速度网格")
+            
+        # 加载另一个网格文件
+        other_grid = xr.open_dataset(other_grid_file)
+        
+        import matplotlib.pyplot as plt
+        
+        # 创建图形
+        plt.figure(figsize=figsize)
+        
+        # 设置默认样式
+        if line_styles is None:
+            line_styles = ['-', '--']  # 实线和虚线区分两个模型
+        if line_colors is None:
+            colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+            line_colors = []
+            for color in colors[:len(x_locations)]:
+                line_colors.extend([color, color])  # 相同位置使用相同颜色
+        if line_widths is None:
+            line_widths = [1.0, 1.5]  # 不同线宽区分两个模型
+        if labels is None:
+            labels = []
+            for x in x_locations:
+                labels.extend([f'Model 1 (x = {x:.1f} km)', 
+                             f'Model 2 (x = {x:.1f} km)'])
+                
+        # 获取深度坐标
+        z_coords = self.velocity_grid.z.values
+        
+        # 绘制每个位置的剖面对比
+        for i, x in enumerate(x_locations):
+            # 找到最近的x坐标索引
+            x_idx1 = np.abs(self.velocity_grid.x.values - x).argmin()
+            x_idx2 = np.abs(other_grid.x.values - x).argmin()
+            
+            # 获取两个模型在该位置的速度剖面
+            velocity_profile1 = self.velocity_grid.velocity.values[:, x_idx1]
+            velocity_profile2 = other_grid.velocity.values[:, x_idx2]
+            
+            # 绘制两个模型的剖面
+            plt.plot(velocity_profile1, z_coords,
+                    linestyle=line_styles[0],
+                    color=line_colors[2*i],
+                    linewidth=line_widths[0],
+                    label=labels[2*i])
+            plt.plot(velocity_profile2, z_coords,
+                    linestyle=line_styles[1],
+                    color=line_colors[2*i+1],
+                    linewidth=line_widths[1],
+                    label=labels[2*i+1])
+            
+        # 设置绘图区域
+        if plot_region:
+            plt.xlim(plot_region[0], plot_region[1])
+            plt.ylim(plot_region[3], plot_region[2])  # 注意：反转顺序以保持深度向下增加
+            
+        # 添加网格
+        if grid:
+            plt.grid(True, linestyle='--', alpha=0.5)
+            
+        # 添加图例
+        if legend:
+            plt.legend(loc=legend_loc)
+            
+        # 设置标题和轴标签
+        if title:
+            plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        
+        # 保存图像
+        plt.savefig(output_fig, dpi=dpi, bbox_inches='tight')
+        plt.close()
+        
+        # 关闭另一个网格文件
+        other_grid.close()
 
 # Export classes in __init__.py
 __all__ = ['ZeltModelVisualizer', 'GridModelVisualizer', 'GridModelProcessor']
