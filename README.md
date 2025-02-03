@@ -1,5 +1,9 @@
 # pyAOBS
 
+<p align="center">
+  <img src="images/logo.png" alt="pyAOBS Logo" width="200"/>
+</p>
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/release/python-370/)
 
