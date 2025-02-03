@@ -1,0 +1,692 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyAOBS.model_building.zeltform &mdash; pyAOBS 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyAOBS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyAOBS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyAOBS.model_building.zeltform</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyAOBS.model_building.zeltform</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Zelt Format Velocity Model Module</span>
+
+<span class="sd">This module provides classes for handling Zelt format velocity models.</span>
+<span class="sd">It includes implementations for basic and enhanced velocity models,</span>
+<span class="sd">supporting both reading from and writing to Zelt format files.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyAOBS.model_building.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point2d</span><span class="p">,</span> <span class="n">ZNode2d</span><span class="p">,</span> <span class="n">TrapezoidCell2d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyAOBS.model_building.read</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_vin_model</span>
+
+<div class="viewcode-block" id="ZeltVelocityModel2d">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.ZeltVelocityModel2d">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZeltVelocityModel2d</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for 2D velocity models in Zelt format.</span>
+<span class="sd">    </span>
+<span class="sd">    This class provides basic functionality for handling 2D velocity models</span>
+<span class="sd">    in Zelt format, including velocity calculations and model manipulation.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        depth_nodes (List[ZNode2d]): Depth nodes for each layer</span>
+<span class="sd">        vupper_nodes (List[ZNode2d]): Upper velocity nodes for each layer</span>
+<span class="sd">        vlower_nodes (List[ZNode2d]): Lower velocity nodes for each layer</span>
+<span class="sd">        cells (List[TrapezoidCell2d]): Trapezoid cells for velocity interpolation</span>
+<span class="sd">        bottom_boundary (ZNode2d): Bottom boundary nodes of the model</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the velocity model.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            model_file (Optional[str]): Path to the Zelt format model file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ZNode2d</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ZNode2d</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ZNode2d</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">TrapezoidCell2d</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bottom_boundary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ZNode2d</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="k">if</span> <span class="n">model_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_model</span><span class="p">(</span><span class="n">model_file</span><span class="p">)</span>
+            
+<div class="viewcode-block" id="ZeltVelocityModel2d.read_model">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.ZeltVelocityModel2d.read_model">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;从文件中读取速度模型。</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_file (str): 速度模型文件路径。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 读取速度模型</span>
+        <span class="n">model_data</span> <span class="o">=</span> <span class="n">read_vin_model</span><span class="p">(</span><span class="n">model_file</span><span class="p">)</span>
+        
+        <span class="c1"># 转换数据到内部格式</span>
+        <span class="n">n_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;layer_boundary_x&#39;</span><span class="p">])</span>
+        
+        <span class="c1"># 初始化每一层的节点</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">):</span>
+            <span class="c1"># 创建深度节点</span>
+            <span class="n">depth_node</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;layer_boundary_x&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">z_coords</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;layer_boundary_z&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;layer_boundary_flags&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_coords</span><span class="p">,</span> <span class="n">z_coords</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+                    <span class="n">depth_node</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">depth_node</span><span class="p">)</span>
+            
+            <span class="c1"># 创建上部速度节点</span>
+            <span class="n">vupper_node</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;upper_x_velocities&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">v_coords</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;upper_velocities&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;upper_velocity_flags&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_coords</span><span class="p">,</span> <span class="n">v_coords</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+                    <span class="n">vupper_node</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vupper_node</span><span class="p">)</span>
+            
+            <span class="c1"># 创建下部速度节点</span>
+            <span class="n">vlower_node</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;lower_x_velocities&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">v_coords</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;lower_velocities&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;lower_velocity_flags&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_coords</span><span class="p">,</span> <span class="n">v_coords</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+                    <span class="n">vlower_node</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vlower_node</span><span class="p">)</span>
+        
+        <span class="c1"># 添加底部边界（如果存在）</span>
+        <span class="k">if</span> <span class="n">model_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bottom_boundary_x&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bottom_boundary</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;bottom_boundary_x&#39;</span><span class="p">]</span>
+            <span class="n">z_coords</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;bottom_boundary_z&#39;</span><span class="p">]</span>
+            <span class="n">flags</span> <span class="o">=</span> <span class="n">model_data</span><span class="p">[</span><span class="s1">&#39;bottom_boundary_flags&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_coords</span><span class="p">,</span> <span class="n">z_coords</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">z</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bottom_boundary</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bottom_boundary</span><span class="p">)</span>
+        
+        <span class="c1"># 更新模型边界</span>
+        <span class="n">x_coords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">z_coords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">:</span>
+            <span class="n">x_coords</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">())</span>
+            <span class="n">z_coords</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_values</span><span class="p">())</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">z_coords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">z_coords</span><span class="p">)</span>
+        
+        <span class="c1"># 创建速度插值单元</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_cells</span><span class="p">()</span></div>
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create trapezoid cells for velocity interpolation.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ilayer</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># Get unique x-coordinates for this layer</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            
+            <span class="c1"># Add x-coordinates from depth nodes</span>
+            <span class="n">x_coords</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">())</span>
+            <span class="n">x_coords</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">ilayer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">())</span>
+            
+            <span class="c1"># Add x-coordinates from velocity nodes</span>
+            <span class="n">x_coords</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">())</span>
+            <span class="n">x_coords</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">())</span>
+            
+            <span class="c1"># Sort x-coordinates</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">x_coords</span><span class="p">))</span>
+            
+            <span class="c1"># Create cells between adjacent x-coordinates</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">x_coords</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x_coords</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                
+                <span class="c1"># Get z-coordinates</span>
+                <span class="n">z1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+                <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+                <span class="n">z3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">ilayer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+                <span class="n">z4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">ilayer</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+                
+                <span class="c1"># Get velocities</span>
+                <span class="n">v1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+                <span class="n">v2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+                <span class="n">v3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span>
+                <span class="n">v4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">ilayer</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+                
+                <span class="c1"># Create cell</span>
+                <span class="n">cell</span> <span class="o">=</span> <span class="n">TrapezoidCell2d</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">,</span> <span class="n">z3</span><span class="p">,</span> <span class="n">z4</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">v4</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="ZeltVelocityModel2d.at">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.ZeltVelocityModel2d.at">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取指定位置的速度值。</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (float): x 坐标。</span>
+<span class="sd">            z (float): z 坐标。</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: 速度值。</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: 如果点超出模型边界。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 检查模型边界</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="ow">or</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="ow">or</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="ow">or</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Point (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2">) is outside model boundaries&quot;</span><span class="p">)</span>
+        
+        <span class="n">point</span> <span class="o">=</span> <span class="n">Point2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">point</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">cell</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Point (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2">) is outside model boundaries&quot;</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="ZeltVelocityModel2d.get_layer_geometry">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.ZeltVelocityModel2d.get_layer_geometry">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_layer_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the geometry of a layer.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            layer_idx (int): Layer index</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[List[float], List[float]]: X-coordinates and depths of layer nodes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">layer_idx</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">layer_idx</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid layer index: </span><span class="si">{</span><span class="n">layer_idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">(),</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">())</span></div>
+
+    
+<div class="viewcode-block" id="ZeltVelocityModel2d.get_model_bounds">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.ZeltVelocityModel2d.get_model_bounds">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_model_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get model boundaries.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[float, float, float, float]: (x_min, x_max, z_min, z_max)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">)</span>
+        <span class="n">x_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">)</span>
+        <span class="n">z_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">)</span>
+        <span class="n">z_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_values</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span></div>
+
+    
+<div class="viewcode-block" id="ZeltVelocityModel2d.to_xarray">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.ZeltVelocityModel2d.to_xarray">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">dz</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;将模型转换为 xarray 数据集。</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dx (float): x方向的采样间隔（km），默认1.0 km</span>
+<span class="sd">            dz (float): z方向的采样间隔（km），默认0.25 km</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            xr.Dataset: 包含速度场的数据集。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 获取模型边界</span>
+        <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model_bounds</span><span class="p">()</span>
+        
+        <span class="c1"># 计算网格点数（向上取整以确保覆盖整个区域）</span>
+        <span class="n">nx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">/</span> <span class="n">dx</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">nz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">z_max</span> <span class="o">-</span> <span class="n">z_min</span><span class="p">)</span> <span class="o">/</span> <span class="n">dz</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+        
+        <span class="c1"># 创建网格</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">z_min</span><span class="p">,</span> <span class="n">z_max</span><span class="p">,</span> <span class="n">nz</span><span class="p">)</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        
+        <span class="c1"># 计算每个网格点的速度</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="n">V</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        
+        <span class="c1"># 创建数据集</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span>
+            <span class="n">data_vars</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;velocity&#39;</span><span class="p">:</span> <span class="p">([</span><span class="s1">&#39;z&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">V</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="n">coords</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+                <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">z</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">ds</span></div>
+</div>
+
+
+<div class="viewcode-block" id="EnhancedZeltModel">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.EnhancedZeltModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EnhancedZeltModel</span><span class="p">(</span><span class="n">ZeltVelocityModel2d</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;增强型 Zelt 速度模型类，提供额外的处理功能。&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_model</span><span class="p">:</span> <span class="n">ZeltVelocityModel2d</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        初始化增强型 Zelt 速度模型。</span>
+
+<span class="sd">        参数:</span>
+<span class="sd">            base_model: ZeltVelocityModel2d 对象，基础速度模型</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 保存原始模型的副本</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span> <span class="o">=</span> <span class="n">ZeltVelocityModel2d</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">depth_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">base_model</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">vupper_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">base_model</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">vlower_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">base_model</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">bottom_boundary</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">bottom_boundary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">xmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">xmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">zmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">zmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="p">[</span><span class="n">cell</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">base_model</span><span class="o">.</span><span class="n">cells</span><span class="p">]</span>
+        
+        <span class="c1"># 初始化当前模型</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">base_model</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">base_model</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">base_model</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bottom_boundary</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">bottom_boundary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">xmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">xmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">zmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="n">base_model</span><span class="o">.</span><span class="n">zmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="p">[</span><span class="n">cell</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">base_model</span><span class="o">.</span><span class="n">cells</span><span class="p">]</span>
+
+<div class="viewcode-block" id="EnhancedZeltModel.compare_with_base">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.EnhancedZeltModel.compare_with_base">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compare_with_base</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        比较当前模型与基础模型的差异。</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: 包含比较结果的字典，包括：</span>
+<span class="sd">                - &#39;velocity_changes&#39;: 每层速度变化的列表，每个元素是一个元组 </span>
+<span class="sd">                  ((base_top, base_bottom), (current_top, current_bottom))</span>
+<span class="sd">                - &#39;depth_changes&#39;: 每层深度变化的列表，每个元素是一个元组</span>
+<span class="sd">                  (base_depth, current_depth)</span>
+<span class="sd">                - &#39;boundary_changes&#39;: 模型边界的变化</span>
+<span class="sd">                  {&#39;xmin&#39;: (base, current), &#39;xmax&#39;: (base, current),</span>
+<span class="sd">                   &#39;zmin&#39;: (base, current), &#39;zmax&#39;: (base, current)}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">velocity_changes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">depth_changes</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># 比较每层的速度变化</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">)):</span>
+            <span class="c1"># 基础模型的速度</span>
+            <span class="n">base_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            <span class="n">base_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            <span class="n">base_top_avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">base_upper</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">base_upper</span><span class="p">)</span>
+            <span class="n">base_bottom_avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">base_lower</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">base_lower</span><span class="p">)</span>
+            
+            <span class="c1"># 当前模型的速度</span>
+            <span class="n">current_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            <span class="n">current_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            <span class="n">current_top_avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">current_upper</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_upper</span><span class="p">)</span>
+            <span class="n">current_bottom_avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">current_lower</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_lower</span><span class="p">)</span>
+            
+            <span class="n">velocity_changes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="p">((</span><span class="n">base_top_avg</span><span class="p">,</span> <span class="n">base_bottom_avg</span><span class="p">),</span>
+                 <span class="p">(</span><span class="n">current_top_avg</span><span class="p">,</span> <span class="n">current_bottom_avg</span><span class="p">))</span>
+            <span class="p">)</span>
+        
+        <span class="c1"># 比较每层的深度变化</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">)):</span>
+            <span class="n">base_depths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            <span class="n">current_depths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            
+            <span class="n">base_avg_depth</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">base_depths</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">base_depths</span><span class="p">)</span>
+            <span class="n">current_avg_depth</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">current_depths</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_depths</span><span class="p">)</span>
+            
+            <span class="n">depth_changes</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">base_avg_depth</span><span class="p">,</span> <span class="n">current_avg_depth</span><span class="p">))</span>
+        
+        <span class="c1"># 比较边界变化</span>
+        <span class="n">boundary_changes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">xmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">),</span>
+            <span class="s1">&#39;xmax&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">xmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span><span class="p">),</span>
+            <span class="s1">&#39;zmin&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">zmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span><span class="p">),</span>
+            <span class="s1">&#39;zmax&#39;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_model</span><span class="o">.</span><span class="n">zmax</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span><span class="p">)</span>
+        <span class="p">}</span>
+        
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;velocity_changes&#39;</span><span class="p">:</span> <span class="n">velocity_changes</span><span class="p">,</span>
+            <span class="s1">&#39;depth_changes&#39;</span><span class="p">:</span> <span class="n">depth_changes</span><span class="p">,</span>
+            <span class="s1">&#39;boundary_changes&#39;</span><span class="p">:</span> <span class="n">boundary_changes</span>
+        <span class="p">}</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_model_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        更新模型的属性，包括边界值和速度插值单元。</span>
+<span class="sd">        在对模型节点进行修改后调用此方法。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 更新模型边界</span>
+        <span class="n">x_coords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">z_coords</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">:</span>
+            <span class="n">x_coords</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">())</span>
+            <span class="n">z_coords</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_values</span><span class="p">())</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">z_coords</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">z_coords</span><span class="p">)</span>
+        
+        <span class="c1"># 重新创建速度插值单元</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_cells</span><span class="p">()</span>
+
+<div class="viewcode-block" id="EnhancedZeltModel.process_velocity_model">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.EnhancedZeltModel.process_velocity_model">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_velocity_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        处理速度模型并更新模型属性。</span>
+
+<span class="sd">        参数:</span>
+<span class="sd">            process_type: 处理类型，可选值包括：</span>
+<span class="sd">                - &#39;average_velocity&#39;: 计算并更新为平均速度</span>
+<span class="sd">                - &#39;interval_velocity&#39;: 计算并更新为层间速度</span>
+<span class="sd">                - &#39;two_way_time&#39;: 计算并更新为双程走时</span>
+
+<span class="sd">        返回:</span>
+<span class="sd">            根据处理类型返回相应的结果，同时更新模型属性</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 首先检查是否是支持的处理类型</span>
+        <span class="n">supported_types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;average_velocity&#39;</span><span class="p">,</span> <span class="s1">&#39;interval_velocity&#39;</span><span class="p">,</span> <span class="s1">&#39;two_way_time&#39;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">process_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">supported_types</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;不支持的处理类型: </span><span class="si">{</span><span class="n">process_type</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># 然后检查是否是已实现的功能</span>
+        <span class="k">if</span> <span class="n">process_type</span> <span class="o">==</span> <span class="s1">&#39;average_velocity&#39;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_average_velocities</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_model_attributes</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">elif</span> <span class="n">process_type</span> <span class="o">==</span> <span class="s1">&#39;interval_velocity&#39;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_interval_velocities</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_model_attributes</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">elif</span> <span class="n">process_type</span> <span class="o">==</span> <span class="s1">&#39;two_way_time&#39;</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_two_way_time</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_model_attributes</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_average_velocities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        计算每一层的平均速度并更新模型。</span>
+
+<span class="sd">        返回:</span>
+<span class="sd">            每一层的平均速度列表，每个元素是一个元组 (top_avg, bottom_avg)，</span>
+<span class="sd">            分别表示该层顶部和底部的平均速度。</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">avg_velocities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">)):</span>
+            <span class="c1"># 获取并计算上部速度节点的平均值</span>
+            <span class="n">upper_vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            <span class="n">top_avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">upper_vals</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">upper_vals</span><span class="p">)</span>
+            
+            <span class="c1"># 获取并计算下部速度节点的平均值</span>
+            <span class="n">lower_vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            <span class="n">bottom_avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lower_vals</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">lower_vals</span><span class="p">)</span>
+            
+            <span class="c1"># 创建新的节点替换原有节点</span>
+            <span class="n">new_vupper</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_coords</span><span class="p">:</span>
+                <span class="n">new_vupper</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">top_avg</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_vupper</span>
+            
+            <span class="n">new_vlower</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_coords</span><span class="p">:</span>
+                <span class="n">new_vlower</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bottom_avg</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_vlower</span>
+            
+            <span class="n">avg_velocities</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">top_avg</span><span class="p">,</span> <span class="n">bottom_avg</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">avg_velocities</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_interval_velocities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        计算层间速度并更新模型。</span>
+<span class="sd">        </span>
+<span class="sd">        计算相邻两层之间的速度差，并更新模型的速度节点。</span>
+<span class="sd">        上层的下部速度和下层的上部速度将被更新为它们的平均值。</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: 包含层间速度信息的字典，包括：</span>
+<span class="sd">                - &#39;interval_velocities&#39;: 每层之间的速度值</span>
+<span class="sd">                - &#39;boundaries&#39;: 速度界面的深度</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">interval_velocities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">boundaries</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># 遍历相邻的层</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># 获取当前层的下部速度和下一层的上部速度</span>
+            <span class="n">current_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            <span class="n">next_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            
+            <span class="c1"># 计算层间速度（平均值）</span>
+            <span class="n">interval_velocity</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">current_lower</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">next_upper</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">current_lower</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">next_upper</span><span class="p">))</span>
+            
+            <span class="c1"># 创建新的节点替换原有节点</span>
+            <span class="n">new_vlower</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_coords</span><span class="p">:</span>
+                <span class="n">new_vlower</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">interval_velocity</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_vlower</span>
+            
+            <span class="n">new_vupper</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_coords</span><span class="p">:</span>
+                <span class="n">new_vupper</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">interval_velocity</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_vupper</span>
+            
+            <span class="c1"># 获取层界面深度</span>
+            <span class="n">boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            
+            <span class="n">interval_velocities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">interval_velocity</span><span class="p">)</span>
+            <span class="n">boundaries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">boundary</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">boundary</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;interval_velocities&#39;</span><span class="p">:</span> <span class="n">interval_velocities</span><span class="p">,</span>
+            <span class="s1">&#39;boundaries&#39;</span><span class="p">:</span> <span class="n">boundaries</span>
+        <span class="p">}</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_two_way_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        计算双程走时并更新模型。</span>
+<span class="sd">        </span>
+<span class="sd">        将深度域的模型转换为时间域，同时保留节点的速度值：</span>
+<span class="sd">        1. 对于每个节点，计算从地表到该点的双程走时</span>
+<span class="sd">        2. 更新深度节点的值为双程走时</span>
+<span class="sd">        3. 保持速度节点的值不变</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: 包含双程走时信息的字典，包括：</span>
+<span class="sd">                - &#39;twt&#39;: 每层的双程走时</span>
+<span class="sd">                - &#39;velocities&#39;: 对应的速度值</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">twt_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">velocities</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># 遍历所有层</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># 获取当前层的深度节点</span>
+            <span class="n">x_coords</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_x_coords</span><span class="p">()</span>
+            <span class="n">depths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+            
+            <span class="c1"># 计算每个x位置的双程走时</span>
+            <span class="n">layer_twt</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">layer_velocities_upper</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">layer_velocities_lower</span> <span class="o">=</span> <span class="p">[]</span>
+            
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x_coords</span><span class="p">):</span>
+                <span class="c1"># 计算从地表到当前点的累积走时</span>
+                <span class="n">total_time</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">current_depth</span> <span class="o">=</span> <span class="n">depths</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                
+                <span class="c1"># 遍历上层计算走时</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                    <span class="n">layer_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="n">next_depth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="n">layer_thickness</span> <span class="o">=</span> <span class="n">next_depth</span> <span class="o">-</span> <span class="n">layer_depth</span>
+                    
+                    <span class="c1"># 计算该层中点的深度</span>
+                    <span class="n">mid_depth</span> <span class="o">=</span> <span class="p">(</span><span class="n">layer_depth</span> <span class="o">+</span> <span class="n">next_depth</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># 尝试使用 at() 方法获取速度</span>
+                        <span class="n">layer_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mid_depth</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="c1"># 如果点在边界外，使用该层的速度节点插值</span>
+                        <span class="n">v_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                        <span class="n">v_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                        <span class="n">layer_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_upper</span> <span class="o">+</span> <span class="n">v_lower</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+                    
+                    <span class="n">total_time</span> <span class="o">+=</span> <span class="n">layer_thickness</span> <span class="o">/</span> <span class="n">layer_v</span>
+                
+                <span class="c1"># 计算当前层的走时贡献</span>
+                <span class="n">current_layer_depth</span> <span class="o">=</span> <span class="n">current_depth</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># 尝试使用 at() 方法获取当前层的速度</span>
+                    <span class="n">mid_depth</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_depth</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="n">current_layer_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mid_depth</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="c1"># 如果点在边界外，使用当前层的速度节点插值</span>
+                    <span class="n">v_upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="n">v_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                    <span class="n">current_layer_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_upper</span> <span class="o">+</span> <span class="n">v_lower</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+                
+                <span class="n">total_time</span> <span class="o">+=</span> <span class="n">current_layer_depth</span> <span class="o">/</span> <span class="n">current_layer_v</span>
+                
+                <span class="c1"># 双程走时</span>
+                <span class="n">layer_twt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">total_time</span><span class="p">)</span>
+                
+                <span class="c1"># 记录速度值</span>
+                <span class="n">layer_velocities_upper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vupper_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+                <span class="n">layer_velocities_lower</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vlower_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+            
+            <span class="c1"># 创建新的深度节点（使用双程走时替换深度值）</span>
+            <span class="n">new_depth</span> <span class="o">=</span> <span class="n">ZNode2d</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x_coords</span><span class="p">):</span>
+                <span class="n">new_depth</span><span class="o">.</span><span class="n">add_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">layer_twt</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">depth_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_depth</span>
+            
+            <span class="c1"># 记录该层的走时和速度信息</span>
+            <span class="n">twt_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layer_twt</span><span class="p">)</span>
+            <span class="n">velocities</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">layer_velocities_upper</span><span class="p">,</span> <span class="n">layer_velocities_lower</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;twt&#39;</span><span class="p">:</span> <span class="n">twt_values</span><span class="p">,</span>
+            <span class="s1">&#39;velocities&#39;</span><span class="p">:</span> <span class="n">velocities</span>
+        <span class="p">}</span> </div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Haibo Huang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; pyAOBS 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="API Reference" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyAOBS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-model-operations">Basic Model Operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reading-and-writing-models">Reading and Writing Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#velocity-analysis">Velocity Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-visualization">Advanced Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#custom-plotting">Custom Plotting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#rock-classification-examples">Rock Classification Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-classification">Basic Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#model-analysis">Model Analysis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyAOBS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
+<p>This section provides detailed examples of using pyAOBS for various tasks.</p>
+<section id="basic-model-operations">
+<h2>Basic Model Operations<a class="headerlink" href="#basic-model-operations" title="Link to this heading"></a></h2>
+<section id="reading-and-writing-models">
+<h3>Reading and Writing Models<a class="headerlink" href="#reading-and-writing-models" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyAOBS.model_building</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZeltVelocityModel2d</span>
+
+<span class="c1"># Read a model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ZeltVelocityModel2d</span><span class="p">(</span><span class="s2">&quot;input_model.in&quot;</span><span class="p">)</span>
+
+<span class="c1"># Modify velocities</span>
+<span class="n">model</span><span class="o">.</span><span class="n">scale_velocities</span><span class="p">(</span><span class="mf">1.1</span><span class="p">)</span>  <span class="c1"># Increase all velocities by 10%</span>
+
+<span class="c1"># Save the modified model</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;output_model.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="velocity-analysis">
+<h3>Velocity Analysis<a class="headerlink" href="#velocity-analysis" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyAOBS.model_building</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZeltVelocityModel2d</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ZeltVelocityModel2d</span><span class="p">(</span><span class="s2">&quot;velocity.in&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create a profile</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># 100 km profile</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span>      <span class="c1"># At 2 km depth</span>
+
+<span class="c1"># Get velocities along the profile</span>
+<span class="n">velocities</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_profile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+<span class="c1"># Calculate statistics</span>
+<span class="n">mean_vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">velocities</span><span class="p">)</span>
+<span class="n">std_vel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">velocities</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean velocity: </span><span class="si">{</span><span class="n">mean_vel</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> km/s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Standard deviation: </span><span class="si">{</span><span class="n">std_vel</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> km/s&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-visualization">
+<h2>Advanced Visualization<a class="headerlink" href="#advanced-visualization" title="Link to this heading"></a></h2>
+<section id="custom-plotting">
+<h3>Custom Plotting<a class="headerlink" href="#custom-plotting" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyAOBS.visualization</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZeltModelVisualizer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ZeltVelocityModel2d</span><span class="p">(</span><span class="s2">&quot;velocity.in&quot;</span><span class="p">)</span>
+<span class="n">visualizer</span> <span class="o">=</span> <span class="n">ZeltModelVisualizer</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># Create a custom figure</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+<span class="c1"># Plot velocity model</span>
+<span class="n">visualizer</span><span class="o">.</span><span class="n">plot_zeltmodel</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Velocity Model&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot velocity profile</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span>
+<span class="n">velocities</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_profile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">velocities</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Velocity Profile at 2 km Depth&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Distance (km)&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Velocity (km/s)&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;velocity_analysis.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="rock-classification-examples">
+<h2>Rock Classification Examples<a class="headerlink" href="#rock-classification-examples" title="Link to this heading"></a></h2>
+<section id="basic-classification">
+<h3>Basic Classification<a class="headerlink" href="#basic-classification" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyAOBS.utils.isrock</span><span class="w"> </span><span class="kn">import</span> <span class="n">RockClassifier</span>
+
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">RockClassifier</span><span class="p">()</span>
+
+<span class="c1"># Single velocity classification</span>
+<span class="n">vp</span> <span class="o">=</span> <span class="mf">6.5</span>  <span class="c1"># km/s</span>
+<span class="n">rock_type</span> <span class="o">=</span> <span class="n">classifier</span><span class="o">.</span><span class="n">classify_by_vp</span><span class="p">(</span><span class="n">vp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rock type for Vp=</span><span class="si">{</span><span class="n">vp</span><span class="si">}</span><span class="s2"> km/s: </span><span class="si">{</span><span class="n">rock_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Batch classification</span>
+<span class="n">velocities</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">6.5</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">]</span>
+<span class="n">rock_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">classifier</span><span class="o">.</span><span class="n">classify_by_vp</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">velocities</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">velocities</span><span class="p">,</span> <span class="n">rock_types</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vp=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2"> km/s -&gt; </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="model-analysis">
+<h3>Model Analysis<a class="headerlink" href="#model-analysis" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyAOBS.model_building</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZeltVelocityModel2d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyAOBS.utils.isrock</span><span class="w"> </span><span class="kn">import</span> <span class="n">RockClassifier</span>
+
+<span class="c1"># Load model and classifier</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">ZeltVelocityModel2d</span><span class="p">(</span><span class="s2">&quot;velocity.in&quot;</span><span class="p">)</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">RockClassifier</span><span class="p">()</span>
+
+<span class="c1"># Create a grid of points</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+
+<span class="c1"># Get velocities at all points</span>
+<span class="n">velocities</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_velocities</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">Z</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+<span class="c1"># Classify rocks at all points</span>
+<span class="n">rock_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">classifier</span><span class="o">.</span><span class="n">classify_by_vp</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">velocities</span><span class="p">]</span>
+
+<span class="c1"># Count rock types</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="n">rock_distribution</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">rock_types</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">rock</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">rock_distribution</span><span class="o">.</span><span class="n">most_common</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rock</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> points&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Haibo Huang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
