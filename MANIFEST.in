@@ -1,0 +1,57 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+
+# Runtime data (keep small catalogs / configs)
+recursive-include pyAOBS/utils *.xlsx *.csv
+recursive-include pyAOBS/petrology/data *.json *.csv *.yaml *.yml *.txt
+recursive-include pyAOBS/petrology/figures *.png
+recursive-include pyAOBS/petrology/reference *.yaml *.yml
+recursive-include pyAOBS/visualization *.bat *.sh
+
+# Vendored libraries (not always discovered as setuptools packages)
+recursive-include pyAOBS/petrology/burnman/burnman *
+recursive-include pyAOBS/petrology/pyrolite *
+
+# --- prune: must not ship in sdist ---
+prune pyAOBS/.venv
+prune pyAOBS/.cursor
+prune pyAOBS/output
+prune pyAOBS/tests
+prune pyAOBS/field/tests
+
+prune pyAOBS/petrology/article
+prune pyAOBS/petrology/validation
+prune pyAOBS/petrology/_tmp_magmars
+prune pyAOBS/petrology/Perple_X_v7.2.5_Linux_64_gfortran
+prune pyAOBS/petrology/ScienceDirect_files_02Jul2026_03-22-55.744
+
+# BurnMan: keep library; drop docs / tests / tutorials
+prune pyAOBS/petrology/burnman/docs
+prune pyAOBS/petrology/burnman/tests
+prune pyAOBS/petrology/burnman/tutorial
+prune pyAOBS/petrology/burnman/misc
+
+prune pyAOBS/utils/rockphypy-main
+
+prune pyAOBS/processors/raw2sac/OBEM2SAC_jf_zjz
+prune pyAOBS/processors/raw2sac/OBEM2SEGY_jf_zjz
+
+prune pyAOBS/visualization/zplotpy/test
+prune pyAOBS/visualization/zplot/pickunc-hhb
+
+# Duplicate / junk trees (if present)
+prune pyAOBS/visualization/zplotpy - 副本
+
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.py[co]
+global-exclude .git*
+global-exclude *.swp
+global-exclude *.bak
+global-exclude .DS_Store
+global-exclude *.exe
+global-exclude *.dll
+global-exclude *.o
+global-exclude *.obj
+global-exclude *.ipynb_checkpoints*

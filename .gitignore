@@ -29,9 +29,18 @@ wheels/
 # Environment
 .env
 .venv
+**/.venv/
 env/
 venv/
 ENV/
+
+# Packaging / local junk (do not commit into installable tree)
+pyAOBS/.venv/
+pyAOBS/.cursor/
+pyAOBS/output/
+pyAOBS/petrology/_tmp*/
+pyAOBS/petrology/ScienceDirect_files_*/
+pyAOBS/visualization/zplotpy - 副本/
 
 # Output
 output/

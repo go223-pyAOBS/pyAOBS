@@ -5,42 +5,68 @@
 </p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/release/python-370/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 
-A Python package for seismic data processing and visualization, with a focus on ZELT format velocity models.
+A Python toolkit for active-source ocean-bottom seismology: Zelt velocity models, workbench GUIs (imodel / zplot / iphase), and KKHS02 petrology workflows.
+
+**Current release candidate:** `3.0.0rc1` — see [CHANGELOG.md](CHANGELOG.md).
 
 ## Features
 
-- Read and write ZELT format velocity models (v.in files)
-- Process and manipulate velocity models
-- Interpolate velocities at arbitrary points
-- Average layer velocities
-- Export to various formats
-- Visualization tools using PyGMT and Matplotlib
-- Support for time and depth domain data
+- Read and write ZELT format velocity models (`v.in`)
+- Workbench shell for imodel (Qt), zplot, iphase, tomography, LIP petrology
+- KKHS02-style mantle melting / H–Vp / fractional-crystallization (ΔVp) tools
+- Visualization with Matplotlib / optional PyGMT
+- Processors for SU and related OBS workflows
 
 ## Installation
 
-### From PyPI (Recommended)
-```bash
-pip install pyAOBS
-```
-
-### From Source
+### From source (recommended for 3.0.0rc1)
 ```bash
 git clone https://github.com/go223-pyAOBS/pyAOBS.git
 cd pyAOBS
-pip install -e .
+git checkout v3.0.0rc1   # after the tag is published
+pip install -e ".[gui-qt]"
+# optional petrology extras:
+# pip install -e ".[gui-qt,petrology]"
+```
+
+### From PyPI
+Stable PyPI wheels may lag behind GitHub tags. Prefer a tagged source install for RC builds:
+```bash
+pip install "git+https://github.com/go223-pyAOBS/pyAOBS.git@v3.0.0rc1#egg=pyAOBS[gui-qt]"
 ```
 
 ## Dependencies
 
-- numpy >= 1.20.0
-- xarray >= 0.16.0
-- scipy >= 1.6.0
-- matplotlib >= 3.3.0
-- pandas >= 1.2.0
-- pygmt >= 0.5.0
+### Required Dependencies
+
+核心 GUI（imodel / zplot / workbench）与岩性分类所需：
+
+- numpy >= 1.24, < 2.1（支持 1.24–1.26 与 2.0.x；zplot Fortran 内核在 NumPy 升级后会自动重编）
+- xarray >= 2023.1.0
+- scipy >= 1.13.0
+- matplotlib >= 3.8.0
+- pandas >= 2.0.0
+- scikit-learn >= 1.5.0（imodel 岩性分类）
+- seaborn >= 0.13.0（岩石识别 / isrock）
+- openpyxl >= 3.0.0
+
+### Optional Dependencies
+
+- PySide6 >= 6.4.0（imodel Qt 界面，`pip install pyAOBS[gui-qt]`）
+- pygmt >= 0.5.0 (for GMT-based visualization)
+- pyproj >= 3.0.0 (for coordinate projection)
+- obspy >= 1.2.0 (for seismic data processing)
+- numba >= 0.59（zplot 叠加等可选加速；需与当前 NumPy 小版本兼容）
+
+Install with optional dependencies:
+
+```bash
+pip install pyAOBS[gui-qt]  # imodel Qt + workbench 启动 imodel
+pip install pyAOBS[full]    # Install with all optional dependencies
+pip install pyAOBS[gmt]     # Install with GMT support only
+```
 
 ## Usage
 
@@ -69,6 +95,12 @@ visualizer.plot_zeltmodel(
 ## Documentation
 
 For detailed documentation and examples, please visit our [documentation page](https://go223-pyAOBS.github.io/pyAOBS).
+
+### Workbench Guide
+
+For the unified project GUI workflow (project management, run history, batch rerun, exports), see:
+
+- [pyAOBS/workbench/README.md](pyAOBS/workbench/README.md)
 
 ## Contributing
 
