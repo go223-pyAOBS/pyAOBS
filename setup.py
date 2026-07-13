@@ -34,7 +34,7 @@ def _iter_packages():
 
 setup(
     name="pyAOBS",
-    version="3.0.0rc1",
+    version="3.0.0rc2",
     packages=list(_iter_packages()),
     install_requires=[
         # NumPy 2.0.x：imodel/zplot/workbench 主路径已验证；zplot f2py 内核会在版本变化时自动重编

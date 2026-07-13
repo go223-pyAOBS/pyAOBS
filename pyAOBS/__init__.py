@@ -39,7 +39,7 @@ Main components 主要组件:
   - Helper functions
 """
 
-__version__ = '3.0.0rc1'
+__version__ = '3.0.0rc2'
 __author__ = 'Haibo Huang'
 
 
