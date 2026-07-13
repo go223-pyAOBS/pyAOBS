@@ -1,48 +1,71 @@
-.. highlight:: shell
-
-============
-Installation
+﻿Installation
 ============
 
-From PyPI
----------
+Requirements
+------------
 
-To install pyAOBS, run this command in your terminal:
+* Python ≥ 3.9 (development / acceptance primarily on **3.11**)
+* NumPy ``>=1.24,<2.1``
 
-.. code-block:: console
+From source (recommended)
+-------------------------
 
-    $ pip install pyAOBS
+.. code-block:: bash
 
-This is the preferred method to install pyAOBS, as it will always install the most recent stable release.
+   git clone https://github.com/go223-pyAOBS/pyAOBS.git
+   cd pyAOBS
+   git checkout v3.0.0rc2
+   pip install -e ".[gui-qt]"
+   # optional petrology thermo:
+   # pip install -e ".[gui-qt,petrology]"
+   # everything optional:
+   # pip install -e ".[full]"
 
-From Source
-----------
+From a Git tag (Direct URL)
+---------------------------
 
-The sources for pyAOBS can be downloaded from the `Github repo`_.
+Modern pip does **not** accept ``#egg=pyAOBS[gui-qt]`` (raises ``invalid-egg-fragment``).
+Use:
 
-You can clone the public repository:
+.. code-block:: bash
 
-.. code-block:: console
+   pip install "pyAOBS[gui-qt] @ git+https://github.com/go223-pyAOBS/pyAOBS.git@v3.0.0rc2"
 
-    $ git clone git://github.com/go223-pyAOBS/pyAOBS
+Core package only:
 
-Once you have a copy of the source, you can install it with:
+.. code-block:: bash
 
-.. code-block:: console
+   pip install "pyAOBS @ git+https://github.com/go223-pyAOBS/pyAOBS.git@v3.0.0rc2"
 
-    $ cd pyAOBS
-    $ pip install -e .
+Extras
+------
 
-.. _Github repo: https://github.com/go223-pyAOBS/pyAOBS
+.. list-table::
+   :header-rows: 1
+   :widths: 15 35 50
 
-Dependencies
------------
+   * - Extra
+     - Packages
+     - Use
+   * - gui-qt
+     - PySide6
+     - Workbench, imodel Qt, LIP GUI
+   * - petrology
+     - burnman≥1.0
+     - Thermodynamic properties
+   * - gmt
+     - pygmt≥0.5
+     - GMT plotting
+   * - full
+     - gui-qt + petrology + pygmt + pyproj + obspy
+     - Full optional set
 
-pyAOBS requires the following Python packages:
+Core dependencies (installed automatically) include numpy, xarray, scipy,
+matplotlib, pandas, scikit-learn, seaborn, openpyxl, dearpygui — see ``setup.py``.
 
-* numpy >= 1.20.0
-* xarray >= 0.16.0
-* scipy >= 1.6.0
-* matplotlib >= 3.3.0
-* pandas >= 1.2.0
-* pygmt >= 0.5.0 
+Binaries / external programs
+----------------------------
+
+* **TOMO2D**: compile the C++ kernel or set ``PYAOBS_TOMO2D_BIN`` / ``TOMO2D_BIN``.
+  See ``pyAOBS/modeling/tomo2d/src/README_OMP_BUILD.md``.
+* **RAYINVR**: external Rayinvr ecosystem; Python wrappers + ``vedit`` editor in-tree.

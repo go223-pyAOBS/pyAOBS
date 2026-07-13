@@ -5,16 +5,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyAOBS.model_building.models &mdash; pyAOBS 0.1.0 documentation</title>
+  <title>pyAOBS.model_building.models &mdash; pyAOBS 3.0.0rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=01f34227"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=b9a01a18"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -30,6 +30,7 @@
           
           <a href="../../../index.html" class="icon icon-home">
             pyAOBS
+              <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -42,8 +43,12 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Modules overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History</a></li>
 </ul>
 
         </div>
@@ -115,13 +120,10 @@
     <span class="n">val</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">flags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     
-<div class="viewcode-block" id="ZNode2d.__post_init__">
-<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.ZNode2d.__post_init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate node data after initialization.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">val</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mismatched lengths in node data&quot;</span><span class="p">)</span></div>
-
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mismatched lengths in node data&quot;</span><span class="p">)</span>
             
 <div class="viewcode-block" id="ZNode2d.add_point">
 <a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.ZNode2d.add_point">[docs]</a>
@@ -210,9 +212,9 @@
 <span class="sd">        b2 (float): Lower boundary intercept</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
-                 <span class="n">z1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z4</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                 <span class="n">v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">v2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">v3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">v4</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> 
+                 <span class="n">z3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z4</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">v2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">v3</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">v4</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">layer</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a trapezoid cell.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
@@ -226,6 +228,7 @@
 <span class="sd">            v2 (float): Upper right velocity</span>
 <span class="sd">            v3 (float): Lower left velocity</span>
 <span class="sd">            v4 (float): Lower right velocity</span>
+<span class="sd">            layer (int): Layer number</span>
 <span class="sd">            </span>
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If x1 equals x2 (zero width cell)</span>
@@ -234,8 +237,11 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cell width too small&quot;</span><span class="p">)</span>
             
         <span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z2</span> <span class="o">=</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z4</span> <span class="o">=</span> <span class="n">z3</span><span class="p">,</span> <span class="n">z4</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2</span> <span class="o">=</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v4</span> <span class="o">=</span> <span class="n">v3</span><span class="p">,</span> <span class="n">v4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layer</span> <span class="o">=</span> <span class="n">layer</span>
 
         <span class="n">rdx</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span>
         <span class="c1"># Calculate boundary line parameters</span>
@@ -274,6 +280,29 @@
         <span class="n">z_up</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s1</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b1</span>
         <span class="n">z_down</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b2</span>
         <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">z_up</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">z</span> <span class="o">&gt;</span> <span class="n">z_down</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+            
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TrapezoidCell2d.is_in_with_tolerance">
+<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.TrapezoidCell2d.is_in_with_tolerance">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_in_with_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">Point2d</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-6</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if a point is inside the cell with tolerance.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            p (Point2d): Point to test</span>
+<span class="sd">            eps (float): Tolerance value for boundary checks</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if point is inside or on boundary (within tolerance)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">-</span> <span class="n">eps</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span> <span class="o">+</span> <span class="n">eps</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        
+        <span class="n">z_up</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s1</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b1</span>
+        <span class="n">z_down</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">s2</span> <span class="o">*</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b2</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">z_up</span> <span class="o">-</span> <span class="n">eps</span> <span class="ow">or</span> <span class="n">p</span><span class="o">.</span><span class="n">z</span> <span class="o">&gt;</span> <span class="n">z_down</span> <span class="o">+</span> <span class="n">eps</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
             
         <span class="k">return</span> <span class="kc">True</span></div>
@@ -318,13 +347,10 @@
             <span class="k">return</span> <span class="n">val1</span><span class="o">/</span><span class="n">val2</span></div>
 
         
-<div class="viewcode-block" id="TrapezoidCell2d.__repr__">
-<a class="viewcode-back" href="../../../api.html#pyAOBS.model_building.TrapezoidCell2d.__repr__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return string representation of the cell.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TrapezoidCell2d(x=[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="si">}</span><span class="s2">], &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;v=[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">v1</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">v2</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">v3</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">v4</span><span class="si">}</span><span class="s2">])&quot;</span><span class="p">)</span></div>
-</div>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Point2d&#39;</span><span class="p">,</span> <span class="s1">&#39;ZNode2d&#39;</span><span class="p">,</span> <span class="s1">&#39;TrapezoidCell2d&#39;</span><span class="p">]</span> 
@@ -337,7 +363,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Haibo Huang.</p>
+    <p>&#169; Copyright 2024–2026, Haibo Huang.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

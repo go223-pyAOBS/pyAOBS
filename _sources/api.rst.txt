@@ -1,35 +1,35 @@
-=============
-API Reference
+API reference
 =============
 
-Model Building
--------------
+Autodoc is enabled for stable library surfaces. Many GUI modules require
+optional dependencies (PySide6, etc.) and are mocked at build time.
+
+Model building
+--------------
 
 .. automodule:: pyAOBS.model_building
    :members:
    :undoc-members:
    :show-inheritance:
+   :noindex:
 
-Visualization
-------------
+For detailed class docs, prefer the source and the GitHub README examples::
 
-.. automodule:: pyAOBS.visualization
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   from pyAOBS.model_building import ZeltVelocityModel2d, EnhancedZeltModel
 
-Rock Classification
------------------
+Package version
+---------------
 
-.. automodule:: pyAOBS.utils.isrock
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. code-block:: python
 
-Utilities
---------
+   import pyAOBS
+   print(pyAOBS.__version__)  # 3.0.0rc2
 
-.. automodule:: pyAOBS.utils
-   :members:
-   :undoc-members:
-   :show-inheritance: 
+Further reading
+---------------
+
+* Repository README (complete feature guide)
+* ``pyAOBS/workbench/README.md``
+* ``pyAOBS/petrology/README.md``
+* ``pyAOBS/utils/README.md``
+* ``pyAOBS/visualization/IMODEL_README.md``

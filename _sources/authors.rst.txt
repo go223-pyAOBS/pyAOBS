@@ -1,42 +1,20 @@
-=======
 Authors
 =======
 
-Core Development Team
--------------------
-
-* **Haibo Huang** - *Initial work and maintainer* - `go223@scsio.ac.cn <mailto:go223@scsio.ac.cn>`_
-
-  - South China Sea Institute of Oceanology, Chinese Academy of Sciences
-  - Research interests: Seismic data processing, Velocity model building, Rock physics
-
-Contributors
------------
-
-We thank the following people who have contributed to this project:
-
-* Your name could be here! See our :doc:`contributing` guide.
-
-Contact
--------
-
-For questions about the project, you can:
-
-* Open an issue on `GitHub <https://github.com/go223-pyAOBS/pyAOBS/issues>`_
-* Send an email to the maintainer
-* Join our discussions on GitHub
+* **Haibo Huang** — go223@scsio.ac.cn
 
 Citation
 --------
 
-If you use pyAOBS in your research, please cite:
-
 .. code-block:: bibtex
 
-    @software{pyAOBS2024,
-      author = {Haibo Huang},
-      title = {pyAOBS: A Python Package for Seismic Data Processing and Visualization},
-      year = {2024},
-      publisher = {GitHub},
-      url = {https://github.com/go223-pyAOBS/pyAOBS}
-    } 
+   @software{pyAOBS,
+     author = {Huang, Haibo},
+     title  = {pyAOBS: Python toolkit for active-source ocean-bottom seismology},
+     year   = {2026},
+     url    = {https://github.com/go223-pyAOBS/pyAOBS},
+     note   = {Version 3.0.0rc2}
+   }
+
+Petrology workflows should also cite method papers as appropriate, e.g.
+Korenaga et al. (2002), *JGR Solid Earth*, doi:10.1029/2001JB001030.

@@ -1,50 +1,15 @@
-=======
 History
 =======
 
-0.1.0 (2024-02-03)
-------------------
+See the repository **CHANGELOG**:
 
-First release on GitHub.
+https://github.com/go223-pyAOBS/pyAOBS/blob/main/CHANGELOG.md
 
-* Core features:
-    - Read and write ZELT format velocity models
-    - Basic velocity model manipulation
-    - Visualization tools
-    - Rock classification module
+Highlights
+----------
 
-* Initial modules:
-    - model_building: Core velocity model handling
-    - visualization: Model visualization tools
-    - utils: Utility functions and rock classification
-
-Future Plans
------------
-
-0.2.0 (Planned)
-~~~~~~~~~~~~~~
-
-* Enhanced features:
-    - Support for more velocity model formats
-    - Advanced interpolation methods
-    - Improved visualization options
-    - Extended rock classification database
-
-* New modules:
-    - data_io: Enhanced data input/output handling
-    - processing: Advanced velocity model processing tools
-    - analysis: Statistical analysis tools
-
-0.3.0 (Planned)
-~~~~~~~~~~~~~~
-
-* Advanced features:
-    - Machine learning integration
-    - 3D model support
-    - Real-time visualization
-    - Batch processing capabilities
-
-Contributing
------------
-
-See :doc:`contributing` for guidelines on how to contribute to the development of pyAOBS. 
+* **3.0.0rc2** — Full workbench / petrology / imodel source published on GitHub;
+  documentation site aligned with the complete feature set.
+* **3.0.0rc1** — Packaging freeze (version / MANIFEST / CHANGELOG).
+* **0.2.0** — Early PyPI-oriented Zelt / visualization packaging.
+* **0.1.0** — Initial documentation site (ZELT-focused).

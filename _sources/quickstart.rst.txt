@@ -1,78 +1,63 @@
-==========
-Quickstart
-==========
+Quick start
+===========
 
-This guide will help you get started with pyAOBS quickly.
+Workbench
+---------
 
-Basic Usage
-----------
+.. code-block:: bash
 
-Reading and Processing Velocity Models
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   python -m pyAOBS.workbench.app
 
-.. code-block:: python
+Tk fallback if PySide6 is unavailable:
 
-    from pyAOBS.model_building import ZeltVelocityModel2d
+.. code-block:: bash
 
-    # Load a velocity model
-    model = ZeltVelocityModel2d("velocity.in")
-    
-    # Get velocity at a specific point
-    velocity = model.at(100.0, 1.5)  # x=100.0 km, z=1.5 km
-    
-    # Get velocities along a profile
-    x_profile = np.linspace(0, 100, 1000)
-    z_profile = np.ones_like(x_profile) * 2.0
-    velocities = model.get_profile(x_profile, z_profile)
+   # PowerShell
+   $env:PYAOBS_WORKBENCH_UI="tk"
+   python -m pyAOBS.workbench.app
 
-Visualization
-~~~~~~~~~~~~
+Zelt velocity model (API)
+-------------------------
 
 .. code-block:: python
 
-    from pyAOBS.visualization import ZeltModelVisualizer
+   from pyAOBS.model_building import ZeltVelocityModel2d, EnhancedZeltModel
 
-    # Create a visualizer
-    visualizer = ZeltModelVisualizer(model)
-    
-    # Plot the model
-    visualizer.plot_zeltmodel(
-        output_file="velocity_model.png",
-        title="Velocity Model",
-        colorbar_label="Velocity (km/s)"
-    )
+   model = ZeltVelocityModel2d("velocity.in")
+   v = model.at(100.0, 1.5)
 
-Rock Classification
-~~~~~~~~~~~~~~~~~
+   enhanced = EnhancedZeltModel("velocity.in")
+   avg = enhanced.compute_average_velocities()
+
+Plot a Zelt model
+-----------------
 
 .. code-block:: python
 
-    from pyAOBS.utils.isrock import RockClassifier
+   from pyAOBS.model_building import ZeltVelocityModel2d
+   from pyAOBS.visualization import ZeltModelVisualizer
 
-    # Create a classifier
-    classifier = RockClassifier()
-    
-    # Classify a rock based on P-wave velocity
-    rock_type = classifier.classify_by_vp(6.5)  # Vp in km/s
-    print(f"Rock type: {rock_type}")
+   model = ZeltVelocityModel2d("velocity.in")
+   ZeltModelVisualizer(model).plot_zeltmodel(
+       output_file="velocity_model.png",
+       title="Velocity Model",
+       colorbar_label="Velocity (km/s)",
+   )
 
-Advanced Features
+SU I/O
+------
+
+.. code-block:: python
+
+   from pyAOBS import readsu, writesu, plotsu
+
+Standalone GUIs
 ---------------
 
-Enhanced Model Processing
-~~~~~~~~~~~~~~~~~~~~~~~
+.. code-block:: bash
 
-.. code-block:: python
-
-    from pyAOBS.model_building import EnhancedZeltModel
-
-    # Create an enhanced model
-    enhanced_model = EnhancedZeltModel("velocity.in")
-    
-    # Compute average velocities
-    avg_velocities = enhanced_model.compute_average_velocities()
-    
-    # Export to different formats
-    enhanced_model.export_to_xyz("model.xyz")
-
-For more detailed examples and advanced usage, please refer to the :doc:`examples` section. 
+   python -m pyAOBS.visualization.imodel_qt
+   python -m pyAOBS.visualization.zplotpy.gui
+   python -m pyAOBS.visualization.iphase.iphase_gui
+   python -m pyAOBS.modeling.tomo2d.gui
+   python -m pyAOBS.petrology.gui
