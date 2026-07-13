@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../processors/relocation"
+		},
+		{
+			"path": "../../processors/denoise"
+		}
+	],
+	"settings": {}
+}

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GetDataWorkspace>
+  <version>2.22</version>
+  <File>
+    <Name>C:\Users\go223\Desktop\ScreenShot_2026-07-09_105537_962.jpg</Name>
+    <Width>650</Width>
+    <Height>540</Height>
+  </File>
+  <Line>
+    <Caption>6.9</Caption>
+    <LineColor>57,57,57</LineColor>
+    <BkColor>253,253,253</BkColor>
+    <PtColor>220,70,220</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1372,751,1435,733,1507,697,1615,661,1714,616,1831,580,1993,526,2092,481</Points>
+  </Line>
+  <Line>
+    <Caption>7.0</Caption>
+    <LineColor>57,57,57</LineColor>
+    <BkColor>253,253,253</BkColor>
+    <PtColor>230,220,20</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1363,1048,1426,985,1516,913,1615,832,1723,769,1876,697,2047,616,2200,535,2317,481</Points>
+  </Line>
+  <Line>
+    <Caption>7.1</Caption>
+    <LineColor>57,57,57</LineColor>
+    <BkColor>253,253,253</BkColor>
+    <PtColor>255,20,160</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1381,1453,1480,1327,1588,1201,1678,1102,1786,985,1930,877,2074,787,2209,697,2353,607,2560,481</Points>
+  </Line>
+  <Line>
+    <Caption>7.2</Caption>
+    <LineColor>57,57,57</LineColor>
+    <BkColor>253,253,253</BkColor>
+    <PtColor>128,220,255</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1471,1786,1588,1696,1696,1597,1867,1426,2029,1192,2173,1021,2371,850,2569,697,2767,553,2857,490</Points>
+  </Line>
+  <Line>
+    <Caption>7.3</Caption>
+    <LineColor>57,57,57</LineColor>
+    <BkColor>253,253,253</BkColor>
+    <PtColor>128,245,128</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1561,2182,1705,2110,1894,2002,2101,1849,2272,1669,2443,1444,2587,1228,2722,1057,2884,859,3019,724</Points>
+    <Points MF="9">3208,535</Points>
+  </Line>
+  <Line>
+    <Caption>7.4</Caption>
+    <LineColor>57,57,57</LineColor>
+    <BkColor>253,253,253</BkColor>
+    <PtColor>255,128,64</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1804,2830,2047,2794,2245,2740,2443,2677,2623,2596,2803,2479,2947,2362,3145,2227,3298,2038,3559,1687</Points>
+    <Points MF="9">3685,1354,3748,1003,3775,805,3829,634</Points>
+  </Line>
+  <Line>
+    <Caption>7.5</Caption>
+    <LineColor>57,57,57</LineColor>
+    <BkColor>253,253,253</BkColor>
+    <PtColor>128,0,255</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">2713,4144,2947,4027,3172,3910,3334,3793,3595,3631,3829,3415,4117,3163,4441,2812,4675,2497,4882,2155</Points>
+    <Points MF="9">5089,1813,5260,1462,5368,1192</Points>
+  </Line>
+  <Line>
+    <Caption>7.6</Caption>
+    <LineColor>57,57,57</LineColor>
+    <BkColor>253,253,253</BkColor>
+    <PtColor>200,255,50</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">4738,4612,4855,4504,5017,4324,5188,4135,5368,3910,5494,3739,5593,3586</Points>
+  </Line>
+  <CurrentLine>7</CurrentLine>
+  <Xmin MF="9">1354,382,5.000000e-001</Xmin>
+  <Xmax MF="9">5602,373,7.000000e+000</Xmax>
+  <Ymin MF="9">1354,382,0.000000e+000</Ymin>
+  <Ymax MF="9">1345,4621,6.000000e-001</Ymax>
+  <XScale>linear</XScale>
+  <YScale>linear</YScale>
+  <Position>315,260</Position>
+  <Zoom>
+    <Scale>100.0</Scale>
+  </Zoom>
+  <Digitize>
+    <IgnorePixels>1</IgnorePixels>
+    <LineIDMethod>2</LineIDMethod>
+  </Digitize>
+  <AutoTrace>
+    <TraceDistance>8</TraceDistance>
+    <SmoothLines>1</SmoothLines>
+  </AutoTrace>
+  <DigitizeArea>
+    <LineOrArea>0</LineOrArea>
+    <RotateAngle>0.000000</RotateAngle>
+    <dx>8.000000</dx>
+  </DigitizeArea>
+  <GridSettings>
+    <ShowGrid>0</ShowGrid>
+    <AreaType>0</AreaType>
+    <dx>15.000000</dx>
+    <dy>15.000000</dy>
+  </GridSettings>
+</GetDataWorkspace>

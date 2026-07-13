@@ -1,0 +1,7 @@
+1 7
+# Kinzler (1997) MORB primary
+# KKHS02 Fig.2 starting liquid; polybaric aggregated melt F≈0.09 @ 1.5 GPa
+# source: petrology/data/mantle_melts/kinzler1997_morb_primary.json
+# oxides wt%: SiO2 48.27, TiO2 0.94, Al2O3 16.42, Cr2O3 0.12, FeO 7.97, MgO 12.52, CaO 11.42, Na2O 2.27, K2O 0.07
+# columns: CAA NAAL MGO FEO CAWO TIO2 SIO2
+0.086722 0.051138 0.216519 0.077349 0.560054 0.008217 0.000000

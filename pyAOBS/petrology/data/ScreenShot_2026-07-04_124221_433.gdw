@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GetDataWorkspace>
+  <version>2.22</version>
+  <File>
+    <Name>C:\Users\go223\Desktop\ScreenShot_2026-07-04_124221_433.jpg</Name>
+    <Width>519</Width>
+    <Height>291</Height>
+  </File>
+  <Line>
+    <Caption>b=0</Caption>
+    <LineColor>39,38,39</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>220,70,220</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1021,2029,1129,1912,1345,1714,1543,1525,1813,1327,2029,1183,2227,1066,2425,958,2569,895,2830,769</Points>
+    <Points MF="9">3091,652,3388,535,3631,445,3856,373,4036,319,4261,247</Points>
+  </Line>
+  <Line>
+    <Caption>b=30</Caption>
+    <LineColor>39,38,39</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>230,220,20</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1471,2110,1597,1921,1768,1651,1921,1453,2119,1246,2254,1111,2425,967,2659,832,2866,715,3019,634</Points>
+    <Points MF="9">3271,535,3478,472,3703,391,3928,328,4252,238</Points>
+  </Line>
+  <Line>
+    <Caption>b=20</Caption>
+    <LineColor>39,38,39</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>255,20,160</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1309,2101,1453,1894,1579,1723,1768,1507,1930,1345,2083,1210,2209,1120,2425,967,2569,886,2758,787</Points>
+    <Points MF="9">2938,697,3172,607,3325,544,3523,472,3694,409,3955,337,4261,247</Points>
+  </Line>
+  <CurrentLine>2</CurrentLine>
+  <Xmin MF="9">1021,2119,1.250000e+003</Xmin>
+  <Xmax MF="9">4279,2119,1.600000e+003</Xmax>
+  <Ymin MF="9">1021,2119,6.900000e+000</Ymin>
+  <Ymax MF="9">1021,157,7.400000e+000</Ymax>
+  <XScale>linear</XScale>
+  <YScale>linear</YScale>
+  <Position>72,-23</Position>
+  <Zoom>
+    <Scale>250.0</Scale>
+  </Zoom>
+  <Digitize>
+    <IgnorePixels>1</IgnorePixels>
+    <LineIDMethod>2</LineIDMethod>
+  </Digitize>
+  <AutoTrace>
+    <TraceDistance>8</TraceDistance>
+    <SmoothLines>1</SmoothLines>
+  </AutoTrace>
+  <DigitizeArea>
+    <LineOrArea>0</LineOrArea>
+    <RotateAngle>0.000000</RotateAngle>
+    <dx>8.000000</dx>
+  </DigitizeArea>
+  <GridSettings>
+    <ShowGrid>0</ShowGrid>
+    <AreaType>0</AreaType>
+    <dx>15.000000</dx>
+    <dy>15.000000</dy>
+  </GridSettings>
+</GetDataWorkspace>

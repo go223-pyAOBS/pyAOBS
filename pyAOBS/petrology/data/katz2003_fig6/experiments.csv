@@ -1,0 +1,39 @@
+id,p_gpa,t_c,f,study_id,source_short,fig6_panel,verified,notes
+BS94_55T,1.0,1270,0.06,MM3,Baker_Stolper_1994,b,partial,Baker & Stolper (1994) run 55T @ 10 kbar; F from paper Table 2 — confirm vs Katz ESI Table S2
+BS94_24,1.0,1330,0.13,MM3,Baker_Stolper_1994,b,partial,Run 24; Katz/Hirschmann compilations use subset of Baker points
+BS94_26,1.0,1390,0.35,MM3,Baker_Stolper_1994,b,partial,Run 26; Falloon (1999) argues not full equilibrium — Katz may still plot
+FG99_T4242,1.0,1300,0.08,MM3_FG99,Falloon_1999,b,partial,MM-3 forward melt; F from modal mass balance (Falloon et al. 1999 Table 3)
+FG99_T4258,1.0,1275,0.05,MM3_FG99,Falloon_1999,b,partial,Just above solidus; F approximate from phase assemblage
+FG99_T4226,1.0,1350,0.18,MM3_FG99,Falloon_1999,b,partial,Cpx present; F from mass balance in Table 3
+FG99_T4243,1.0,1400,0.28,MM3_FG99,Falloon_1999,b,partial,Opx+lherz residue
+W98_KR_3GPa_solidus,3.0,1480,0.02,KR4003,Walter_1998,d,partial,Near-solidus bracket Walter (1998) KR4003 @ 3 GPa
+W98_KR_3GPa_mid,3.0,1550,0.15,KR4003,Walter_1998,d,partial,Intermediate melting; F from Walter modal balance — verify digitization
+W98_KR_3GPa_high,3.0,1650,0.45,KR4003,Walter_1998,d,partial,High-T partial melt region
+FG99_T4235_15,1.5,1350,0.10,MM3_FG99,Falloon_1999,c,partial,MM-3 @ 1.5 GPa; solidus ~1300–1350 C
+FG99_T4335_15,1.5,1425,0.22,MM3_FG99,Falloon_1999,c,partial,Cpx-out region ~1425 C
+FG99_T4269_15,1.5,1500,0.40,MM3_FG99,Falloon_1999,c,partial,Opx melting interval
+TK86_KLB_1atm_solidus,0.0,1100,0.02,KLB1,Takahashi_1986,a,partial,~1 atm; near-solidus — pressure rounded to 0 GPa for Fig.6 (a)
+TK86_KLB_1atm_mid,0.0,1250,0.12,KLB1,Takahashi_1986,a,partial,Low-P KLB-1 branch; confirm Katz pressure assignment
+FG88_10kbar_low,0.0,1280,0.08,FG87,Falloon_Green_1988,a,partial,Originally 1 GPa experiments sometimes shown on 0 GPa panel as 1 atm proxy — verify Katz mapping
+HK93_1GPa,1.0,1300,0.10,HK66,Hirose_Kushiro_1993,b,no,Placeholder F — replace from Katz ESI; HK66 often down-weighted in fits
+RW98_15GPa_solidus,1.5,1350,0.05,RW98,Robinson_Wood_1998,c,no,Solidus bracket Robinson & Wood (1998); F from Katz appendix needed
+JG80_15k_1350,1.5,1350,0.18,JG1980_HP,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 15 kbar; F=% melt/100
+JG80_15k_1400,1.5,1400,0.25,JG1980_HP,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 15 kbar; F=% melt/100
+JG80_15k_1450,1.5,1450,0.32,JG1980_HP,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 15 kbar; F=% melt/100
+JG80_15k_1500,1.5,1500,0.41,JG1980_HP,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 15 kbar; F=% melt/100
+JG80_15k_1550,1.5,1550,0.51,JG1980_HP,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 15 kbar; F=% melt/100
+JG80_10k_1250,1,1250,0.16,JG1980_HP,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 10 kbar; F=% melt/100
+JG80_10k_1300,1,1300,0.23,JG1980_HP,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 10 kbar; F=% melt/100
+JG80_10k_1350,1,1350,0.28,JG1980_HP,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 10 kbar; F=% melt/100
+JG80_10k_1400,1,1400,0.35,JG1980_HP,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 10 kbar; F=% melt/100
+JG80_10k_1450,1,1450,0.44,JG1980_HP,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 10 kbar; F=% melt/100
+JG80TQ_15k_1350,1.5,1350,0.11,JG1980_TQ,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 15 kbar; F=% melt/100
+JG80TQ_15k_1400,1.5,1400,0.18,JG1980_TQ,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 15 kbar; F=% melt/100
+JG80TQ_15k_1450,1.5,1450,0.25,JG1980_TQ,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 15 kbar; F=% melt/100
+JG80TQ_15k_1500,1.5,1500,0.34,JG1980_TQ,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 15 kbar; F=% melt/100
+JG80TQ_15k_1550,1.5,1550,0.44,JG1980_TQ,Jaques_Green_1980,c,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 15 kbar; F=% melt/100
+JG80TQ_10k_1250,1,1250,0.11,JG1980_TQ,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 10 kbar; F=% melt/100
+JG80TQ_10k_1300,1,1300,0.15,JG1980_TQ,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 10 kbar; F=% melt/100
+JG80TQ_10k_1350,1,1350,0.21,JG1980_TQ,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 10 kbar; F=% melt/100
+JG80TQ_10k_1400,1,1400,0.29,JG1980_TQ,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 10 kbar; F=% melt/100
+JG80TQ_10k_1450,1,1450,0.4,JG1980_TQ,Jaques_Green_1980,b,partial,Jaques & Green (1980) Table 5 Tinaquillo lherzolite; 10 kbar; F=% melt/100

@@ -1,0 +1,717 @@
+# KKHS02 LIP petrology — key formulas and GUI reference
+# Workflow narrative: petrology/reference/kkhs02_workflow.py (Step 1–4 + track terminology)
+# Fields: display, purpose / principle / usage / gui; optional prev / next cross-links (item `id` + blurb)
+# defaults: 可为标量，或 {value, label, meaning}；标量的显示名/含义见 default_param_meta
+
+workflow_overview: >
+  正演链 Step 4 → (P̄,F̄,H) → Step 1 方程 (1) → V_bulk → Step 3 给出 ΔVp → Step 2 与 V_LC 比较。
+  默认「H–Vp 图」= KKHS02 §4「Mantle Melting Model With Active Upwelling」方程 (4)–(11)
+  + Step 1 方程 (1)（方法源自 Fig.12；实现 petrology/active_upwelling.py + vp_regression.py）。
+  Modern = Katz/REEBOX 几何 + 同一方程 (1)。印刷数字化 Fig.12a 仅 validation/ 保留。
+  观测 H、V_LC 为读图坐标，不对应论文 Step 编号。
+
+# 默认参数表：label = 与正文/公式一致的符号；meaning = 物理含义
+# （YAML 键仍用代码标识符，仅表格第一列显示 label）
+default_param_meta:
+  P_ref_MPa:
+    label: "P_ref"
+    meaning: "方程 (1) / H–Vp 图参考态压力（全文统一 600 MPa）"
+  T_ref_C:
+    label: "T_ref"
+    meaning: "方程 (1) / H–Vp 图参考态温度（全文统一 400 °C）"
+  a0:
+    label: "a₀"
+    meaning: "方程 (1) 常数项（参考态附近基线 Vp，km/s）"
+  b1:
+    label: "b₁"
+    meaning: "低 P–F 分支中 P̄ 一次项系数（生产用 −0.55；印刷表 +0.55 为勘误）"
+  alpha:
+    label: "α"
+    meaning: "方程 (1) 压力窗陡度（tanh 切换宽度，1/GPa）"
+  beta:
+    label: "β"
+    meaning: "方程 (1) 熔融分数窗陡度（tanh 切换宽度）"
+  P_t_GPa:
+    label: "P_t"
+    meaning: "低/高 P 分支切换中心压力"
+  F_t:
+    label: "F_t"
+    meaning: "低/高 F 分支切换中心熔融分数"
+  delta_vp_max_km_s:
+    label: "ΔVp,max"
+    meaning: "Step-2 竖段半宽：分离结晶使 V_bulk 相对 V_LC 可低多少（km/s）"
+  dV_dP_km_s_per_MPa:
+    label: "∂Vp/∂P"
+    meaning: "原位 Vp → 600/400 参考态时的压力偏导（km/s / MPa）"
+  dV_dT_km_s_per_C:
+    label: "∂Vp/∂T"
+    meaning: "原位 Vp → 600/400 参考态时的温度偏导（km/s / °C）"
+  T0_intercept_C:
+    label: "T₀(0)"
+    meaning: "TK83 干橄榄岩固相线零压截距"
+  dT_dP_C_per_GPa:
+    label: "dT/dP"
+    meaning: "TK83 固相线斜率（°C/GPa）"
+  adiabat_C_per_GPa:
+    label: "(dT/dP)_ad"
+    meaning: "MB88 线性绝热梯度（°C/GPa），用于由 Tp 求 P₀"
+  dF_dP_fig11_fig12_per_GPa:
+    label: "(∂F/∂P)_S"
+    meaning: "§4 / Fig.11–12 标准等熵产率（线性轨，12%/GPa）"
+  dF_dP_fig13a_per_GPa:
+    label: "(∂F/∂P)_S (Fig.13a)"
+    meaning: "Fig.13a 灵敏度示例产率（16%/GPa）"
+  dF_dP_per_GPa:
+    label: "(∂F/∂P)_S"
+    meaning: "线性 F(P) 等熵产率，默认与 Fig.11–12 一致（12%/GPa）"
+  scale_km_per_GPa:
+    label: "30 km/GPa"
+    meaning: "深度–压力换算系数（方程 (7)(10) 中的 30）"
+  scale_km_per_gpa:
+    label: "30 km/GPa"
+    meaning: "深度–压力换算系数（方程 (7)(10) 中的 30）"
+  f_lower:
+    label: "f_lower"
+    meaning: "下地壳柱底部镁铁质比例（谐和平均 V_LC 的深度域下界）"
+
+steps:
+  - id: step1
+    title: "Step 1 — Bulk Vp 与方程 (1)"
+    items:
+      - id: eq1
+        name: "方程 (1) V_bulk(P̄, F̄)"
+        display: |
+          V_bulk = a0 + W_L·(b0 + b1·P̄ + b2·F̄ + b3·P̄² + b4·P̄·F̄ + b5·F̄²)
+                 + W_H·(c0 + c1·P̄ + c2·F̄ + c3·P̄² + c4·P̄·F̄ + c5·F̄²)
+          @ 600 MPa, 400 °C
+        latex: >
+          V_{\mathrm{bulk}} = a_0
+          + W_L(\bar P,\bar F)\,(b_0 + b_1\bar P + b_2\bar F + b_3\bar P^2 + b_4\bar P\bar F + b_5\bar F^2)
+          + W_H(\bar P,\bar F)\,(c_0 + c_1\bar P + c_2\bar F + c_3\bar P^2 + c_4\bar P\bar F + c_5\bar F^2)
+        purpose: >
+          把正演得到的矿物/熔体组合换算为 **假想全固相 bulk 速度**（参考态 600 MPa、400 °C），
+          作为 H–Vp 标准图上的模型曲线纵坐标，与地震观测量 V_LC **不是同一物理量**。
+        principle: >
+          KKHS02 §2.2 方程 (1)：双二次分支 + 乘积双曲正切窗。
+          W_L = ¼[1 − tanh(α(P̄ − P_t))][1 − tanh(β(F̄ − F_t))]（低 P、低 F 主导）；
+          W_H = ¼[1 + tanh(α(P̄ − P_t))][1 + tanh(β(F̄ − F_t))]（高 P、高 F 主导）。
+          默认系数（data/korenaga2002_eq1.json，**生产用**）：
+          a0=7.52；b=(−1.73, **−0.55**, 7.71, −0.11, 8.87, −146.11)；
+          c=(−0.35, 0.034, 0.51, 0.0016, −0.04, 0.046)；
+          α=0.6，β=8.4，P_t=1.0 GPa，F_t=0.05。
+          **勘误**：正文印刷表写 b1=+0.55，与 Fig.3 等值线不符；仓库已改为 b1=−0.55，
+          印刷值保留在 JSON `print_errata` 供对比（见 validation/check_eq1_print_refit.py）。
+          适用域约 P̄∈[1,3] GPa、F̄∈[0.02,0.2]（干 pyrolite 源）。
+          这是 **norm-based 端元**（CIPW 名义矿物 + HS 混合后的回归），代表“若全壳瞬时固结”的假想速度，
+          而非下地壳就位测得的 V_LC。
+        usage: >
+          **H–Vp 图（默认）**：§4 方程 (4)–(11) 得 (P̄,F̄) → 查方程 (1)（生产系数，无纵轴偏置）。
+          **Modern 轨**：REEBOX 熔融柱 → (P̄,F̄) → 同一方程 (1)（快速扫描）或 CIPW+BurnMan 精算。
+          实现：petrology/vp_regression.py → predict_v_bulk_km_s。
+        gui: >
+          「Tp–χ 扫描」「Φ 扫描」正演 H–Vp 曲线；默认「H–Vp 图」与 Modern / 双轨均依赖 Step-1 方程 (1)。
+          勾选「bulk 界精修」时，用 BurnMan norm Vp 与 V_LC 比较。
+          公式查阅 → Step 4 可逐条查看方程 (4)–(11)。
+        defaults:
+          P_ref_MPa: 600
+          T_ref_C: 400
+          a0: 7.52
+          b1: -0.55
+          alpha: 0.6
+          beta: 8.4
+          P_t_GPa: 1.0
+          F_t: 0.05
+        reference: "KKHS02 §2.2, Fig.3; data/korenaga2002_eq1.json (b1 sign-corrected)"
+        prev:
+          - id: eq8
+            blurb: "§4 给出 F̄"
+          - id: eq9
+            blurb: "§4 给出 P̄"
+          - id: linear_fp
+            blurb: "H–Vp 图线性轨"
+          - id: track_modern
+            blurb: "Modern REEBOX 正演得 (P̄, F̄)"
+        next:
+          - id: bulk_bounds
+            blurb: "V_bulk,model 与 V_LC 上界比较"
+          - id: delta_vp
+            blurb: "竖段下界 V_LC − ΔVp"
+          - id: track_fig12
+            blurb: "H–Vp 图纵坐标"
+      - id: hs_mix
+        name: "Hashin–Sutherland 混合"
+        display: "V_bulk = HS( Σ f_i · V_i )"
+        latex: "V_{\\mathrm{bulk}} = \\mathrm{HS}(\\sum_i f_i V_i)"
+        purpose: >
+          由名义矿物体积/摩尔分数与单矿物 Vp，合成 **全壳 bulk 等效速度**，连接物性库与方程 (1) 输出。
+        principle: >
+          Hashin–Sutherland（或 Voigt–Reuss–Hill 族）给出多相混合的有效弹性模量/速度。
+          GUI 默认与 KKHS02 一致采用 HS 混合 CIPW norm 矿物 Vp。
+        usage: >
+          每步正演先算平衡矿物或 CIPW norm，再按 f_i 混合得到 V_bulk，供 Step-2 与 H–Vp 投图。
+        gui: >
+          隐式用于所有 REEBOX / pymelt 正演与「bulk 界精修」；无需单独按钮。
+        reference: "§2.1"
+        next:
+          - id: eq1
+            blurb: "合成 norm-based V_bulk"
+          - id: fc_delta
+            blurb: "Step 3 结晶路径共用同一物性链"
+
+  - id: step2
+    title: "Step 2 — V_LC 上界与 ΔVp"
+    items:
+      - id: bulk_bounds
+        name: "Bulk 可行域"
+        display: "V_bulk,model ≤ V_LC"
+        latex: "V_{\\mathrm{bulk,model}} \\le V_{\\mathrm{LC}}"
+        purpose: >
+          用地震可直接约束的 **V_LC 作为 bulk 速度的上界**，排除物理上不可能的 (Tp, χ, H) 组合，
+          而不假设唯一的就位模式（Fig.1 核心思想）。
+        principle: >
+          下地壳速度 V_LC 反映 **就位后的** 镁铁质柱；假想 bulk 端元（Step-1）通常更快。
+          若模型 V_bulk > V_LC，说明该熔融/结晶路径与观测不兼容。厚壳 (H>15 km) 时该约束才可靠。
+        usage: >
+          Tp–χ 扫描时标记满足 |ΔH| 且 V_bulk ≤ V_LC 的格点；可选 bulk 界精修进一步用 BurnMan 精算 top-K 候选。
+        gui: >
+          扫描结果表「可行」列；H–Vp 图观测点纵坐标为 V_LC，**竖段表示 ΔVp 带宽而非平移曲线**。
+          「厚壳 H>」默认 15 km。
+        reference: "§2.3, Fig.5"
+        prev:
+          - id: eq1
+            blurb: "Step 1 输出的 V_bulk,model"
+          - id: harmonic_vlc
+            blurb: "观测锚点 V_LC"
+        next:
+          - id: eq10
+            blurb: "与 |ΔH| 联合筛选 (Tp, χ)"
+          - id: track_fig12
+            blurb: "在 H–Vp 图上读图闭合"
+      - id: delta_vp
+        name: "ΔVp 读图带宽"
+        display: "V_bulk ≥ V_LC − ΔVp,max"
+        latex: "V_{\\mathrm{bulk}} \\ge V_{\\mathrm{LC}} - \\Delta V_{p,\\max}"
+        purpose: >
+          在 H–Vp 标准图上给出 **bulk 速度的可读下界**，反映分离结晶等过程导致的 V_bulk 低于 V_LC 的允许范围。
+        principle: >
+          ΔVp = V_cumulate − V_bulk（Step-3）。观测只能给出 V_LC；论文取 F≈0.7–0.8 时 ΔVp,max≈0.15 km/s，
+          故 V_bulk 可低至 V_LC − 0.15 仍与 Fig.5 一致。
+        usage: >
+          读 Tp、χ 时在 H–Vp 图上对厚壳点绘制竖线段 [V_LC−ΔVp, V_LC]；薄壳不画上界约束。
+        gui: >
+          勾选「Step-2 竖段」；「ΔVp」默认 0.15 km/s。Export / Transect 预览 Fig.15(c) 同样使用此带宽。
+        defaults:
+          delta_vp_max_km_s: 0.15
+        reference: "Fig.5 @ F=0.7–0.8"
+        prev:
+          - id: fc_delta
+            blurb: "Step 3 分离结晶 ΔVp(F)"
+        next:
+          - id: bulk_bounds
+            blurb: "与上界合并为 Step-2 竖段"
+          - id: track_fig12
+            blurb: "厚壳观测读图带宽"
+      - id: pt_corr
+        name: "P–T 校正 (Fig.7)"
+        display: "V_600/400 = V_obs + 0.0002(600 − P) − 0.0004(400 − T)"
+        latex: "V_{600/400} = V_{\\mathrm{obs}} + 0.0002(600-P) - 0.0004(400-T)"
+        purpose: >
+          将层析/剖面 **原位 Vp** 统一到 KKHS02 全文使用的 600 MPa、400 °C 参考态，便于与 H–Vp 图对比。
+        principle: >
+          Fig.7 偏导数：∂Vp/∂P、∂Vp/∂T 在参考态线性外推。P 由深度/地温估算，T 由地温梯度（默认 20 °C/km）估算。
+        usage: >
+          imodel 导出单点/沿迹时，对每个深度样点做 P–T 校正后再谐和平均得 V_LC；Petrology 导入 JSON/CSV 时已为参考态。
+        gui: >
+          imodel「Export / Transect」内部自动应用；本 GUI 观测锚点 H、V_LC 应使用 **已校正** 的值。
+        defaults:
+          dV_dP_km_s_per_MPa: 0.0002
+          dV_dT_km_s_per_C: -0.0004
+        reference: "§5, Fig.15a"
+        next:
+          - id: harmonic_vlc
+            blurb: "校正后再谐和平均得 V_LC"
+          - id: bulk_bounds
+            blurb: "参考态 V_LC 与模型 V_bulk 对比"
+
+  - id: step3
+    title: "Step 3 — 分离结晶 ΔVp(F)"
+    items:
+      - id: fc_delta
+        name: "ΔVp = V_cum − V_bulk"
+        display: "ΔVp = V_cumulate − V_bulk"
+        latex: "\\Delta V_p = V_{\\mathrm{cumulate}} - V_{\\mathrm{bulk}}"
+        purpose: >
+          量化 **分离结晶** 使 bulk 速度相对堆晶岩端元降低的幅度，连接 Step-2 读图带宽与 W&L 结晶路径。
+        principle: >
+          V_cumulate 为结晶堆积分出的固相速度；V_bulk 为全柱假想固相（Step-1）。
+          ΔVp 随 F 变化，在 F=0.7–0.8 附近约 0.15 km/s（Fig.5）。
+        usage: >
+          复现轨用 W&L (1990) + Langmuir 高压校正；Modern 轨可用热力学 FC 路径（开发中）。
+          Step-2 中 ΔVp,max 即对此的摘要约束。
+        gui: >
+          不单独输入；通过「ΔVp」与 Step-2 竖段体现。验证菜单可打开 Katz / 经典曲线对照。
+        reference: "W&L (1990), Fig.5"
+        prev:
+          - id: eq1
+            blurb: "全柱假想 bulk（Step 1）"
+          - id: hs_mix
+            blurb: "堆晶与 bulk 同套 HS 混合"
+        next:
+          - id: delta_vp
+            blurb: "摘要为读图用 ΔVp,max"
+
+  - id: step4
+    title: "Step 4 — 主动上涌与 H–Vp（§4 方程 4–11）"
+    items:
+      - id: active_upwelling_overview
+        name: "§4 主动上涌总览（H–Vp 图默认轨）"
+        display: |
+          默认「H–Vp 图」正演链（KKHS02 §4 + 方程 (1)）：
+            Tp → (4)(5) 得 P₀ → (6) 线性 F(P) → (11) 闭式得 P_f
+              → (7)(10) 自洽 H → (8)(9) 得 (F̄, P̄) → 方程 (1) 得 V_bulk
+          方程 (11) 即论文：
+            P_f = P₀ + (1/χ)·(∂F/∂P)_S^{-1}
+                  ·{1 − [1 + 2χ(∂F/∂P)_S(P₀ − b/30)]^{1/2}}
+          实现：active_upwelling.solve_active_upwelling
+        latex: >
+          T_p \\xrightarrow{(4)(5)} P_0 \\xrightarrow{(6)\\text{–}(11)}
+          (H,\\bar P,\\bar F) \\xrightarrow{(1)} V_{\\mathrm{bulk}}
+        purpose: >
+          把论文 **「Mantle Melting Model With Active Upwelling」** 整节公式与 GUI 默认
+          H–Vp 曲线一一对应，避免只写方程 (10) 而漏掉 (4)–(9)、(11)。
+        principle: >
+          固相线 Takahashi & Kushiro (1983)；绝热线 McKenzie & Bickle (1988) 梯度 20 °C/GPa；
+          深度–压力换算 30 km/GPa（方程 7、10）。χ≥1：χ=1 为纯主动上涌端元。
+          线性 F 时优先用方程 (11) 闭式求 P_f（见同组「方程 (11)」条目，含论文原式）。
+          生产 Vp **无纵轴偏置**（raw 方程 1；b1=−0.55）。
+          Modern 轨不用 (4)–(11) 线性闭式，改用 REEBOX/三角几何，但仍查同一方程 (1)。
+        usage: >
+          GUI「H–Vp 显示」默认；reproduce_fig12.py；hvp_plot.build_fig12_linear_curves。
+        gui: >
+          公式查阅 → Step 4 → 展开后可见方程 (4)…(11)；点「方程 (11)」看论文原式。
+          「H–Vp 显示」→ H–Vp 图。
+        reference: "KKHS02 §4 eqs.(4)–(11), Fig.11–12; petrology/active_upwelling.py"
+        next:
+          - id: eq4
+            blurb: "固相线 T₀(P₀)"
+          - id: eq11
+            blurb: "论文原式 P_f 闭式 (11)"
+          - id: eq1
+            blurb: "(P̄,F̄) → V_bulk"
+          - id: track_fig12
+            blurb: "H–Vp 图轨说明"
+
+      - id: eq4
+        name: "方程 (4) 干橄榄岩固相线"
+        display: "T₀ = 1150 + 120 · P₀   (°C, P₀ in GPa)"
+        latex: "T_0 = 1150 + 120\\,P_0"
+        purpose: >
+          给出开始熔融深度处的固相线温度 T₀，与绝热线交点定出初始熔融压力 P₀。
+        principle: >
+          Takahashi & Kushiro (1983) 干橄榄岩固相线（KKHS02 §4 采用）。
+          常数：T₀(0)=1150 °C，dT/dP = 120 °C/GPa。
+          实现：active_upwelling.solidus_tk83_c / TK83_SOLIDUS_*。
+        usage: >
+          与方程 (5) 联立：由给定 Tp 反解 P₀（见 p0_from_tp）。
+        gui: >
+          H–Vp 图 / Tp–χ 扫描隐式使用；无单独控件。
+        defaults:
+          T0_intercept_C: 1150
+          dT_dP_C_per_GPa: 120
+        reference: "KKHS02 §4 eq.(4); Takahashi & Kushiro (1983)"
+        prev:
+          - id: active_upwelling_overview
+            blurb: "§4 总览"
+        next:
+          - id: eq5
+            blurb: "绝热线与 Tp"
+
+      - id: eq5
+        name: "方程 (5) 潜在温度与绝热线"
+        display: |
+          T(P) = Tp + 20 · P          (MB88 绝热线)
+          Tp   = T₀ − 20 · P₀         (在 P₀ 处与固相线相交)
+          ⇒ P₀ = (Tp − 1150) / (120 − 20) = (Tp − 1150) / 100
+        latex: >
+          T_p = T_0 - 20\\,P_0
+          \\quad\\Rightarrow\\quad
+          P_0 = (T_p - 1150)/(120 - 20)
+        purpose: >
+          用潜在温度 Tp 确定熔融柱底部压力 P₀（开始熔融深度）。
+        principle: >
+          McKenzie & Bickle (1988) 线性绝热梯度 20 °C/GPa。
+          在 P₀：绝热线 Tp+20·P₀ = 固相线 1150+120·P₀ → 上式。
+          实现：adiabat_mb88_c、p0_from_tp、tp_from_solidus_at_p0。
+        usage: >
+          输入 Tp（扫描网格或单点正演）→ 得 P₀，再进入方程 (6)–(11)。
+        gui: >
+          「Tp min/max」扫描范围；单点「Tp」。
+        defaults:
+          adiabat_C_per_GPa: 20
+        reference: "KKHS02 §4 eq.(5); McKenzie & Bickle (1988)"
+        prev:
+          - id: eq4
+            blurb: "固相线 T₀"
+        next:
+          - id: eq6
+            blurb: "线性 F(P)"
+
+      - id: eq6
+        name: "方程 (6) 线性熔融分数"
+        display: "F(P) = (∂F/∂P)_S · (P₀ − P)   （P_f ≤ P ≤ P₀）"
+        latex: "F(P) = \\left(\\partial F/\\partial P\\right)_S (P_0 - P)"
+        purpose: >
+          在绝热减压路径上用常数产率近似熔融分数随压力的变化（Fig.11 线性律）。
+        principle: >
+          (∂F/∂P)_S 为等熵产率。
+          **论文 §4 / Fig.11 标准模型：12 %/GPa**；默认「H–Vp 图」/ Fig.12 风格轨与之相同
+          （FIG12_DFDP_PER_GPA = FIG11 = 0.12）。Fig.13 灵敏度示例为 16 %/GPa。
+          实现：melt_fraction_linear / LinearMeltingLaw。
+        usage: >
+          仅默认「H–Vp 图」轨；Modern 轨用 Katz/REEBOX F(P,T)，不用本式。
+        gui: >
+          「H–Vp 显示」→ H–Vp 图时启用；与 Modern 对照见双轨。
+        defaults:
+          dF_dP_fig11_fig12_per_GPa: 0.12
+          dF_dP_fig13a_per_GPa: 0.16
+        reference: "KKHS02 §4 eq.(6), Fig.11–12 (12%/GPa); hvp_plot.FIG12_DFDP_PER_GPA"
+        prev:
+          - id: eq5
+            blurb: "P₀(Tp)"
+          - id: linear_fp
+            blurb: "产率取值说明"
+        next:
+          - id: eq7
+            blurb: "P_f 与壳厚几何"
+          - id: eq8
+            blurb: "平均 F̄"
+
+      - id: eq7
+        name: "方程 (7) 柱顶压力与壳厚"
+        display: "P_f = (H + b) / 30   （P_f in GPa；H, b in km）"
+        latex: "P_f = (H + b)/30"
+        purpose: >
+          把火成岩壳厚 H 与岩石圈底埋深 b 换成熔融柱顶部压力 P_f（壳底荷载）。
+        principle: >
+          深度–压力换算 **30 km/GPa**（KKHS02 §4）。b 为柱顶以上已有岩石圈厚度。
+          与方程 (10) 联立构成 **Pf–H 自洽**：H 决定 P_f，P_f 又截断熔融柱从而决定 H。
+          实现：pf_from_geometry；常数 KM_PER_GPA = 30。
+        usage: >
+          线性轨由 (11) 或数值求根满足 (7)+(10)；Modern 三角积分停积后亦取 P_f=(H+b)/30 截断路径。
+        gui: >
+          「b (km)」输入；H 为扫描/正演输出。
+        defaults:
+          scale_km_per_GPa: 30
+        reference: "KKHS02 §4 eq.(7)"
+        prev:
+          - id: eq6
+            blurb: "F(P) 定义域含 P_f"
+        next:
+          - id: eq10
+            blurb: "质量守恒壳厚"
+          - id: eq11
+            blurb: "线性时闭式 P_f"
+
+      - id: eq8
+        name: "方程 (8) 柱平均熔融分数 F̄"
+        display: |
+          一般式：  F̄ = ∫_{P_f}^{P₀} F(P) dP  /  ∫_{P_f}^{P₀} dP
+          线性 F(P)：(∂F/∂P)_S 常数 ⇒ F̄ = ½ F(P_f) = ½ (∂F/∂P)_S · (P₀ − P_f)
+        latex: >
+          \\bar F = \\frac{\\int_{P_f}^{P_0} F(P)\\,dP}{\\int_{P_f}^{P_0} dP}
+          \\xrightarrow{\\text{linear}}
+          \\tfrac12\\left(\\partial F/\\partial P\\right)_S (P_0-P_f)
+        purpose: >
+          得到送入方程 (1) 与方程 (10) 的 **柱平均熔融分数** F̄。
+        principle: >
+          论文一般式为压力区间上的算术平均。线性律下积分得 F̄ = ½ F(P_f)。
+          实现：fbar_linear_mean（线性轨）；非线性格用 melting_law.fbar_mean。
+        usage: >
+          与 P̄ 一起查方程 (1)；并进入方程 (10) 求 H。
+        gui: >
+          扫描表 / 正演结果中的 F̄；无单独输入。
+        reference: "KKHS02 §4 eq.(8)"
+        prev:
+          - id: eq6
+            blurb: "F(P)"
+          - id: eq7
+            blurb: "积分下限 P_f"
+        next:
+          - id: eq9
+            blurb: "平均压力 P̄"
+          - id: eq10
+            blurb: "H ∝ F̄"
+
+      - id: eq9
+        name: "方程 (9) 柱平均压力 P̄"
+        display: |
+          一般式：  P̄ = ∫_{P_f}^{P₀} P·F(P) dP  /  ∫_{P_f}^{P₀} F(P) dP
+          线性 F(P)：实现取  P̄ = (P₀ + P_f) / 2
+          （与线性柱常用简化一致；见 active_upwelling.pbar_mean）
+        latex: >
+          \\bar P = \\frac{\\int_{P_f}^{P_0} P F(P)\\,dP}{\\int_{P_f}^{P_0} F(P)\\,dP}
+          \\xrightarrow{\\text{linear impl.}}
+          (P_0+P_f)/2
+        purpose: >
+          得到送入方程 (1) 的 **熔融柱平均压力** P̄。
+        principle: >
+          论文一般式为按熔融分数加权的压力平均。
+          **本仓库线性轨实现**采用 P̄=(P₀+P_f)/2（active_upwelling 文档与 pbar_mean），
+          未对每个格点数值积分一般式 (9)；对线性 F 这是 Fig.12 复现的标准简化。
+        usage: >
+          (P̄, F̄) → predict_v_bulk_km_s → V_bulk。
+        gui: >
+          正演/扫描输出 P̄；无单独输入。
+        reference: "KKHS02 §4 eq.(9); petrology/active_upwelling.py pbar_mean"
+        prev:
+          - id: eq8
+            blurb: "同柱 F̄"
+        next:
+          - id: eq1
+            blurb: "方程 (1) V_bulk(P̄,F̄)"
+
+      - id: eq10
+        name: "方程 (10) 壳厚"
+        display: "H = 30 · χ · (P₀ − P_f) · F̄"
+        latex: "H = 30\\,\\chi\\,(P_0 - P_f)\\,\\bar F"
+        purpose: >
+          由主动上涌几何与平均熔融分数估算 **镁铁质壳厚 H**，与观测 H 闭合。
+        principle: >
+          30 km/GPa × χ × ΔP × F̄。χ=1 为主动上涌端元；χ 增大相当于更多被动分量、壳更厚。
+          必须与方程 (7) 同时满足（Pf–H 自洽）。实现：h_from_eq10。
+        usage: >
+          对每个 (Tp, χ[, b]) 求解后得 H；与 |ΔH| tol、V_LC 约束联合筛选。
+        gui: >
+          「Tp–χ 扫描」主结果；「b (km)」；「|ΔH| tol」默认 5 km。
+        defaults:
+          scale_km_per_gpa: 30
+        reference: "KKHS02 §4 eq.(10), Fig.11"
+        prev:
+          - id: eq7
+            blurb: "P_f=(H+b)/30"
+          - id: eq8
+            blurb: "F̄"
+          - id: linear_fp
+            blurb: "线性产率"
+          - id: track_modern
+            blurb: "Modern 用三角积分求 H（非本式）"
+        next:
+          - id: eq11
+            blurb: "线性时闭式消元"
+          - id: eq1
+            blurb: "同柱 (P̄,F̄) → V_bulk"
+          - id: bulk_bounds
+            blurb: "H 与 V_bulk 联合闭合"
+
+      - id: eq11
+        name: "方程 (11) 线性 F 时 P_f 闭式"
+        display: |
+          论文原式（KKHS02 §4 eq. 11）：
+          P_f = P₀ + (1/χ)·(∂F/∂P)_S^{-1}
+                · { 1 − [1 + 2·χ·(∂F/∂P)_S·(P₀ − b/30)]^{1/2} }
+
+          等价写法（令 α ≡ (∂F/∂P)_S）：
+          P_f = P₀ + (1/(χ·α)) · { 1 − [1 + 2·χ·α·(P₀ − b/30)]^{1/2} }
+
+          由方程 (7)+(8)+(10) 对线性 F 消元；ΔP = P₀ − P_f > 0。
+        latex: >
+          P_f = P_0 + \\frac{1}{\\chi}
+          \\left(\\frac{\\partial F}{\\partial P}\\right)_S^{-1}
+          \\left\\{1 - \\left[1 + 2\\chi
+          \\left(\\frac{\\partial F}{\\partial P}\\right)_S
+          \\left(P_0 - \\frac{b}{30}\\right)\\right]^{1/2}\\right\\}
+        purpose: >
+          线性熔融时一次求出与方程 (7)(10) 自洽的柱顶压力 P_f（及 ΔP），无需迭代。
+          即你给出的论文公式 (11)；与用 α=(∂F/∂P)_S 的写法完全等价
+          （因为 (1/χ)·α^{-1} = 1/(χ·α)）。
+        principle: >
+          将 F̄=½ α ΔP 代入 H=30 χ ΔP F̄，再令 P_f=(H+b)/30，解出 ΔP 或 P_f。
+          代码先算 ΔP = (√(1+2 χ α (P₀−b/30)) − 1)/(χ α)，再 P_f = P₀ − ΔP
+          （与上式同解）。实现：delta_p_closed_form_linear / pf_closed_form_linear；
+          若闭式失败（无熔融等）则对残差 H(10)−H(7) 数值求根。
+        usage: >
+          solve_active_upwelling 对 LinearMeltingLaw **优先走闭式 (11)**。
+        gui: >
+          公式查阅 → Step 4 →「方程 (11) 线性 F 时 P_f 闭式」。
+          计算上隐式调用；H–Vp 图每个 (Tp,χ) 点内部使用。
+        reference: "KKHS02 §4 eq.(11); active_upwelling.delta_p_closed_form_linear"
+        prev:
+          - id: eq7
+            blurb: "几何 P_f"
+          - id: eq10
+            blurb: "质量 H"
+          - id: eq6
+            blurb: "α = (∂F/∂P)_S"
+        next:
+          - id: eq8
+            blurb: "由 ΔP 得 F̄"
+          - id: eq9
+            blurb: "由 (P₀,P_f) 得 P̄"
+          - id: track_fig12
+            blurb: "整条 H–Vp 曲线"
+
+      - id: linear_fp
+        name: "线性 F(P) 产率（§4 / Fig.11–12 标准）"
+        display: |
+          论文 §4 / Fig.11 标准：(∂F/∂P)_S = 12 %/GPa
+          默认「H–Vp 图」/ Fig.12 风格轨：同上 12 %/GPa
+          Fig.13a 灵敏度示例：16 %/GPa
+        latex: "(\\partial F/\\partial P)_S = 0.12\\,/\\mathrm{GPa}"
+        purpose: >
+          固定方程 (6) 的等熵产率，与 KKHS02 §4 标准模型及 Fig.11/Fig.12 一致。
+        principle: >
+          与完整 Katz/REEBOX 产率不同；仅用于默认「H–Vp 图」轨。
+          Fig.12 与 Fig.11 共用同一线性产率 12%/GPa（非另设 14%）。
+        usage: >
+          build_fig12_linear_curves(..., dfdp_per_gpa=0.12)；reproduce_fig12 / check_fig11。
+        gui: >
+          「H–Vp 显示」默认 → H–Vp 图（内部 12%/GPa）；可选 Modern / 双轨。
+        defaults:
+          dF_dP_per_GPa: 0.12
+        reference: "KKHS02 §4/Fig.11–12; hvp_plot.FIG12_DFDP_PER_GPA=0.12"
+        prev:
+          - id: eq6
+            blurb: "方程 (6) 定义"
+          - id: eq10
+            blurb: "进入壳厚"
+        next:
+          - id: eq11
+            blurb: "闭式 P_f"
+          - id: eq1
+            blurb: "(P̄,F̄) → 方程 (1)"
+          - id: track_fig12
+            blurb: "H–Vp 图说明"
+
+      - id: harmonic_vlc
+        name: "谐和平均 V_LC"
+        display: "V_LC = N / Σ(1/V_i)"
+        latex: "V_{\\mathrm{LC}} = N / \\sum (1/V_i)"
+        purpose: >
+          将下地壳柱内多个深度/测点的 Vp **合并为单一观测量 V_LC**，供 H–Vp 投点与 Tp–χ 扫描对比。
+        principle: >
+          地震学常用谐和平均表示层状介质的等效速度。下地壳定义为镁铁质柱底部 f_lower 比例（界面或多边形确定）。
+        usage: >
+          imodel：单点导出或沿迹滑窗对 LC 深度样点谐和平均；MC σ 来自深度域稀疏抽样（非拾取噪声为主）。
+        gui: >
+          观测锚点「V_LC」；导入 JSON / transect CSV 自动填入。Fig.15(a) 沿迹 V_LC±σ 同此定义。
+        defaults:
+          f_lower: 0.7
+        reference: "§5, Fig.15a"
+        prev:
+          - id: pt_corr
+            blurb: "深度样点 Vp 先校正到 600/400"
+        next:
+          - id: bulk_bounds
+            blurb: "Step 2 bulk 上界"
+          - id: delta_vp
+            blurb: "竖段以 V_LC 为中心"
+
+  - id: tracks
+    title: "计算轨说明"
+    items:
+      - id: track_modern
+        name: "Modern REEBOX"
+        purpose: >
+          默认 **现代正演轨**：Katz/pymelt 熔融 + REEBOX 主动上涌几何，物性用 pymelt 岩性预设。
+        principle: >
+          保留 KKHS02 四步边界框架（V_LC 上界、ΔVp 带、H–Vp 解释），替换 TK83 线性 F(P) 等为现代参数化。
+          三角积分求 H 后按方程 (7) 取 P_f=(H+b)/30，等熵路径截断至该 P_f（Pf–H 自洽）。
+        usage: >
+          新项目解释建议用此轨；可与默认「H–Vp 图」双轨对比。
+        gui: >
+          「H–Vp 显示」→ Modern REEBOX；engine=reebox；岩性 preset 如 greenland_kg1。
+        prev:
+          - id: track_fig12
+            blurb: "对照：默认 H–Vp 图 = §4 (4)–(11)+方程 (1)"
+          - id: active_upwelling_overview
+            blurb: "§4 线性主动上涌总览"
+        next:
+          - id: eq7
+            blurb: "Modern 亦用 P_f=(H+b)/30 截断"
+          - id: eq1
+            blurb: "快速扫描查方程 (1)"
+          - id: bulk_bounds
+            blurb: "扫描可行域闭合"
+      - id: track_fig12
+        name: "H–Vp 图"
+        purpose: >
+          **默认 H–Vp 图**：KKHS02 §4 方程 (4)–(11)（线性主动上涌）+ Step 1 方程 (1)；
+          GUI / reproduce_fig12 以此为准。
+        principle: >
+          完整链：Tp → (4)(5) P₀ → (6) F(P) → (11) 或求根得 P_f
+          → (8)(9) 得 F̄、P̄（线性下 F̄=½F(P_f)，P̄=(P₀+P_f)/2）→ (10)(7) 自洽 H
+          → 方程 (1) 得 V_bulk（生产 b1=−0.55，无 Vp bias）。
+          产率：(∂F/∂P)_S = 12%/GPa（§4 / Fig.11–12 标准，与 check_fig11 一致）。
+          方法源自 Fig.12；印刷数字化 Fig.12a 仅 validation/ 对照。
+          实现：active_upwelling.solve_active_upwelling + vp_regression.predict_v_bulk_km_s。
+        usage: >
+          日常扫描与解释；「轨对比」可与 Modern 并排比较。
+        gui: >
+          「H–Vp 显示」**默认** → H–Vp 图；公式查阅 → Step 4 方程 (4)–(11)。
+        prev:
+          - id: active_upwelling_overview
+            blurb: "§4 总览"
+          - id: eq4
+            blurb: "固相线"
+          - id: eq11
+            blurb: "闭式 P_f"
+          - id: linear_fp
+            blurb: "α=12%/GPa"
+          - id: eq1
+            blurb: "方程 (1) V_bulk"
+        next:
+          - id: bulk_bounds
+            blurb: "Step 2 闭合"
+
+parameters:
+  - name: H_LIM
+    value: "3 – 35 km"
+    purpose: "锁定 KKHS02 Fig.12 风格横轴视窗（H–Vp 图默认读图范围）。"
+    usage: "勾选「论文轴范围」时 H–Vp 图使用此区间。"
+    gui: "模型参数 →「论文轴范围」"
+    next:
+      - id: track_fig12
+        blurb: "H–Vp 图横轴"
+  - name: VP_LIM
+    value: "6.9 – 7.36 km/s"
+    purpose: "锁定 H–Vp 图纵轴（参考态 bulk/LC 速度）显示范围。"
+    usage: "与 H_LIM 联用；取消「论文轴范围」则自动缩放。"
+    gui: "模型参数 →「论文轴范围」"
+    next:
+      - id: track_fig12
+        blurb: "H–Vp 图纵轴"
+  - name: thick_crust_H
+    value: "> 15 km"
+    purpose: "区分厚壳/薄壳；薄壳时 V_LC 作为 bulk 上界的假设失效（论文 §5）。"
+    usage: "H≤15 km 的观测在 H–Vp 上不画 Step-2 竖段，扫描时不强制 bulk 上界。"
+    gui: "「厚壳 H>」默认 15 km；Transect 导出 thick/thin 分轨。"
+    next:
+      - id: bulk_bounds
+        blurb: "薄壳时 bulk 上界失效"
+      - id: delta_vp
+        blurb: "厚壳才画 Step-2 竖段"
+  - name: geotherm
+    value: "20 °C/km"
+    purpose: "imodel 导出时将原位 Vp 校正到 600 MPa、400 °C 所需的地温估计。"
+    usage: "P–T 校正默认梯度；深部地温更高 → 校正后 Vp 略降。"
+    gui: "imodel Export / Transect 内部参数，非本 GUI 直接编辑。"
+    next:
+      - id: pt_corr
+        blurb: "原位 Vp → 600/400 参考态"
+  - name: MC_ensembles
+    value: "100"
+    purpose: "沿迹滑窗 V_LC 不确定度：反映下地壳深度采样与垂向 Vp 异质性。"
+    principle: "每 MC 次每站从 LC 深度样点池随机抽 1 个深度 → 谐和平均；σ = std(窗 V_LC)。"
+    usage: "层析网格顶/底 Vp 差大时 σ 可达 ~0.1–0.3 km/s；需重新 Transect Compute。"
+    gui: "imodel Transect → MC 次数；Fig.15(a) 误差棒。"
+    next:
+      - id: harmonic_vlc
+        blurb: "沿迹 V_LC ± σ"
+  - name: vp_pick_sigma
+    value: "0 km/s"
+    purpose: "可选叠加地震拾取噪声；默认 0，主不确定度来自深度域抽样。"
+    usage: "仅当深度样点几乎同速且需人为放大 σ 时启用。"
+    gui: "imodel Transect →「Vp 拾取 σ」。"
+    next:
+      - id: harmonic_vlc
+        blurb: "可选叠加拾取噪声到 V_LC σ"

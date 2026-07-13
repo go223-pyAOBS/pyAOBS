@@ -1,0 +1,108 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=2.2cm}
+
+\title{iphase 时差公式（与当前代码一致）}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{符号约定}
+\begin{itemize}
+\item $\Delta t$：时差
+\item $V_p, V_s$：末段介质中的 P/S 波速度
+\item $h$：末段垂向厚度（或等效厚度）
+\item $L$：末段路径长度
+\item $p=\mathrm{d}t/\mathrm{d}x$：由走时曲线斜率估计的慢度
+\item $x_{\mathrm{conv}}$：转换点位置，$x_{\mathrm{rec}}$：接收点位置
+\end{itemize}
+
+\section{观测时差定义}
+\subsection{PPS-PPP}
+严格配对模式：
+\begin{equation}
+\Delta t_{\mathrm{PPS-PPP}} = t_{\mathrm{PPS}} - t_{\mathrm{PPP}}.
+\end{equation}
+
+拟合取值模式（默认）：
+\begin{equation}
+\Delta t_{\mathrm{PPS-PPP}} = t_{\mathrm{PPS,fit}}(x) - t_{\mathrm{PPP,fit}}(x).
+\end{equation}
+
+\subsection{PSS-PSP}
+严格配对模式：
+\begin{equation}
+\Delta t_{\mathrm{PSS-PSP}} = t_{\mathrm{PSS}} - t_{\mathrm{PSP}}.
+\end{equation}
+
+拟合取值模式（默认）：
+\begin{equation}
+\Delta t_{\mathrm{PSS-PSP}} = t_{\mathrm{PSS}} - t_{\mathrm{PSP,fit}}(x).
+\end{equation}
+
+\section{理论核心式}
+两类时差在代码中的统一核心为
+\begin{equation}
+\Delta t = L\left(\frac{1}{V_s} - \frac{1}{V_p}\right).
+\end{equation}
+在通常条件 $V_s<V_p$ 下，$\Delta t$ 为正。
+
+\section{PPS-PPP 主理论（1D）}
+由 PPP 拟合走时曲线估计
+\begin{equation}
+p=\frac{\mathrm{d}t}{\mathrm{d}x}, \qquad
+\sin\theta_p = |p|V_p.
+\end{equation}
+路径长度取
+\begin{equation}
+L_{ppp}=\frac{h}{\cos\theta_p}
+=\frac{h}{\sqrt{1-(|p|V_p)^2}}.
+\end{equation}
+代入得
+\begin{equation}
+\Delta t_{\mathrm{PPS-PPP}}^{\mathrm{main}}
+=L_{ppp}\left(\frac{1}{V_s}-\frac{1}{V_p}\right).
+\end{equation}
+
+\section{1D 诊断图4的 PPS-PPP 三条理论线}
+当前代码在图4中绘制三条口径：
+\begin{align}
+\Delta t_{\mathrm{main}} &= \frac{L_{pps}}{V_s} - \frac{L_{ppp}}{V_p}, \\
+\Delta t_{\mathrm{alt1}} &= \frac{L_{ppp}}{V_s} - \frac{L_{ppp}}{V_p}, \\
+\Delta t_{\mathrm{alt2}} &= \frac{L_{pps}}{V_s} - \frac{L_{pps}}{V_p}.
+\end{align}
+其中主线为第一个式子；其余两条为对照线。
+
+\section{1D 诊断图4的 PSS-PSP 三条理论线}
+当前代码同样绘制三条口径：
+\begin{align}
+\Delta t_{\mathrm{main}} &= \frac{L_{pss}}{V_s} - \frac{L_{psp}}{V_p}, \\
+\Delta t_{\mathrm{alt1}} &= \frac{L_{psp}}{V_s} - \frac{L_{psp}}{V_p}, \\
+\Delta t_{\mathrm{alt2}} &= \frac{L_{pss}}{V_s} - \frac{L_{pss}}{V_p}.
+\end{align}
+
+\section{PSS-PSP 主算法口径（与诊断图不同）}
+主算法中，PSS-PSP 使用迭代几何长度：
+\begin{equation}
+L=\sqrt{h^2+\left(x_{\mathrm{conv}}-x_{\mathrm{rec}}\right)^2},
+\end{equation}
+再代入
+\begin{equation}
+\Delta t_{\mathrm{PSS-PSP}} =
+L\left(\frac{1}{V_s}-\frac{1}{V_p}\right).
+\end{equation}
+因此，诊断图中的绿色虚线/点划线只用于形态对照，不等同于主算法反演口径。
+
+\section{结论}
+\begin{itemize}
+\item 观测定义统一为“后相位减前相位”。
+\item 理论核心统一为 $\Delta t=L(1/V_s-1/V_p)$。
+\item 不同模块之间差异主要在 $L$ 的构造方式。
+\end{itemize}
+
+\end{document}

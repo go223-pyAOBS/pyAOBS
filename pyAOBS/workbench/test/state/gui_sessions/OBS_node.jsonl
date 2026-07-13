@@ -1,0 +1,15 @@
+{"ts": "2026-07-06T09:46:34", "event": "imodel_gui_started", "run_id": "OBS_node", "payload": {"argv": [], "frontend": "qt", "module": "pyAOBS.visualization.imodel_qt"}}
+{"ts": "2026-07-06T09:46:34", "event": "runtime_hooks_installed", "run_id": "OBS_node", "payload": {}}
+{"ts": "2026-07-06T09:46:37", "event": "subprocess_run_start", "run_id": "OBS_node", "payload": {"command": "['/home/go223/miniconda3/envs/obs/bin/gmt', '--show-library']"}}
+{"ts": "2026-07-06T09:46:37", "event": "subprocess_popen_start", "run_id": "OBS_node", "payload": {"command": "['/home/go223/miniconda3/envs/obs/bin/gmt', '--show-library']"}}
+{"ts": "2026-07-06T09:46:37", "event": "subprocess_popen_pid", "run_id": "OBS_node", "payload": {"command": "['/home/go223/miniconda3/envs/obs/bin/gmt', '--show-library']", "pid": 114}}
+{"ts": "2026-07-06T09:46:37", "event": "subprocess_run_finish", "run_id": "OBS_node", "payload": {"command": "['/home/go223/miniconda3/envs/obs/bin/gmt', '--show-library']", "returncode": 0}}
+{"ts": "2026-07-06T09:46:37", "event": "imodel_gui_error", "run_id": "OBS_node", "payload": {"error": "PySide6 或 Matplotlib/Qt 后端未就绪。请执行： pip install 'pyAOBS[gui-qt]' 或 pip install PySide6 matplotlib", "frontend": "qt"}}
+{"ts": "2026-07-06T09:46:37", "event": "runtime_hooks_restored", "run_id": "OBS_node", "payload": {}}
+{"ts": "2026-07-06T10:04:55", "event": "imodel_gui_started", "run_id": "OBS_node", "payload": {"argv": [], "frontend": "qt", "module": "pyAOBS.visualization.imodel_qt"}}
+{"ts": "2026-07-06T10:04:55", "event": "runtime_hooks_installed", "run_id": "OBS_node", "payload": {}}
+{"ts": "2026-07-06T10:04:58", "event": "subprocess_run_start", "run_id": "OBS_node", "payload": {"command": "['/home/go223/miniconda3/envs/obs/bin/gmt', '--show-library']"}}
+{"ts": "2026-07-06T10:04:58", "event": "subprocess_popen_start", "run_id": "OBS_node", "payload": {"command": "['/home/go223/miniconda3/envs/obs/bin/gmt', '--show-library']"}}
+{"ts": "2026-07-06T10:04:58", "event": "subprocess_popen_pid", "run_id": "OBS_node", "payload": {"command": "['/home/go223/miniconda3/envs/obs/bin/gmt', '--show-library']", "pid": 450}}
+{"ts": "2026-07-06T10:04:58", "event": "subprocess_run_finish", "run_id": "OBS_node", "payload": {"command": "['/home/go223/miniconda3/envs/obs/bin/gmt', '--show-library']", "returncode": 0}}
+{"ts": "2026-07-06T10:05:11", "event": "runtime_hooks_restored", "run_id": "OBS_node", "payload": {}}

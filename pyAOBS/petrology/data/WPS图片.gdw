@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GetDataWorkspace>
+  <version>2.22</version>
+  <File>
+    <Name>D:\python-learn\pyAOBS\pyAOBS\petrology\data\WPS图片.jpg</Name>
+    <Width>750</Width>
+    <Height>1069</Height>
+  </File>
+  <Line>
+    <Caption>x=8,b=0</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>220,70,220</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">2011,3856,2110,3775,2173,3721,2344,3595,2470,3505,2641,3397,2803,3280,2974,3163,3136,3073,3307,2965</Points>
+    <Points MF="9">3496,2857,3712,2740,3964,2605,4180,2497,4387,2389,4657,2263,5116,2056,5512,1894,5782,1777,6088,1669</Points>
+    <Points MF="9">6502,1525</Points>
+  </Line>
+  <Line>
+    <Caption>x=4,b=0</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>230,220,20</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1345,3856,1453,3730,1588,3577,1723,3433,1822,3334,1921,3244,2074,3109,2218,2983,2389,2866,2587,2704</Points>
+    <Points MF="9">2956,2470,3289,2272,3586,2110,3856,1975,4162,1831,4522,1687,4963,1498,5539,1291,6043,1129,6493,1012</Points>
+  </Line>
+  <Line>
+    <Caption>x=2,b=0</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>255,20,160</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1003,3730,1075,3595,1147,3469,1237,3316,1336,3181,1435,3037,1534,2911,1678,2749,1831,2587,2083,2371</Points>
+    <Points MF="9">2200,2272,2515,2047,2803,1867,3037,1732,3505,1489,3901,1309,4342,1129,4711,1003,5170,850,5611,715</Points>
+    <Points MF="9">6178,571</Points>
+  </Line>
+  <Line>
+    <Caption>x=1,b=0</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>128,220,255</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1003,3028,1048,2929,1129,2767,1246,2569,1309,2479,1435,2308,1498,2227,1642,2074,1903,1822,2083,1678</Points>
+    <Points MF="9">2326,1498,2569,1345,2884,1147,3271,949,3550,823,3811,724,4225,562</Points>
+  </Line>
+  <Line>
+    <Caption>x=1,b=10</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>128,245,128</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1003,2677,1084,2515,1174,2362,1291,2182,1408,2020,1525,1885,1642,1759,1831,1588,2020,1435,2200,1300</Points>
+    <Points MF="9">2416,1165,2749,976,3037,832,3352,688,3595,598,3667,571</Points>
+  </Line>
+  <Line>
+    <Caption>x=1,b=20</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>255,128,64</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1003,2317,1066,2182,1156,2020,1237,1894,1327,1777,1417,1669,1552,1516,1696,1390,1858,1255,2011,1147</Points>
+    <Points MF="9">2173,1039,2362,922,2659,778,2902,679,3136,571</Points>
+  </Line>
+  <Line>
+    <Caption>x=1,b=30</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>128,0,255</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1003,1921,1048,1822,1120,1705,1183,1615,1246,1525,1336,1417,1453,1309,1588,1183,1741,1075,1912,967</Points>
+    <Points MF="9">2101,859,2362,733,2560,634,2704,571</Points>
+  </Line>
+  <Line>
+    <Caption>T=1300</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>200,255,50</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1003,2911,1048,2884,1120,2875,1201,2866,1264,2875,1363,2893,1453,2920,1561,2938,1687,2956,1867,2983</Points>
+    <Points MF="9">1957,2992,2047,3001,2137,3010,2254,3037,2416,3064,2569,3082,2776,3118,2911,3127,3001,3136</Points>
+  </Line>
+  <Line>
+    <Caption>T=1400</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>220,70,220</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1075,1777,1219,1759,1408,1759,1588,1750,1894,1750,2119,1750,2479,1759,2893,1759,3307,1759,3739,1759</Points>
+    <Points MF="9">4495,1768,4927,1759,5323,1786,5656,1768,5791,1777</Points>
+  </Line>
+  <Line>
+    <Caption>T=1500</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>230,220,20</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">2011,913,2173,931,2425,940,2686,949,2983,967,3235,976,3478,985,3766,985,4126,985,4414,967</Points>
+    <Points MF="9">4684,949,4999,949,5359,949,5719,940,6043,931,6169,922,6286,940,6394,967,6493,1003</Points>
+  </Line>
+  <Line>
+    <Caption>T=1350</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>255,20,160</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1003,2389,1111,2335,1228,2299,1363,2272,1579,2254,1858,2263,2065,2272,2317,2281,2506,2290,2767,2308</Points>
+    <Points MF="9">2983,2317,3181,2335,3388,2362,3577,2389,3784,2398,3919,2389,4099,2389,4324,2398</Points>
+  </Line>
+  <Line>
+    <Caption>T=1450</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>128,220,255</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1498,1273,1660,1291,1831,1291,2029,1309,2308,1327,2515,1336,2713,1336,3136,1336,3469,1336,3901,1318</Points>
+    <Points MF="9">4288,1318,4684,1318,5170,1318,5521,1300,5728,1291,6133,1291,6268,1327,6412,1390,6511,1426</Points>
+  </Line>
+  <Line>
+    <Caption>T=1550</Caption>
+    <LineColor>182,183,183</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>128,245,128</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">2605,616,2713,634,2830,643,2992,643,3109,643,3280,652,3442,652,3604,661,3784,670,4045,679</Points>
+    <Points MF="9">4234,679,4369,661,4576,625,4738,598,4900,598,5161,607,5539,625,5908,634,6106,625,6223,625</Points>
+    <Points MF="9">6349,643,6502,679</Points>
+  </Line>
+  <CurrentLine>12</CurrentLine>
+  <Xmin MF="9">1336,3874,5.000000e+000</Xmin>
+  <Xmax MF="9">6511,3874,3.500000e+001</Xmax>
+  <Ymin MF="9">994,3865,6.900000e+000</Ymin>
+  <Ymax MF="9">994,985,7.300000e+000</Ymax>
+  <XScale>linear</XScale>
+  <YScale>linear</YScale>
+  <Position>-359,49</Position>
+  <Zoom>
+    <Scale>80.0</Scale>
+  </Zoom>
+  <Digitize>
+    <IgnorePixels>1</IgnorePixels>
+    <LineIDMethod>2</LineIDMethod>
+  </Digitize>
+  <AutoTrace>
+    <TraceDistance>8</TraceDistance>
+    <SmoothLines>1</SmoothLines>
+  </AutoTrace>
+  <DigitizeArea>
+    <LineOrArea>0</LineOrArea>
+    <RotateAngle>0.000000</RotateAngle>
+    <dx>8.000000</dx>
+  </DigitizeArea>
+  <GridSettings>
+    <ShowGrid>0</ShowGrid>
+    <AreaType>0</AreaType>
+    <dx>15.000000</dx>
+    <dy>15.000000</dy>
+  </GridSettings>
+</GetDataWorkspace>

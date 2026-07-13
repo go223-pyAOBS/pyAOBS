@@ -1,0 +1,5293 @@
+%! xpltlib
+ /initxplt
+ {90 rotate
+ 50 -600 translate
+ 2.834 2.834 scale
+ 0.2 setlinewidth
+ /Helvetica findfont 12 scalefont setfont
+ } def
+ initxplt
+ % segment
+ erasepage
+   12.5000000       170.000000      moveto
+   12.5000000       170.000000      moveto
+   262.500000       170.000000      lineto
+ stroke
+              NaN   170.000000      moveto
+              NaN   170.000000      moveto
+              NaN   172.500000      lineto
+ stroke
+              NaN   170.000000      moveto
+              NaN   170.000000      moveto
+              NaN   172.500000      lineto
+ stroke
+              NaN   173.750000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+( -999999.) show
+ grestore
+              NaN   173.750000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+( -999999.) show
+ grestore
+   125.312500       177.500000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(DISTANCE (km)) show
+ grestore
+   12.5000000       95.0000000      moveto
+   12.5000000       95.0000000      moveto
+   12.5000000       170.000000      lineto
+ stroke
+   12.5000000       95.0000000      moveto
+   12.5000000       95.0000000      moveto
+   10.0000000       95.0000000      lineto
+ stroke
+   12.5000000       107.500000      moveto
+   12.5000000       107.500000      moveto
+   10.0000000       107.500000      lineto
+ stroke
+   12.5000000       120.000000      moveto
+   12.5000000       120.000000      moveto
+   10.0000000       120.000000      lineto
+ stroke
+   12.5000000       132.500000      moveto
+   12.5000000       132.500000      moveto
+   10.0000000       132.500000      lineto
+ stroke
+   12.5000000       145.000000      moveto
+   12.5000000       145.000000      moveto
+   10.0000000       145.000000      lineto
+ stroke
+   12.5000000       157.500000      moveto
+   12.5000000       157.500000      moveto
+   10.0000000       157.500000      lineto
+ stroke
+   12.5000000       170.000000      moveto
+   12.5000000       170.000000      moveto
+   10.0000000       170.000000      lineto
+ stroke
+   8.75000000       93.1250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(30) show
+ grestore
+   8.75000000       105.625000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(25) show
+ grestore
+   8.75000000       118.125000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(20) show
+ grestore
+   8.75000000       130.625000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(15) show
+ grestore
+   8.75000000       143.125000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(10) show
+ grestore
+   8.75000000       155.625000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(5) show
+ grestore
+   8.75000000       168.125000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(0) show
+ grestore
+   5.00000000       123.125000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(DEPTH (km)) show
+ grestore
+   12.5000000       95.0000000      moveto
+   12.5000000       95.0000000      moveto
+   262.500000       95.0000000      lineto
+ stroke
+   262.500000       95.0000000      moveto
+   262.500000       170.000000      lineto
+ stroke
+   262.500000       170.000000      moveto
+   12.5000000       170.000000      lineto
+ stroke
+   12.5000000       170.000000      moveto
+   12.5000000       95.0000000      lineto
+ stroke
+ 0 setgray
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   170.000000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   159.274994      lineto
+ stroke
+         Infinity   169.350006      moveto
+         Infinity   169.350006      moveto
+         Infinity   156.574997      lineto
+ stroke
+         Infinity   167.850006      moveto
+         Infinity   167.850006      moveto
+         Infinity   153.100006      lineto
+ stroke
+         Infinity   142.074997      moveto
+         Infinity   142.074997      moveto
+         Infinity   149.625000      lineto
+ stroke
+         Infinity   115.675003      moveto
+         Infinity   115.675003      moveto
+         Infinity   142.149994      lineto
+ stroke
+         Infinity   99.7249985      moveto
+         Infinity   99.7249985      moveto
+         Infinity   133.050003      lineto
+ stroke
+         Infinity   95.0000000      moveto
+         Infinity   95.0000000      moveto
+         Infinity   95.0000000      lineto
+ stroke
+ 0 setgray
+ 0 setgray
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   167.975006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   168.425003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   167.625000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.699997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.399994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   167.475006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.375000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.899994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.850006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.300003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.324997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.975006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.125000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.924988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.500000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.100006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.850006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.774994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.000000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.975006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.149994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.325012      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.324997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.324997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.424988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.149994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.725006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.850006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.824997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.875000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.975006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.875000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.075012      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.975006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.024994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.449997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   166.074997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.824997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.950012      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.224991      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   160.699997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   160.625000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   160.699997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.000000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.924988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.200012      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.200012      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.274994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.375015      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.149994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.674988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.524994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.674988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.800003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.299988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.774994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.699997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.074997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.475006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   165.500000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.649994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.474991      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.575012      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.449997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.475006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.925003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.375000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.549988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.299988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.574997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.524994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   164.199997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.050003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.850006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.899994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.199997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.924988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.799988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.750000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.750000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.875000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.425003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.324997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.375000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.550003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.375000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.500000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.225006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.024994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.049988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   163.424988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.924988      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.975006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.175003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.899994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.824997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.850006      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.949997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   161.925003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.250000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   162.550003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   159.425003      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   160.274994      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   160.699997      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   159.250000      lineto
+ stroke
+         Infinity   170.000000      moveto
+         Infinity   170.000000      moveto
+         Infinity   159.075012      lineto
+ stroke
+         Infinity   169.250885      moveto
+         Infinity   169.250885      moveto
+         Infinity   167.574997      lineto
+ stroke
+         Infinity   168.235641      moveto
+         Infinity   168.235641      moveto
+         Infinity   165.899994      lineto
+ stroke
+         Infinity   167.975006      moveto
+         Infinity   167.975006      moveto
+         Infinity   165.670654      lineto
+ stroke
+         Infinity   168.018295      moveto
+         Infinity   168.018295      moveto
+         Infinity   165.475006      lineto
+ stroke
+         Infinity   168.300430      moveto
+         Infinity   168.300430      moveto
+         Infinity   165.899994      lineto
+ stroke
+         Infinity   168.425003      moveto
+         Infinity   168.425003      moveto
+         Infinity   165.751892      lineto
+ stroke
+         Infinity   168.238220      moveto
+         Infinity   168.238220      moveto
+         Infinity   165.600006      lineto
+ stroke
+         Infinity   167.899963      moveto
+         Infinity   167.899963      moveto
+         Infinity   165.125000      lineto
+ stroke
+         Infinity   167.625000      moveto
+         Infinity   167.625000      moveto
+         Infinity   164.962433      lineto
+ stroke
+         Infinity   167.585815      moveto
+         Infinity   167.585815      moveto
+         Infinity   164.935730      lineto
+ stroke
+         Infinity   167.570053      moveto
+         Infinity   167.570053      moveto
+         Infinity   164.924988      lineto
+ stroke
+         Infinity   167.259766      moveto
+         Infinity   167.259766      moveto
+         Infinity   164.975006      lineto
+ stroke
+         Infinity   167.011185      moveto
+         Infinity   167.011185      moveto
+         Infinity   165.199997      lineto
+ stroke
+         Infinity   166.754028      moveto
+         Infinity   166.754028      moveto
+         Infinity   165.125000      lineto
+ stroke
+         Infinity   166.699997      moveto
+         Infinity   166.699997      moveto
+         Infinity   164.842865      lineto
+ stroke
+         Infinity   166.645630      moveto
+         Infinity   166.645630      moveto
+         Infinity   164.375000      lineto
+ stroke
+         Infinity   166.481689      moveto
+         Infinity   166.481689      moveto
+         Infinity   163.299988      lineto
+ stroke
+         Infinity   166.399994      moveto
+         Infinity   166.399994      moveto
+         Infinity   163.299988      lineto
+ stroke
+         Infinity   166.498184      moveto
+         Infinity   166.498184      moveto
+         Infinity   163.299988      lineto
+ stroke
+         Infinity   166.887146      moveto
+         Infinity   166.887146      moveto
+         Infinity   164.024994      lineto
+ stroke
+         Infinity   167.191772      moveto
+         Infinity   167.191772      moveto
+         Infinity   165.074997      lineto
+ stroke
+         Infinity   167.475006      moveto
+         Infinity   167.475006      moveto
+         Infinity   165.694489      lineto
+ stroke
+         Infinity   167.471954      moveto
+         Infinity   167.471954      moveto
+         Infinity   165.699997      lineto
+ stroke
+         Infinity   167.246216      moveto
+         Infinity   167.246216      moveto
+         Infinity   165.699997      lineto
+ stroke
+         Infinity   167.017426      moveto
+         Infinity   167.017426      moveto
+         Infinity   165.449997      lineto
+ stroke
+         Infinity   166.708344      moveto
+         Infinity   166.708344      moveto
+         Infinity   164.449997      lineto
+ stroke
+         Infinity   166.375000      moveto
+         Infinity   166.375000      moveto
+         Infinity   163.354218      lineto
+ stroke
+         Infinity   166.335083      moveto
+         Infinity   166.335083      moveto
+         Infinity   163.149994      lineto
+ stroke
+         Infinity   166.119003      moveto
+         Infinity   166.119003      moveto
+         Infinity   162.524994      lineto
+ stroke
+         Infinity   165.899994      moveto
+         Infinity   165.899994      moveto
+         Infinity   162.326477      lineto
+ stroke
+         Infinity   165.891983      moveto
+         Infinity   165.891983      moveto
+         Infinity   162.299988      lineto
+ stroke
+         Infinity   165.853210      moveto
+         Infinity   165.853210      moveto
+         Infinity   162.573013      lineto
+ stroke
+         Infinity   165.850006      moveto
+         Infinity   165.850006      moveto
+         Infinity   162.595612      lineto
+ stroke
+         Infinity   165.893204      moveto
+         Infinity   165.893204      moveto
+         Infinity   162.750000      lineto
+ stroke
+         Infinity   165.987518      moveto
+         Infinity   165.987518      moveto
+         Infinity   163.274994      lineto
+ stroke
+         Infinity   166.200928      moveto
+         Infinity   166.200928      moveto
+         Infinity   164.899994      lineto
+ stroke
+         Infinity   166.267853      moveto
+         Infinity   166.267853      moveto
+         Infinity   165.250000      lineto
+ stroke
+         Infinity   166.296310      moveto
+         Infinity   166.296310      moveto
+         Infinity   165.250000      lineto
+ stroke
+         Infinity   166.300003      moveto
+         Infinity   166.300003      moveto
+         Infinity   165.232101      lineto
+ stroke
+         Infinity   166.302979      moveto
+         Infinity   166.302979      moveto
+         Infinity   165.024994      lineto
+ stroke
+         Infinity   166.310364      moveto
+         Infinity   166.310364      moveto
+         Infinity   164.100006      lineto
+ stroke
+         Infinity   166.317200      moveto
+         Infinity   166.317200      moveto
+         Infinity   163.524994      lineto
+ stroke
+         Infinity   166.322937      moveto
+         Infinity   166.322937      moveto
+         Infinity   163.324997      lineto
+ stroke
+         Infinity   166.324997      moveto
+         Infinity   166.324997      moveto
+         Infinity   163.369980      lineto
+ stroke
+         Infinity   166.512512      moveto
+         Infinity   166.512512      moveto
+         Infinity   163.524994      lineto
+ stroke
+         Infinity   166.830231      moveto
+         Infinity   166.830231      moveto
+         Infinity   164.449997      lineto
+ stroke
+         Infinity   166.975006      moveto
+         Infinity   166.975006      moveto
+         Infinity   164.403442      lineto
+ stroke
+         Infinity   166.752319      moveto
+         Infinity   166.752319      moveto
+         Infinity   164.375000      lineto
+ stroke
+         Infinity   166.182144      moveto
+         Infinity   166.182144      moveto
+         Infinity   163.416443      lineto
+ stroke
+         Infinity   165.979034      moveto
+         Infinity   165.979034      moveto
+         Infinity   163.074997      lineto
+ stroke
+         Infinity   165.550797      moveto
+         Infinity   165.550797      moveto
+         Infinity   162.625000      lineto
+ stroke
+         Infinity   165.125000      moveto
+         Infinity   165.125000      moveto
+         Infinity   163.142853      lineto
+ stroke
+         Infinity   165.112152      moveto
+         Infinity   165.112152      moveto
+         Infinity   163.250000      lineto
+ stroke
+         Infinity   165.040359      moveto
+         Infinity   165.040359      moveto
+         Infinity   163.225006      lineto
+ stroke
+         Infinity   164.972504      moveto
+         Infinity   164.972504      moveto
+         Infinity   162.875000      lineto
+ stroke
+         Infinity   164.924988      moveto
+         Infinity   164.924988      moveto
+         Infinity   162.890533      lineto
+ stroke
+         Infinity   164.969574      moveto
+         Infinity   164.969574      moveto
+         Infinity   162.899994      lineto
+ stroke
+         Infinity   165.032837      moveto
+         Infinity   165.032837      moveto
+         Infinity   163.175003      lineto
+ stroke
+         Infinity   165.106018      moveto
+         Infinity   165.106018      moveto
+         Infinity   163.875000      lineto
+ stroke
+         Infinity   165.289261      moveto
+         Infinity   165.289261      moveto
+         Infinity   163.625000      lineto
+ stroke
+         Infinity   165.477997      moveto
+         Infinity   165.477997      moveto
+         Infinity   161.575012      lineto
+ stroke
+         Infinity   165.500000      moveto
+         Infinity   165.500000      moveto
+         Infinity   161.518829      lineto
+ stroke
+         Infinity   165.615845      moveto
+         Infinity   165.615845      moveto
+         Infinity   161.385391      lineto
+ stroke
+         Infinity   165.668289      moveto
+         Infinity   165.668289      moveto
+         Infinity   161.324997      lineto
+ stroke
+         Infinity   165.913422      moveto
+         Infinity   165.913422      moveto
+         Infinity   161.824997      lineto
+ stroke
+         Infinity   166.073166      moveto
+         Infinity   166.073166      moveto
+         Infinity   163.149994      lineto
+ stroke
+         Infinity   166.100006      moveto
+         Infinity   166.100006      moveto
+         Infinity   163.294724      lineto
+ stroke
+         Infinity   166.067703      moveto
+         Infinity   166.067703      moveto
+         Infinity   163.649994      lineto
+ stroke
+         Infinity   165.937317      moveto
+         Infinity   165.937317      moveto
+         Infinity   163.924988      lineto
+ stroke
+         Infinity   165.850006      moveto
+         Infinity   165.850006      moveto
+         Infinity   164.452072      lineto
+ stroke
+         Infinity   165.809235      moveto
+         Infinity   165.809235      moveto
+         Infinity   164.925003      lineto
+ stroke
+         Infinity   165.774994      moveto
+         Infinity   165.774994      moveto
+         Infinity   164.763245      lineto
+ stroke
+         Infinity   165.688217      moveto
+         Infinity   165.688217      moveto
+         Infinity   164.699997      lineto
+ stroke
+         Infinity   165.232086      moveto
+         Infinity   165.232086      moveto
+         Infinity   162.550003      lineto
+ stroke
+         Infinity   165.074677      moveto
+         Infinity   165.074677      moveto
+         Infinity   162.139465      lineto
+ stroke
+         Infinity   165.000000      moveto
+         Infinity   165.000000      moveto
+         Infinity   161.944733      lineto
+ stroke
+         Infinity   164.996216      moveto
+         Infinity   164.996216      moveto
+         Infinity   161.750000      lineto
+ stroke
+         Infinity   164.975616      moveto
+         Infinity   164.975616      moveto
+         Infinity   161.625000      lineto
+ stroke
+         Infinity   164.975006      moveto
+         Infinity   164.975006      moveto
+         Infinity   161.628372      lineto
+ stroke
+         Infinity   165.030441      moveto
+         Infinity   165.030441      moveto
+         Infinity   161.674988      lineto
+ stroke
+         Infinity   165.060486      moveto
+         Infinity   165.060486      moveto
+         Infinity   161.846619      lineto
+ stroke
+         Infinity   165.069855      moveto
+         Infinity   165.069855      moveto
+         Infinity   161.899994      lineto
+ stroke
+         Infinity   165.095886      moveto
+         Infinity   165.095886      moveto
+         Infinity   162.324997      lineto
+ stroke
+         Infinity   165.137970      moveto
+         Infinity   165.137970      moveto
+         Infinity   163.500000      lineto
+ stroke
+         Infinity   165.149994      moveto
+         Infinity   165.149994      moveto
+         Infinity   163.623291      lineto
+ stroke
+         Infinity   165.235931      moveto
+         Infinity   165.235931      moveto
+         Infinity   164.000000      lineto
+ stroke
+         Infinity   165.325012      moveto
+         Infinity   165.325012      moveto
+         Infinity   164.050903      lineto
+ stroke
+         Infinity   165.324997      moveto
+         Infinity   165.324997      moveto
+         Infinity   164.075012      lineto
+ stroke
+         Infinity   165.325012      moveto
+         Infinity   165.325012      moveto
+         Infinity   163.949997      lineto
+ stroke
+         Infinity   165.324997      moveto
+         Infinity   165.324997      moveto
+         Infinity   163.458450      lineto
+ stroke
+         Infinity   165.324997      moveto
+         Infinity   165.324997      moveto
+         Infinity   163.050003      lineto
+ stroke
+         Infinity   165.324997      moveto
+         Infinity   165.324997      moveto
+         Infinity   162.750000      lineto
+ stroke
+         Infinity   165.324997      moveto
+         Infinity   165.324997      moveto
+         Infinity   162.901138      lineto
+ stroke
+         Infinity   165.386765      moveto
+         Infinity   165.386765      moveto
+         Infinity   163.225006      lineto
+ stroke
+         Infinity   165.408539      moveto
+         Infinity   165.408539      moveto
+         Infinity   163.650299      lineto
+ stroke
+         Infinity   165.424988      moveto
+         Infinity   165.424988      moveto
+         Infinity   163.972137      lineto
+ stroke
+         Infinity   165.577850      moveto
+         Infinity   165.577850      moveto
+         Infinity   165.224991      lineto
+ stroke
+         Infinity   166.149994      moveto
+         Infinity   166.149994      moveto
+         Infinity   165.919891      lineto
+ stroke
+         Infinity   166.141571      moveto
+         Infinity   166.141571      moveto
+         Infinity   165.924988      lineto
+ stroke
+         Infinity   164.725006      moveto
+         Infinity   164.725006      moveto
+         Infinity   164.183624      lineto
+ stroke
+         Infinity   164.740173      moveto
+         Infinity   164.740173      moveto
+         Infinity   164.125000      lineto
+ stroke
+         Infinity   164.850006      moveto
+         Infinity   164.850006      moveto
+         Infinity   163.839462      lineto
+ stroke
+         Infinity   164.778595      moveto
+         Infinity   164.778595      moveto
+         Infinity   163.800003      lineto
+ stroke
+         Infinity   163.837601      moveto
+         Infinity   163.837601      moveto
+         Infinity   163.199997      lineto
+ stroke
+         Infinity   163.824997      moveto
+         Infinity   163.824997      moveto
+         Infinity   163.175446      lineto
+ stroke
+         Infinity   163.846100      moveto
+         Infinity   163.846100      moveto
+         Infinity   161.375000      lineto
+ stroke
+         Infinity   163.861084      moveto
+         Infinity   163.861084      moveto
+         Infinity   160.975006      lineto
+ stroke
+         Infinity   163.875000      moveto
+         Infinity   163.875000      moveto
+         Infinity   161.183777      lineto
+ stroke
+         Infinity   163.878250      moveto
+         Infinity   163.878250      moveto
+         Infinity   161.202484      lineto
+ stroke
+         Infinity   163.886505      moveto
+         Infinity   163.886505      moveto
+         Infinity   161.250000      lineto
+ stroke
+         Infinity   163.932999      moveto
+         Infinity   163.932999      moveto
+         Infinity   162.024994      lineto
+ stroke
+         Infinity   163.975006      moveto
+         Infinity   163.975006      moveto
+         Infinity   163.313019      lineto
+ stroke
+         Infinity   164.593750      moveto
+         Infinity   164.593750      moveto
+         Infinity   164.324997      lineto
+ stroke
+         Infinity   164.875000      moveto
+         Infinity   164.875000      moveto
+         Infinity   164.337006      lineto
+ stroke
+         Infinity   164.634262      moveto
+         Infinity   164.634262      moveto
+         Infinity   164.350006      lineto
+ stroke
+         Infinity   164.074997      moveto
+         Infinity   164.074997      moveto
+         Infinity   163.855652      lineto
+ stroke
+         Infinity   164.068558      moveto
+         Infinity   164.068558      moveto
+         Infinity   163.799988      lineto
+ stroke
+         Infinity   164.001526      moveto
+         Infinity   164.001526      moveto
+         Infinity   162.825012      lineto
+ stroke
+         Infinity   163.975006      moveto
+         Infinity   163.975006      moveto
+         Infinity   162.675781      lineto
+ stroke
+         Infinity   163.987701      moveto
+         Infinity   163.987701      moveto
+         Infinity   162.550003      lineto
+ stroke
+         Infinity   164.013794      moveto
+         Infinity   164.013794      moveto
+         Infinity   162.550003      lineto
+ stroke
+         Infinity   164.024994      moveto
+         Infinity   164.024994      moveto
+         Infinity   162.634781      lineto
+ stroke
+         Infinity   164.456512      moveto
+         Infinity   164.456512      moveto
+         Infinity   162.774994      lineto
+ stroke
+         Infinity   165.449982      moveto
+         Infinity   165.449982      moveto
+         Infinity   164.169357      lineto
+ stroke
+         Infinity   165.505798      moveto
+         Infinity   165.505798      moveto
+         Infinity   164.274994      lineto
+ stroke
+         Infinity   165.970825      moveto
+         Infinity   165.970825      moveto
+         Infinity   165.225006      lineto
+ stroke
+         Infinity   166.074997      moveto
+         Infinity   166.074997      moveto
+         Infinity   165.107300      lineto
+ stroke
+         Infinity   165.848938      moveto
+         Infinity   165.848938      moveto
+         Infinity   164.750000      lineto
+ stroke
+         Infinity   165.824997      moveto
+         Infinity   165.824997      moveto
+         Infinity   164.664886      lineto
+ stroke
+         Infinity   163.058716      moveto
+         Infinity   163.058716      moveto
+         Infinity   162.499969      lineto
+ stroke
+         Infinity   162.949997      moveto
+         Infinity   162.949997      moveto
+         Infinity   162.438858      lineto
+ stroke
+         Infinity   162.005508      moveto
+         Infinity   162.005508      moveto
+         Infinity   161.460602      lineto
+ stroke
+         Infinity   161.225006      moveto
+         Infinity   161.225006      moveto
+         Infinity   160.652176      lineto
+ stroke
+         Infinity   161.216492      moveto
+         Infinity   161.216492      moveto
+         Infinity   160.625000      lineto
+ stroke
+         Infinity   160.700012      moveto
+         Infinity   160.700012      moveto
+         Infinity   159.921783      lineto
+ stroke
+         Infinity   160.690735      moveto
+         Infinity   160.690735      moveto
+         Infinity   159.725006      lineto
+ stroke
+         Infinity   160.681213      moveto
+         Infinity   160.681213      moveto
+         Infinity   159.604507      lineto
+ stroke
+         Infinity   160.649231      moveto
+         Infinity   160.649231      moveto
+         Infinity   159.199997      lineto
+ stroke
+         Infinity   160.631256      moveto
+         Infinity   160.631256      moveto
+         Infinity   159.067032      lineto
+ stroke
+         Infinity   160.625000      moveto
+         Infinity   160.625000      moveto
+         Infinity   159.020691      lineto
+ stroke
+         Infinity   160.636063      moveto
+         Infinity   160.636063      moveto
+         Infinity   158.925003      lineto
+ stroke
+         Infinity   160.666458      moveto
+         Infinity   160.666458      moveto
+         Infinity   158.899994      lineto
+ stroke
+         Infinity   160.699997      moveto
+         Infinity   160.699997      moveto
+         Infinity   158.967285      lineto
+ stroke
+         Infinity   160.719879      moveto
+         Infinity   160.719879      moveto
+         Infinity   158.975006      lineto
+ stroke
+         Infinity   160.881317      moveto
+         Infinity   160.881317      moveto
+         Infinity   159.225006      lineto
+ stroke
+         Infinity   161.000000      moveto
+         Infinity   161.000000      moveto
+         Infinity   159.404556      lineto
+ stroke
+         Infinity   161.417603      moveto
+         Infinity   161.417603      moveto
+         Infinity   159.574997      lineto
+ stroke
+         Infinity   161.949097      moveto
+         Infinity   161.949097      moveto
+         Infinity   160.000000      lineto
+ stroke
+         Infinity   162.924988      moveto
+         Infinity   162.924988      moveto
+         Infinity   161.861465      lineto
+ stroke
+         Infinity   162.836349      moveto
+         Infinity   162.836349      moveto
+         Infinity   162.099991      lineto
+ stroke
+         Infinity   162.200012      moveto
+         Infinity   162.200012      moveto
+         Infinity   161.332626      lineto
+ stroke
+         Infinity   162.200012      moveto
+         Infinity   162.200012      moveto
+         Infinity   161.324997      lineto
+ stroke
+         Infinity   162.200012      moveto
+         Infinity   162.200012      moveto
+         Infinity   161.125000      lineto
+ stroke
+         Infinity   162.200012      moveto
+         Infinity   162.200012      moveto
+         Infinity   161.151520      lineto
+ stroke
+         Infinity   162.200012      moveto
+         Infinity   162.200012      moveto
+         Infinity   161.160095      lineto
+ stroke
+         Infinity   162.257599      moveto
+         Infinity   162.257599      moveto
+         Infinity   161.225006      lineto
+ stroke
+         Infinity   162.272369      moveto
+         Infinity   162.272369      moveto
+         Infinity   161.507050      lineto
+ stroke
+         Infinity   162.274994      moveto
+         Infinity   162.274994      moveto
+         Infinity   161.557312      lineto
+ stroke
+         Infinity   162.753235      moveto
+         Infinity   162.753235      moveto
+         Infinity   161.750000      lineto
+ stroke
+         Infinity   163.959137      moveto
+         Infinity   163.959137      moveto
+         Infinity   163.650452      lineto
+ stroke
+         Infinity   164.180969      moveto
+         Infinity   164.180969      moveto
+         Infinity   164.000000      lineto
+ stroke
+         Infinity   164.375015      moveto
+         Infinity   164.375015      moveto
+         Infinity   163.886307      lineto
+ stroke
+         Infinity   164.149994      moveto
+         Infinity   164.149994      moveto
+         Infinity   163.626419      lineto
+ stroke
+         Infinity   163.674988      moveto
+         Infinity   163.674988      moveto
+         Infinity   162.846832      lineto
+ stroke
+         Infinity   163.626709      moveto
+         Infinity   163.626709      moveto
+         Infinity   162.542267      lineto
+ stroke
+         Infinity   163.524994      moveto
+         Infinity   163.524994      moveto
+         Infinity   161.900711      lineto
+ stroke
+         Infinity   163.546051      moveto
+         Infinity   163.546051      moveto
+         Infinity   161.449997      lineto
+ stroke
+         Infinity   163.622467      moveto
+         Infinity   163.622467      moveto
+         Infinity   160.824997      lineto
+ stroke
+         Infinity   163.674988      moveto
+         Infinity   163.674988      moveto
+         Infinity   160.938141      lineto
+ stroke
+         Infinity   163.715332      moveto
+         Infinity   163.715332      moveto
+         Infinity   161.008011      lineto
+ stroke
+         Infinity   163.753998      moveto
+         Infinity   163.753998      moveto
+         Infinity   161.074997      lineto
+ stroke
+         Infinity   163.800003      moveto
+         Infinity   163.800003      moveto
+         Infinity   161.538696      lineto
+ stroke
+         Infinity   164.508026      moveto
+         Infinity   164.508026      moveto
+         Infinity   162.000000      lineto
+ stroke
+         Infinity   165.299988      moveto
+         Infinity   165.299988      moveto
+         Infinity   163.068054      lineto
+ stroke
+         Infinity   165.502167      moveto
+         Infinity   165.502167      moveto
+         Infinity   163.574997      lineto
+ stroke
+         Infinity   165.774994      moveto
+         Infinity   165.774994      moveto
+         Infinity   164.144974      lineto
+ stroke
+         Infinity   165.752533      moveto
+         Infinity   165.752533      moveto
+         Infinity   164.349991      lineto
+ stroke
+         Infinity   165.699997      moveto
+         Infinity   165.699997      moveto
+         Infinity   164.180298      lineto
+ stroke
+         Infinity   165.074997      moveto
+         Infinity   165.074997      moveto
+         Infinity   163.926453      lineto
+ stroke
+         Infinity   165.077011      moveto
+         Infinity   165.077011      moveto
+         Infinity   163.924988      lineto
+ stroke
+         Infinity   165.475006      moveto
+         Infinity   165.475006      moveto
+         Infinity   164.179352      lineto
+ stroke
+         Infinity   165.486954      moveto
+         Infinity   165.486954      moveto
+         Infinity   164.250000      lineto
+ stroke
+         Infinity   165.500000      moveto
+         Infinity   165.500000      moveto
+         Infinity   164.034531      lineto
+ stroke
+         Infinity   165.086945      moveto
+         Infinity   165.086945      moveto
+         Infinity   163.600006      lineto
+ stroke
+         Infinity   164.649994      moveto
+         Infinity   164.649994      moveto
+         Infinity   163.144104      lineto
+ stroke
+         Infinity   162.704803      moveto
+         Infinity   162.704803      moveto
+         Infinity   162.299988      lineto
+ stroke
+         Infinity   162.475006      moveto
+         Infinity   162.475006      moveto
+         Infinity   162.162750      lineto
+ stroke
+         Infinity   161.575012      moveto
+         Infinity   161.575012      moveto
+         Infinity   161.329407      lineto
+ stroke
+         Infinity   161.568909      moveto
+         Infinity   161.568909      moveto
+         Infinity   161.300003      lineto
+ stroke
+         Infinity   161.449997      moveto
+         Infinity   161.449997      moveto
+         Infinity   160.635223      lineto
+ stroke
+         Infinity   161.454590      moveto
+         Infinity   161.454590      moveto
+         Infinity   160.300003      lineto
+ stroke
+         Infinity   161.465973      moveto
+         Infinity   161.465973      moveto
+         Infinity   159.975006      lineto
+ stroke
+         Infinity   161.475006      moveto
+         Infinity   161.475006      moveto
+         Infinity   160.248184      lineto
+ stroke
+         Infinity   161.549011      moveto
+         Infinity   161.549011      moveto
+         Infinity   160.299988      lineto
+ stroke
+         Infinity   162.144501      moveto
+         Infinity   162.144501      moveto
+         Infinity   160.849991      lineto
+ stroke
+         Infinity   162.925003      moveto
+         Infinity   162.925003      moveto
+         Infinity   161.536255      lineto
+ stroke
+         Infinity   162.976334      moveto
+         Infinity   162.976334      moveto
+         Infinity   161.625000      lineto
+ stroke
+         Infinity   163.375000      moveto
+         Infinity   163.375000      moveto
+         Infinity   161.758698      lineto
+ stroke
+         Infinity   163.398331      moveto
+         Infinity   163.398331      moveto
+         Infinity   161.800003      lineto
+ stroke
+         Infinity   163.549988      moveto
+         Infinity   163.549988      moveto
+         Infinity   162.295364      lineto
+ stroke
+         Infinity   163.625275      moveto
+         Infinity   163.625275      moveto
+         Infinity   162.324997      lineto
+ stroke
+         Infinity   164.299988      moveto
+         Infinity   164.299988      moveto
+         Infinity   162.679077      lineto
+ stroke
+         Infinity   164.324768      moveto
+         Infinity   164.324768      moveto
+         Infinity   162.774994      lineto
+ stroke
+         Infinity   164.548767      moveto
+         Infinity   164.548767      moveto
+         Infinity   163.424988      lineto
+ stroke
+         Infinity   164.574997      moveto
+         Infinity   164.574997      moveto
+         Infinity   163.420990      lineto
+ stroke
+         Infinity   164.559128      moveto
+         Infinity   164.559128      moveto
+         Infinity   163.410583      lineto
+ stroke
+         Infinity   164.542999      moveto
+         Infinity   164.542999      moveto
+         Infinity   163.399994      lineto
+ stroke
+         Infinity   164.524994      moveto
+         Infinity   164.524994      moveto
+         Infinity   163.181763      lineto
+ stroke
+         Infinity   164.357254      moveto
+         Infinity   164.357254      moveto
+         Infinity   163.050003      lineto
+ stroke
+         Infinity   164.199997      moveto
+         Infinity   164.199997      moveto
+         Infinity   162.832001      lineto
+ stroke
+         Infinity   163.704193      moveto
+         Infinity   163.704193      moveto
+         Infinity   162.524994      lineto
+ stroke
+         Infinity   163.325775      moveto
+         Infinity   163.325775      moveto
+         Infinity   162.231812      lineto
+ stroke
+         Infinity   163.091064      moveto
+         Infinity   163.091064      moveto
+         Infinity   162.049988      lineto
+ stroke
+         Infinity   163.050003      moveto
+         Infinity   163.050003      moveto
+         Infinity   162.015289      lineto
+ stroke
+         Infinity   162.883331      moveto
+         Infinity   162.883331      moveto
+         Infinity   160.800003      lineto
+ stroke
+         Infinity   162.850006      moveto
+         Infinity   162.850006      moveto
+         Infinity   160.720978      lineto
+ stroke
+         Infinity   162.863922      moveto
+         Infinity   162.863922      moveto
+         Infinity   160.550003      lineto
+ stroke
+         Infinity   162.870499      moveto
+         Infinity   162.870499      moveto
+         Infinity   160.614594      lineto
+ stroke
+         Infinity   162.889359      moveto
+         Infinity   162.889359      moveto
+         Infinity   160.799988      lineto
+ stroke
+         Infinity   162.899994      moveto
+         Infinity   162.899994      moveto
+         Infinity   161.110687      lineto
+ stroke
+         Infinity   163.149597      moveto
+         Infinity   163.149597      moveto
+         Infinity   161.500000      lineto
+ stroke
+         Infinity   163.199997      moveto
+         Infinity   163.199997      moveto
+         Infinity   161.395874      lineto
+ stroke
+         Infinity   162.924988      moveto
+         Infinity   162.924988      moveto
+         Infinity   160.992065      lineto
+ stroke
+         Infinity   162.836273      moveto
+         Infinity   162.836273      moveto
+         Infinity   160.699997      lineto
+ stroke
+         Infinity   162.799988      moveto
+         Infinity   162.799988      moveto
+         Infinity   160.610199      lineto
+ stroke
+         Infinity   162.750000      moveto
+         Infinity   162.750000      moveto
+         Infinity   160.417191      lineto
+ stroke
+         Infinity   162.750000      moveto
+         Infinity   162.750000      moveto
+         Infinity   160.399994      lineto
+ stroke
+         Infinity   162.750000      moveto
+         Infinity   162.750000      moveto
+         Infinity   160.288879      lineto
+ stroke
+         Infinity   162.866547      moveto
+         Infinity   162.866547      moveto
+         Infinity   160.225006      lineto
+ stroke
+         Infinity   162.875000      moveto
+         Infinity   162.875000      moveto
+         Infinity   160.231506      lineto
+ stroke
+         Infinity   162.609100      moveto
+         Infinity   162.609100      moveto
+         Infinity   160.350006      lineto
+ stroke
+         Infinity   162.425003      moveto
+         Infinity   162.425003      moveto
+         Infinity   160.495392      lineto
+ stroke
+         Infinity   162.424347      moveto
+         Infinity   162.424347      moveto
+         Infinity   160.500000      lineto
+ stroke
+         Infinity   162.401733      moveto
+         Infinity   162.401733      moveto
+         Infinity   160.500000      lineto
+ stroke
+         Infinity   162.357132      moveto
+         Infinity   162.357132      moveto
+         Infinity   160.344437      lineto
+ stroke
+         Infinity   162.351562      moveto
+         Infinity   162.351562      moveto
+         Infinity   160.325012      lineto
+ stroke
+         Infinity   162.324997      moveto
+         Infinity   162.324997      moveto
+         Infinity   160.644745      lineto
+ stroke
+         Infinity   162.333374      moveto
+         Infinity   162.333374      moveto
+         Infinity   160.774994      lineto
+ stroke
+         Infinity   162.347839      moveto
+         Infinity   162.347839      moveto
+         Infinity   160.824997      lineto
+ stroke
+         Infinity   162.372208      moveto
+         Infinity   162.372208      moveto
+         Infinity   160.550018      lineto
+ stroke
+         Infinity   162.375000      moveto
+         Infinity   162.375000      moveto
+         Infinity   160.624466      lineto
+ stroke
+         Infinity   162.428070      moveto
+         Infinity   162.428070      moveto
+         Infinity   160.875000      lineto
+ stroke
+         Infinity   162.515564      moveto
+         Infinity   162.515564      moveto
+         Infinity   161.850052      lineto
+ stroke
+         Infinity   162.550003      moveto
+         Infinity   162.550003      moveto
+         Infinity   161.882431      lineto
+ stroke
+         Infinity   162.538269      moveto
+         Infinity   162.538269      moveto
+         Infinity   161.899994      lineto
+ stroke
+         Infinity   162.375000      moveto
+         Infinity   162.375000      moveto
+         Infinity   160.739151      lineto
+ stroke
+         Infinity   162.379456      moveto
+         Infinity   162.379456      moveto
+         Infinity   160.675018      lineto
+ stroke
+         Infinity   162.447968      moveto
+         Infinity   162.447968      moveto
+         Infinity   160.774994      lineto
+ stroke
+         Infinity   162.500000      moveto
+         Infinity   162.500000      moveto
+         Infinity   161.818161      lineto
+ stroke
+         Infinity   162.610229      moveto
+         Infinity   162.610229      moveto
+         Infinity   162.049988      lineto
+ stroke
+         Infinity   163.203796      moveto
+         Infinity   163.203796      moveto
+         Infinity   162.599991      lineto
+ stroke
+         Infinity   163.225006      moveto
+         Infinity   163.225006      moveto
+         Infinity   162.581329      lineto
+ stroke
+         Infinity   163.116394      moveto
+         Infinity   163.116394      moveto
+         Infinity   162.274994      lineto
+ stroke
+         Infinity   163.024994      moveto
+         Infinity   163.024994      moveto
+         Infinity   162.216522      lineto
+ stroke
+         Infinity   163.027008      moveto
+         Infinity   163.027008      moveto
+         Infinity   162.201263      lineto
+ stroke
+         Infinity   163.030487      moveto
+         Infinity   163.030487      moveto
+         Infinity   162.175003      lineto
+ stroke
+         Infinity   163.042938      moveto
+         Infinity   163.042938      moveto
+         Infinity   161.875000      lineto
+ stroke
+         Infinity   163.050003      moveto
+         Infinity   163.050003      moveto
+         Infinity   161.842529      lineto
+ stroke
+         Infinity   163.148071      moveto
+         Infinity   163.148071      moveto
+         Infinity   161.824997      lineto
+ stroke
+         Infinity   163.425003      moveto
+         Infinity   163.425003      moveto
+         Infinity   162.100006      lineto
+ stroke
+         Infinity   163.387299      moveto
+         Infinity   163.387299      moveto
+         Infinity   162.042023      lineto
+ stroke
+         Infinity   163.327454      moveto
+         Infinity   163.327454      moveto
+         Infinity   161.949997      lineto
+ stroke
+         Infinity   163.011887      moveto
+         Infinity   163.011887      moveto
+         Infinity   161.625000      lineto
+ stroke
+         Infinity   162.924988      moveto
+         Infinity   162.924988      moveto
+         Infinity   161.671967      lineto
+ stroke
+         Infinity   162.972229      moveto
+         Infinity   162.972229      moveto
+         Infinity   161.755249      lineto
+ stroke
+         Infinity   162.975006      moveto
+         Infinity   162.975006      moveto
+         Infinity   161.760132      lineto
+ stroke
+         Infinity   162.805588      moveto
+         Infinity   162.805588      moveto
+         Infinity   161.800003      lineto
+ stroke
+         Infinity   162.350067      moveto
+         Infinity   162.350067      moveto
+         Infinity   160.625000      lineto
+ stroke
+         Infinity   162.175003      moveto
+         Infinity   162.175003      moveto
+         Infinity   160.462494      lineto
+ stroke
+         Infinity   162.038239      moveto
+         Infinity   162.038239      moveto
+         Infinity   160.300003      lineto
+ stroke
+         Infinity   162.001465      moveto
+         Infinity   162.001465      moveto
+         Infinity   160.314148      lineto
+ stroke
+         Infinity   161.899994      moveto
+         Infinity   161.899994      moveto
+         Infinity   160.353210      lineto
+ stroke
+         Infinity   161.824997      moveto
+         Infinity   161.824997      moveto
+         Infinity   160.434723      lineto
+ stroke
+         Infinity   161.831085      moveto
+         Infinity   161.831085      moveto
+         Infinity   160.449997      lineto
+ stroke
+         Infinity   161.850006      moveto
+         Infinity   161.850006      moveto
+         Infinity   160.717560      lineto
+ stroke
+         Infinity   161.949997      moveto
+         Infinity   161.949997      moveto
+         Infinity   160.911865      lineto
+ stroke
+         Infinity   161.925003      moveto
+         Infinity   161.925003      moveto
+         Infinity   161.122101      lineto
+ stroke
+         Infinity   162.047852      moveto
+         Infinity   162.047852      moveto
+         Infinity   161.274994      lineto
+ stroke
+         Infinity   162.050385      moveto
+         Infinity   162.050385      moveto
+         Infinity   161.279068      lineto
+ stroke
+         Infinity   162.250000      moveto
+         Infinity   162.250000      moveto
+         Infinity   161.596680      lineto
+ stroke
+         Infinity   162.550003      moveto
+         Infinity   162.550003      moveto
+         Infinity   162.244110      lineto
+ stroke
+         Infinity   162.460419      moveto
+         Infinity   162.460419      moveto
+         Infinity   162.350006      lineto
+ stroke
+         Infinity   159.425003      moveto
+         Infinity   159.425003      moveto
+         Infinity   158.459229      lineto
+ stroke
+         Infinity   159.548660      moveto
+         Infinity   159.548660      moveto
+         Infinity   158.075012      lineto
+ stroke
+         Infinity   159.784607      moveto
+         Infinity   159.784607      moveto
+         Infinity   157.774994      lineto
+ stroke
+         Infinity   160.067474      moveto
+         Infinity   160.067474      moveto
+         Infinity   157.925003      lineto
+ stroke
+         Infinity   160.274994      moveto
+         Infinity   160.274994      moveto
+         Infinity   157.934036      lineto
+ stroke
+         Infinity   160.472565      moveto
+         Infinity   160.472565      moveto
+         Infinity   157.949997      lineto
+ stroke
+         Infinity   160.631073      moveto
+         Infinity   160.631073      moveto
+         Infinity   157.725006      lineto
+ stroke
+         Infinity   160.699997      moveto
+         Infinity   160.699997      moveto
+         Infinity   157.630005      lineto
+ stroke
+         Infinity   160.690491      moveto
+         Infinity   160.690491      moveto
+         Infinity   157.616287      lineto
+ stroke
+         Infinity   160.488785      moveto
+         Infinity   160.488785      moveto
+         Infinity   157.324997      lineto
+ stroke
+         Infinity   160.190598      moveto
+         Infinity   160.190598      moveto
+         Infinity   157.425003      lineto
+ stroke
+         Infinity   159.891678      moveto
+         Infinity   159.891678      moveto
+         Infinity   157.949997      lineto
+ stroke
+         Infinity   159.592773      moveto
+         Infinity   159.592773      moveto
+         Infinity   158.175003      lineto
+ stroke
+         Infinity   159.314301      moveto
+         Infinity   159.314301      moveto
+         Infinity   157.925003      lineto
+ stroke
+         Infinity   159.250000      moveto
+         Infinity   159.250000      moveto
+         Infinity   157.615143      lineto
+ stroke
+         Infinity   159.245697      moveto
+         Infinity   159.245697      moveto
+         Infinity   157.174988      lineto
+ stroke
+         Infinity   159.237411      moveto
+         Infinity   159.237411      moveto
+         Infinity   157.050003      lineto
+ stroke
+         Infinity   159.229340      moveto
+         Infinity   159.229340      moveto
+         Infinity   157.030411      lineto
+ stroke
+         Infinity   159.227097      moveto
+         Infinity   159.227097      moveto
+         Infinity   157.024994      lineto
+ stroke
+         Infinity   159.193573      moveto
+         Infinity   159.193573      moveto
+         Infinity   157.074997      lineto
+ stroke
+         Infinity   159.152100      moveto
+         Infinity   159.152100      moveto
+         Infinity   157.675003      lineto
+ stroke
+         Infinity   159.146805      moveto
+         Infinity   159.146805      moveto
+         Infinity   157.691101      lineto
+ stroke
+         Infinity   159.119186      moveto
+         Infinity   159.119186      moveto
+         Infinity   157.774994      lineto
+ stroke
+         Infinity   159.090576      moveto
+         Infinity   159.090576      moveto
+         Infinity   157.725006      lineto
+ stroke
+         Infinity   159.075012      moveto
+         Infinity   159.075012      moveto
+         Infinity   157.310287      lineto
+ stroke
+         Infinity   159.117126      moveto
+         Infinity   159.117126      moveto
+         Infinity   157.074997      lineto
+ stroke
+         Infinity   167.916168      moveto
+         Infinity   167.916168      moveto
+         Infinity   165.925003      lineto
+ stroke
+         Infinity   167.574997      moveto
+         Infinity   167.574997      moveto
+         Infinity   165.573547      lineto
+ stroke
+         Infinity   166.257843      moveto
+         Infinity   166.257843      moveto
+         Infinity   163.625000      lineto
+ stroke
+         Infinity   165.899994      moveto
+         Infinity   165.899994      moveto
+         Infinity   163.369537      lineto
+ stroke
+         Infinity   165.511887      moveto
+         Infinity   165.511887      moveto
+         Infinity   162.850006      lineto
+ stroke
+         Infinity   165.475006      moveto
+         Infinity   165.475006      moveto
+         Infinity   162.846588      lineto
+ stroke
+         Infinity   165.732132      moveto
+         Infinity   165.732132      moveto
+         Infinity   162.774994      lineto
+ stroke
+         Infinity   165.748718      moveto
+         Infinity   165.748718      moveto
+         Infinity   162.797272      lineto
+ stroke
+         Infinity   165.899994      moveto
+         Infinity   165.899994      moveto
+         Infinity   163.000641      lineto
+ stroke
+         Infinity   165.753586      moveto
+         Infinity   165.753586      moveto
+         Infinity   163.250000      lineto
+ stroke
+         Infinity   165.600006      moveto
+         Infinity   165.600006      moveto
+         Infinity   162.901413      lineto
+ stroke
+         Infinity   165.142487      moveto
+         Infinity   165.142487      moveto
+         Infinity   162.299988      lineto
+ stroke
+         Infinity   165.125000      moveto
+         Infinity   165.125000      moveto
+         Infinity   162.290863      lineto
+ stroke
+         Infinity   165.011505      moveto
+         Infinity   165.011505      moveto
+         Infinity   162.149994      lineto
+ stroke
+         Infinity   164.924988      moveto
+         Infinity   164.924988      moveto
+         Infinity   162.352203      lineto
+ stroke
+         Infinity   164.942490      moveto
+         Infinity   164.942490      moveto
+         Infinity   162.524994      lineto
+ stroke
+         Infinity   164.972824      moveto
+         Infinity   164.972824      moveto
+         Infinity   162.625000      lineto
+ stroke
+         Infinity   164.975006      moveto
+         Infinity   164.975006      moveto
+         Infinity   162.616516      lineto
+ stroke
+         Infinity   165.019440      moveto
+         Infinity   165.019440      moveto
+         Infinity   162.585663      lineto
+ stroke
+         Infinity   165.178802      moveto
+         Infinity   165.178802      moveto
+         Infinity   162.475006      lineto
+ stroke
+         Infinity   165.199997      moveto
+         Infinity   165.199997      moveto
+         Infinity   162.437759      lineto
+ stroke
+         Infinity   165.156403      moveto
+         Infinity   165.156403      moveto
+         Infinity   162.200012      lineto
+ stroke
+         Infinity   165.125000      moveto
+         Infinity   165.125000      moveto
+         Infinity   161.656815      lineto
+ stroke
+         Infinity   164.781738      moveto
+         Infinity   164.781738      moveto
+         Infinity   161.324997      lineto
+ stroke
+         Infinity   164.375000      moveto
+         Infinity   164.375000      moveto
+         Infinity   161.013947      lineto
+ stroke
+         Infinity   163.638626      moveto
+         Infinity   163.638626      moveto
+         Infinity   160.274994      lineto
+ stroke
+         Infinity   163.299988      moveto
+         Infinity   163.299988      moveto
+         Infinity   160.274994      lineto
+ stroke
+         Infinity   163.299988      moveto
+         Infinity   163.299988      moveto
+         Infinity   160.274994      lineto
+ stroke
+         Infinity   163.299988      moveto
+         Infinity   163.299988      moveto
+         Infinity   160.384369      lineto
+ stroke
+         Infinity   163.358643      moveto
+         Infinity   163.358643      moveto
+         Infinity   160.394928      lineto
+ stroke
+         Infinity   163.386810      moveto
+         Infinity   163.386810      moveto
+         Infinity   160.399994      lineto
+ stroke
+         Infinity   164.024994      moveto
+         Infinity   164.024994      moveto
+         Infinity   161.012222      lineto
+ stroke
+         Infinity   164.194214      moveto
+         Infinity   164.194214      moveto
+         Infinity   161.100006      lineto
+ stroke
+         Infinity   165.074997      moveto
+         Infinity   165.074997      moveto
+         Infinity   162.887543      lineto
+ stroke
+         Infinity   165.196136      moveto
+         Infinity   165.196136      moveto
+         Infinity   163.274994      lineto
+ stroke
+         Infinity   165.504517      moveto
+         Infinity   165.504517      moveto
+         Infinity   164.000000      lineto
+ stroke
+         Infinity   165.699997      moveto
+         Infinity   165.699997      moveto
+         Infinity   164.230896      lineto
+ stroke
+         Infinity   165.699997      moveto
+         Infinity   165.699997      moveto
+         Infinity   164.399994      lineto
+ stroke
+         Infinity   165.699997      moveto
+         Infinity   165.699997      moveto
+         Infinity   164.386292      lineto
+ stroke
+         Infinity   165.567551      moveto
+         Infinity   165.567551      moveto
+         Infinity   164.375000      lineto
+ stroke
+         Infinity   165.449997      moveto
+         Infinity   165.449997      moveto
+         Infinity   164.155853      lineto
+ stroke
+         Infinity   165.400970      moveto
+         Infinity   165.400970      moveto
+         Infinity   164.125000      lineto
+ stroke
+         Infinity   164.449997      moveto
+         Infinity   164.449997      moveto
+         Infinity   163.059357      lineto
+ stroke
+         Infinity   163.648071      moveto
+         Infinity   163.648071      moveto
+         Infinity   162.174988      lineto
+ stroke
+         Infinity   163.149994      moveto
+         Infinity   163.149994      moveto
+         Infinity   161.816711      lineto
+ stroke
+         Infinity   162.631989      moveto
+         Infinity   162.631989      moveto
+         Infinity   161.157486      lineto
+ stroke
+         Infinity   162.547516      moveto
+         Infinity   162.547516      moveto
+         Infinity   161.049988      lineto
+ stroke
+         Infinity   162.524994      moveto
+         Infinity   162.524994      moveto
+         Infinity   161.039459      lineto
+ stroke
+         Infinity   162.347641      moveto
+         Infinity   162.347641      moveto
+         Infinity   160.774994      lineto
+ stroke
+         Infinity   162.299988      moveto
+         Infinity   162.299988      moveto
+         Infinity   160.782074      lineto
+ stroke
+         Infinity   162.557953      moveto
+         Infinity   162.557953      moveto
+         Infinity   160.799988      lineto
+ stroke
+         Infinity   162.591827      moveto
+         Infinity   162.591827      moveto
+         Infinity   160.820374      lineto
+ stroke
+         Infinity   162.750000      moveto
+         Infinity   162.750000      moveto
+         Infinity   160.915436      lineto
+ stroke
+         Infinity   163.163544      moveto
+         Infinity   163.163544      moveto
+         Infinity   161.074997      lineto
+ stroke
+         Infinity   163.274994      moveto
+         Infinity   163.274994      moveto
+         Infinity   161.291336      lineto
+ stroke
+         Infinity   164.338272      moveto
+         Infinity   164.338272      moveto
+         Infinity   162.799988      lineto
+ stroke
+         Infinity   164.899994      moveto
+         Infinity   164.899994      moveto
+         Infinity   163.520599      lineto
+ stroke
+         Infinity   164.982666      moveto
+         Infinity   164.982666      moveto
+         Infinity   163.674988      lineto
+ stroke
+         Infinity   164.985443      moveto
+         Infinity   164.985443      moveto
+         Infinity   163.677612      lineto
+ stroke
+         Infinity   165.250000      moveto
+         Infinity   165.250000      moveto
+         Infinity   163.928040      lineto
+ stroke
+         Infinity   165.250000      moveto
+         Infinity   165.250000      moveto
+         Infinity   163.975006      lineto
+ stroke
+         Infinity   165.250000      moveto
+         Infinity   165.250000      moveto
+         Infinity   163.898590      lineto
+ stroke
+         Infinity   165.071014      moveto
+         Infinity   165.071014      moveto
+         Infinity   163.750000      lineto
+ stroke
+         Infinity   165.024994      moveto
+         Infinity   165.024994      moveto
+         Infinity   163.644989      lineto
+ stroke
+         Infinity   164.100006      moveto
+         Infinity   164.100006      moveto
+         Infinity   162.472504      lineto
+ stroke
+         Infinity   163.942337      moveto
+         Infinity   163.942337      moveto
+         Infinity   162.174988      lineto
+ stroke
+         Infinity   163.524994      moveto
+         Infinity   163.524994      moveto
+         Infinity   161.671997      lineto
+ stroke
+         Infinity   163.431412      moveto
+         Infinity   163.431412      moveto
+         Infinity   161.399994      lineto
+ stroke
+         Infinity   163.324997      moveto
+         Infinity   163.324997      moveto
+         Infinity   161.359940      lineto
+ stroke
+         Infinity   163.466370      moveto
+         Infinity   163.466370      moveto
+         Infinity   161.274994      lineto
+ stroke
+         Infinity   163.524994      moveto
+         Infinity   163.524994      moveto
+         Infinity   161.409851      lineto
+ stroke
+         Infinity   163.892731      moveto
+         Infinity   163.892731      moveto
+         Infinity   161.649994      lineto
+ stroke
+         Infinity   164.449997      moveto
+         Infinity   164.449997      moveto
+         Infinity   163.173416      lineto
+ stroke
+         Infinity   164.437805      moveto
+         Infinity   164.437805      moveto
+         Infinity   163.475006      lineto
+ stroke
+         Infinity   164.375000      moveto
+         Infinity   164.375000      moveto
+         Infinity   163.617889      lineto
+ stroke
+         Infinity   164.333862      moveto
+         Infinity   164.333862      moveto
+         Infinity   163.625000      lineto
+ stroke
+         Infinity   163.075012      moveto
+         Infinity   163.075012      moveto
+         Infinity   161.224991      lineto
+ stroke
+         Infinity   162.702148      moveto
+         Infinity   162.702148      moveto
+         Infinity   160.699997      lineto
+ stroke
+         Infinity   162.625000      moveto
+         Infinity   162.625000      moveto
+         Infinity   160.709808      lineto
+ stroke
+         Infinity   162.991058      moveto
+         Infinity   162.991058      moveto
+         Infinity   160.750000      lineto
+ stroke
+         Infinity   163.250000      moveto
+         Infinity   163.250000      moveto
+         Infinity   160.954590      lineto
+ stroke
+         Infinity   163.239929      moveto
+         Infinity   163.239929      moveto
+         Infinity   161.145050      lineto
+ stroke
+         Infinity   163.235687      moveto
+         Infinity   163.235687      moveto
+         Infinity   161.225006      lineto
+ stroke
+         Infinity   163.225006      moveto
+         Infinity   163.225006      moveto
+         Infinity   161.195129      lineto
+ stroke
+         Infinity   163.118164      moveto
+         Infinity   163.118164      moveto
+         Infinity   161.174988      lineto
+ stroke
+         Infinity   162.875000      moveto
+         Infinity   162.875000      moveto
+         Infinity   160.940399      lineto
+ stroke
+         Infinity   162.884232      moveto
+         Infinity   162.884232      moveto
+         Infinity   160.799988      lineto
+ stroke
+         Infinity   162.899994      moveto
+         Infinity   162.899994      moveto
+         Infinity   160.823425      lineto
+ stroke
+         Infinity   162.921509      moveto
+         Infinity   162.921509      moveto
+         Infinity   160.824997      lineto
+ stroke
+         Infinity   163.175003      moveto
+         Infinity   163.175003      moveto
+         Infinity   160.972214      lineto
+ stroke
+         Infinity   163.375000      moveto
+         Infinity   163.375000      moveto
+         Infinity   161.024994      lineto
+ stroke
+         Infinity   163.875000      moveto
+         Infinity   163.875000      moveto
+         Infinity   161.649994      lineto
+ stroke
+         Infinity   163.760895      moveto
+         Infinity   163.760895      moveto
+         Infinity   162.649994      lineto
+ stroke
+         Infinity   163.739105      moveto
+         Infinity   163.739105      moveto
+         Infinity   162.656189      lineto
+ stroke
+         Infinity   163.736115      moveto
+         Infinity   163.736115      moveto
+         Infinity   162.657043      lineto
+ stroke
+         Infinity   163.625000      moveto
+         Infinity   163.625000      moveto
+         Infinity   162.688675      lineto
+ stroke
+         Infinity   163.308228      moveto
+         Infinity   163.308228      moveto
+         Infinity   162.699997      lineto
+ stroke
+         Infinity   161.622818      moveto
+         Infinity   161.622818      moveto
+         Infinity   160.899994      lineto
+ stroke
+         Infinity   161.574997      moveto
+         Infinity   161.574997      moveto
+         Infinity   160.881409      lineto
+ stroke
+         Infinity   161.329208      moveto
+         Infinity   161.329208      moveto
+         Infinity   160.475006      lineto
+ stroke
+         Infinity   161.324997      moveto
+         Infinity   161.324997      moveto
+         Infinity   160.480286      lineto
+ stroke
+         Infinity   161.698135      moveto
+         Infinity   161.698135      moveto
+         Infinity   160.744995      lineto
+ stroke
+         Infinity   161.740417      moveto
+         Infinity   161.740417      moveto
+         Infinity   160.774994      lineto
+ stroke
+         Infinity   161.824997      moveto
+         Infinity   161.824997      moveto
+         Infinity   160.971161      lineto
+ stroke
+         Infinity   162.138550      moveto
+         Infinity   162.138550      moveto
+         Infinity   161.149994      lineto
+ stroke
+         Infinity   163.149994      moveto
+         Infinity   163.149994      moveto
+         Infinity   161.589813      lineto
+ stroke
+         Infinity   163.202637      moveto
+         Infinity   163.202637      moveto
+         Infinity   161.625000      lineto
+ stroke
+         Infinity   163.301315      moveto
+         Infinity   163.301315      moveto
+         Infinity   161.678574      lineto
+ stroke
+         Infinity   163.649994      moveto
+         Infinity   163.649994      moveto
+         Infinity   161.867859      lineto
+ stroke
+         Infinity   163.679016      moveto
+         Infinity   163.679016      moveto
+         Infinity   161.949997      lineto
+ stroke
+         Infinity   163.908600      moveto
+         Infinity   163.908600      moveto
+         Infinity   162.024994      lineto
+ stroke
+         Infinity   163.924988      moveto
+         Infinity   163.924988      moveto
+         Infinity   162.029083      lineto
+ stroke
+         Infinity   164.452072      moveto
+         Infinity   164.452072      moveto
+         Infinity   162.074997      lineto
+ stroke
+         Infinity   164.560394      moveto
+         Infinity   164.560394      moveto
+         Infinity   162.115906      lineto
+ stroke
+         Infinity   164.924988      moveto
+         Infinity   164.924988      moveto
+         Infinity   162.253632      lineto
+ stroke
+         Infinity   164.875000      moveto
+         Infinity   164.875000      moveto
+         Infinity   162.300003      lineto
+ stroke
+         Infinity   164.723526      moveto
+         Infinity   164.723526      moveto
+         Infinity   162.024994      lineto
+ stroke
+         Infinity   164.700012      moveto
+         Infinity   164.700012      moveto
+         Infinity   161.911819      lineto
+ stroke
+         Infinity   162.550003      moveto
+         Infinity   162.550003      moveto
+         Infinity   160.313187      lineto
+ stroke
+         Infinity   162.465790      moveto
+         Infinity   162.465790      moveto
+         Infinity   160.199997      lineto
+ stroke
+         Infinity   161.750000      moveto
+         Infinity   161.750000      moveto
+         Infinity   159.703186      lineto
+ stroke
+         Infinity   161.698639      moveto
+         Infinity   161.698639      moveto
+         Infinity   159.399994      lineto
+ stroke
+         Infinity   161.625000      moveto
+         Infinity   161.625000      moveto
+         Infinity   159.290131      lineto
+ stroke
+         Infinity   161.674988      moveto
+         Infinity   161.674988      moveto
+         Infinity   159.207947      lineto
+ stroke
+         Infinity   161.899994      moveto
+         Infinity   161.899994      moveto
+         Infinity   159.153473      lineto
+ stroke
+         Infinity   162.324997      moveto
+         Infinity   162.324997      moveto
+         Infinity   159.117462      lineto
+ stroke
+         Infinity   163.182953      moveto
+         Infinity   163.182953      moveto
+         Infinity   159.075012      lineto
+ stroke
+         Infinity   163.500000      moveto
+         Infinity   163.500000      moveto
+         Infinity   159.096909      lineto
+ stroke
+         Infinity   164.000000      moveto
+         Infinity   164.000000      moveto
+         Infinity   159.190979      lineto
+ stroke
+         Infinity   164.060715      moveto
+         Infinity   164.060715      moveto
+         Infinity   159.278610      lineto
+ stroke
+         Infinity   164.074997      moveto
+         Infinity   164.074997      moveto
+         Infinity   159.299225      lineto
+ stroke
+         Infinity   164.047516      moveto
+         Infinity   164.047516      moveto
+         Infinity   159.324997      lineto
+ stroke
+         Infinity   163.949997      moveto
+         Infinity   163.949997      moveto
+         Infinity   159.696732      lineto
+ stroke
+         Infinity   163.119232      moveto
+         Infinity   163.119232      moveto
+         Infinity   160.325012      lineto
+ stroke
+         Infinity   163.049988      moveto
+         Infinity   163.049988      moveto
+         Infinity   160.393188      lineto
+ stroke
+         Infinity   162.986725      moveto
+         Infinity   162.986725      moveto
+         Infinity   160.577271      lineto
+ stroke
+         Infinity   162.750000      moveto
+         Infinity   162.750000      moveto
+         Infinity   161.265900      lineto
+ stroke
+         Infinity   162.867203      moveto
+         Infinity   162.867203      moveto
+         Infinity   161.524994      lineto
+ stroke
+         Infinity   163.225006      moveto
+         Infinity   163.225006      moveto
+         Infinity   162.078278      lineto
+ stroke
+         Infinity   163.638794      moveto
+         Infinity   163.638794      moveto
+         Infinity   162.250000      lineto
+ stroke
+         Infinity   164.845703      moveto
+         Infinity   164.845703      moveto
+         Infinity   163.299988      lineto
+ stroke
+         Infinity   165.225006      moveto
+         Infinity   165.225006      moveto
+         Infinity   163.820618      lineto
+ stroke
+         Infinity   165.344208      moveto
+         Infinity   165.344208      moveto
+         Infinity   164.925003      lineto
+ stroke
+         Infinity   165.925003      moveto
+         Infinity   165.925003      moveto
+         Infinity   165.524994      lineto
+ stroke
+         Infinity   164.190521      moveto
+         Infinity   164.190521      moveto
+         Infinity   163.375000      lineto
+ stroke
+         Infinity   164.125000      moveto
+         Infinity   164.125000      moveto
+         Infinity   163.257675      lineto
+ stroke
+         Infinity   163.800003      moveto
+         Infinity   163.800003      moveto
+         Infinity   162.393219      lineto
+ stroke
+         Infinity   163.336609      moveto
+         Infinity   163.336609      moveto
+         Infinity   161.324997      lineto
+ stroke
+         Infinity   163.325897      moveto
+         Infinity   163.325897      moveto
+         Infinity   161.296860      lineto
+ stroke
+         Infinity   163.199997      moveto
+         Infinity   163.199997      moveto
+         Infinity   160.966202      lineto
+ stroke
+         Infinity   161.988785      moveto
+         Infinity   161.988785      moveto
+         Infinity   159.925003      lineto
+ stroke
+         Infinity   161.375000      moveto
+         Infinity   161.375000      moveto
+         Infinity   159.677368      lineto
+ stroke
+         Infinity   161.023712      moveto
+         Infinity   161.023712      moveto
+         Infinity   159.225006      lineto
+ stroke
+         Infinity   160.975006      moveto
+         Infinity   160.975006      moveto
+         Infinity   159.260834      lineto
+ stroke
+         Infinity   161.250000      moveto
+         Infinity   161.250000      moveto
+         Infinity   159.621216      lineto
+ stroke
+         Infinity   161.258331      moveto
+         Infinity   161.258331      moveto
+         Infinity   159.625000      lineto
+ stroke
+         Infinity   161.554169      moveto
+         Infinity   161.554169      moveto
+         Infinity   159.846878      lineto
+ stroke
+         Infinity   161.958328      moveto
+         Infinity   161.958328      moveto
+         Infinity   160.149994      lineto
+ stroke
+         Infinity   162.024994      moveto
+         Infinity   162.024994      moveto
+         Infinity   160.297058      lineto
+ stroke
+         Infinity   163.466339      moveto
+         Infinity   163.466339      moveto
+         Infinity   162.025009      lineto
+ stroke
+         Infinity   164.255997      moveto
+         Infinity   164.255997      moveto
+         Infinity   164.075470      lineto
+ stroke
+         Infinity   164.294342      moveto
+         Infinity   164.294342      moveto
+         Infinity   164.174988      lineto
+ stroke
+         Infinity   164.325012      moveto
+         Infinity   164.325012      moveto
+         Infinity   164.174988      lineto
+ stroke
+         Infinity   164.350006      moveto
+         Infinity   164.350006      moveto
+         Infinity   164.174988      lineto
+ stroke
+         Infinity   164.307434      moveto
+         Infinity   164.307434      moveto
+         Infinity   164.174988      lineto
+ stroke
+         Infinity   163.799988      moveto
+         Infinity   163.799988      moveto
+         Infinity   163.594788      lineto
+ stroke
+         Infinity   163.623734      moveto
+         Infinity   163.623734      moveto
+         Infinity   163.475006      lineto
+ stroke
+         Infinity   162.825012      moveto
+         Infinity   162.825012      moveto
+         Infinity   161.792450      lineto
+ stroke
+         Infinity   162.569183      moveto
+         Infinity   162.569183      moveto
+         Infinity   160.399994      lineto
+ stroke
+         Infinity   162.550003      moveto
+         Infinity   162.550003      moveto
+         Infinity   160.371552      lineto
+ stroke
+         Infinity   162.550003      moveto
+         Infinity   162.550003      moveto
+         Infinity   160.125000      lineto
+ stroke
+         Infinity   162.550003      moveto
+         Infinity   162.550003      moveto
+         Infinity   160.138107      lineto
+ stroke
+         Infinity   162.639679      moveto
+         Infinity   162.639679      moveto
+         Infinity   160.154877      lineto
+ stroke
+         Infinity   162.747284      moveto
+         Infinity   162.747284      moveto
+         Infinity   160.174988      lineto
+ stroke
+         Infinity   162.774994      moveto
+         Infinity   162.774994      moveto
+         Infinity   160.337921      lineto
+ stroke
+         Infinity   163.077820      moveto
+         Infinity   163.077820      moveto
+         Infinity   160.750000      lineto
+ stroke
+         Infinity   164.274994      moveto
+         Infinity   164.274994      moveto
+         Infinity   163.155945      lineto
+ stroke
+         Infinity   165.225006      moveto
+         Infinity   165.225006      moveto
+         Infinity   164.924988      lineto
+ stroke
+         Infinity   164.750000      moveto
+         Infinity   164.750000      moveto
+         Infinity   164.417389      lineto
+ stroke
+         Infinity   164.608185      moveto
+         Infinity   164.608185      moveto
+         Infinity   164.350006      lineto
+ stroke
+         Infinity   162.500000      moveto
+         Infinity   162.500000      moveto
+         Infinity   162.219101      lineto
+ stroke
+         Infinity   162.486420      moveto
+         Infinity   162.486420      moveto
+         Infinity   162.200012      lineto
+ stroke
+         Infinity   160.625000      moveto
+         Infinity   160.625000      moveto
+         Infinity   160.062973      lineto
+ stroke
+         Infinity   160.488983      moveto
+         Infinity   160.488983      moveto
+         Infinity   159.696381      lineto
+ stroke
+         Infinity   160.379013      moveto
+         Infinity   160.379013      moveto
+         Infinity   159.399994      lineto
+ stroke
+         Infinity   159.725006      moveto
+         Infinity   159.725006      moveto
+         Infinity   158.123596      lineto
+ stroke
+         Infinity   159.595901      moveto
+         Infinity   159.595901      moveto
+         Infinity   157.700012      lineto
+ stroke
+         Infinity   159.545990      moveto
+         Infinity   159.545990      moveto
+         Infinity   157.596420      lineto
+ stroke
+         Infinity   159.523605      moveto
+         Infinity   159.523605      moveto
+         Infinity   157.550003      lineto
+ stroke
+         Infinity   159.199997      moveto
+         Infinity   159.199997      moveto
+         Infinity   156.878571      lineto
+ stroke
+         Infinity   159.057953      moveto
+         Infinity   159.057953      moveto
+         Infinity   156.375000      lineto
+ stroke
+         Infinity   158.925003      moveto
+         Infinity   158.925003      moveto
+         Infinity   156.160065      lineto
+ stroke
+         Infinity   158.912643      moveto
+         Infinity   158.912643      moveto
+         Infinity   155.949997      lineto
+ stroke
+         Infinity   158.899994      moveto
+         Infinity   158.899994      moveto
+         Infinity   156.009644      lineto
+ stroke
+         Infinity   158.907944      moveto
+         Infinity   158.907944      moveto
+         Infinity   156.024994      lineto
+ stroke
+         Infinity   158.942993      moveto
+         Infinity   158.942993      moveto
+         Infinity   156.375000      lineto
+ stroke
+         Infinity   158.968689      moveto
+         Infinity   158.968689      moveto
+         Infinity   156.875000      lineto
+ stroke
+         Infinity   158.975006      moveto
+         Infinity   158.975006      moveto
+         Infinity   157.065369      lineto
+ stroke
+         Infinity   159.022583      moveto
+         Infinity   159.022583      moveto
+         Infinity   157.425003      lineto
+ stroke
+         Infinity   159.067352      moveto
+         Infinity   159.067352      moveto
+         Infinity   157.671173      lineto
+ stroke
+         Infinity   159.095337      moveto
+         Infinity   159.095337      moveto
+         Infinity   157.824997      lineto
+ stroke
+         Infinity   159.207275      moveto
+         Infinity   159.207275      moveto
+         Infinity   157.975006      lineto
+ stroke
+         Infinity   159.225006      moveto
+         Infinity   159.225006      moveto
+         Infinity   157.963226      lineto
+ stroke
+         Infinity   159.256897      moveto
+         Infinity   159.256897      moveto
+         Infinity   157.941528      lineto
+ stroke
+         Infinity   159.317963      moveto
+         Infinity   159.317963      moveto
+         Infinity   157.899994      lineto
+ stroke
+         Infinity   159.438278      moveto
+         Infinity   159.438278      moveto
+         Infinity   157.899994      lineto
+ stroke
+         Infinity   159.574997      moveto
+         Infinity   159.574997      moveto
+         Infinity   158.093964      lineto
+ stroke
+         Infinity   159.617859      moveto
+         Infinity   159.617859      moveto
+         Infinity   158.125000      lineto
+ stroke
+         Infinity   159.812500      moveto
+         Infinity   159.812500      moveto
+         Infinity   158.088669      lineto
+ stroke
+         Infinity   159.853577      moveto
+         Infinity   159.853577      moveto
+         Infinity   158.080994      lineto
+ stroke
+         Infinity   159.885712      moveto
+         Infinity   159.885712      moveto
+         Infinity   158.074997      lineto
+ stroke
+         Infinity   160.000000      moveto
+         Infinity   160.000000      moveto
+         Infinity   158.233780      lineto
+ stroke
+         Infinity   160.285385      moveto
+         Infinity   160.285385      moveto
+         Infinity   158.399994      lineto
+ stroke
+         Infinity   161.618652      moveto
+         Infinity   161.618652      moveto
+         Infinity   159.272003      lineto
+ stroke
+         Infinity   161.737930      moveto
+         Infinity   161.737930      moveto
+         Infinity   159.350006      lineto
+ stroke
+         Infinity   162.100006      moveto
+         Infinity   162.100006      moveto
+         Infinity   159.095459      lineto
+ stroke
+         Infinity   161.966370      moveto
+         Infinity   161.966370      moveto
+         Infinity   158.885849      lineto
+ stroke
+         Infinity   161.324997      moveto
+         Infinity   161.324997      moveto
+         Infinity   157.879669      lineto
+ stroke
+         Infinity   161.298508      moveto
+         Infinity   161.298508      moveto
+         Infinity   157.699997      lineto
+ stroke
+         Infinity   161.166504      moveto
+         Infinity   161.166504      moveto
+         Infinity   157.074997      lineto
+ stroke
+         Infinity   161.125000      moveto
+         Infinity   161.125000      moveto
+         Infinity   157.119904      lineto
+ stroke
+         Infinity   161.151520      moveto
+         Infinity   161.151520      moveto
+         Infinity   157.196808      lineto
+ stroke
+         Infinity   161.187103      moveto
+         Infinity   161.187103      moveto
+         Infinity   157.300003      lineto
+ stroke
+         Infinity   161.225006      moveto
+         Infinity   161.225006      moveto
+         Infinity   158.550705      lineto
+ stroke
+         Infinity   161.261292      moveto
+         Infinity   161.261292      moveto
+         Infinity   158.621399      lineto
+ stroke
+         Infinity   161.571274      moveto
+         Infinity   161.571274      moveto
+         Infinity   159.225006      lineto
+ stroke
+         Infinity   161.750000      moveto
+         Infinity   161.750000      moveto
+         Infinity   160.076065      lineto
+ stroke
+         Infinity   163.999969      moveto
+         Infinity   163.999969      moveto
+         Infinity   162.815430      lineto
+ stroke
+         Infinity   163.951263      moveto
+         Infinity   163.951263      moveto
+         Infinity   162.975006      lineto
+ stroke
+         Infinity   161.559631      moveto
+         Infinity   161.559631      moveto
+         Infinity   160.177246      lineto
+ stroke
+         Infinity   161.449997      moveto
+         Infinity   161.449997      moveto
+         Infinity   160.048996      lineto
+ stroke
+         Infinity   161.139832      moveto
+         Infinity   161.139832      moveto
+         Infinity   159.098999      lineto
+ stroke
+         Infinity   161.009552      moveto
+         Infinity   161.009552      moveto
+         Infinity   158.699997      lineto
+ stroke
+         Infinity   160.824997      moveto
+         Infinity   160.824997      moveto
+         Infinity   158.469177      lineto
+ stroke
+         Infinity   160.871155      moveto
+         Infinity   160.871155      moveto
+         Infinity   158.250000      lineto
+ stroke
+         Infinity   161.005966      moveto
+         Infinity   161.005966      moveto
+         Infinity   158.324997      lineto
+ stroke
+         Infinity   161.074997      moveto
+         Infinity   161.074997      moveto
+         Infinity   158.424988      lineto
+ stroke
+         Infinity   161.153473      moveto
+         Infinity   161.153473      moveto
+         Infinity   158.444519      lineto
+ stroke
+         Infinity   161.476868      moveto
+         Infinity   161.476868      moveto
+         Infinity   158.524994      lineto
+ stroke
+         Infinity   161.902496      moveto
+         Infinity   161.902496      moveto
+         Infinity   158.824997      lineto
+ stroke
+         Infinity   162.000000      moveto
+         Infinity   162.000000      moveto
+         Infinity   159.004730      lineto
+ stroke
+         Infinity   162.836731      moveto
+         Infinity   162.836731      moveto
+         Infinity   159.750000      lineto
+ stroke
+         Infinity   163.574997      moveto
+         Infinity   163.574997      moveto
+         Infinity   160.876236      lineto
+ stroke
+         Infinity   163.845642      moveto
+         Infinity   163.845642      moveto
+         Infinity   161.371765      lineto
+ stroke
+         Infinity   164.202393      moveto
+         Infinity   164.202393      moveto
+         Infinity   162.024994      lineto
+ stroke
+         Infinity   164.349991      moveto
+         Infinity   164.349991      moveto
+         Infinity   162.010315      lineto
+ stroke
+         Infinity   164.283264      moveto
+         Infinity   164.283264      moveto
+         Infinity   161.991577      lineto
+ stroke
+         Infinity   163.924988      moveto
+         Infinity   163.924988      moveto
+         Infinity   161.890900      lineto
+ stroke
+         Infinity   163.975098      moveto
+         Infinity   163.975098      moveto
+         Infinity   161.875000      lineto
+ stroke
+         Infinity   164.250000      moveto
+         Infinity   164.250000      moveto
+         Infinity   162.238342      lineto
+ stroke
+         Infinity   163.600006      moveto
+         Infinity   163.600006      moveto
+         Infinity   162.545654      lineto
+ stroke
+         Infinity   163.486023      moveto
+         Infinity   163.486023      moveto
+         Infinity   162.600006      lineto
+ stroke
+         Infinity   162.866302      moveto
+         Infinity   162.866302      moveto
+         Infinity   162.449997      lineto
+ stroke
+         Infinity   162.300003      moveto
+         Infinity   162.300003      moveto
+         Infinity   161.852600      lineto
+ stroke
+         Infinity   162.231384      moveto
+         Infinity   162.231384      moveto
+         Infinity   161.800003      lineto
+ stroke
+         Infinity   161.819611      moveto
+         Infinity   161.819611      moveto
+         Infinity   161.500000      lineto
+ stroke
+         Infinity   161.300003      moveto
+         Infinity   161.300003      moveto
+         Infinity   160.769501      lineto
+ stroke
+         Infinity   160.300018      moveto
+         Infinity   160.300018      moveto
+         Infinity   159.556580      lineto
+ stroke
+         Infinity   160.168671      moveto
+         Infinity   160.168671      moveto
+         Infinity   159.150009      lineto
+ stroke
+         Infinity   159.974991      moveto
+         Infinity   159.974991      moveto
+         Infinity   159.064514      lineto
+ stroke
+         Infinity   160.300003      moveto
+         Infinity   160.300003      moveto
+         Infinity   158.928925      lineto
+ stroke
+         Infinity   160.312424      moveto
+         Infinity   160.312424      moveto
+         Infinity   158.925003      lineto
+ stroke
+         Infinity   160.850006      moveto
+         Infinity   160.850006      moveto
+         Infinity   159.141251      lineto
+ stroke
+         Infinity   161.225662      moveto
+         Infinity   161.225662      moveto
+         Infinity   159.299988      lineto
+ stroke
+         Infinity   161.625000      moveto
+         Infinity   161.625000      moveto
+         Infinity   159.605637      lineto
+ stroke
+         Infinity   161.800003      moveto
+         Infinity   161.800003      moveto
+         Infinity   160.296143      lineto
+ stroke
+         Infinity   161.883621      moveto
+         Infinity   161.883621      moveto
+         Infinity   160.475006      lineto
+ stroke
+         Infinity   162.324997      moveto
+         Infinity   162.324997      moveto
+         Infinity   161.195007      lineto
+ stroke
+         Infinity   162.717163      moveto
+         Infinity   162.717163      moveto
+         Infinity   161.675003      lineto
+ stroke
+         Infinity   162.774994      moveto
+         Infinity   162.774994      moveto
+         Infinity   161.692719      lineto
+ stroke
+         Infinity   163.424988      moveto
+         Infinity   163.424988      moveto
+         Infinity   161.958679      lineto
+ stroke
+         Infinity   163.415375      moveto
+         Infinity   163.415375      moveto
+         Infinity   162.033478      lineto
+ stroke
+         Infinity   163.413971      moveto
+         Infinity   163.413971      moveto
+         Infinity   162.044296      lineto
+ stroke
+         Infinity   163.410034      moveto
+         Infinity   163.410034      moveto
+         Infinity   162.074997      lineto
+ stroke
+         Infinity   163.399994      moveto
+         Infinity   163.399994      moveto
+         Infinity   161.979248      lineto
+ stroke
+         Infinity   163.049988      moveto
+         Infinity   163.049988      moveto
+         Infinity   161.798401      lineto
+ stroke
+         Infinity   162.970062      moveto
+         Infinity   162.970062      moveto
+         Infinity   161.774994      lineto
+ stroke
+         Infinity   162.524994      moveto
+         Infinity   162.524994      moveto
+         Infinity   161.289612      lineto
+ stroke
+         Infinity   162.479553      moveto
+         Infinity   162.479553      moveto
+         Infinity   161.250000      lineto
+ stroke
+         Infinity   162.322723      moveto
+         Infinity   162.322723      moveto
+         Infinity   161.075562      lineto
+ stroke
+         Infinity   162.075012      moveto
+         Infinity   162.075012      moveto
+         Infinity   160.799988      lineto
+ stroke
+         Infinity   162.049988      moveto
+         Infinity   162.049988      moveto
+         Infinity   160.766937      lineto
+ stroke
+         Infinity   161.561401      moveto
+         Infinity   161.561401      moveto
+         Infinity   160.175018      lineto
+ stroke
+         Infinity   160.906647      moveto
+         Infinity   160.906647      moveto
+         Infinity   159.725006      lineto
+ stroke
+         Infinity   160.800003      moveto
+         Infinity   160.800003      moveto
+         Infinity   159.680969      lineto
+ stroke
+         Infinity   160.598389      moveto
+         Infinity   160.598389      moveto
+         Infinity   159.425003      lineto
+ stroke
+         Infinity   160.550003      moveto
+         Infinity   160.550003      moveto
+         Infinity   159.457108      lineto
+ stroke
+         Infinity   160.722473      moveto
+         Infinity   160.722473      moveto
+         Infinity   159.600006      lineto
+ stroke
+         Infinity   160.799988      moveto
+         Infinity   160.799988      moveto
+         Infinity   159.971893      lineto
+ stroke
+         Infinity   161.498077      moveto
+         Infinity   161.498077      moveto
+         Infinity   161.100006      lineto
+ stroke
+         Infinity   161.500000      moveto
+         Infinity   161.500000      moveto
+         Infinity   161.096252      lineto
+ stroke
+         Infinity   160.875244      moveto
+         Infinity   160.875244      moveto
+         Infinity   160.174988      lineto
+ stroke
+         Infinity   160.699997      moveto
+         Infinity   160.699997      moveto
+         Infinity   159.987488      lineto
+ stroke
+         Infinity   160.399994      moveto
+         Infinity   160.399994      moveto
+         Infinity   159.560867      lineto
+ stroke
+         Infinity   160.353699      moveto
+         Infinity   160.353699      moveto
+         Infinity   159.425003      lineto
+ stroke
+         Infinity   160.225006      moveto
+         Infinity   160.225006      moveto
+         Infinity   159.273911      lineto
+ stroke
+         Infinity   160.350006      moveto
+         Infinity   160.350006      moveto
+         Infinity   159.169571      lineto
+ stroke
+         Infinity   160.444611      moveto
+         Infinity   160.444611      moveto
+         Infinity   159.125000      lineto
+ stroke
+         Infinity   160.500000      moveto
+         Infinity   160.500000      moveto
+         Infinity   159.118256      lineto
+ stroke
+         Infinity   160.500000      moveto
+         Infinity   160.500000      moveto
+         Infinity   159.098877      lineto
+ stroke
+         Infinity   160.344437      moveto
+         Infinity   160.344437      moveto
+         Infinity   159.060669      lineto
+ stroke
+         Infinity   160.325012      moveto
+         Infinity   160.325012      moveto
+         Infinity   159.055908      lineto
+ stroke
+         Infinity   160.407898      moveto
+         Infinity   160.407898      moveto
+         Infinity   159.049988      lineto
+ stroke
+         Infinity   160.774994      moveto
+         Infinity   160.774994      moveto
+         Infinity   159.096497      lineto
+ stroke
+         Infinity   160.824997      moveto
+         Infinity   160.824997      moveto
+         Infinity   159.125000      lineto
+ stroke
+         Infinity   160.550018      moveto
+         Infinity   160.550018      moveto
+         Infinity   159.173004      lineto
+ stroke
+         Infinity   160.875015      moveto
+         Infinity   160.875015      moveto
+         Infinity   159.196991      lineto
+ stroke
+         Infinity   160.970917      moveto
+         Infinity   160.970917      moveto
+         Infinity   159.199997      lineto
+ stroke
+         Infinity   161.850006      moveto
+         Infinity   161.850006      moveto
+         Infinity   159.233292      lineto
+ stroke
+         Infinity   161.899994      moveto
+         Infinity   161.899994      moveto
+         Infinity   159.255692      lineto
+ stroke
+         Infinity   160.675018      moveto
+         Infinity   160.675018      moveto
+         Infinity   159.371307      lineto
+ stroke
+         Infinity   160.759415      moveto
+         Infinity   160.759415      moveto
+         Infinity   159.449997      lineto
+ stroke
+         Infinity   160.774994      moveto
+         Infinity   160.774994      moveto
+         Infinity   159.525467      lineto
+ stroke
+         Infinity   161.978683      moveto
+         Infinity   161.978683      moveto
+         Infinity   159.949997      lineto
+ stroke
+         Infinity   162.049988      moveto
+         Infinity   162.049988      moveto
+         Infinity   159.953308      lineto
+ stroke
+         Infinity   162.493927      moveto
+         Infinity   162.493927      moveto
+         Infinity   160.000000      lineto
+ stroke
+         Infinity   162.600006      moveto
+         Infinity   162.600006      moveto
+         Infinity   160.038727      lineto
+ stroke
+         Infinity   162.275009      moveto
+         Infinity   162.275009      moveto
+         Infinity   160.163513      lineto
+ stroke
+         Infinity   162.268219      moveto
+         Infinity   162.268219      moveto
+         Infinity   160.174988      lineto
+ stroke
+         Infinity   162.174988      moveto
+         Infinity   162.174988      moveto
+         Infinity   160.629364      lineto
+ stroke
+         Infinity   162.161484      moveto
+         Infinity   162.161484      moveto
+         Infinity   160.649994      lineto
+ stroke
+         Infinity   161.993927      moveto
+         Infinity   161.993927      moveto
+         Infinity   160.525284      lineto
+ stroke
+         Infinity   161.926346      moveto
+         Infinity   161.926346      moveto
+         Infinity   160.475006      lineto
+ stroke
+         Infinity   161.875000      moveto
+         Infinity   161.875000      moveto
+         Infinity   160.411987      lineto
+ stroke
+         Infinity   161.872421      moveto
+         Infinity   161.872421      moveto
+         Infinity   160.395401      lineto
+ stroke
+         Infinity   161.834274      moveto
+         Infinity   161.834274      moveto
+         Infinity   160.149994      lineto
+ stroke
+         Infinity   161.824997      moveto
+         Infinity   161.824997      moveto
+         Infinity   160.149994      lineto
+ stroke
+         Infinity   162.100006      moveto
+         Infinity   162.100006      moveto
+         Infinity   160.149994      lineto
+ stroke
+         Infinity   162.083618      moveto
+         Infinity   162.083618      moveto
+         Infinity   160.149994      lineto
+ stroke
+         Infinity   161.949997      moveto
+         Infinity   161.949997      moveto
+         Infinity   160.249374      lineto
+ stroke
+         Infinity   161.904419      moveto
+         Infinity   161.904419      moveto
+         Infinity   160.299988      lineto
+ stroke
+         Infinity   161.625000      moveto
+         Infinity   161.625000      moveto
+         Infinity   160.120605      lineto
+ stroke
+         Infinity   161.641846      moveto
+         Infinity   161.641846      moveto
+         Infinity   160.100006      lineto
+ stroke
+         Infinity   161.764557      moveto
+         Infinity   161.764557      moveto
+         Infinity   160.625000      lineto
+ stroke
+         Infinity   161.799988      moveto
+         Infinity   161.799988      moveto
+         Infinity   160.270554      lineto
+ stroke
+         Infinity   161.037720      moveto
+         Infinity   161.037720      moveto
+         Infinity   159.574982      lineto
+ stroke
+         Infinity   160.625000      moveto
+         Infinity   160.625000      moveto
+         Infinity   159.462433      lineto
+ stroke
+         Infinity   160.299988      moveto
+         Infinity   160.299988      moveto
+         Infinity   159.216064      lineto
+ stroke
+         Infinity   160.317535      moveto
+         Infinity   160.317535      moveto
+         Infinity   159.174988      lineto
+ stroke
+         Infinity   160.449997      moveto
+         Infinity   160.449997      moveto
+         Infinity   159.365234      lineto
+ stroke
+         Infinity   160.488220      moveto
+         Infinity   160.488220      moveto
+         Infinity   159.375000      lineto
+ stroke
+         Infinity   160.988312      moveto
+         Infinity   160.988312      moveto
+         Infinity   159.803192      lineto
+ stroke
+         Infinity   161.013794      moveto
+         Infinity   161.013794      moveto
+         Infinity   159.824982      lineto
+ stroke
+         Infinity   161.274994      moveto
+         Infinity   161.274994      moveto
+         Infinity   159.966003      lineto
+ stroke
+         Infinity   161.710693      moveto
+         Infinity   161.710693      moveto
+         Infinity   160.149994      lineto
+ stroke
+         Infinity   162.349976      moveto
+         Infinity   162.349976      moveto
+         Infinity   160.019165      lineto
+ stroke
+         Infinity   162.115936      moveto
+         Infinity   162.115936      moveto
+         Infinity   159.975006      lineto
+ stroke
+         Infinity   158.075012      moveto
+         Infinity   158.075012      moveto
+         Infinity   157.034637      lineto
+ stroke
+         Infinity   158.069580      moveto
+         Infinity   158.069580      moveto
+         Infinity   157.024994      lineto
+ stroke
+         Infinity   157.774994      moveto
+         Infinity   157.774994      moveto
+         Infinity   156.428024      lineto
+ stroke
+         Infinity   157.888824      moveto
+         Infinity   157.888824      moveto
+         Infinity   155.875000      lineto
+ stroke
+         Infinity   157.925003      moveto
+         Infinity   157.925003      moveto
+         Infinity   155.770309      lineto
+ stroke
+         Infinity   157.940460      moveto
+         Infinity   157.940460      moveto
+         Infinity   155.225006      lineto
+ stroke
+         Infinity   157.949997      moveto
+         Infinity   157.949997      moveto
+         Infinity   155.112137      lineto
+ stroke
+         Infinity   157.783691      moveto
+         Infinity   157.783691      moveto
+         Infinity   155.000000      lineto
+ stroke
+         Infinity   157.725006      moveto
+         Infinity   157.725006      moveto
+         Infinity   154.956177      lineto
+ stroke
+         Infinity   157.616302      moveto
+         Infinity   157.616302      moveto
+         Infinity   154.872559      lineto
+ stroke
+         Infinity   157.456924      moveto
+         Infinity   157.456924      moveto
+         Infinity   154.750000      lineto
+ stroke
+         Infinity   157.324997      moveto
+         Infinity   157.324997      moveto
+         Infinity   154.766022      lineto
+ stroke
+         Infinity   157.389954      moveto
+         Infinity   157.389954      moveto
+         Infinity   154.800003      lineto
+ stroke
+         Infinity   157.425003      moveto
+         Infinity   157.425003      moveto
+         Infinity   155.042374      lineto
+ stroke
+         Infinity   157.695847      moveto
+         Infinity   157.695847      moveto
+         Infinity   155.400009      lineto
+ stroke
+         Infinity   157.949997      moveto
+         Infinity   157.949997      moveto
+         Infinity   156.095444      lineto
+ stroke
+         Infinity   157.974213      moveto
+         Infinity   157.974213      moveto
+         Infinity   156.249985      lineto
+ stroke
+         Infinity   158.108978      moveto
+         Infinity   158.108978      moveto
+         Infinity   156.524994      lineto
+ stroke
+         Infinity   158.175003      moveto
+         Infinity   158.175003      moveto
+         Infinity   156.547333      lineto
+ stroke
+         Infinity   157.989304      moveto
+         Infinity   157.989304      moveto
+         Infinity   156.600006      lineto
+ stroke
+         Infinity   157.925003      moveto
+         Infinity   157.925003      moveto
+         Infinity   156.494827      lineto
+ stroke
+         Infinity   157.174988      moveto
+         Infinity   157.174988      moveto
+         Infinity   156.266220      lineto
+ stroke
+         Infinity   157.130905      moveto
+         Infinity   157.130905      moveto
+         Infinity   156.175003      lineto
+ stroke
+         Infinity   157.050003      moveto
+         Infinity   157.050003      moveto
+         Infinity   155.972549      lineto
+ stroke
+         Infinity   157.024994      moveto
+         Infinity   157.024994      moveto
+         Infinity   155.583252      lineto
+ stroke
+         Infinity   157.035202      moveto
+         Infinity   157.035202      moveto
+         Infinity   155.324997      lineto
+ stroke
+         Infinity   157.050690      moveto
+         Infinity   157.050690      moveto
+         Infinity   155.149994      lineto
+ stroke
+         Infinity   157.074997      moveto
+         Infinity   157.074997      moveto
+         Infinity   155.323410      lineto
+ stroke
+         Infinity   157.145142      moveto
+         Infinity   157.145142      moveto
+         Infinity   155.375000      lineto
+ stroke
+         Infinity   157.377991      moveto
+         Infinity   157.377991      moveto
+         Infinity   155.474991      lineto
+ stroke
+         Infinity   157.578979      moveto
+         Infinity   157.578979      moveto
+         Infinity   155.149994      lineto
+ stroke
+         Infinity   157.675003      moveto
+         Infinity   157.675003      moveto
+         Infinity   155.108032      lineto
+ stroke
+         Infinity   157.702896      moveto
+         Infinity   157.702896      moveto
+         Infinity   155.050003      lineto
+ stroke
+         Infinity   157.746796      moveto
+         Infinity   157.746796      moveto
+         Infinity   155.125000      lineto
+ stroke
+         Infinity   157.774994      moveto
+         Infinity   157.774994      moveto
+         Infinity   155.213821      lineto
+ stroke
+         Infinity   157.772949      moveto
+         Infinity   157.772949      moveto
+         Infinity   155.225006      lineto
+ stroke
+         Infinity   157.751617      moveto
+         Infinity   157.751617      moveto
+         Infinity   155.600006      lineto
+ stroke
+         Infinity   157.725006      moveto
+         Infinity   157.725006      moveto
+         Infinity   155.678268      lineto
+ stroke
+         Infinity   157.612396      moveto
+         Infinity   157.612396      moveto
+         Infinity   155.699997      lineto
+ stroke
+         Infinity   157.183029      moveto
+         Infinity   157.183029      moveto
+         Infinity   155.300003      lineto
+ stroke
+         Infinity   157.074997      moveto
+         Infinity   157.074997      moveto
+         Infinity   155.059708      lineto
+ stroke
+         Infinity   156.836685      moveto
+         Infinity   156.836685      moveto
+         Infinity   154.125000      lineto
+ stroke
+         Infinity   165.925003      moveto
+         Infinity   165.925003      moveto
+         Infinity   142.074997      lineto
+ stroke
+         Infinity   163.958649      moveto
+         Infinity   163.958649      moveto
+         Infinity   142.074997      lineto
+ stroke
+         Infinity   163.874130      moveto
+         Infinity   163.874130      moveto
+         Infinity   142.074997      lineto
+ stroke
+         Infinity   163.625000      moveto
+         Infinity   163.625000      moveto
+         Infinity   142.074997      lineto
+ stroke
+         Infinity   163.436081      moveto
+         Infinity   163.436081      moveto
+         Infinity   142.074997      lineto
+ stroke
+         Infinity   163.017456      moveto
+         Infinity   163.017456      moveto
+         Infinity   142.074997      lineto
+ stroke
+         Infinity   162.850006      moveto
+         Infinity   162.850006      moveto
+         Infinity   142.015656      lineto
+ stroke
+         Infinity   162.777374      moveto
+         Infinity   162.777374      moveto
+         Infinity   141.644440      lineto
+ stroke
+         Infinity   162.774994      moveto
+         Infinity   162.774994      moveto
+         Infinity   141.632263      lineto
+ stroke
+         Infinity   163.250000      moveto
+         Infinity   163.250000      moveto
+         Infinity   141.129425      lineto
+ stroke
+         Infinity   163.055603      moveto
+         Infinity   163.055603      moveto
+         Infinity   140.975006      lineto
+ stroke
+         Infinity   162.545166      moveto
+         Infinity   162.545166      moveto
+         Infinity   140.924988      lineto
+ stroke
+         Infinity   162.299988      moveto
+         Infinity   162.299988      moveto
+         Infinity   141.055405      lineto
+ stroke
+         Infinity   162.149994      moveto
+         Infinity   162.149994      moveto
+         Infinity   141.256104      lineto
+ stroke
+         Infinity   162.522125      moveto
+         Infinity   162.522125      moveto
+         Infinity   141.520477      lineto
+ stroke
+         Infinity   162.524994      moveto
+         Infinity   162.524994      moveto
+         Infinity   141.522507      lineto
+ stroke
+         Infinity   162.625000      moveto
+         Infinity   162.625000      moveto
+         Infinity   141.735428      lineto
+ stroke
+         Infinity   162.547455      moveto
+         Infinity   162.547455      moveto
+         Infinity   141.875000      lineto
+ stroke
+         Infinity   162.540375      moveto
+         Infinity   162.540375      moveto
+         Infinity   141.885376      lineto
+ stroke
+         Infinity   162.475006      moveto
+         Infinity   162.475006      moveto
+         Infinity   141.981262      lineto
+ stroke
+         Infinity   162.200012      moveto
+         Infinity   162.200012      moveto
+         Infinity   142.140656      lineto
+ stroke
+         Infinity   161.324997      moveto
+         Infinity   161.324997      moveto
+         Infinity   142.300476      lineto
+ stroke
+         Infinity   160.274994      moveto
+         Infinity   160.274994      moveto
+         Infinity   142.542908      lineto
+ stroke
+         Infinity   160.274994      moveto
+         Infinity   160.274994      moveto
+         Infinity   142.649994      lineto
+ stroke
+         Infinity   160.274994      moveto
+         Infinity   160.274994      moveto
+         Infinity   142.677292      lineto
+ stroke
+         Infinity   160.399994      moveto
+         Infinity   160.399994      moveto
+         Infinity   142.842133      lineto
+ stroke
+         Infinity   160.719604      moveto
+         Infinity   160.719604      moveto
+         Infinity   142.921234      lineto
+ stroke
+         Infinity   161.100006      moveto
+         Infinity   161.100006      moveto
+         Infinity   143.015350      lineto
+ stroke
+         Infinity   163.274994      moveto
+         Infinity   163.274994      moveto
+         Infinity   143.152908      lineto
+ stroke
+         Infinity   164.000000      moveto
+         Infinity   164.000000      moveto
+         Infinity   143.215286      lineto
+ stroke
+         Infinity   164.399994      moveto
+         Infinity   164.399994      moveto
+         Infinity   143.283783      lineto
+ stroke
+         Infinity   164.388428      moveto
+         Infinity   164.388428      moveto
+         Infinity   143.329453      lineto
+ stroke
+         Infinity   164.375000      moveto
+         Infinity   164.375000      moveto
+         Infinity   143.382355      lineto
+ stroke
+         Infinity   164.125000      moveto
+         Infinity   164.125000      moveto
+         Infinity   143.427475      lineto
+ stroke
+         Infinity   162.916550      moveto
+         Infinity   162.916550      moveto
+         Infinity   143.550003      lineto
+ stroke
+         Infinity   162.174988      moveto
+         Infinity   162.174988      moveto
+         Infinity   143.652679      lineto
+ stroke
+         Infinity   161.049988      moveto
+         Infinity   161.049988      moveto
+         Infinity   143.891479      lineto
+ stroke
+         Infinity   160.774994      moveto
+         Infinity   160.774994      moveto
+         Infinity   144.050446      lineto
+ stroke
+         Infinity   160.799988      moveto
+         Infinity   160.799988      moveto
+         Infinity   144.195709      lineto
+ stroke
+         Infinity   160.992386      moveto
+         Infinity   160.992386      moveto
+         Infinity   144.324997      lineto
+ stroke
+         Infinity   161.074997      moveto
+         Infinity   161.074997      moveto
+         Infinity   144.340668      lineto
+ stroke
+         Infinity   162.800003      moveto
+         Infinity   162.800003      moveto
+         Infinity   144.405762      lineto
+ stroke
+         Infinity   163.675003      moveto
+         Infinity   163.675003      moveto
+         Infinity   144.442261      lineto
+ stroke
+         Infinity   163.703705      moveto
+         Infinity   163.703705      moveto
+         Infinity   144.444641      lineto
+ stroke
+         Infinity   163.975006      moveto
+         Infinity   163.975006      moveto
+         Infinity   144.466965      lineto
+ stroke
+         Infinity   163.750000      moveto
+         Infinity   163.750000      moveto
+         Infinity   144.489731      lineto
+ stroke
+         Infinity   163.732483      moveto
+         Infinity   163.732483      moveto
+         Infinity   144.490372      lineto
+ stroke
+         Infinity   162.175003      moveto
+         Infinity   162.175003      moveto
+         Infinity   144.547714      lineto
+ stroke
+         Infinity   161.701813      moveto
+         Infinity   161.701813      moveto
+         Infinity   144.574997      lineto
+ stroke
+         Infinity   161.399994      moveto
+         Infinity   161.399994      moveto
+         Infinity   144.542282      lineto
+ stroke
+         Infinity   161.274994      moveto
+         Infinity   161.274994      moveto
+         Infinity   144.437653      lineto
+ stroke
+         Infinity   161.649994      moveto
+         Infinity   161.649994      moveto
+         Infinity   144.355652      lineto
+ stroke
+         Infinity   163.475006      moveto
+         Infinity   163.475006      moveto
+         Infinity   144.260330      lineto
+ stroke
+         Infinity   163.531860      moveto
+         Infinity   163.531860      moveto
+         Infinity   144.227997      lineto
+ stroke
+         Infinity   163.625000      moveto
+         Infinity   163.625000      moveto
+         Infinity   144.175095      lineto
+ stroke
+         Infinity   161.224991      moveto
+         Infinity   161.224991      moveto
+         Infinity   144.051483      lineto
+ stroke
+         Infinity   160.699997      moveto
+         Infinity   160.699997      moveto
+         Infinity   143.992905      lineto
+ stroke
+         Infinity   160.701965      moveto
+         Infinity   160.701965      moveto
+         Infinity   143.990479      lineto
+ stroke
+         Infinity   160.714386      moveto
+         Infinity   160.714386      moveto
+         Infinity   143.975128      lineto
+ stroke
+         Infinity   160.750000      moveto
+         Infinity   160.750000      moveto
+         Infinity   143.931107      lineto
+ stroke
+         Infinity   160.931061      moveto
+         Infinity   160.931061      moveto
+         Infinity   143.899994      lineto
+ stroke
+         Infinity   161.225006      moveto
+         Infinity   161.225006      moveto
+         Infinity   143.815201      lineto
+ stroke
+         Infinity   161.174988      moveto
+         Infinity   161.174988      moveto
+         Infinity   143.717499      lineto
+ stroke
+         Infinity   160.799988      moveto
+         Infinity   160.799988      moveto
+         Infinity   143.574356      lineto
+ stroke
+         Infinity   160.824997      moveto
+         Infinity   160.824997      moveto
+         Infinity   143.476669      lineto
+ stroke
+         Infinity   161.024994      moveto
+         Infinity   161.024994      moveto
+         Infinity   143.378983      lineto
+ stroke
+         Infinity   162.649994      moveto
+         Infinity   162.649994      moveto
+         Infinity   143.211411      lineto
+ stroke
+         Infinity   162.699997      moveto
+         Infinity   162.699997      moveto
+         Infinity   143.052658      lineto
+ stroke
+         Infinity   160.899994      moveto
+         Infinity   160.899994      moveto
+         Infinity   142.861359      lineto
+ stroke
+         Infinity   160.475006      moveto
+         Infinity   160.475006      moveto
+         Infinity   142.737198      lineto
+ stroke
+         Infinity   160.774994      moveto
+         Infinity   160.774994      moveto
+         Infinity   142.621872      lineto
+ stroke
+         Infinity   161.150009      moveto
+         Infinity   161.150009      moveto
+         Infinity   142.577774      lineto
+ stroke
+         Infinity   161.625000      moveto
+         Infinity   161.625000      moveto
+         Infinity   142.504501      lineto
+ stroke
+         Infinity   161.949997      moveto
+         Infinity   161.949997      moveto
+         Infinity   142.442764      lineto
+ stroke
+         Infinity   162.024994      moveto
+         Infinity   162.024994      moveto
+         Infinity   142.319305      lineto
+ stroke
+         Infinity   162.068710      moveto
+         Infinity   162.068710      moveto
+         Infinity   142.225006      lineto
+ stroke
+         Infinity   162.074997      moveto
+         Infinity   162.074997      moveto
+         Infinity   142.219315      lineto
+ stroke
+         Infinity   162.299988      moveto
+         Infinity   162.299988      moveto
+         Infinity   142.172348      lineto
+ stroke
+         Infinity   162.024994      moveto
+         Infinity   162.024994      moveto
+         Infinity   142.143036      lineto
+ stroke
+         Infinity   160.200012      moveto
+         Infinity   160.200012      moveto
+         Infinity   142.069611      lineto
+ stroke
+         Infinity   159.418259      moveto
+         Infinity   159.418259      moveto
+         Infinity   142.008698      lineto
+ stroke
+         Infinity   159.399994      moveto
+         Infinity   159.399994      moveto
+         Infinity   142.007278      lineto
+ stroke
+         Infinity   159.075012      moveto
+         Infinity   159.075012      moveto
+         Infinity   141.907089      lineto
+ stroke
+         Infinity   159.324997      moveto
+         Infinity   159.324997      moveto
+         Infinity   141.851883      lineto
+ stroke
+         Infinity   160.325012      moveto
+         Infinity   160.325012      moveto
+         Infinity   141.797516      lineto
+ stroke
+         Infinity   161.525009      moveto
+         Infinity   161.525009      moveto
+         Infinity   141.747421      lineto
+ stroke
+         Infinity   162.250000      moveto
+         Infinity   162.250000      moveto
+         Infinity   141.704163      lineto
+ stroke
+         Infinity   163.299988      moveto
+         Infinity   163.299988      moveto
+         Infinity   141.674286      lineto
+ stroke
+         Infinity   164.925003      moveto
+         Infinity   164.925003      moveto
+         Infinity   141.644974      lineto
+ stroke
+         Infinity   165.203003      moveto
+         Infinity   165.203003      moveto
+         Infinity   141.600006      lineto
+ stroke
+         Infinity   165.422943      moveto
+         Infinity   165.422943      moveto
+         Infinity   141.658051      lineto
+ stroke
+         Infinity   165.524994      moveto
+         Infinity   165.524994      moveto
+         Infinity   141.684982      lineto
+ stroke
+         Infinity   163.375000      moveto
+         Infinity   163.375000      moveto
+         Infinity   141.918579      lineto
+ stroke
+         Infinity   161.324997      moveto
+         Infinity   161.324997      moveto
+         Infinity   142.072754      lineto
+ stroke
+         Infinity   159.925003      moveto
+         Infinity   159.925003      moveto
+         Infinity   142.165161      lineto
+ stroke
+         Infinity   159.225006      moveto
+         Infinity   159.225006      moveto
+         Infinity   142.263626      lineto
+ stroke
+         Infinity   159.432541      moveto
+         Infinity   159.432541      moveto
+         Infinity   142.314697      lineto
+ stroke
+         Infinity   159.625000      moveto
+         Infinity   159.625000      moveto
+         Infinity   142.362076      lineto
+ stroke
+         Infinity   160.149994      moveto
+         Infinity   160.149994      moveto
+         Infinity   142.440094      lineto
+ stroke
+         Infinity   162.024994      moveto
+         Infinity   162.024994      moveto
+         Infinity   142.534836      lineto
+ stroke
+         Infinity   164.174988      moveto
+         Infinity   164.174988      moveto
+         Infinity   142.584976      lineto
+ stroke
+         Infinity   164.174988      moveto
+         Infinity   164.174988      moveto
+         Infinity   142.649994      lineto
+ stroke
+         Infinity   164.174988      moveto
+         Infinity   164.174988      moveto
+         Infinity   142.653244      lineto
+ stroke
+         Infinity   163.475006      moveto
+         Infinity   163.475006      moveto
+         Infinity   142.957153      lineto
+ stroke
+         Infinity   160.400009      moveto
+         Infinity   160.400009      moveto
+         Infinity   143.387833      lineto
+ stroke
+         Infinity   160.125000      moveto
+         Infinity   160.125000      moveto
+         Infinity   143.529236      lineto
+ stroke
+         Infinity   160.174988      moveto
+         Infinity   160.174988      moveto
+         Infinity   143.795761      lineto
+ stroke
+         Infinity   160.749985      moveto
+         Infinity   160.749985      moveto
+         Infinity   143.893280      lineto
+ stroke
+         Infinity   164.925003      moveto
+         Infinity   164.925003      moveto
+         Infinity   144.372711      lineto
+ stroke
+         Infinity   164.853134      moveto
+         Infinity   164.853134      moveto
+         Infinity   144.398712      lineto
+ stroke
+         Infinity   164.350006      moveto
+         Infinity   164.350006      moveto
+         Infinity   144.580750      lineto
+ stroke
+         Infinity   163.795776      moveto
+         Infinity   163.795776      moveto
+         Infinity   144.674988      lineto
+ stroke
+         Infinity   162.199982      moveto
+         Infinity   162.199982      moveto
+         Infinity   145.003418      lineto
+ stroke
+         Infinity   159.400024      moveto
+         Infinity   159.400024      moveto
+         Infinity   145.709396      lineto
+ stroke
+         Infinity   158.180069      moveto
+         Infinity   158.180069      moveto
+         Infinity   146.134171      lineto
+ stroke
+         Infinity   157.699997      moveto
+         Infinity   157.699997      moveto
+         Infinity   146.301331      lineto
+ stroke
+         Infinity   156.703568      moveto
+         Infinity   156.703568      moveto
+         Infinity   146.850006      lineto
+ stroke
+         Infinity   156.375000      moveto
+         Infinity   156.375000      moveto
+         Infinity   146.955841      lineto
+ stroke
+         Infinity   155.949997      moveto
+         Infinity   155.949997      moveto
+         Infinity   147.256088      lineto
+ stroke
+         Infinity   155.979370      moveto
+         Infinity   155.979370      moveto
+         Infinity   147.330856      lineto
+ stroke
+         Infinity   156.024994      moveto
+         Infinity   156.024994      moveto
+         Infinity   147.447052      lineto
+ stroke
+         Infinity   156.375000      moveto
+         Infinity   156.375000      moveto
+         Infinity   147.619614      lineto
+ stroke
+         Infinity   156.875000      moveto
+         Infinity   156.875000      moveto
+         Infinity   147.746155      lineto
+ stroke
+         Infinity   157.424988      moveto
+         Infinity   157.424988      moveto
+         Infinity   147.835876      lineto
+ stroke
+         Infinity   157.599365      moveto
+         Infinity   157.599365      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   157.824997      moveto
+         Infinity   157.824997      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   157.975006      moveto
+         Infinity   157.975006      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   157.937805      moveto
+         Infinity   157.937805      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   157.899994      moveto
+         Infinity   157.899994      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   157.899994      moveto
+         Infinity   157.899994      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   158.125000      moveto
+         Infinity   158.125000      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   158.074997      moveto
+         Infinity   158.074997      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   158.399994      moveto
+         Infinity   158.399994      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   158.675812      moveto
+         Infinity   158.675812      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   159.350006      moveto
+         Infinity   159.350006      moveto
+         Infinity   147.755417      lineto
+ stroke
+         Infinity   157.699997      moveto
+         Infinity   157.699997      moveto
+         Infinity   147.483124      lineto
+ stroke
+         Infinity   157.074997      moveto
+         Infinity   157.074997      moveto
+         Infinity   147.335373      lineto
+ stroke
+         Infinity   157.085037      moveto
+         Infinity   157.085037      moveto
+         Infinity   147.324997      lineto
+ stroke
+         Infinity   157.300003      moveto
+         Infinity   157.300003      moveto
+         Infinity   146.999802      lineto
+ stroke
+         Infinity   159.225006      moveto
+         Infinity   159.225006      moveto
+         Infinity   146.743988      lineto
+ stroke
+         Infinity   162.975006      moveto
+         Infinity   162.975006      moveto
+         Infinity   146.540192      lineto
+ stroke
+         Infinity   162.053497      moveto
+         Infinity   162.053497      moveto
+         Infinity   146.399994      lineto
+ stroke
+         Infinity   158.813995      moveto
+         Infinity   158.813995      moveto
+         Infinity   145.692978      lineto
+ stroke
+         Infinity   158.699997      moveto
+         Infinity   158.699997      moveto
+         Infinity   145.668106      lineto
+ stroke
+         Infinity   158.250000      moveto
+         Infinity   158.250000      moveto
+         Infinity   145.427582      lineto
+ stroke
+         Infinity   158.321823      moveto
+         Infinity   158.321823      moveto
+         Infinity   145.100006      lineto
+ stroke
+         Infinity   158.324997      moveto
+         Infinity   158.324997      moveto
+         Infinity   145.082031      lineto
+ stroke
+         Infinity   158.524994      moveto
+         Infinity   158.524994      moveto
+         Infinity   144.648224      lineto
+ stroke
+         Infinity   158.824997      moveto
+         Infinity   158.824997      moveto
+         Infinity   144.418472      lineto
+ stroke
+         Infinity   159.750000      moveto
+         Infinity   159.750000      moveto
+         Infinity   144.147644      lineto
+ stroke
+         Infinity   161.807251      moveto
+         Infinity   161.807251      moveto
+         Infinity   143.795990      lineto
+ stroke
+         Infinity   162.024994      moveto
+         Infinity   162.024994      moveto
+         Infinity   143.758759      lineto
+ stroke
+         Infinity   161.903122      moveto
+         Infinity   161.903122      moveto
+         Infinity   143.375000      lineto
+ stroke
+         Infinity   161.875000      moveto
+         Infinity   161.875000      moveto
+         Infinity   143.368347      lineto
+ stroke
+         Infinity   162.138184      moveto
+         Infinity   162.138184      moveto
+         Infinity   143.353378      lineto
+ stroke
+         Infinity   162.600006      moveto
+         Infinity   162.600006      moveto
+         Infinity   143.327118      lineto
+ stroke
+         Infinity   162.449997      moveto
+         Infinity   162.449997      moveto
+         Infinity   143.310333      lineto
+ stroke
+         Infinity   161.800003      moveto
+         Infinity   161.800003      moveto
+         Infinity   143.293625      lineto
+ stroke
+         Infinity   161.500000      moveto
+         Infinity   161.500000      moveto
+         Infinity   143.285522      lineto
+ stroke
+         Infinity   159.149994      moveto
+         Infinity   159.149994      moveto
+         Infinity   143.252609      lineto
+ stroke
+         Infinity   159.123474      moveto
+         Infinity   159.123474      moveto
+         Infinity   143.250000      lineto
+ stroke
+         Infinity   158.955460      moveto
+         Infinity   158.955460      moveto
+         Infinity   143.241287      lineto
+ stroke
+         Infinity   158.925003      moveto
+         Infinity   158.925003      moveto
+         Infinity   143.239716      lineto
+ stroke
+         Infinity   159.299988      moveto
+         Infinity   159.299988      moveto
+         Infinity   143.224442      lineto
+ stroke
+         Infinity   159.487915      moveto
+         Infinity   159.487915      moveto
+         Infinity   143.220215      lineto
+ stroke
+         Infinity   160.475006      moveto
+         Infinity   160.475006      moveto
+         Infinity   143.198013      lineto
+ stroke
+         Infinity   161.674988      moveto
+         Infinity   161.674988      moveto
+         Infinity   143.162628      lineto
+ stroke
+         Infinity   161.994568      moveto
+         Infinity   161.994568      moveto
+         Infinity   143.125000      lineto
+ stroke
+         Infinity   162.074997      moveto
+         Infinity   162.074997      moveto
+         Infinity   143.184326      lineto
+ stroke
+         Infinity   161.774994      moveto
+         Infinity   161.774994      moveto
+         Infinity   143.364182      lineto
+ stroke
+         Infinity   161.250000      moveto
+         Infinity   161.250000      moveto
+         Infinity   143.448700      lineto
+ stroke
+         Infinity   160.799988      moveto
+         Infinity   160.799988      moveto
+         Infinity   143.505463      lineto
+ stroke
+         Infinity   160.174988      moveto
+         Infinity   160.174988      moveto
+         Infinity   143.571793      lineto
+ stroke
+         Infinity   159.725006      moveto
+         Infinity   159.725006      moveto
+         Infinity   143.655991      lineto
+ stroke
+         Infinity   159.583710      moveto
+         Infinity   159.583710      moveto
+         Infinity   143.699997      lineto
+ stroke
+         Infinity   159.425003      moveto
+         Infinity   159.425003      moveto
+         Infinity   143.846436      lineto
+ stroke
+         Infinity   159.600006      moveto
+         Infinity   159.600006      moveto
+         Infinity   144.155396      lineto
+ stroke
+         Infinity   161.065903      moveto
+         Infinity   161.065903      moveto
+         Infinity   144.602295      lineto
+ stroke
+         Infinity   161.100006      moveto
+         Infinity   161.100006      moveto
+         Infinity   144.612671      lineto
+ stroke
+         Infinity   160.174988      moveto
+         Infinity   160.174988      moveto
+         Infinity   144.846039      lineto
+ stroke
+         Infinity   159.425003      moveto
+         Infinity   159.425003      moveto
+         Infinity   145.106812      lineto
+ stroke
+         Infinity   159.125000      moveto
+         Infinity   159.125000      moveto
+         Infinity   145.367569      lineto
+ stroke
+         Infinity   159.055908      moveto
+         Infinity   159.055908      moveto
+         Infinity   145.599991      lineto
+ stroke
+         Infinity   159.049988      moveto
+         Infinity   159.049988      moveto
+         Infinity   145.621490      lineto
+ stroke
+         Infinity   159.199997      moveto
+         Infinity   159.199997      moveto
+         Infinity   145.928619      lineto
+ stroke
+         Infinity   159.201202      moveto
+         Infinity   159.201202      moveto
+         Infinity   145.930664      lineto
+ stroke
+         Infinity   159.449997      moveto
+         Infinity   159.449997      moveto
+         Infinity   146.351440      lineto
+ stroke
+         Infinity   159.949997      moveto
+         Infinity   159.949997      moveto
+         Infinity   146.514221      lineto
+ stroke
+         Infinity   160.000000      moveto
+         Infinity   160.000000      moveto
+         Infinity   146.638092      lineto
+ stroke
+         Infinity   160.174988      moveto
+         Infinity   160.174988      moveto
+         Infinity   146.762985      lineto
+ stroke
+         Infinity   160.526093      moveto
+         Infinity   160.526093      moveto
+         Infinity   146.850006      lineto
+ stroke
+         Infinity   160.649994      moveto
+         Infinity   160.649994      moveto
+         Infinity   146.862366      lineto
+ stroke
+         Infinity   160.475006      moveto
+         Infinity   160.475006      moveto
+         Infinity   146.898254      lineto
+ stroke
+         Infinity   160.149994      moveto
+         Infinity   160.149994      moveto
+         Infinity   146.938690      lineto
+ stroke
+         Infinity   160.149994      moveto
+         Infinity   160.149994      moveto
+         Infinity   146.991074      lineto
+ stroke
+         Infinity   160.299988      moveto
+         Infinity   160.299988      moveto
+         Infinity   147.057068      lineto
+ stroke
+         Infinity   160.100006      moveto
+         Infinity   160.100006      moveto
+         Infinity   147.209290      lineto
+ stroke
+         Infinity   160.223190      moveto
+         Infinity   160.223190      moveto
+         Infinity   147.236084      lineto
+ stroke
+         Infinity   160.625000      moveto
+         Infinity   160.625000      moveto
+         Infinity   147.323547      lineto
+ stroke
+         Infinity   159.574982      moveto
+         Infinity   159.574982      moveto
+         Infinity   147.421295      lineto
+ stroke
+         Infinity   159.174988      moveto
+         Infinity   159.174988      moveto
+         Infinity   147.545868      lineto
+ stroke
+         Infinity   159.183136      moveto
+         Infinity   159.183136      moveto
+         Infinity   147.550003      lineto
+ stroke
+         Infinity   159.375000      moveto
+         Infinity   159.375000      moveto
+         Infinity   147.380386      lineto
+ stroke
+         Infinity   159.745911      moveto
+         Infinity   159.745911      moveto
+         Infinity   147.282639      lineto
+ stroke
+         Infinity   159.824997      moveto
+         Infinity   159.824997      moveto
+         Infinity   147.261795      lineto
+ stroke
+         Infinity   160.149994      moveto
+         Infinity   160.149994      moveto
+         Infinity   147.125961      lineto
+ stroke
+         Infinity   159.974991      moveto
+         Infinity   159.974991      moveto
+         Infinity   146.975037      lineto
+ stroke
+         Infinity   157.024994      moveto
+         Infinity   157.024994      moveto
+         Infinity   146.315262      lineto
+ stroke
+         Infinity   155.875000      moveto
+         Infinity   155.875000      moveto
+         Infinity   146.089600      lineto
+ stroke
+         Infinity   155.225006      moveto
+         Infinity   155.225006      moveto
+         Infinity   145.875412      lineto
+ stroke
+         Infinity   155.000000      moveto
+         Infinity   155.000000      moveto
+         Infinity   145.654770      lineto
+ stroke
+         Infinity   154.909912      moveto
+         Infinity   154.909912      moveto
+         Infinity   145.574997      lineto
+ stroke
+         Infinity   154.750000      moveto
+         Infinity   154.750000      moveto
+         Infinity   145.680664      lineto
+ stroke
+         Infinity   154.762817      moveto
+         Infinity   154.762817      moveto
+         Infinity   145.734314      lineto
+ stroke
+         Infinity   154.800003      moveto
+         Infinity   154.800003      moveto
+         Infinity   145.889862      lineto
+ stroke
+         Infinity   155.399994      moveto
+         Infinity   155.399994      moveto
+         Infinity   146.079727      lineto
+ stroke
+         Infinity   155.505371      moveto
+         Infinity   155.505371      moveto
+         Infinity   146.095825      lineto
+ stroke
+         Infinity   155.860123      moveto
+         Infinity   155.860123      moveto
+         Infinity   146.149994      lineto
+ stroke
+         Infinity   156.249985      moveto
+         Infinity   156.249985      moveto
+         Infinity   146.238525      lineto
+ stroke
+         Infinity   156.524994      moveto
+         Infinity   156.524994      moveto
+         Infinity   146.433914      lineto
+ stroke
+         Infinity   156.600006      moveto
+         Infinity   156.600006      moveto
+         Infinity   146.755310      lineto
+ stroke
+         Infinity   156.175003      moveto
+         Infinity   156.175003      moveto
+         Infinity   147.071121      lineto
+ stroke
+         Infinity   155.324997      moveto
+         Infinity   155.324997      moveto
+         Infinity   147.593475      lineto
+ stroke
+         Infinity   155.149994      moveto
+         Infinity   155.149994      moveto
+         Infinity   147.834320      lineto
+ stroke
+         Infinity   155.168655      moveto
+         Infinity   155.168655      moveto
+         Infinity   147.875000      lineto
+ stroke
+         Infinity   155.375000      moveto
+         Infinity   155.375000      moveto
+         Infinity   148.605759      lineto
+ stroke
+         Infinity   155.474991      moveto
+         Infinity   155.474991      moveto
+         Infinity   149.212128      lineto
+ stroke
+         Infinity   155.358353      moveto
+         Infinity   155.358353      moveto
+         Infinity   149.399994      lineto
+ stroke
+         Infinity   155.149994      moveto
+         Infinity   155.149994      moveto
+         Infinity   149.483063      lineto
+ stroke
+         Infinity   155.050003      moveto
+         Infinity   155.050003      moveto
+         Infinity   149.630585      lineto
+ stroke
+         Infinity   155.091064      moveto
+         Infinity   155.091064      moveto
+         Infinity   149.704346      lineto
+ stroke
+         Infinity   155.125000      moveto
+         Infinity   155.125000      moveto
+         Infinity   149.765274      lineto
+ stroke
+         Infinity   155.225006      moveto
+         Infinity   155.225006      moveto
+         Infinity   149.862762      lineto
+ stroke
+         Infinity   155.512329      moveto
+         Infinity   155.512329      moveto
+         Infinity   149.949997      lineto
+ stroke
+         Infinity   155.600006      moveto
+         Infinity   155.600006      moveto
+         Infinity   149.974350      lineto
+ stroke
+         Infinity   155.699997      moveto
+         Infinity   155.699997      moveto
+         Infinity   150.140411      lineto
+ stroke
+         Infinity   155.300003      moveto
+         Infinity   155.300003      moveto
+         Infinity   150.278015      lineto
+ stroke
+         Infinity   154.279755      moveto
+         Infinity   154.279755      moveto
+         Infinity   150.425003      lineto
+ stroke
+         Infinity   154.125000      moveto
+         Infinity   154.125000      moveto
+         Infinity   150.320175      lineto
+ stroke
+         Infinity   142.074997      moveto
+         Infinity   142.074997      moveto
+         Infinity   114.540131      lineto
+ stroke
+         Infinity   141.437515      moveto
+         Infinity   141.437515      moveto
+         Infinity   113.699997      lineto
+ stroke
+         Infinity   140.975006      moveto
+         Infinity   140.975006      moveto
+         Infinity   113.505928      lineto
+ stroke
+         Infinity   140.924988      moveto
+         Infinity   140.924988      moveto
+         Infinity   113.335800      lineto
+ stroke
+         Infinity   141.263229      moveto
+         Infinity   141.263229      moveto
+         Infinity   113.123856      lineto
+ stroke
+         Infinity   141.580582      moveto
+         Infinity   141.580582      moveto
+         Infinity   112.925003      lineto
+ stroke
+         Infinity   141.875000      moveto
+         Infinity   141.875000      moveto
+         Infinity   113.238235      lineto
+ stroke
+         Infinity   142.649994      moveto
+         Infinity   142.649994      moveto
+         Infinity   114.250000      lineto
+ stroke
+         Infinity   143.268753      moveto
+         Infinity   143.268753      moveto
+         Infinity   115.080826      lineto
+ stroke
+         Infinity   143.550003      moveto
+         Infinity   143.550003      moveto
+         Infinity   115.458466      lineto
+ stroke
+         Infinity   143.973633      moveto
+         Infinity   143.973633      moveto
+         Infinity   115.875000      lineto
+ stroke
+         Infinity   144.324997      moveto
+         Infinity   144.324997      moveto
+         Infinity   116.591278      lineto
+ stroke
+         Infinity   144.530548      moveto
+         Infinity   144.530548      moveto
+         Infinity   118.074997      lineto
+ stroke
+         Infinity   144.574997      moveto
+         Infinity   144.574997      moveto
+         Infinity   118.177032      lineto
+ stroke
+         Infinity   144.486130      moveto
+         Infinity   144.486130      moveto
+         Infinity   118.285477      lineto
+ stroke
+         Infinity   144.481689      moveto
+         Infinity   144.481689      moveto
+         Infinity   118.290901      lineto
+ stroke
+         Infinity   143.899994      moveto
+         Infinity   143.899994      moveto
+         Infinity   119.000710      lineto
+ stroke
+         Infinity   143.832153      moveto
+         Infinity   143.832153      moveto
+         Infinity   119.050003      lineto
+ stroke
+         Infinity   142.858643      moveto
+         Infinity   142.858643      moveto
+         Infinity   119.100082      lineto
+ stroke
+         Infinity   142.374252      moveto
+         Infinity   142.374252      moveto
+         Infinity   119.125000      lineto
+ stroke
+         Infinity   142.225006      moveto
+         Infinity   142.225006      moveto
+         Infinity   119.155075      lineto
+ stroke
+         Infinity   141.819153      moveto
+         Infinity   141.819153      moveto
+         Infinity   119.349998      lineto
+ stroke
+         Infinity   141.600006      moveto
+         Infinity   141.600006      moveto
+         Infinity   120.119598      lineto
+ stroke
+         Infinity   141.865631      moveto
+         Infinity   141.865631      moveto
+         Infinity   120.691299      lineto
+ stroke
+         Infinity   142.136841      moveto
+         Infinity   142.136841      moveto
+         Infinity   121.275002      lineto
+ stroke
+         Infinity   142.226471      moveto
+         Infinity   142.226471      moveto
+         Infinity   121.482971      lineto
+ stroke
+         Infinity   142.649994      moveto
+         Infinity   142.649994      moveto
+         Infinity   122.465729      lineto
+ stroke
+         Infinity   143.493484      moveto
+         Infinity   143.493484      moveto
+         Infinity   123.024994      lineto
+ stroke
+         Infinity   144.675003      moveto
+         Infinity   144.675003      moveto
+         Infinity   123.392838      lineto
+ stroke
+         Infinity   145.251190      moveto
+         Infinity   145.251190      moveto
+         Infinity   123.541092      lineto
+ stroke
+         Infinity   145.611084      moveto
+         Infinity   145.611084      moveto
+         Infinity   123.633682      lineto
+ stroke
+         Infinity   146.850006      moveto
+         Infinity   146.850006      moveto
+         Infinity   123.952438      lineto
+ stroke
+         Infinity   146.958130      moveto
+         Infinity   146.958130      moveto
+         Infinity   124.000000      lineto
+ stroke
+         Infinity   147.875000      moveto
+         Infinity   147.875000      moveto
+         Infinity   123.914749      lineto
+ stroke
+         Infinity   147.875000      moveto
+         Infinity   147.875000      moveto
+         Infinity   123.824997      lineto
+ stroke
+         Infinity   147.875000      moveto
+         Infinity   147.875000      moveto
+         Infinity   123.905396      lineto
+ stroke
+         Infinity   147.324997      moveto
+         Infinity   147.324997      moveto
+         Infinity   124.583244      lineto
+ stroke
+         Infinity   147.008484      moveto
+         Infinity   147.008484      moveto
+         Infinity   124.849998      lineto
+ stroke
+         Infinity   146.399994      moveto
+         Infinity   146.399994      moveto
+         Infinity   124.973877      lineto
+ stroke
+         Infinity   146.335724      moveto
+         Infinity   146.335724      moveto
+         Infinity   124.982994      lineto
+ stroke
+         Infinity   145.100006      moveto
+         Infinity   145.100006      moveto
+         Infinity   125.158371      lineto
+ stroke
+         Infinity   144.736771      moveto
+         Infinity   144.736771      moveto
+         Infinity   125.199997      lineto
+ stroke
+         Infinity   143.375000      moveto
+         Infinity   143.375000      moveto
+         Infinity   124.651566      lineto
+ stroke
+         Infinity   143.312073      moveto
+         Infinity   143.312073      moveto
+         Infinity   124.314560      lineto
+ stroke
+         Infinity   143.250000      moveto
+         Infinity   143.250000      moveto
+         Infinity   123.982178      lineto
+ stroke
+         Infinity   143.241913      moveto
+         Infinity   143.241913      moveto
+         Infinity   123.899994      lineto
+ stroke
+         Infinity   143.125000      moveto
+         Infinity   143.125000      moveto
+         Infinity   124.643982      lineto
+ stroke
+         Infinity   143.204727      moveto
+         Infinity   143.204727      moveto
+         Infinity   124.724998      lineto
+ stroke
+         Infinity   143.699997      moveto
+         Infinity   143.699997      moveto
+         Infinity   126.603638      lineto
+ stroke
+         Infinity   144.107208      moveto
+         Infinity   144.107208      moveto
+         Infinity   127.125000      lineto
+ stroke
+         Infinity   145.600006      moveto
+         Infinity   145.600006      moveto
+         Infinity   127.914009      lineto
+ stroke
+         Infinity   146.442551      moveto
+         Infinity   146.442551      moveto
+         Infinity   128.324997      lineto
+ stroke
+         Infinity   146.850006      moveto
+         Infinity   146.850006      moveto
+         Infinity   128.555389      lineto
+ stroke
+         Infinity   147.309937      moveto
+         Infinity   147.309937      moveto
+         Infinity   129.200806      lineto
+ stroke
+         Infinity   147.550003      moveto
+         Infinity   147.550003      moveto
+         Infinity   129.537704      lineto
+ stroke
+         Infinity   147.410568      moveto
+         Infinity   147.410568      moveto
+         Infinity   129.649994      lineto
+ stroke
+         Infinity   146.063004      moveto
+         Infinity   146.063004      moveto
+         Infinity   131.370819      lineto
+ stroke
+         Infinity   145.942261      moveto
+         Infinity   145.942261      moveto
+         Infinity   131.524994      lineto
+ stroke
+         Infinity   145.574997      moveto
+         Infinity   145.574997      moveto
+         Infinity   132.361008      lineto
+ stroke
+         Infinity   146.149994      moveto
+         Infinity   146.149994      moveto
+         Infinity   134.114853      lineto
+ stroke
+         Infinity   146.666779      moveto
+         Infinity   146.666779      moveto
+         Infinity   135.175003      lineto
+ stroke
+         Infinity   147.875000      moveto
+         Infinity   147.875000      moveto
+         Infinity   137.936874      lineto
+ stroke
+         Infinity   149.199173      moveto
+         Infinity   149.199173      moveto
+         Infinity   139.799988      lineto
+ stroke
+         Infinity   149.399994      moveto
+         Infinity   149.399994      moveto
+         Infinity   139.889511      lineto
+ stroke
+         Infinity   149.949997      moveto
+         Infinity   149.949997      moveto
+         Infinity   140.880005      lineto
+ stroke
+         Infinity   150.425003      moveto
+         Infinity   150.425003      moveto
+         Infinity   141.815018      lineto
+ stroke
+         Infinity   113.699997      moveto
+         Infinity   113.699997      moveto
+         Infinity   99.9966278      lineto
+ stroke
+         Infinity   113.055557      moveto
+         Infinity   113.055557      moveto
+         Infinity   100.275002      lineto
+ stroke
+         Infinity   112.925003      moveto
+         Infinity   112.925003      moveto
+         Infinity   100.537804      lineto
+ stroke
+         Infinity   114.250000      moveto
+         Infinity   114.250000      moveto
+         Infinity   102.108810      lineto
+ stroke
+         Infinity   114.647095      moveto
+         Infinity   114.647095      moveto
+         Infinity   102.449997      lineto
+ stroke
+         Infinity   115.875000      moveto
+         Infinity   115.875000      moveto
+         Infinity   104.437851      lineto
+ stroke
+         Infinity   118.074997      moveto
+         Infinity   118.074997      moveto
+         Infinity   106.155716      lineto
+ stroke
+         Infinity   118.459480      moveto
+         Infinity   118.459480      moveto
+         Infinity   107.099998      lineto
+ stroke
+         Infinity   119.050003      moveto
+         Infinity   119.050003      moveto
+         Infinity   107.844238      lineto
+ stroke
+         Infinity   119.125000      moveto
+         Infinity   119.125000      moveto
+         Infinity   109.179276      lineto
+ stroke
+         Infinity   119.349998      moveto
+         Infinity   119.349998      moveto
+         Infinity   110.201828      lineto
+ stroke
+         Infinity   119.668839      moveto
+         Infinity   119.668839      moveto
+         Infinity   110.400002      lineto
+ stroke
+         Infinity   121.275002      moveto
+         Infinity   121.275002      moveto
+         Infinity   111.448532      lineto
+ stroke
+         Infinity   123.024994      moveto
+         Infinity   123.024994      moveto
+         Infinity   112.508156      lineto
+ stroke
+         Infinity   123.052826      moveto
+         Infinity   123.052826      moveto
+         Infinity   112.544037      lineto
+ stroke
+         Infinity   124.000000      moveto
+         Infinity   124.000000      moveto
+         Infinity   113.765480      lineto
+ stroke
+         Infinity   123.994751      moveto
+         Infinity   123.994751      moveto
+         Infinity   113.797455      lineto
+ stroke
+         Infinity   123.824997      moveto
+         Infinity   123.824997      moveto
+         Infinity   114.832932      lineto
+ stroke
+         Infinity   124.050949      moveto
+         Infinity   124.050949      moveto
+         Infinity   115.074997      lineto
+ stroke
+         Infinity   124.849998      moveto
+         Infinity   124.849998      moveto
+         Infinity   115.614410      lineto
+ stroke
+         Infinity   124.947540      moveto
+         Infinity   124.947540      moveto
+         Infinity   115.887001      lineto
+ stroke
+         Infinity   125.199997      moveto
+         Infinity   125.199997      moveto
+         Infinity   116.592514      lineto
+ stroke
+         Infinity   124.810776      moveto
+         Infinity   124.810776      moveto
+         Infinity   116.902100      lineto
+ stroke
+         Infinity   124.184807      moveto
+         Infinity   124.184807      moveto
+         Infinity   117.399994      lineto
+ stroke
+         Infinity   123.899994      moveto
+         Infinity   123.899994      moveto
+         Infinity   117.616714      lineto
+ stroke
+         Infinity   123.951523      moveto
+         Infinity   123.951523      moveto
+         Infinity   117.679245      lineto
+ stroke
+         Infinity   124.724998      moveto
+         Infinity   124.724998      moveto
+         Infinity   118.618057      lineto
+ stroke
+         Infinity   126.976212      moveto
+         Infinity   126.976212      moveto
+         Infinity   119.349998      lineto
+ stroke
+         Infinity   127.125000      moveto
+         Infinity   127.125000      moveto
+         Infinity   119.407524      lineto
+ stroke
+         Infinity   128.325012      moveto
+         Infinity   128.325012      moveto
+         Infinity   120.531334      lineto
+ stroke
+         Infinity   129.592697      moveto
+         Infinity   129.592697      moveto
+         Infinity   121.555527      lineto
+ stroke
+         Infinity   129.649994      moveto
+         Infinity   129.649994      moveto
+         Infinity   121.601830      lineto
+ stroke
+         Infinity   129.744537      moveto
+         Infinity   129.744537      moveto
+         Infinity   121.650002      lineto
+ stroke
+         Infinity   130.314453      moveto
+         Infinity   130.314453      moveto
+         Infinity   122.397743      lineto
+ stroke
+         Infinity   131.524994      moveto
+         Infinity   131.524994      moveto
+         Infinity   123.985947      lineto
+ stroke
+         Infinity   133.108673      moveto
+         Infinity   133.108673      moveto
+         Infinity   125.151505      lineto
+ stroke
+         Infinity   133.786011      moveto
+         Infinity   133.786011      moveto
+         Infinity   125.650002      lineto
+ stroke
+         Infinity   135.175003      moveto
+         Infinity   135.175003      moveto
+         Infinity   126.634964      lineto
+ stroke
+         Infinity   139.800003      moveto
+         Infinity   139.800003      moveto
+         Infinity   129.578232      lineto
+ stroke
+         Infinity   139.997513      moveto
+         Infinity   139.997513      moveto
+         Infinity   129.974991      lineto
+ stroke
+         Infinity   100.275002      moveto
+         Infinity   100.275002      moveto
+         Infinity   95.0000076      lineto
+ stroke
+         Infinity   102.449997      moveto
+         Infinity   102.449997      moveto
+         Infinity   94.9999924      lineto
+ stroke
+         Infinity   107.099998      moveto
+         Infinity   107.099998      moveto
+         Infinity   94.9999924      lineto
+ stroke
+         Infinity   110.400002      moveto
+         Infinity   110.400002      moveto
+         Infinity   95.0000076      lineto
+ stroke
+         Infinity   115.074997      moveto
+         Infinity   115.074997      moveto
+         Infinity   94.9999924      lineto
+ stroke
+         Infinity   117.399994      moveto
+         Infinity   117.399994      moveto
+         Infinity   95.0000000      lineto
+ stroke
+         Infinity   119.349998      moveto
+         Infinity   119.349998      moveto
+         Infinity   95.0000000      lineto
+ stroke
+         Infinity   121.650002      moveto
+         Infinity   121.650002      moveto
+         Infinity   95.0000000      lineto
+ stroke
+         Infinity   125.649994      moveto
+         Infinity   125.649994      moveto
+         Infinity   94.9999924      lineto
+ stroke
+         Infinity   129.975006      moveto
+         Infinity   129.975006      moveto
+         Infinity   95.0000000      lineto
+ stroke
+ 0 setgray
+ % flushbuffer
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   161.284637      lineto
+         Infinity   161.853806      lineto
+         Infinity   162.467072      lineto
+         Infinity   163.397217      lineto
+         Infinity   163.560272      lineto
+         Infinity   163.690521      lineto
+         Infinity   163.758209      lineto
+         Infinity   163.820770      lineto
+         Infinity   163.934601      lineto
+         Infinity   164.082275      lineto
+         Infinity   164.274048      lineto
+         Infinity   164.709900      lineto
+         Infinity   164.913986      lineto
+         Infinity   165.539566      lineto
+         Infinity   165.672882      lineto
+         Infinity   165.901581      lineto
+         Infinity   166.056427      lineto
+         Infinity   166.231796      lineto
+         Infinity   166.519958      lineto
+         Infinity   166.718918      lineto
+         Infinity   166.844025      lineto
+         Infinity   167.046051      lineto
+         Infinity   167.358856      lineto
+         Infinity   167.516785      lineto
+         Infinity   167.592682      lineto
+         Infinity   167.724976      lineto
+         Infinity   167.828537      lineto
+         Infinity   167.994675      lineto
+         Infinity   168.157745      lineto
+         Infinity   168.407959      lineto
+         Infinity   169.188385      lineto
+         Infinity   169.791397      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   162.206116      lineto
+         Infinity   163.033051      lineto
+         Infinity   163.924057      lineto
+         Infinity   165.275467      lineto
+         Infinity   165.512390      lineto
+         Infinity   165.701599      lineto
+         Infinity   165.799927      lineto
+         Infinity   165.890839      lineto
+         Infinity   166.056213      lineto
+         Infinity   166.270782      lineto
+         Infinity   166.549408      lineto
+         Infinity   167.182648      lineto
+         Infinity   167.479156      lineto
+         Infinity   168.388031      lineto
+         Infinity   168.581726      lineto
+         Infinity   168.913986      lineto
+         Infinity   169.138977      lineto
+         Infinity   169.393753      lineto
+         Infinity   169.812439      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   164.985352      lineto
+         Infinity   166.589737      lineto
+         Infinity   168.318420      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   169.706512      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250031      lineto
+         Infinity   166.560730      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   164.998444      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.249954      lineto
+         Infinity   168.169037      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.249878      lineto
+         Infinity   169.666534      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.249878      lineto
+         Infinity   169.666534      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   169.666656      lineto
+         Infinity   170.000000      lineto
+ stroke
+ % flushbuffer
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   159.250000      lineto
+         Infinity   159.747986      lineto
+         Infinity   160.010254      lineto
+         Infinity   160.192520      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   159.250000      lineto
+         Infinity   161.265671      lineto
+         Infinity   162.327316      lineto
+         Infinity   163.065063      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   159.250000      lineto
+         Infinity   165.830719      lineto
+         Infinity   169.296783      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   159.250000      lineto
+         Infinity   166.395599      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   159.250031      lineto
+         Infinity   165.632843      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   159.250031      lineto
+         Infinity   169.602051      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250031      lineto
+         Infinity   159.249954      lineto
+         Infinity   167.358475      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250031      lineto
+         Infinity   159.249878      lineto
+         Infinity   169.666534      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.249878      lineto
+         Infinity   159.250183      lineto
+         Infinity   169.666840      lineto
+         Infinity   170.000000      lineto
+ stroke
+ newpath
+         Infinity   159.250000      moveto
+         Infinity   159.250000      lineto
+         Infinity   159.249878      lineto
+         Infinity   170.000000      lineto
+ stroke
+ % flushbuffer
+   12.5000000       12.5000000      moveto
+   12.5000000       12.5000000      moveto
+   262.500000       12.5000000      lineto
+ stroke
+   12.5000000       12.5000000      moveto
+   12.5000000       12.5000000      moveto
+   12.5000000       10.0000000      lineto
+ stroke
+   37.5000000       12.5000000      moveto
+   37.5000000       12.5000000      moveto
+   37.5000000       10.0000000      lineto
+ stroke
+   62.5000000       12.5000000      moveto
+   62.5000000       12.5000000      moveto
+   62.5000000       10.0000000      lineto
+ stroke
+   87.5000000       12.5000000      moveto
+   87.5000000       12.5000000      moveto
+   87.5000000       10.0000000      lineto
+ stroke
+   112.500000       12.5000000      moveto
+   112.500000       12.5000000      moveto
+   112.500000       10.0000000      lineto
+ stroke
+   137.500000       12.5000000      moveto
+   137.500000       12.5000000      moveto
+   137.500000       10.0000000      lineto
+ stroke
+   162.500000       12.5000000      moveto
+   162.500000       12.5000000      moveto
+   162.500000       10.0000000      lineto
+ stroke
+   187.500000       12.5000000      moveto
+   187.500000       12.5000000      moveto
+   187.500000       10.0000000      lineto
+ stroke
+   212.500000       12.5000000      moveto
+   212.500000       12.5000000      moveto
+   212.500000       10.0000000      lineto
+ stroke
+   237.500000       12.5000000      moveto
+   237.500000       12.5000000      moveto
+   237.500000       10.0000000      lineto
+ stroke
+   262.500000       12.5000000      moveto
+   262.500000       12.5000000      moveto
+   262.500000       10.0000000      lineto
+ stroke
+   9.68750000       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(0) show
+ grestore
+   34.6875000       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(50) show
+ grestore
+   59.6875000       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(100) show
+ grestore
+   84.6875000       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(150) show
+ grestore
+   109.687500       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(200) show
+ grestore
+   134.687500       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(250) show
+ grestore
+   159.687500       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(300) show
+ grestore
+   184.687500       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(350) show
+ grestore
+   209.687500       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(400) show
+ grestore
+   234.687500       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(450) show
+ grestore
+   259.687500       6.25000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(500) show
+ grestore
+   125.312500       2.50000000      moveto
+ gsave
+   0.00000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(DISTANCE (km)) show
+ grestore
+   12.5000000       12.5000000      moveto
+   12.5000000       12.5000000      moveto
+   12.5000000       87.5000000      lineto
+ stroke
+   12.5000000       12.5000000      moveto
+   12.5000000       12.5000000      moveto
+   10.0000000       12.5000000      lineto
+ stroke
+   12.5000000       20.0000000      moveto
+   12.5000000       20.0000000      moveto
+   10.0000000       20.0000000      lineto
+ stroke
+   12.5000000       27.5000000      moveto
+   12.5000000       27.5000000      moveto
+   10.0000000       27.5000000      lineto
+ stroke
+   12.5000000       35.0000000      moveto
+   12.5000000       35.0000000      moveto
+   10.0000000       35.0000000      lineto
+ stroke
+   12.5000000       42.5000000      moveto
+   12.5000000       42.5000000      moveto
+   10.0000000       42.5000000      lineto
+ stroke
+   12.5000000       50.0000000      moveto
+   12.5000000       50.0000000      moveto
+   10.0000000       50.0000000      lineto
+ stroke
+   12.5000000       57.5000000      moveto
+   12.5000000       57.5000000      moveto
+   10.0000000       57.5000000      lineto
+ stroke
+   12.5000000       65.0000000      moveto
+   12.5000000       65.0000000      moveto
+   10.0000000       65.0000000      lineto
+ stroke
+   12.5000000       72.5000000      moveto
+   12.5000000       72.5000000      moveto
+   10.0000000       72.5000000      lineto
+ stroke
+   12.5000000       80.0000000      moveto
+   12.5000000       80.0000000      moveto
+   10.0000000       80.0000000      lineto
+ stroke
+   12.5000000       87.5000000      moveto
+   12.5000000       87.5000000      moveto
+   10.0000000       87.5000000      lineto
+ stroke
+   8.75000000       10.6250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(0) show
+ grestore
+   8.75000000       18.1250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(1) show
+ grestore
+   8.75000000       25.6250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(2) show
+ grestore
+   8.75000000       33.1250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(3) show
+ grestore
+   8.75000000       40.6250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(4) show
+ grestore
+   8.75000000       48.1250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(5) show
+ grestore
+   8.75000000       55.6250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(6) show
+ grestore
+   8.75000000       63.1250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(7) show
+ grestore
+   8.75000000       70.6250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(8) show
+ grestore
+   8.75000000       78.1250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(9) show
+ grestore
+   8.75000000       85.6250000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(10) show
+ grestore
+   5.00000000       41.5625000      moveto
+ gsave
+   90.0000000      rotate
+ /Helvetica findfont    2.50000000      scalefont setfont
+(T-D/8 (s)) show
+ grestore
+   12.5000000       12.5000000      moveto
+   12.5000000       12.5000000      moveto
+   262.500000       12.5000000      lineto
+ stroke
+   262.500000       12.5000000      moveto
+   262.500000       87.5000000      lineto
+ stroke
+   262.500000       87.5000000      moveto
+   12.5000000       87.5000000      lineto
+ stroke
+   12.5000000       87.5000000      moveto
+   12.5000000       12.5000000      lineto
+ stroke
+   178.542953       438.788666      moveto
+   178.542953       438.788666      moveto
+   194.880569       306.244934      lineto
+ stroke
+   194.880569       306.244934      moveto
+   212.361496       164.811218      lineto
+ stroke
+   212.361496       164.811218      moveto
+   220.756577       97.6040878      lineto
+ stroke
+   220.756577       97.6040878      moveto
+   224.828171       65.9436035      lineto
+ stroke
+   224.828171       65.9436035      moveto
+   227.059021       49.6935349      lineto
+ stroke
+   227.059021       49.6935349      moveto
+   228.443970       40.8491135      lineto
+ stroke
+   228.443970       40.8491135      moveto
+   229.414230       36.0622940      lineto
+ stroke
+   229.414230       36.0622940      moveto
+   230.185165       33.8937149      lineto
+ stroke
+   230.185165       33.8937149      moveto
+   230.893036       33.8927307      lineto
+ stroke
+   258.181000       234.558853      moveto
+   258.181000       234.558853      moveto
+   243.491821       116.192207      lineto
+ stroke
+   243.491821       116.192207      moveto
+   237.972504       72.7375031      lineto
+ stroke
+   237.972504       72.7375031      moveto
+   235.281845       52.7031708      lineto
+ stroke
+   235.281845       52.7031708      moveto
+   233.717026       42.3232498      lineto
+ stroke
+   233.717026       42.3232498      moveto
+   232.667679       36.7769775      lineto
+ stroke
+   232.667679       36.7769775      moveto
+   231.862808       34.1366882      lineto
+ stroke
+   231.862808       34.1366882      moveto
+   231.270538       33.6391640      lineto
+ stroke
+ % flushbuffer
+ showpage

@@ -1,0 +1,35 @@
+{
+  "sedimentary_keywords": [
+    "sediment",
+    "sedimentary",
+    "sand",
+    "shale",
+    "silt",
+    "mud",
+    "clastic",
+    "conglomerate",
+    "limestone",
+    "dolomite",
+    "chalk",
+    "marl",
+    "greywacke",
+    "graywacke",
+    "沉积",
+    "砂岩",
+    "页岩",
+    "泥岩",
+    "灰岩",
+    "白云岩",
+    "杂砂岩"
+  ],
+  "zone_labels": {
+    "water": "海水层 (water)",
+    "sediment": "沉积层 (sediment)",
+    "deep": "深部地层 (deep)"
+  },
+  "geothermal_gradient_c_per_km": 30.0,
+  "seawater_temperature_c": 4.0,
+  "seafloor_temperature_c": 4.0,
+  "seawater_density_g_cm3": 1.03,
+  "seawater_pressure_gradient_mpa_per_km": 10.1
+}

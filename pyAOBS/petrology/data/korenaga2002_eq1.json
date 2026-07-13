@@ -1,0 +1,108 @@
+{
+  "reference_state": {
+    "pressure_MPa": 600,
+    "temperature_C": 400,
+    "comment": "Norm-based V_bulk reference: pore-free rock at 600 MPa, 400 °C (NOT Fig.2 at 100 MPa, 100 °C)"
+  },
+  "equation_1": {
+    "description": "V_bulk(P_bar, F_bar) in km/s. Dual quadratic branches blended by product tanh windows W_L, W_H (KKHS02 §2.2).",
+    "inputs": {
+      "P_bar_GPa": "volume- or melt-weighted mean melting pressure (§4 eq. 9)",
+      "F_bar": "mean melt fraction over the melting interval (§4 eq. 8)"
+    },
+    "output": "V_bulk_km_s",
+    "form": "V_bulk = a0 + W_L*(b0 + b1*P + b2*F + b3*P^2 + b4*P*F + b5*F^2) + W_H*(c0 + c1*P + c2*F + c3*P^2 + c4*P*F + c5*F^2)",
+    "coefficients": {
+      "a0": 7.52,
+      "b0": -1.73,
+      "b1": -0.55,
+      "b2": 7.71,
+      "b3": -0.11,
+      "b4": 8.87,
+      "b5": -146.11,
+      "c0": -0.35,
+      "c1": 0.034,
+      "c2": 0.51,
+      "c3": 0.0016,
+      "c4": -0.04,
+      "c5": 0.046,
+      "comment": "Production coefficients. b1 = -0.55 (sign-corrected); see print_errata."
+    },
+    "print_errata": {
+      "issue": "KKHS02 §2.2 printed table lists b1 = +0.55; that sign is inconsistent with Fig.3 V(P,F) contours.",
+      "evidence": "Digitized Fig.3 contours (data/ScreenShot_2026-07-09_105537_962.txt): flipping only b1 to -0.55 drops rms from ~0.16 to ~0.002 km/s (validation/check_eq1_print_refit.py; figures/eq1_paper_vs_b1neg.png).",
+      "printed_b1": 0.55,
+      "corrected_b1": -0.55,
+      "printed_coefficients_for_comparison": {
+        "a0": 7.52,
+        "b0": -1.73,
+        "b1": 0.55,
+        "b2": 7.71,
+        "b3": -0.11,
+        "b4": 8.87,
+        "b5": -146.11,
+        "c0": -0.35,
+        "c1": 0.034,
+        "c2": 0.51,
+        "c3": 0.0016,
+        "c4": -0.04,
+        "c5": 0.046
+      },
+      "note": "Forward models use equation_1.coefficients (corrected). Keep printed_coefficients_for_comparison only for errata plots / audits."
+    },
+    "window_functions": {
+      "W_L": "0.25 * (1 - tanh(alpha*(P - P_t))) * (1 - tanh(beta*(F - F_t)))",
+      "W_H": "0.25 * (1 + tanh(alpha*(P - P_t))) * (1 + tanh(beta*(F - F_t)))",
+      "alpha": 0.6,
+      "beta": 8.4,
+      "P_t_GPa": 1.0,
+      "F_t": 0.05,
+      "comment": "W_L dominates at low P, low F; W_H at high P, high F; smooth transition between branches"
+    },
+    "applicable_range": {
+      "P_GPa": [1.0, 3.0],
+      "F": [0.02, 0.2],
+      "source_rock": "dry pyrolite peridotite melt (MORB primary basalts)",
+      "comment": "Extrapolation outside this box is not validated by KKHS02 regression"
+    }
+  },
+  "fig11_vbulk_linear": {
+    "description": "Holbrook (2000) Ch3 eq.(3.1) linear V(P,F) — catalog cross-check only; NOT the KKHS02 Fig.11 d/h predictor (paper uses eq.(1) with section-4 P_bar, F_bar).",
+    "form": "V_bulk = c0 + c1*P + c2*F + c3*P*F",
+    "coefficients": {
+      "c0": 6.87,
+      "c1": 0.09,
+      "c2": 1.38,
+      "c3": -0.16
+    },
+    "reference_state": {
+      "pressure_MPa": 600,
+      "temperature_C": 400
+    },
+    "sigma_km_s": 0.06,
+    "source": "Holbrook (2000) thesis Ch3 eq.(3.1); KKHS02 Fig.11 standard-model paths"
+  },
+  "validation": {
+    "morb_P_GPa": 1.0,
+    "morb_F": 0.1,
+    "expected_Vp_km_s": 7.1,
+    "catalog_Vp_range_km_s": [6.8, 7.8],
+    "sigma_supplementary_km_s": 0.01,
+    "sigma_experimental_km_s": 0.05
+  },
+  "regression_data_policy": {
+    "include": [
+      "Kinzler_and_Grove_1992",
+      "Kinzler_and_Grove_1993",
+      "Baker_and_Stolper_1994",
+      "Kinzler_1997",
+      "Walter_1998",
+      "Kinzler_1997_calculated_grid"
+    ],
+    "exclude_from_regression": [
+      "Hirose_and_Kushiro_1993"
+    ],
+    "weighting": "equal per-point weighted misfit for experimental vs supplementary"
+  },
+  "source": "Korenaga et al. (2002) JGR 10.1029/2001JB001030 §2.2; b1 sign corrected vs printed table (see equation_1.print_errata)"
+}

@@ -1,0 +1,5 @@
+! BASALT_MODERN 数据文件 - 高 MgO/FeO 易结晶成分
+! 列顺序: CAA   NAAL  MGO   FEO   CAWO  TIO2  SIO2
+! 该成分富集 MgO/FeO，液相线更高，更容易验证橄榄石/辉石结晶
+
+0.1500 0.2500 0.0800 0.1200 0.1000 0.0200 0.2800

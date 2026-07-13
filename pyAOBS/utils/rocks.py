@@ -15,6 +15,30 @@ from dataclasses import dataclass
 import pandas as pd
 from pathlib import Path
 from enum import Enum, auto
+import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.calibration import CalibratedClassifierCV
+
+# 导入经验公式库
+try:
+    from .empirical_formulas import (
+        calculate_density as _calculate_density,
+        calculate_vs as _calculate_vs,
+        calculate_elastic_moduli as _calculate_elastic_moduli,
+        correct_velocity as _correct_velocity,
+        correct_velocity_pressure as _correct_velocity_pressure,
+        correct_velocity_temperature as _correct_velocity_temperature
+    )
+except ImportError:
+    from empirical_formulas import (
+        calculate_density as _calculate_density,
+        calculate_vs as _calculate_vs,
+        calculate_elastic_moduli as _calculate_elastic_moduli,
+        correct_velocity as _correct_velocity,
+        correct_velocity_pressure as _correct_velocity_pressure,
+        correct_velocity_temperature as _correct_velocity_temperature
+    )
 
 class TectonicSetting(Enum):
     """构造背景枚举类"""
@@ -94,21 +118,8 @@ class Rock:
         Returns:
             float: 计算得到的密度 (g/cm³)
         """
-        vp = self.properties.vp
-        
-        if method == 'gardner':
-            # Gardner et al. (1974)
-            return 1.74 * (vp * 1000)**0.25  # vp需要转换为m/s
-            
-        elif method == 'nafe_drake':
-            # Nafe & Drake (1963)
-            return 1.6612 * vp - 0.4721 * vp**2 + 0.0671 * vp**3 - 0.0043 * vp**4 + 0.000106 * vp**5
-            
-        elif method == 'brocher':
-            # Brocher (2005)
-            return 1.6612 * vp - 0.4721 * vp**2 + 0.0671 * vp**3 - 0.0043 * vp**4 + 0.000106 * vp**5
-            
-        raise ValueError(f"不支持的密度计算方法: {method}")
+        # 使用统一的经验公式库
+        return _calculate_density(self.properties.vp, method=method)
     
     def calculate_vs(self, method: str = 'brocher') -> float:
         """使用经验公式计算S波速度
@@ -121,17 +132,8 @@ class Rock:
         Returns:
             float: 计算得到的S波速度 (km/s)
         """
-        vp = self.properties.vp
-        
-        if method == 'brocher':
-            # Brocher (2005)
-            return 0.7858 - 1.2344 * vp + 0.7949 * vp**2 - 0.1238 * vp**3 + 0.0064 * vp**4
-            
-        elif method == 'castagna':
-            # Castagna et al. (1985)
-            return (vp - 1.36) / 1.16
-            
-        raise ValueError(f"不支持的S波速度计算方法: {method}")
+        # 使用统一的经验公式库
+        return _calculate_vs(self.properties.vp, method=method)
     
     def calculate_elastic_moduli(self) -> Dict[str, float]:
         """计算弹性模量
@@ -149,54 +151,76 @@ class Rock:
         if self.properties.density is None:
             self.properties.density = self.calculate_density()
             
-        vp = self.properties.vp * 1000  # 转换为m/s
-        vs = self.properties.vs * 1000
-        rho = self.properties.density * 1000  # 转换为kg/m³
+        # 使用统一的经验公式库
+        moduli = _calculate_elastic_moduli(
+            self.properties.vp,
+            self.properties.vs,
+            self.properties.density
+        )
         
-        # 计算弹性模量
-        mu = rho * vs**2 * 1e-9  # 剪切模量 (GPa)
-        lambda_ = rho * (vp**2 - 2*vs**2) * 1e-9  # 拉梅常数λ (GPa)
-        K = lambda_ + 2*mu/3  # 体积模量 (GPa)
-        E = mu * (3*lambda_ + 2*mu)/(lambda_ + mu)  # 杨氏模量 (GPa)
-        
-        return {
-            'bulk_modulus': K,
-            'shear_modulus': mu,
-            'young_modulus': E,
-            'lame_lambda': lambda_
-        }
+        # 转换为float（如果是标量）
+        return {k: float(v) for k, v in moduli.items()}
     
     def calculate_temperature_effect(self, 
                                   reference_vp: float,
                                   delta_T: float,
-                                  alpha: float = -0.0005) -> float:
+                                  alpha: Optional[float] = None) -> float:
         """计算温度对P波速度的影响
+        
+        使用统一的经验公式库进行校正。
+        注意：delta_T应该是 (原始温度 - 目标温度)，公式使用 1 - alpha * delta_T。
+        isrock.py中alpha定义为负数（-0.50e-4），公式使用减号。
         
         Args:
             reference_vp: 参考温度下的P波速度 (km/s)
-            delta_T: 温度变化 (°C)
-            alpha: 温度系数 (默认 -0.0005/°C)
+            delta_T: 温度变化 (°C)，应该是 (原始温度 - 目标温度)
+            alpha: 温度系数，如果为None则使用默认值-0.50e-4/°C（与CorrectionParameters一致）
             
         Returns:
             float: 温度校正后的P波速度 (km/s)
         """
-        return reference_vp * (1 + alpha * delta_T)
+        # 使用统一的经验公式库
+        # 注意：correct_velocity_temperature需要原始温度和目标温度，而不是delta_T
+        # 这里为了保持接口兼容性，我们仍然使用delta_T
+        # 假设参考温度是目标温度，原始温度 = 目标温度 + delta_T
+        target_temp = 25.0  # 默认目标温度
+        original_temp = target_temp + delta_T
+        return _correct_velocity_temperature(
+            reference_vp,
+            temperature=original_temp,
+            target_temperature=target_temp,
+            is_s_wave=False
+        )
     
     def calculate_pressure_effect(self,
                                reference_vp: float,
                                delta_P: float,
-                               beta: float = 0.0002) -> float:
+                               beta: Optional[float] = None) -> float:
         """计算压力对P波速度的影响
+        
+        使用统一的经验公式库进行校正。
+        注意：delta_P应该是 (目标压力 - 原始压力)，压力升高速度增加。
         
         Args:
             reference_vp: 参考压力下的P波速度 (km/s)
-            delta_P: 压力变化 (MPa)
-            beta: 压力系数 (默认 0.0002/MPa)
+            delta_P: 压力变化 (MPa)，应该是 (目标压力 - 原始压力)
+            beta: 压力系数，如果为None则使用默认值0.0002/MPa（与CorrectionParameters一致）
             
         Returns:
             float: 压力校正后的P波速度 (km/s)
         """
-        return reference_vp * (1 + beta * delta_P)
+        # 使用统一的经验公式库
+        # 注意：correct_velocity_pressure需要原始压力和目标压力，而不是delta_P
+        # 这里为了保持接口兼容性，我们仍然使用delta_P
+        # 假设参考压力是原始压力，目标压力 = 原始压力 + delta_P
+        original_pressure = 200.0  # 默认原始压力
+        target_pressure = original_pressure + delta_P
+        return _correct_velocity_pressure(
+            reference_vp,
+            pressure=original_pressure,
+            target_pressure=target_pressure,
+            is_s_wave=False
+        )
     
     def __str__(self) -> str:
         """返回岩石信息的字符串表示"""
@@ -441,7 +465,6 @@ class RockDatabase:
         if rock_type not in self.rocks:
             raise ValueError(f"数据库中不存在岩石类型: {rock_type}")
             
-        import matplotlib.pyplot as plt
         import seaborn as sns
         
         # 收集数据
@@ -734,183 +757,616 @@ class RockDatabase:
 
 class RockClassifier:
     """岩石分类器类"""
+
+    @staticmethod
+    def _read_table_with_fallback(file_path: Path) -> pd.DataFrame:
+        """读取数据库表格，支持 Excel/CSV/TXT。"""
+        suffix = file_path.suffix.lower()
+        if suffix in {'.xlsx', '.xlsm'}:
+            return pd.read_excel(file_path)
+
+        if suffix in {'.txt', '.tsv'}:
+            for enc in ('utf-8-sig', 'utf-8', 'gb18030', 'latin-1'):
+                try:
+                    return pd.read_csv(file_path, sep=None, engine='python', encoding=enc)
+                except Exception:
+                    continue
+            raise ValueError(f"无法解析文本数据库文件: {file_path}")
+
+        for enc in ('utf-8-sig', 'utf-8', 'gb18030', 'latin-1'):
+            try:
+                return pd.read_csv(file_path, encoding=enc)
+            except Exception:
+                continue
+        raise ValueError(f"无法解析CSV数据库文件: {file_path}")
     
-    def __init__(self, database: RockDatabase):
+    def __init__(
+        self,
+        database,
+        use_felsic_mafic: bool = False,
+        use_rock_facies: bool = False,
+        use_sio2: bool = False,
+    ):
         """初始化分类器
         
         Args:
-            database: 岩石数据库实例
+            database: str或pd.DataFrame，岩石数据库文件路径或DataFrame
         """
-        self.database = database
-        self.classifier = None
-        self.scaler = None
-        self.features = ['vp', 'vs', 'density', 'porosity']
-        self.required_features = ['vp']  # 只有P波速度是必需的
+        if isinstance(database, (str, Path)):
+            self.rock_database = self._read_table_with_fallback(Path(database))
+        else:
+            self.rock_database = database
+        self.use_felsic_mafic = bool(use_felsic_mafic)
+        self.use_rock_facies = bool(use_rock_facies)
+        self.use_sio2 = bool(use_sio2)
+            
+        # 检查必需的列是否存在，支持多种列名格式和中文列名
+        # 定义列名映射规则（标准列名 -> 可能的变体）
+        col_name_variants = {
+            'vp': ['vp', 'Vp', 'VP', 'v_p', 'v_p (km/s)', 'vp (km/s)', 'vp(km/s)', 'p-wave', 'pwave', 'p波', 'p波速度', 'v', 'V'],
+            'vs': ['vs', 'Vs', 'VS', 'v_s', 'v_s (km/s)', 'vs (km/s)', 'vs(km/s)', 's-wave', 'swave', 's波', 's波速度'],
+            'density': ['density', 'Density', 'DENSITY', 'ρ', 'rho', 'Rho', 'RHO', 'density (g/cm³)', 'density(g/cm³)', '密度', '密度 (g/cm³)'],
+            'pressure': ['pressure', 'Pressure', 'PRESSURE', 'P', 'p', '压力', '压力 (MPa)', 'pressure (MPa)'],
+            'rock_type': ['rock_type', 'Rock Type', 'RockType', 'ROCK_TYPE', 'rocktype', 'rock type', 'type', 'Type', 'TYPE', '岩石类型', '岩性', '中文', '中文名'],
+            'felsic_or_mafic': ['felsic_or_mafic', 'felsic or mafic', 'composition', 'composition_class'],
+            'rock_facies': ['rock_facies', 'rock facies', 'facies'],
+            'sio2_wt': ['sio2_wt', 'sio2', 'sio2, wt.%', 'sio2 wt']
+        }
         
-    def train_classifier(self):
-        """训练分类器"""
-        from sklearn.ensemble import RandomForestClassifier
-        from sklearn.preprocessing import StandardScaler
+        col_mapping = {}
+        available_cols_lower = [str(col).lower().strip() for col in self.rock_database.columns]
+        available_cols = list(self.rock_database.columns)
         
-        # 准备训练数据
-        X = []
-        y = []
+        # 创建列名映射（支持多种变体）
+        for std_col, variants in col_name_variants.items():
+            found = False
+            # 首先尝试精确匹配（大小写不敏感）
+            for variant in variants:
+                variant_lower = variant.lower().strip()
+                if variant in available_cols:
+                    col_mapping[std_col] = variant
+                    found = True
+                    break
+                elif variant_lower in available_cols_lower:
+                    idx = available_cols_lower.index(variant_lower)
+                    col_mapping[std_col] = available_cols[idx]
+                    found = True
+                    break
+            
+            # 如果没找到，对于density和pressure列，允许缺失（将使用经验公式估算）
+            if not found:
+                if std_col in ['density', 'pressure', 'felsic_or_mafic', 'rock_facies', 'sio2_wt']:
+                    # 密度和压力列可选，如果缺失将在后续处理中估算
+                    col_mapping[std_col] = None
+                else:
+                    # 其他列是必需的
+                    raise ValueError(
+                        f"Database missing required column: '{std_col}'. "
+                        f"Tried variants: {variants}. "
+                        f"Available columns: {list(self.rock_database.columns)}"
+                    )
         
-        for rock_type, measurements in self.database.rocks.items():
-            for m in measurements:
-                features = []
-                skip = False
-                for feature in self.features:
-                    value = getattr(m.properties, feature)
-                    if feature in self.required_features and value is None:
-                        skip = True
-                        break
-                    features.append(value if value is not None else 0.0)  # 使用0.0填充缺失值
+        # 使用映射后的列名
+        vp_col = col_mapping['vp']
+        vs_col = col_mapping['vs']
+        density_col = col_mapping.get('density')  # 可能为None
+        pressure_col = col_mapping.get('pressure')  # 可能为None
+        rock_type_col = col_mapping['rock_type']
+        felsic_or_mafic_col = col_mapping.get('felsic_or_mafic')
+        rock_facies_col = col_mapping.get('rock_facies')
+        sio2_col = col_mapping.get('sio2_wt')
+        
+        # 目标校正条件（标准条件）
+        self.target_pressure = 200.0  # MPa
+        self.target_temperature = 25.0  # °C
+        
+        # 检查是否有足够的非空数据
+        # 对于缺失的vs或density，使用经验公式估算
+        valid_data = self.rock_database.copy()
+        
+        # 如果vs缺失，使用Brocher公式估算（使用经验公式库）
+        if vs_col and valid_data[vs_col].isna().any():
+            mask = valid_data[vs_col].isna()
+            for idx in valid_data[mask].index:
+                vp_val = valid_data.loc[idx, vp_col]
+                valid_data.loc[idx, vs_col] = _calculate_vs(vp_val, method='brocher')
+        
+        # 如果density列不存在或缺失，创建新列并使用Gardner公式估算
+        if density_col is None:
+            # 创建density列
+            valid_data['density'] = np.nan
+            density_col = 'density'
+        
+        # 如果density缺失，使用Gardner公式估算（使用经验公式库）
+        if density_col in valid_data.columns:
+            if valid_data[density_col].isna().any() or valid_data[density_col].isna().all():
+                mask = valid_data[density_col].isna()
+                for idx in valid_data[mask].index:
+                    vp_val = valid_data.loc[idx, vp_col]
+                    valid_data.loc[idx, density_col] = _calculate_density(vp_val, method='gardner')
+        else:
+            # 如果density列完全不存在，为所有行估算（使用经验公式库）
+            valid_data[density_col] = np.nan
+            for idx in valid_data.index:
+                vp_val = valid_data.loc[idx, vp_col]
+                valid_data.loc[idx, density_col] = _calculate_density(vp_val, method='gardner')
+        
+        # 处理压力列：如果不存在，假设为25°C（默认温度），压力需要根据深度估算
+        # 但数据库中没有深度信息，所以假设压力为200MPa（标准条件）
+        if pressure_col is None:
+            valid_data['pressure'] = self.target_pressure  # 假设已经是标准条件
+            pressure_col = 'pressure'
+        elif pressure_col in valid_data.columns:
+            # 如果压力列存在但有空值，用目标压力填充
+            # 使用推荐的方式避免FutureWarning
+            if valid_data[pressure_col].isna().any():
+                valid_data[pressure_col] = valid_data[pressure_col].fillna(self.target_pressure)
+        else:
+            valid_data['pressure'] = self.target_pressure
+            pressure_col = 'pressure'
+        
+        # 假设数据库中的温度都是25°C（默认测量温度）
+        # 如果数据库中有温度列，可以读取，否则假设为25°C
+        valid_data['temperature'] = self.target_temperature  # 假设测量温度为25°C
+        
+        # 对数据库中的速度值进行压力和温度校正到标准条件（200MPa, 25°C）
+        # 校正公式（基于Christensen, 1979）：
+        # 压力校正: V_corrected = V_original * (1 + beta * delta_P)
+        #   其中 delta_P = target_pressure - original_pressure
+        #   beta = 0.0002/MPa (P波) 或 0.00015/MPa (S波)
+        # 温度校正: V_corrected = V_original * (1 - alpha * delta_T)
+        #   其中 delta_T = original_temperature - target_temperature
+        #   alpha = 0.50e-4/°C (P波，即0.00005/°C) 或 0.40e-4/°C (S波，即0.00004/°C)
+        #   注意：温度升高速度降低，所以使用减号
+        
+        # P波速度校正系数（与isrock.py中的CorrectionParameters保持一致）
+        beta_p = 0.0002  # P波压力系数 (1/MPa)
+        alpha_p = -0.50e-4  # P波温度系数 (1/°C)，注意：isrock.py中定义为负数
+        
+        for idx in valid_data.index:
+            vp_orig = valid_data.loc[idx, vp_col]
+            p_orig = valid_data.loc[idx, pressure_col]
+            t_orig = valid_data.loc[idx, 'temperature']
+            
+            # 压力校正
+            delta_p = self.target_pressure - p_orig
+            vp_pressure_corrected = vp_orig * (1 + beta_p * delta_p)
+            
+            # 温度校正（与isrock.py中的CorrectionParameters一致）
+        # 注意：isrock.py中alpha定义为负数，公式使用减号
+            delta_t = t_orig - self.target_temperature  # 原始温度 - 目标温度
+            vp_corrected = vp_pressure_corrected * (1 - alpha_p * delta_t)
+            
+            valid_data.loc[idx, vp_col] = vp_corrected
+        
+        # S波速度校正（如果存在）
+        if vs_col:
+            beta_s = 0.00015  # S波压力系数 (1/MPa)
+            alpha_s = -0.40e-4  # S波温度系数 (1/°C)，注意：isrock.py中定义为负数
+            
+            for idx in valid_data.index:
+                vs_orig = valid_data.loc[idx, vs_col]
+                p_orig = valid_data.loc[idx, pressure_col]
+                t_orig = valid_data.loc[idx, 'temperature']
                 
-                if not skip:
-                    X.append(features)
-                    y.append(rock_type)
+                # 压力校正
+                delta_p = self.target_pressure - p_orig
+                vs_pressure_corrected = vs_orig * (1 + beta_s * delta_p)
+                
+                # 温度校正（与isrock.py中的CorrectionParameters一致）
+                # 注意：isrock.py中alpha定义为负数，公式使用减号
+                delta_t = t_orig - self.target_temperature  # 原始温度 - 目标温度
+                vs_corrected = vs_pressure_corrected * (1 - alpha_s * delta_t)
+                
+                valid_data.loc[idx, vs_col] = vs_corrected
         
-        if not X:
-            raise ValueError("没有足够的训练数据")
-            
-        X = np.array(X)
-        
-        # 标准化特征
-        self.scaler = StandardScaler()
-        X_scaled = self.scaler.fit_transform(X)
-        
-        # 训练分类器
-        self.classifier = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=None,
-            min_samples_split=2,
-            min_samples_leaf=1,
-            class_weight='balanced'
-        )
-        self.classifier.fit(X_scaled, y)
-        
-    def predict_proba(self, properties: RockProperties) -> Dict[str, float]:
-        """预测所有岩石类型的概率
-        
-        Args:
-            properties: 岩石物性参数
-            
-        Returns:
-            Dict[str, float]: 岩石类型到预测概率的映射
-        """
-        if self.classifier is None:
-            raise ValueError("请先训练分类器")
-            
-        # 提取特征
-        feature_values = []
-        for feature in self.features:
-            value = getattr(properties, feature)
-            if feature in self.required_features and value is None:
-                raise ValueError(f"缺少必需特征: {feature}")
-            feature_values.append(value if value is not None else 0.0)  # 使用0.0填充缺失值
-            
-        # 标准化特征
-        X = np.array([feature_values])
-        X_scaled = self.scaler.transform(X)
-        
-        # 获取所有类别的预测概率
-        probabilities = self.classifier.predict_proba(X_scaled)[0]
-        rock_types = self.classifier.classes_
-        
-        return dict(zip(rock_types, probabilities))
+        # 先转换为标准列名，便于后续扩展特征
+        rename_dict = {
+            vp_col: 'vp',
+            rock_type_col: 'rock_type',
+            pressure_col: 'pressure',
+            'temperature': 'temperature',
+        }
+        if vs_col:
+            rename_dict[vs_col] = 'vs'
+        if density_col:
+            rename_dict[density_col] = 'density'
+        if felsic_or_mafic_col:
+            rename_dict[felsic_or_mafic_col] = 'felsic_or_mafic'
+        if rock_facies_col:
+            rename_dict[rock_facies_col] = 'rock_facies'
+        if sio2_col:
+            rename_dict[sio2_col] = 'sio2_wt'
 
-    def identify_rock(self, vp: float, vs: Optional[float] = None,
-                     density: Optional[float] = None,
-                     porosity: Optional[float] = None,
-                     min_probability: float = 0.2,
-                     max_candidates: int = 3) -> Optional[Dict[str, Any]]:
-        """识别岩石类型，返回多个可能的候选岩石
-        
-        Args:
-            vp: P波速度 (km/s)
-            vs: S波速度 (km/s)，可选
-            density: 密度 (g/cm³)，可选
-            porosity: 孔隙度 (0-1)，可选
-            min_probability: 最小可信概率
-            max_candidates: 最大候选岩石数量
-            
-        Returns:
-            Optional[Dict[str, Any]]: 识别结果，包含：
-                - candidates: 候选岩石列表，每个候选包含：
-                    - rock_type: 岩石类型
-                    - probability: 预测概率
-                    - similarity_score: 相似度分数
-                - properties: 输入的岩石物性参数
-        """
-        if self.classifier is None:
-            self.train_classifier()
-        
-        properties = RockProperties(vp=vp, vs=vs, density=density, porosity=porosity)
-        
-        try:
-            # 获取所有岩石类型的预测概率
-            probabilities = self.predict_proba(properties)
-            
-            # 筛选概率大于阈值的候选岩石
-            candidates = []
-            for rock_type, prob in probabilities.items():
-                if prob >= min_probability:
-                    # 计算相似度分数
-                    consensus = self.database.get_consensus_properties(rock_type)
-                    if consensus:
-                        similarity = self._calculate_similarity(properties, consensus)
-                        candidates.append({
-                            'rock_type': rock_type,
-                            'probability': prob,
-                            'similarity_score': similarity
-                        })
-            
-            # 按综合分数排序（概率和相似度的加权）
-            candidates.sort(
-                key=lambda x: 0.7 * x['probability'] + 0.3 * x['similarity_score'],
-                reverse=True
+        standard_data = valid_data.rename(columns=rename_dict)
+
+        # 基础特征：保持默认行为（vp/vs/density）
+        feature_cols = ['vp']
+        if 'vs' in standard_data.columns:
+            feature_cols.append('vs')
+        if 'density' in standard_data.columns:
+            feature_cols.append('density')
+
+        # 可选增强特征：默认关闭，仅作为后续入口
+        if self.use_felsic_mafic and 'felsic_or_mafic' in standard_data.columns:
+            feature_cols.append('felsic_or_mafic')
+        if self.use_rock_facies and 'rock_facies' in standard_data.columns:
+            feature_cols.append('rock_facies')
+        if self.use_sio2 and 'sio2_wt' in standard_data.columns:
+            feature_cols.append('sio2_wt')
+
+        # 清洗增强特征
+        if 'felsic_or_mafic' in standard_data.columns:
+            standard_data['felsic_or_mafic'] = (
+                standard_data['felsic_or_mafic']
+                .astype(str)
+                .str.strip()
+                .replace({'': 'UNKNOWN', 'nan': 'UNKNOWN'})
             )
-            
-            # 限制候选数量
-            candidates = candidates[:max_candidates]
-            
-            return {
-                'candidates': candidates,
-                'properties': properties
-            } if candidates else None
-            
-        except Exception as e:
-            print(f"岩石识别过程中出错: {str(e)}")
-            return None
+        if 'rock_facies' in standard_data.columns:
+            standard_data['rock_facies'] = (
+                standard_data['rock_facies']
+                .astype(str)
+                .str.strip()
+                .replace({'': 'UNKNOWN', 'nan': 'UNKNOWN'})
+            )
+        if 'sio2_wt' in standard_data.columns:
+            standard_data['sio2_wt'] = pd.to_numeric(standard_data['sio2_wt'], errors='coerce')
+            if standard_data['sio2_wt'].isna().all():
+                standard_data['sio2_wt'] = np.nan
+                if 'sio2_wt' in feature_cols:
+                    feature_cols.remove('sio2_wt')
+            else:
+                standard_data['sio2_wt'] = standard_data['sio2_wt'].fillna(standard_data['sio2_wt'].median())
 
-    def _calculate_similarity(self, props1: RockProperties,
-                            props2: RockProperties) -> float:
-        """计算两个岩石物性的相似度
+        cols_to_use = ['rock_type'] + feature_cols
+        train_data = standard_data[cols_to_use].copy()
+        train_data = train_data.dropna(subset=['rock_type', 'vp'])
+        if len(train_data) == 0:
+            raise ValueError("Database has no valid data rows (all rows have NaN values)")
+
+        self.classifier = RandomForestClassifier(
+            n_estimators=200,
+            random_state=42,
+            class_weight='balanced_subsample',
+            min_samples_leaf=2,
+        )
+        self.scaler = StandardScaler()
+        self.col_mapping = col_mapping
+        self.feature_cols = feature_cols
+        self._categorical_feature_cols = [
+            col for col in ['felsic_or_mafic', 'rock_facies'] if col in self.feature_cols
+        ]
+        self._category_maps: Dict[str, Dict[str, int]] = {}
+        self._feature_defaults: Dict[str, Any] = {}
+
+        # 为可选特征建立编码和默认值
+        for col in self._categorical_feature_cols:
+            values = train_data[col].astype(str).str.strip().replace({'': 'UNKNOWN'})
+            unique_vals = sorted(values.unique())
+            self._category_maps[col] = {name: i for i, name in enumerate(unique_vals)}
+            train_data[col] = values.map(self._category_maps[col]).astype(float)
+            self._feature_defaults[col] = values.mode().iloc[0] if not values.mode().empty else 'UNKNOWN'
+
+        if 'sio2_wt' in self.feature_cols:
+            self._feature_defaults['sio2_wt'] = float(train_data['sio2_wt'].median())
+
+        if 'density' in self.feature_cols:
+            self._feature_defaults['density'] = float(train_data['density'].median())
+        if 'vs' in self.feature_cols:
+            self._feature_defaults['vs'] = float(train_data['vs'].median())
+
+        X_np = train_data[self.feature_cols].to_numpy(dtype=float)
+        y = train_data['rock_type']
+        # Use ndarray for scaler so inference with ndarray (classify_by_features) does not
+        # trigger sklearn's "without feature names" vs "fitted with feature names" warning.
+        X_scaled = self.scaler.fit_transform(X_np)
+        self.classifier.fit(X_scaled, y)
+        self.probability_model = self.classifier
+        try:
+            calibrator = CalibratedClassifierCV(
+                estimator=self.classifier,
+                method='sigmoid',
+                cv=3,
+            )
+            calibrator.fit(X_scaled, y)
+            self.probability_model = calibrator
+        except Exception:
+            self.probability_model = self.classifier
+        self.rock_database_reference = standard_data.copy()
+        self.rock_database_standard = train_data
+    
+    def correct_velocity(self, velocity, pressure=None, temperature=None, 
+                        is_s_wave=False, target_pressure=200.0, target_temperature=25.0):
+        """将速度值校正到目标压力和温度条件
+        
+        使用统一的经验公式库进行校正。
         
         Args:
-            props1: 第一个岩石物性
-            props2: 第二个岩石物性
+            velocity: 原始速度值 (km/s)
+            pressure: 原始压力值 (MPa)，如果为None则假设已经是目标压力
+            temperature: 原始温度值 (°C)，如果为None则假设已经是目标温度
+            is_s_wave: 是否为S波速度
+            target_pressure: 目标压力 (MPa)，默认200.0
+            target_temperature: 目标温度 (°C)，默认25.0
             
         Returns:
-            float: 相似度分数 (0-1)
+            float: 校正后的速度值 (km/s)
         """
-        features = ['vp', 'vs', 'density', 'porosity']
-        weights = {'vp': 0.4, 'vs': 0.3, 'density': 0.2, 'porosity': 0.1}
+        # 使用统一的经验公式库
+        return _correct_velocity(
+            velocity,
+            pressure=pressure,
+            temperature=temperature,
+            target_pressure=target_pressure,
+            target_temperature=target_temperature,
+            is_s_wave=is_s_wave
+        )
+
+    def _encode_categorical_value(self, feature: str, value: Any) -> float:
+        text = str(value).strip() if value is not None else ""
+        if not text:
+            text = str(self._feature_defaults.get(feature, "UNKNOWN"))
+        mapping = self._category_maps.get(feature, {})
+        if text not in mapping:
+            mapping[text] = len(mapping)
+            self._category_maps[feature] = mapping
+        return float(mapping[text])
+
+    def _build_feature_vector(
+        self,
+        vp: float,
+        vs: Optional[float] = None,
+        density: Optional[float] = None,
+        felsic_or_mafic: Optional[str] = None,
+        rock_facies: Optional[str] = None,
+        sio2_wt: Optional[float] = None,
+    ) -> np.ndarray:
+        values: list[float] = []
+        for feature in self.feature_cols:
+            if feature == 'vp':
+                values.append(float(vp))
+            elif feature == 'vs':
+                v = vs if vs is not None else self._feature_defaults.get('vs', _calculate_vs(vp, method='brocher'))
+                values.append(float(v))
+            elif feature == 'density':
+                d = density if density is not None else self._feature_defaults.get('density', _calculate_density(vp, method='gardner'))
+                values.append(float(d))
+            elif feature == 'sio2_wt':
+                s = sio2_wt if sio2_wt is not None else self._feature_defaults.get('sio2_wt', np.nan)
+                if s is None or (isinstance(s, float) and np.isnan(s)):
+                    s = 0.0
+                values.append(float(s))
+            elif feature == 'felsic_or_mafic':
+                values.append(self._encode_categorical_value('felsic_or_mafic', felsic_or_mafic))
+            elif feature == 'rock_facies':
+                values.append(self._encode_categorical_value('rock_facies', rock_facies))
+            else:
+                values.append(0.0)
+        return np.asarray(values, dtype=float).reshape(1, -1)
+
+    def classify_by_features(
+        self,
+        vp: float,
+        vs: Optional[float] = None,
+        density: Optional[float] = None,
+        felsic_or_mafic: Optional[str] = None,
+        rock_facies: Optional[str] = None,
+        sio2_wt: Optional[float] = None,
+    ) -> str:
+        X = self._build_feature_vector(
+            vp=vp,
+            vs=vs,
+            density=density,
+            felsic_or_mafic=felsic_or_mafic,
+            rock_facies=rock_facies,
+            sio2_wt=sio2_wt,
+        )
+        X_scaled = self.scaler.transform(X)
+        pred = self.probability_model.predict(X_scaled)[0]
+        return str(pred)
+
+    def classify_probabilities_by_features(
+        self,
+        vp: float,
+        vs: Optional[float] = None,
+        density: Optional[float] = None,
+        felsic_or_mafic: Optional[str] = None,
+        rock_facies: Optional[str] = None,
+        sio2_wt: Optional[float] = None,
+    ) -> Dict[str, float]:
+        X = self._build_feature_vector(
+            vp=vp,
+            vs=vs,
+            density=density,
+            felsic_or_mafic=felsic_or_mafic,
+            rock_facies=rock_facies,
+            sio2_wt=sio2_wt,
+        )
+        X_scaled = self.scaler.transform(X)
+        probs = self.probability_model.predict_proba(X_scaled)[0]
+        return {str(cls): float(p) for cls, p in zip(self.classifier.classes_, probs)}
+
+    def get_auxiliary_attributes(
+        self,
+        rock_type: str,
+        vp: Optional[float] = None,
+        vs: Optional[float] = None,
+    ) -> Dict[str, Any]:
+        if not hasattr(self, 'rock_database_reference'):
+            return {}
+        ref = self.rock_database_reference
+        if 'rock_type' not in ref.columns or ref.empty:
+            return {}
+
+        mask = ref['rock_type'].astype(str).str.strip().str.lower() == str(rock_type).strip().lower()
+        subset = ref[mask]
+        if subset.empty:
+            return {}
+
+        chosen = subset.iloc[0]
+        if vp is not None and 'vp' in subset.columns:
+            distances = (subset['vp'].astype(float) - float(vp)).abs()
+            if vs is not None and 'vs' in subset.columns:
+                distances = distances + (subset['vs'].astype(float) - float(vs)).abs()
+            chosen = subset.loc[distances.idxmin()]
+
+        out: Dict[str, Any] = {}
+        if 'felsic_or_mafic' in subset.columns:
+            v = str(chosen.get('felsic_or_mafic', '')).strip()
+            if v and v.lower() != 'nan':
+                out['felsic_or_mafic'] = v
+        if 'rock_facies' in subset.columns:
+            v = str(chosen.get('rock_facies', '')).strip()
+            if v and v.lower() != 'nan':
+                out['rock_facies'] = v
+        if 'sio2_wt' in subset.columns:
+            try:
+                s = float(chosen.get('sio2_wt'))
+                if not np.isnan(s):
+                    out['sio2_wt'] = s
+            except Exception:
+                pass
+        # Extended geology descriptors from merged dictionary table
+        for col, key in [
+            ('岩石属性', 'rock_attributes_cn'),
+            ('岩石分类', 'rock_classification'),
+            ('变质程度', 'metamorphic_grade'),
+            ('地质意义', 'geological_meaning'),
+        ]:
+            if col in subset.columns:
+                v = str(chosen.get(col, '')).strip()
+                if v and v.lower() != 'nan':
+                    out[key] = v
+        return out
+    
+    def classify_by_vp(self, vp):
+        """基于P波速度的岩石分类
         
-        total_weight = 0
-        similarity = 0
-        
-        for feature in features:
-            value1 = getattr(props1, feature)
-            value2 = getattr(props2, feature)
+        Args:
+            vp: float, P波速度 (km/s)
             
-            if value1 is not None and value2 is not None:
-                weight = weights[feature]
-                # 计算归一化差异
-                max_val = max(abs(value1), abs(value2))
-                diff = abs(value1 - value2) / max_val if max_val > 0 else 0
-                similarity += weight * (1 - diff)
-                total_weight += weight
-                
-        return similarity / total_weight if total_weight > 0 else 0
+        Returns:
+            str: 岩石类型
+        """
+        try:
+            return self.classify_by_features(vp=vp)
+        except Exception:
+            distances = abs(self.rock_database_standard['vp'] - vp)
+            closest_idx = distances.idxmin()
+            return self.rock_database_standard.loc[closest_idx, 'rock_type']
+    
+    def classify_by_vp_vs(self, vp, vs):
+        """基于P波和S波速度的岩石分类
+        
+        Args:
+            vp: float, P波速度 (km/s)
+            vs: float, S波速度 (km/s)
+            
+        Returns:
+            str: 岩石类型
+        """
+        try:
+            return self.classify_by_features(vp=vp, vs=vs)
+        except Exception:
+            distances = np.sqrt(
+                (self.rock_database_standard['vp'] - vp)**2 +
+                (self.rock_database_standard['vs'] - vs)**2
+            )
+            closest_idx = distances.idxmin()
+            return self.rock_database_standard.loc[closest_idx, 'rock_type']
+    
+    def classify_with_uncertainty(self, vp, threshold=0.2):
+        """带不确定性的岩石分类
+        
+        Args:
+            vp: float, P波速度 (km/s)
+            threshold: float, 速度差异阈值
+            
+        Returns:
+            dict: 可能的岩石类型及其概率
+        """
+        try:
+            probabilities = self.classify_probabilities_by_features(vp=vp)
+            if not probabilities:
+                return {self.classify_by_vp(vp): 1.0}
+            max_prob = max(probabilities.values())
+            if threshold is None or float(threshold) <= 0:
+                return probabilities
+            filtered = {
+                k: v for k, v in probabilities.items()
+                if v >= max(0.0, max_prob - float(threshold))
+            }
+            return filtered or probabilities
+        except Exception:
+            return {self.classify_by_vp(vp): 1.0}
+    
+    def classify_by_vp_and_setting(self, vp, setting):
+        """考虑构造环境的岩石分类
+        
+        Args:
+            vp: float, P波速度 (km/s)
+            setting: TectonicSetting, 构造环境
+            
+        Returns:
+            str: 岩石类型
+        """
+        # 检查是否有tectonic_setting列（在原始数据库中）
+        if 'tectonic_setting' in self.rock_database.columns:
+            # 需要找到对应的标准化数据库中的行
+            setting_mask = self.rock_database['tectonic_setting'] == setting.value
+            setting_indices = self.rock_database[setting_mask].index
+            # 获取标准化数据库中对应的行
+            setting_samples = self.rock_database_standard.loc[
+                self.rock_database_standard.index.intersection(setting_indices)
+            ]
+        else:
+            # 如果没有构造环境列，使用全部数据
+            setting_samples = self.rock_database_standard
+        
+        if setting_samples.empty:
+            # 如果在特定构造环境中没有找到，使用全部数据
+            return self.classify_by_vp(vp)
+        
+        # 使用标准化的数据库
+        distances = abs(setting_samples['vp'] - vp)
+        closest_idx = distances.idxmin()
+        return setting_samples.loc[closest_idx, 'rock_type']
+    
+    def plot_classification_results(self, results, output_file=None):
+        """绘制分类结果
+        
+        Args:
+            results: dict, 分类结果
+            output_file: str, 输出文件路径
+        """
+        plt.figure(figsize=(10, 6))
+        
+        # 绘制概率分布
+        rock_types = list(results.keys())
+        probabilities = list(results.values())
+        
+        plt.bar(rock_types, probabilities)
+        plt.xlabel('Rock Type')
+        plt.ylabel('Probability')
+        plt.title('Rock Classification Results')
+        plt.xticks(rotation=45)
+        
+        if output_file:
+            plt.savefig(output_file, bbox_inches='tight')
+        else:
+            plt.show()
+            
+        plt.close()
+
+def load_rock_database(database_file: Optional[str] = None) -> 'RockDatabase':
+    """加载岩石数据库。
+
+    Args:
+        database_file (str, optional): 数据库文件路径。如果不提供，将创建一个空的数据库。
+
+    Returns:
+        RockDatabase: 岩石数据库实例
+    """
+    db = RockDatabase(database_file)
+    return db

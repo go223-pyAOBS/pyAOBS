@@ -1,0 +1,11 @@
+  &pltpar  iplot=0, imod=1, iray=1, itxout=1,itx=1,
+  &end
+  &axepar  xmin=0.0, xmax=500.0, zmin=0.0, zmax=30.0,
+  &end
+  &trapar  imodf=1, i2pt=0, ishot=2, xshot=436.91, zshot=4.30,
+           ray= 1.2,
+           nray= 10,
+           vfile="v.in",
+  &end
+  &invpar
+  &end

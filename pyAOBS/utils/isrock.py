@@ -1,11 +1,11 @@
 """
-isrock.py - 基于地震速度模型参数的岩石识别模块
+isrock.py - Python implementation of rock type identification
 
-该模块提供了一系列用于岩石识别的类和函数，可以根据地震速度模型参数
-（如P波速度、S波速度、密度等）来预测岩石类型。
+This module provides functions for identifying rock types based on their physical properties.
+It works in conjunction with the rocks.py module.
 
 Author: Haibo Huang
-Date: 2024
+Date: 2025
 """
 
 import numpy as np
@@ -14,32 +14,36 @@ from dataclasses import dataclass
 from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
-from .rocks import RockDatabase, RockProperties, Rock, RockClassifier, TectonicSetting
+from .rocks import RockDatabase, RockProperties, Rock, RockClassifier, TectonicSetting, create_common_rock
+import pandas as pd
+from enum import Enum
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
 
 @dataclass
 class CorrectionParameters:
     """温度压力校正参数类"""
     # 温度校正参数 (基于Christensen, 1979)
     vp_temp_coefficients = {
-        'granite_granodiorite': -0.39e-3,  # 花岗岩-花岗闪长岩,花岗片麻岩,英云闪长片麻岩
-        'gabbro_norite': -0.57e-3,   # 辉长岩-紫苏辉长岩-斜长岩
-        'basalt': -0.39e-3,   # 玄武岩,变质玄武岩
-        'slate': -0.40e-3,    # 板岩,千枚岩,石英云母片岩
-        'mafic_granulite': -0.52e-3,  # 镁铁质麻粒岩,镁铁质石榴石麻粒岩
-        'felsic_granulite': -0.49e-3, # 长英质麻粒岩,副麻粒岩
-        'amphibolite': -0.55e-3,      # 角闪岩
-        'anorthosite': -0.41e-3,      # 斜长岩
-        'dunite': -0.56e-3,           # 橄榄岩,辉石岩,角闪岩
-        'eclogite': -0.53e-3,         # 榴辉岩
-        'serpentinite': -0.68e-3,     # 蛇纹岩
-        'quartzite': -0.54e-3,        # 石英岩
-        'marble': -0.41e-3,           # 大理岩
+        'granite_granodiorite': -0.39e-4,  # 花岗岩-花岗闪长岩,花岗片麻岩,英云闪长片麻岩
+        'gabbro_norite': -0.57e-4,   # 辉长岩-紫苏辉长岩-斜长岩
+        'basalt': -0.39e-4,   # 玄武岩,变质玄武岩
+        'slate': -0.40e-4,    # 板岩,千枚岩,石英云母片岩
+        'mafic_granulite': -0.52e-4,  # 镁铁质麻粒岩,镁铁质石榴石麻粒岩
+        'felsic_granulite': -0.49e-4, # 长英质麻粒岩,副麻粒岩
+        'amphibolite': -0.55e-4,      # 角闪岩
+        'anorthosite': -0.41e-4,      # 斜长岩
+        'dunite': -0.56e-4,           # 橄榄岩,辉石岩,角闪岩
+        'eclogite': -0.53e-4,         # 榴辉岩
+        'serpentinite': -0.68e-4,     # 蛇纹岩
+        'quartzite': -0.54e-4,        # 石英岩
+        'marble': -0.41e-4,           # 大理岩
     }
     
     # 默认温度校正系数(当岩石类型未知时使用)
-    vp_temp_alpha: float = -0.50e-3  # 平均值
-    vs_temp_alpha: float = -0.40e-3  
-    density_temp_alpha: float = -0.10e-3
+    vp_temp_alpha: float = -0.50e-4  # 平均值，降低一个数量级
+    vs_temp_alpha: float = -0.40e-4  # 降低一个数量级
+    density_temp_alpha: float = -0.10e-4  # 降低一个数量级
     
     # 压力校正参数
     vp_pressure_beta: float = 0.0002
@@ -66,532 +70,486 @@ class CorrectionParameters:
                 return self.vp_temp_coefficients['felsic_granulite']
         return self.vp_temp_coefficients.get(rock_type, self.vp_temp_alpha)
 
-class RockIdentifier:
-    """岩石识别器类"""
+class TectonicSetting(Enum):
+    """构造环境枚举类"""
+    CONTINENTAL_CRUST = "CONTINENTAL_CRUST"
+    OCEANIC_CRUST = "OCEANIC_CRUST"
+    SUBDUCTION_ZONE = "SUBDUCTION_ZONE"
+
+class RockIdentifier(RockClassifier):
+    """岩石识别器类，继承自RockClassifier并提供更高级的识别功能"""
     
-    def __init__(self, database_file: str):
+    def __init__(self, database):
         """初始化岩石识别器
         
         Args:
-            database_file: 岩石物性数据库文件路径
+            database: str或pd.DataFrame，岩石数据库文件路径或DataFrame
         """
-        self.database = RockDatabase(database_file)
-        self.classifier = RockClassifier(self.database)
-        self.trained = False
-        self.correction_params = {}  # 岩石类型到校正参数的映射
+        # 调用父类的初始化方法
+        super().__init__(database)
         
-    def add_correction_parameters(self, rock_type: str, params: CorrectionParameters):
-        """添加特定岩石类型的校正参数
+        # 添加额外的分类器用于更复杂的识别任务
+        self.advanced_classifier = None
+        self.advanced_scaler = None
         
-        Args:
-            rock_type: 岩石类型
-            params: 校正参数
-        """
-        self.correction_params[rock_type] = params
+        # 初始化校正参数
+        self.correction_params = CorrectionParameters()
         
-    def _get_correction_parameters(self, rock_type: str) -> CorrectionParameters:
-        """获取特定岩石类型的校正参数
+        # 校正训练数据
+        self._correct_training_data()
+    
+    def _correct_training_data(self):
+        """校正训练数据到标准条件（25°C，200MPa）"""
+        # 获取原始数据
+        original_vp = self.rock_database['vp'].values
+        original_vs = self.rock_database['vs'].values
+        original_density = self.rock_database['density'].values
+        original_pressure = self.rock_database['pressure'].values
+        original_temperature = self.rock_database['temperature'].values
+        rock_types = self.rock_database['rock_type'].values
         
-        Args:
-            rock_type: 岩石类型
-            
-        Returns:
-            CorrectionParameters: 校正参数
-        """
-        return self.correction_params.get(rock_type, CorrectionParameters())
-        
-    def _normalize_to_standard_conditions(self, properties: RockProperties,
-                                        rock_type: Optional[str] = None,
-                                        target_temp: float = 25.0,
-                                        target_pressure: float = 200.0) -> RockProperties:
-        """将岩石物性参数归一化到标准温度压力条件
-        
-        Args:
-            properties: 原始岩石物性
-            rock_type: 岩石类型（用于获取特定的校正参数）
-            target_temp: 目标温度 (°C)
-            target_pressure: 目标压力 (MPa)
-            
-        Returns:
-            RockProperties: 校正后的岩石物性
-            
-        Warns:
-            UserWarning: 当温度或压力超出合理范围时
-        """
-        import warnings
-        
-        # 检查极端条件
-        if properties.temperature is not None:
-            if properties.temperature > 800.0:
-                warnings.warn(f"温度 {properties.temperature}°C 超出了实验室测量范围")
-            elif properties.temperature < 0.0:
-                warnings.warn(f"温度 {properties.temperature}°C 低于冰点")
-                
-        if properties.pressure is not None:
-            if properties.pressure > 1000.0:
-                warnings.warn(f"压力 {properties.pressure}MPa 超出了实验室测量范围")
-            elif properties.pressure < 0.0:
-                warnings.warn(f"压力不能为负值: {properties.pressure}MPa")
-        
-        # 获取校正参数
-        params = CorrectionParameters()  # 使用新的参数实例，确保使用正确的系数
-        
-        # 获取原始条件
-        original_temp = properties.temperature if properties.temperature is not None else 25.0
-        original_pressure = properties.pressure if properties.pressure is not None else 200.0
-        
-        # 计算温度和压力变化
-        delta_T = target_temp - original_temp
-        delta_P = target_pressure - original_pressure
-        
-        # 校正P波速度
-        corrected_vp = properties.vp
-        if corrected_vp is not None:
-            # 使用特定岩石类型的温度校正系数
-            vp_temp_alpha = params.get_vp_temp_alpha(rock_type) if rock_type else params.vp_temp_alpha
-            # 温度校正
-            corrected_vp = corrected_vp * (1 + vp_temp_alpha * delta_T)
-            # 压力校正
-            corrected_vp = corrected_vp * (1 + params.vp_pressure_beta * delta_P)
-        
-        # 校正S波速度
-        corrected_vs = properties.vs
-        if corrected_vs is not None:
-            # 温度校正
-            corrected_vs = corrected_vs * (1 + params.vs_temp_alpha * delta_T)
-            # 压力校正
-            corrected_vs = corrected_vs * (1 + params.vs_pressure_beta * delta_P)
-        
-        # 校正密度
-        corrected_density = properties.density
-        if corrected_density is not None:
-            # 温度校正
-            corrected_density = corrected_density * (1 + params.density_temp_alpha * delta_T)
-            # 压力校正
-            corrected_density = corrected_density * (1 + params.density_pressure_beta * delta_P)
-        
-        return RockProperties(
-            vp=corrected_vp,
-            vs=corrected_vs,
-            density=corrected_density,
-            porosity=properties.porosity,
-            temperature=target_temp,
-            pressure=target_pressure,
-            fluid_saturation=properties.fluid_saturation
+        # 进行压力校正
+        corrected_vp = self.pressure_correction(
+            original_vp,
+            original_pressure,
+            target_pressure=200.0,
+            rock_type=None
+        )
+        corrected_vs = self.pressure_correction(
+            original_vs,
+            original_pressure,
+            target_pressure=200.0,
+            rock_type=None,
+            is_s_wave=True
         )
         
-    def plot_correction_comparison(self, rock_type: str,
-                                 temp_range: Tuple[float, float] = (0, 200),
-                                 pressure_range: Tuple[float, float] = (0, 500),
-                                 output_file: Optional[str] = None):
-        """绘制不同校正方法的对比图
+        # 进行温度校正
+        corrected_vp = self.temperature_correction(
+            corrected_vp,
+            original_temperature,
+            target_temperature=25.0,
+            rock_type=None
+        )
+        corrected_vs = self.temperature_correction(
+            corrected_vs,
+            original_temperature,
+            target_temperature=25.0,
+            rock_type=None,
+            is_s_wave=True
+        )
+        
+        # 进行密度校正
+        corrected_density = self.density_correction(
+            original_density,
+            original_pressure,
+            original_temperature,
+            target_pressure=200.0,
+            target_temperature=25.0
+        )
+        
+        # 第二次校正（使用岩石类型特定的系数）
+        for i, rock_type in enumerate(rock_types):
+            corrected_vp[i] = self.pressure_correction(
+                original_vp[i],
+                original_pressure[i],
+                target_pressure=200.0,
+                rock_type=rock_type
+            )
+            corrected_vp[i] = self.temperature_correction(
+                corrected_vp[i],
+                original_temperature[i],
+                target_temperature=25.0,
+                rock_type=rock_type
+            )
+            
+            corrected_vs[i] = self.pressure_correction(
+                original_vs[i],
+                original_pressure[i],
+                target_pressure=200.0,
+                rock_type=rock_type,
+                is_s_wave=True
+            )
+            corrected_vs[i] = self.temperature_correction(
+                corrected_vs[i],
+                original_temperature[i],
+                target_temperature=25.0,
+                rock_type=rock_type,
+                is_s_wave=True
+            )
+        
+        # 更新数据库中的值
+        self.rock_database['vp'] = corrected_vp
+        self.rock_database['vs'] = corrected_vs
+        self.rock_database['density'] = corrected_density
+        self.rock_database['pressure'] = 200.0  # 标准压力
+        self.rock_database['temperature'] = 25.0  # 标准温度
+    
+    def train_classifier(self):
+        """训练高级分类器"""
+        # 准备特征和标签
+        # 检查哪些特征列存在
+        available_features = []
+        for feature in ['vp', 'vs', 'density', 'porosity']:
+            if feature in self.rock_database.columns:
+                available_features.append(feature)
+            elif hasattr(self, 'rock_database') and hasattr(self.rock_database, 'columns'):
+                # 尝试查找变体列名
+                col_lower = [str(c).lower().strip() for c in self.rock_database.columns]
+                if feature.lower() in col_lower:
+                    idx = col_lower.index(feature.lower())
+                    available_features.append(self.rock_database.columns[idx])
+        
+        # 如果porosity列不存在，使用默认值0.02
+        if 'porosity' not in available_features and 'porosity' not in [str(c).lower() for c in self.rock_database.columns]:
+            # 添加porosity列，使用默认值
+            if 'porosity' not in self.rock_database.columns:
+                self.rock_database['porosity'] = 0.02
+            available_features.append('porosity')
+        
+        # 确保至少有一些特征
+        if not available_features:
+            raise ValueError("No valid features found in database for training classifier")
+        
+        X = self.rock_database[available_features]
+        y = self.rock_database['rock_type']
+        
+        # 标准化特征
+        self.advanced_scaler = StandardScaler()
+        X_scaled = self.advanced_scaler.fit_transform(X)
+        
+        # 训练随机森林分类器
+        self.advanced_classifier = RandomForestClassifier(
+            n_estimators=100,
+            random_state=42
+        )
+        self.advanced_classifier.fit(X_scaled, y)
+
+    def identify_rock(self, vp, vs, density, porosity, 
+                     tectonic_setting=None, min_probability=0.1,
+                     max_candidates=5):
+        """识别岩石类型，提供更详细的结果
         
         Args:
-            rock_type: 岩石类型
-            temp_range: 温度范围 (°C)
-            pressure_range: 压力范围 (MPa)
-            output_file: 输出文件路径
+            vp: float, P波速度 (km/s)
+            vs: float, S波速度 (km/s)
+            density: float, 密度 (g/cm³)
+            porosity: float, 孔隙度
+            tectonic_setting: TectonicSetting, 构造环境
+            min_probability: float, 最小概率阈值
+            max_candidates: int, 最大候选数量
+            
+        Returns:
+            dict: 识别结果，包含属性和候选岩石列表
         """
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+        if self.advanced_classifier is None:
+            self.train_classifier()
         
-        # 获取基准物性
-        consensus = self.database.get_consensus_properties(rock_type)
-        if not consensus:
-            raise ValueError(f"没有找到岩石类型 {rock_type} 的共识物性值")
+        # 准备输入数据，添加特征名称
+        X = pd.DataFrame([[vp, vs, density, porosity]], 
+                        columns=['vp', 'vs', 'density', 'porosity'])
+        X_scaled = self.advanced_scaler.transform(X)
+        
+        # 获取预测概率
+        probabilities = self.advanced_classifier.predict_proba(X_scaled)[0]
+        classes = self.advanced_classifier.classes_
+        
+        # 整理结果
+        candidates = []
+        for prob, rock_type in zip(probabilities, classes):
+            if prob >= min_probability:
+                candidates.append({
+                    'rock_type': rock_type,
+                    'probability': prob
+                })
+        
+        # 按概率排序
+        candidates.sort(key=lambda x: x['probability'], reverse=True)
+        
+        # 如果提供了构造环境，使用父类的方法进行验证
+        if tectonic_setting:
+            tectonic_result = self.classify_by_vp_and_setting(vp, tectonic_setting)
+            # 调整具有相同构造环境的岩石的概率
+            for candidate in candidates:
+                if candidate['rock_type'] == tectonic_result:
+                    candidate['probability'] *= 1.2  # 增加20%的概率
+        
+        # 限制候选数量
+        candidates = candidates[:max_candidates]
+        
+        return {
+            'properties': {
+                'vp': vp,
+                'vs': vs,
+                'density': density,
+                'porosity': porosity,
+                'tectonic_setting': tectonic_setting.value if tectonic_setting else None
+            },
+            'candidates': candidates
+        }
+    
+    def pressure_correction(self, velocity, pressure, target_pressure=200.0, rock_type=None, is_s_wave=False):
+        """
+        将速度值校正到目标压力条件
+        
+        参数:
+            velocity (numpy.ndarray): 原始速度值数组
+            pressure (numpy.ndarray): 原始压力值数组（MPa）
+            target_pressure (float): 目标压力值（MPa），默认200.0 MPa
+            rock_type (str, optional): 岩石类型，用于选择合适的校正系数
+            is_s_wave (bool): 是否为S波速度，默认False
             
-        # 温度影响
-        temps = np.linspace(*temp_range, 50)
-        vp_emp = []  # 经验校正
-        vp_lab = []  # 实验室校正
+        返回:
+            numpy.ndarray: 校正后的速度值数组
+        """
+        # 选择合适的压力校正系数
+        beta = (self.correction_params.vs_pressure_beta if is_s_wave 
+               else self.correction_params.vp_pressure_beta)
         
-        emp_params = CorrectionParameters()
-        lab_params = self._get_correction_parameters(rock_type)
+        pressure_diff = target_pressure - pressure
+        correction_factor = 1 + beta * pressure_diff
+        return velocity * correction_factor
+
+    def temperature_correction(self, velocity, temperature, target_temperature=25.0, 
+                             rock_type=None, is_s_wave=False):
+        """
+        将速度值校正到目标温度条件
         
-        for temp in temps:
-            # 经验校正
-            props_emp = self._normalize_to_standard_conditions(
-                consensus, rock_type=None, target_temp=temp
-            )
-            vp_emp.append(props_emp.vp)
+        参数:
+            velocity (numpy.ndarray): 原始速度值数组
+            temperature (numpy.ndarray): 原始温度值数组（°C）
+            target_temperature (float): 目标温度值（°C），默认25.0°C
+            rock_type (str, optional): 岩石类型，用于选择合适的校正系数
+            is_s_wave (bool): 是否为S波速度，默认False
             
-            # 实验室校正
-            if lab_params.source == 'laboratory':
-                props_lab = self._normalize_to_standard_conditions(
-                    consensus, rock_type=rock_type, target_temp=temp
-                )
-                vp_lab.append(props_lab.vp)
-        
-        ax1.plot(temps, vp_emp, label='经验校正', linestyle='-')
-        if lab_params.source == 'laboratory':
-            ax1.plot(temps, vp_lab, label=f'实验室校正 ({lab_params.lab_name})',
-                    linestyle='--')
-        ax1.set_xlabel('温度 (°C)')
-        ax1.set_ylabel('P波速度 (km/s)')
-        ax1.set_title('温度校正对比')
-        ax1.grid(True, alpha=0.3)
-        ax1.legend()
-        
-        # 压力影响
-        pressures = np.linspace(*pressure_range, 50)
-        vp_emp = []
-        vp_lab = []
-        
-        for pressure in pressures:
-            # 经验校正
-            props_emp = self._normalize_to_standard_conditions(
-                consensus, rock_type=None, target_pressure=pressure
-            )
-            vp_emp.append(props_emp.vp)
-            
-            # 实验室校正
-            if lab_params.source == 'laboratory':
-                props_lab = self._normalize_to_standard_conditions(
-                    consensus, rock_type=rock_type, target_pressure=pressure
-                )
-                vp_lab.append(props_lab.vp)
-        
-        ax2.plot(pressures, vp_emp, label='经验校正', linestyle='-')
-        if lab_params.source == 'laboratory':
-            ax2.plot(pressures, vp_lab, label=f'实验室校正 ({lab_params.lab_name})',
-                    linestyle='--')
-        ax2.set_xlabel('压力 (MPa)')
-        ax2.set_ylabel('P波速度 (km/s)')
-        ax2.set_title('压力校正对比')
-        ax2.grid(True, alpha=0.3)
-        ax2.legend()
-        
-        plt.tight_layout()
-        
-        if output_file:
-            plt.savefig(output_file, bbox_inches='tight', dpi=300)
+        返回:
+            numpy.ndarray: 校正后的速度值数组
+        """
+        # 选择合适的温度校正系数
+        if is_s_wave:
+            alpha = self.correction_params.vs_temp_alpha
         else:
-            plt.show()
-        plt.close()
+            alpha = (self.correction_params.get_vp_temp_alpha(rock_type) 
+                    if rock_type else self.correction_params.vp_temp_alpha)
         
-    def train_classifier(self, features: Optional[List[str]] = None,
-                        test_size: float = 0.2) -> Dict[str, float]:
-        """训练岩石分类器
+        temperature_diff = temperature - target_temperature  # 注意：这里改变了差值的计算顺序
+        correction_factor = 1 - alpha * temperature_diff  # 使用减号，因为温度升高，速度降低
         
-        Args:
-            features: 用于分类的特征列表，默认使用['vp', 'vs', 'density', 'porosity']
-            test_size: 测试集比例
-            
-        Returns:
-            Dict[str, float]: 训练结果报告
+        # 限制校正因子的范围，防止出现不合理的值
+        correction_factor = np.clip(correction_factor, 0.7, 1.3)
+        
+        return velocity * correction_factor
+
+    def density_correction(self, density, pressure, temperature, 
+                         target_pressure=200.0, target_temperature=25.0):
         """
-        if features:
-            self.classifier.features = features
-            
-        self.classifier.train_classifier()
-        self.trained = True
-        return {}
+        将密度值校正到目标压力和温度条件
         
-    def identify_rock(self, vp: float, vs: Optional[float] = None,
-                     density: Optional[float] = None,
-                     porosity: Optional[float] = None,
-                     tectonic_setting: Optional[TectonicSetting] = None,
-                     min_probability: float = 0.2,
-                     max_candidates: int = 3) -> Optional[Dict[str, Any]]:
-        """识别岩石类型，返回多个可能的候选岩石
-        
-        Args:
-            vp: P波速度 (km/s)
-            vs: S波速度 (km/s)，可选
-            density: 密度 (g/cm³)，可选
-            porosity: 孔隙度 (0-1)，可选
-            tectonic_setting: 构造背景，可选
-            min_probability: 最小可信概率
-            max_candidates: 最大候选岩石数量
+        参数:
+            density (numpy.ndarray): 原始密度值数组
+            pressure (numpy.ndarray): 原始压力值数组（MPa）
+            temperature (numpy.ndarray): 原始温度值数组（°C）
+            target_pressure (float): 目标压力值（MPa），默认200.0 MPa
+            target_temperature (float): 目标温度值（°C），默认25.0°C
             
-        Returns:
-            Optional[Dict[str, Any]]: 识别结果，包含：
-                - candidates: 候选岩石列表，每个候选包含：
-                    - rock_type: 岩石类型
-                    - probability: 预测概率
-                    - similarity_score: 相似度分数
-                    - tectonic_confidence: 构造背景置信度
-                - properties: 输入的岩石物性参数
-                - similar_rocks: 相似的岩石类型及其物性参数
+        返回:
+            numpy.ndarray: 校正后的密度值数组
         """
-        if not self.trained:
-            self.train_classifier()
-            
-        # 创建岩石物性实例
-        properties = RockProperties(
-            vp=vp,
-            vs=vs,
-            density=density,
-            porosity=porosity,
-            tectonic_setting=tectonic_setting
+        # 压力校正
+        pressure_diff = target_pressure - pressure
+        pressure_factor = 1 + self.correction_params.density_pressure_beta * pressure_diff
+        
+        # 温度校正
+        temperature_diff = target_temperature - temperature
+        temperature_factor = 1 + self.correction_params.density_temp_alpha * temperature_diff
+        
+        # 组合校正
+        return density * pressure_factor * temperature_factor
+
+    def identify_velocity_model(self, model_data, min_probability=0.1):
+        """识别速度模型中的岩石类型，包括温度压力校正"""
+        results = {}
+        
+        # 第一步：使用标准系数进行初步校正
+        corrected_vp = self.pressure_correction(
+            model_data['vp'], 
+            model_data['pressure'],
+            rock_type=None,  # 使用标准系数
+            is_s_wave=False
+        )
+        corrected_vp = self.temperature_correction(
+            corrected_vp, 
+            model_data['temperature'],
+            rock_type=None,  # 使用标准系数
+            is_s_wave=False
         )
         
-        # 预测岩石类型
-        try:
-            probabilities = self.classifier.predict_proba(properties)
-            
-            # 获取所有概率大于阈值的岩石类型
-            candidates = []
-            for rock_type, prob in probabilities.items():
-                if prob >= min_probability:
-                    try:
-                        # 计算与数据库中该类型岩石的相似度
-                        consensus = self.database.get_consensus_properties(rock_type)
-                        if consensus:
-                            similarity = self._calculate_similarity(properties, consensus)
-                            
-                            # 计算构造背景置信度
-                            tectonic_confidence = 1.0
-                            if tectonic_setting and hasattr(self.database, 'get_tectonic_distribution'):
-                                distribution = self.database.get_tectonic_distribution().get(rock_type, {})
-                                total_samples = sum(distribution.values()) if distribution else 0
-                                setting_samples = distribution.get(tectonic_setting, 0)
-                                tectonic_confidence = setting_samples / total_samples if total_samples > 0 else 0.0
-                            
-                            candidates.append({
-                                'rock_type': rock_type,
-                                'probability': prob,
-                                'similarity_score': similarity,
-                                'tectonic_confidence': tectonic_confidence
-                            })
-                    except Exception as e:
-                        print(f"处理岩石类型 {rock_type} 时出错: {str(e)}")
-                        continue
-            
-            # 如果没有候选，返回None
-            if not candidates:
-                return None
-                
-            # 按综合分数排序（概率、相似度和构造背景置信度的加权）
-            candidates.sort(
-                key=lambda x: (
-                    0.5 * x['probability'] + 
-                    0.3 * x['similarity_score'] + 
-                    0.2 * x['tectonic_confidence']
-                ),
-                reverse=True
-            )
-            
-            # 限制候选数量
-            candidates = candidates[:max_candidates]
-            
-            # 查找相似的岩石
-            similar_rocks = self._find_similar_rocks(properties)
-            
-            return {
-                'candidates': candidates,
-                'properties': properties,
-                'similar_rocks': similar_rocks
-            }
-            
-        except Exception as e:
-            print(f"岩石识别过程中出错: {str(e)}")
-            return None
-            
-    def identify_velocity_model(self, model_data: Dict[str, np.ndarray],
-                              min_probability: float = 0.6) -> Dict[str, List[Dict[str, Any]]]:
-        """识别速度模型中的岩石类型
+        corrected_vs = self.pressure_correction(
+            model_data['vs'], 
+            model_data['pressure'],
+            rock_type=None,  # 使用标准系数
+            is_s_wave=True
+        )
+        corrected_vs = self.temperature_correction(
+            corrected_vs, 
+            model_data['temperature'],
+            rock_type=None,  # 使用标准系数
+            is_s_wave=True
+        )
         
-        Args:
-            model_data: 速度模型数据，包含：
-                - vp: P波速度数组
-                - vs: S波速度数组（可选）
-                - density: 密度数组（可选）
-                - porosity: 孔隙度数组（可选）
-            min_probability: 最小可信概率
-            
-        Returns:
-            Dict[str, List[Dict[str, Any]]]: 每个岩石类型的识别结果列表
-        """
-        if not self.trained:
-            self.train_classifier()
-            
-        results = []
-        vp = model_data['vp']
-        vs = model_data.get('vs')
-        density = model_data.get('density')
-        porosity = model_data.get('porosity')
+        corrected_density = self.density_correction(
+            model_data['density'],
+            model_data['pressure'],
+            model_data['temperature']
+        )
         
-        for i in range(len(vp)):
+        # 第二步：使用校正后的数据进行初步识别
+        preliminary_results = []
+        for i in range(len(corrected_vp)):
             result = self.identify_rock(
-                vp=vp[i],
-                vs=vs[i] if vs is not None else None,
-                density=density[i] if density is not None else None,
-                porosity=porosity[i] if porosity is not None else None,
+                vp=corrected_vp[i],
+                vs=corrected_vs[i],
+                density=corrected_density[i],
+                porosity=model_data['porosity'][i],
+                tectonic_setting=model_data['tectonic_setting'][i],  # 添加构造环境
                 min_probability=min_probability
             )
-            if result:
-                results.append(result)
-                
-        return self._group_results(results)
-        
-    def _find_similar_rocks(self, properties: RockProperties,
-                           max_rocks: int = 3) -> List[Dict[str, Any]]:
-        """查找相似的岩石
-        
-        Args:
-            properties: 目标岩石物性
-            max_rocks: 最大返回数量
+            preliminary_results.append(result)
             
-        Returns:
-            List[Dict[str, Any]]: 相似岩石列表
-        """
-        similarities = []
-        
-        for rock_type, measurements in self.database.rocks.items():
-            consensus = self.database.get_consensus_properties(rock_type)
-            if consensus:
-                similarity = self._calculate_similarity(properties, consensus)
-                similarities.append({
-                    'rock_type': rock_type,
-                    'similarity': similarity,
-                    'properties': consensus
-                })
-                
-        # 按相似度排序
-        similarities.sort(key=lambda x: x['similarity'], reverse=True)
-        return similarities[:max_rocks]
-        
-    def _calculate_similarity(self, props1: RockProperties,
-                            props2: RockProperties) -> float:
-        """计算两个岩石物性的相似度，考虑温度压力影响
-        
-        Args:
-            props1: 第一个岩石物性
-            props2: 第二个岩石物性
+        # 第三步：根据初步识别结果进行第二次校正
+        for i in range(len(corrected_vp)):
+            # 获取最可能的岩石类型
+            most_likely_rock = preliminary_results[i]['candidates'][0]['rock_type']
             
-        Returns:
-            float: 相似度分数 (0-1)
-        """
-        # 将两个物性都归一化到标准条件
-        normalized_props1 = self._normalize_to_standard_conditions(props1)
-        normalized_props2 = self._normalize_to_standard_conditions(props2)
-        
-        features = ['vp', 'vs', 'density', 'porosity']
-        weights = {'vp': 0.4, 'vs': 0.3, 'density': 0.2, 'porosity': 0.1}
-        
-        total_weight = 0
-        similarity = 0
-        
-        for feature in features:
-            value1 = getattr(normalized_props1, feature)
-            value2 = getattr(normalized_props2, feature)
+            # 使用特定岩石类型的系数进行第二次校正
+            final_vp = self.pressure_correction(
+                model_data['vp'][i], 
+                model_data['pressure'][i],
+                rock_type=most_likely_rock,
+                is_s_wave=False
+            )
+            final_vp = self.temperature_correction(
+                final_vp, 
+                model_data['temperature'][i],
+                rock_type=most_likely_rock,
+                is_s_wave=False
+            )
             
-            if value1 is not None and value2 is not None:
-                weight = weights[feature]
-                # 计算归一化差异
-                max_val = max(abs(value1), abs(value2))
-                diff = abs(value1 - value2) / max_val if max_val > 0 else 0
-                similarity += weight * (1 - diff)
-                total_weight += weight
-                
-        return similarity / total_weight if total_weight > 0 else 0
-        
-    def _group_results(self, results: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
-        """将识别结果按岩石类型分组
-        
-        Args:
-            results: 识别结果列表
+            final_vs = self.pressure_correction(
+                model_data['vs'][i], 
+                model_data['pressure'][i],
+                rock_type=most_likely_rock,
+                is_s_wave=True
+            )
+            final_vs = self.temperature_correction(
+                final_vs, 
+                model_data['temperature'][i],
+                rock_type=most_likely_rock,
+                is_s_wave=True
+            )
             
-        Returns:
-            Dict[str, List[Dict[str, Any]]]: 分组后的结果
-        """
-        grouped = {}
-        for result in results:
-            if 'candidates' not in result:
-                continue
+            final_density = self.density_correction(
+                model_data['density'][i],
+                model_data['pressure'][i],
+                model_data['temperature'][i]
+            )
             
-            for candidate in result['candidates']:
+            # 使用最终校正的数据进行识别，加入构造环境信息
+            final_result = self.identify_rock(
+                vp=final_vp,
+                vs=final_vs,
+                density=final_density,
+                porosity=model_data['porosity'][i],
+                tectonic_setting=model_data['tectonic_setting'][i],  # 添加构造环境
+                min_probability=min_probability
+            )
+            
+            # 根据构造环境调整概率
+            if model_data['tectonic_setting'][i] == TectonicSetting.OCEANIC_CRUST:
+                # 在大洋地壳中，增加辉长岩和玄武岩的概率
+                for candidate in final_result['candidates']:
+                    if candidate['rock_type'] in ['GABBRO', 'BASALT']:
+                        candidate['probability'] *= 1.3
+            elif model_data['tectonic_setting'][i] == TectonicSetting.SUBDUCTION_ZONE:
+                # 在俯冲带中，增加橄榄岩和榴辉岩的概率
+                for candidate in final_result['candidates']:
+                    if candidate['rock_type'] in ['PERIDOTITE', 'ECLOGITE']:
+                        candidate['probability'] *= 1.3
+            
+            # 重新排序候选岩石
+            final_result['candidates'].sort(key=lambda x: x['probability'], reverse=True)
+            
+            # 整理结果
+            for candidate in final_result['candidates']:
                 rock_type = candidate['rock_type']
-                if rock_type not in grouped:
-                    grouped[rock_type] = []
-                # 创建包含候选信息和原始属性的完整结果
-                complete_result = {
-                    'rock_type': rock_type,
+                if rock_type not in results:
+                    results[rock_type] = []
+                    
+                results[rock_type].append({
+                    'properties': final_result['properties'],
                     'probability': candidate['probability'],
-                    'similarity_score': candidate['similarity_score'],
-                    'properties': result['properties']
-                }
-                grouped[rock_type].append(complete_result)
+                    'original_properties': {
+                        'vp': model_data['vp'][i],
+                        'vs': model_data['vs'][i],
+                        'density': model_data['density'][i],
+                        'pressure': model_data['pressure'][i],
+                        'temperature': model_data['temperature'][i],
+                        'tectonic_setting': model_data['tectonic_setting'][i].value
+                    },
+                    'correction_info': {
+                        'preliminary_rock_type': most_likely_rock,
+                        'preliminary_probability': preliminary_results[i]['candidates'][0]['probability'],
+                        'final_vp': final_vp,
+                        'final_vs': final_vs,
+                        'final_density': final_density
+                    }
+                })
+        
+        return results
+    
+    def plot_identification_results(self, results, output_file=None):
+        """绘制更详细的识别结果可视化"""
+        plt.figure(figsize=(12, 8))
+        
+        # 为每种岩石类型绘制概率分布
+        for i, (rock_type, data) in enumerate(results.items()):
+            probabilities = [d['probability'] for d in data]
+            properties = [d['properties'] for d in data]
             
-        return grouped
-        
-    def plot_identification_results(self, results: Dict[str, List[Dict[str, Any]]],
-                                  output_file: Optional[str] = None) -> None:
-        """Plot visualization of rock identification results
-        
-        Args:
-            results: Dictionary of identification results
-            output_file: Output file path
-        """
-        # Create figure
-        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-        
-        # Extract data
-        vp_values = []
-        temperatures = []
-        pressures = []
-        rock_types = []
-        probabilities = []
-        
-        for rock_type, rock_results in results.items():
-            for result in rock_results:
-                vp_values.append(result['properties'].vp)
-                temperatures.append(result['properties'].temperature)
-                pressures.append(result['properties'].pressure)
-                rock_types.append(rock_type)
-                probabilities.append(result['probability'])
-        
-        unique_rock_types = list(set(rock_types))
-        colors = plt.cm.tab10(np.linspace(0, 1, len(unique_rock_types)))
-        
-        # Box plot
-        box_data = []
-        box_labels = []
-        for rock_type in unique_rock_types:
-            rock_vp = [vp for vp, rt in zip(vp_values, rock_types) if rt == rock_type]
-            if rock_vp:  # Only add non-empty data
-                box_data.append(rock_vp)
-                box_labels.append(rock_type)
-        
-        if box_data:  # Ensure there is data to plot
-            bp = ax1.boxplot(box_data, labels=box_labels, patch_artist=True)
-            for i, patch in enumerate(bp['boxes']):
-                patch.set_facecolor(colors[i])
-            ax1.set_xlabel('Rock Type')
-            ax1.set_ylabel('P-wave Velocity (km/s)')
-            ax1.set_title('P-wave Velocity Distribution')
-            plt.setp(ax1.xaxis.get_majorticklabels(), rotation=45)
-        
-        # Temperature distribution
-        for i, rock_type in enumerate(unique_rock_types):
-            temp_data = [t for t, rt in zip(temperatures, rock_types) if rt == rock_type]
-            if temp_data:  # Only plot non-empty data
-                ax2.hist(temp_data, alpha=0.5, label=rock_type, bins=10, color=colors[i])
-        ax2.set_xlabel('Temperature (°C)')
-        ax2.set_ylabel('Count')
-        ax2.set_title('Temperature Distribution')
-        ax2.grid(True, alpha=0.3)
-        if any(temp_data for rock_type in unique_rock_types
-              for temp_data in [[t for t, rt in zip(temperatures, rock_types) if rt == rock_type]]):
-            ax2.legend()
-        
-        # Pressure distribution
-        for i, rock_type in enumerate(unique_rock_types):
-            pressure_data = [p for p, rt in zip(pressures, rock_types) if rt == rock_type]
-            if pressure_data:  # Only plot non-empty data
-                ax3.hist(pressure_data, alpha=0.5, label=rock_type, bins=10, color=colors[i])
-        ax3.set_xlabel('Pressure (MPa)')
-        ax3.set_ylabel('Count')
-        ax3.set_title('Pressure Distribution')
-        ax3.grid(True, alpha=0.3)
-        if any(pressure_data for rock_type in unique_rock_types
-              for pressure_data in [[p for p, rt in zip(pressures, rock_types) if rt == rock_type]]):
-            ax3.legend()
+            # 绘制概率分布
+            plt.subplot(2, 2, 1)
+            plt.hist(probabilities, alpha=0.5, label=rock_type, bins=10)
+            plt.xlabel('Probability')
+            plt.ylabel('Count')
+            plt.title('Probability Distribution')
+            plt.legend()
+            
+            # 绘制Vp-Vs关系
+            plt.subplot(2, 2, 2)
+            vp = [p['vp'] for p in properties]
+            vs = [p['vs'] for p in properties]
+            plt.scatter(vp, vs, alpha=0.5, label=rock_type)
+            plt.xlabel('Vp (km/s)')
+            plt.ylabel('Vs (km/s)')
+            plt.title('Vp-Vs Relationship')
+            plt.legend()
+            
+            # 绘制密度-孔隙度关系
+            plt.subplot(2, 2, 3)
+            density = [p['density'] for p in properties]
+            porosity = [p['porosity'] for p in properties]
+            plt.scatter(density, porosity, alpha=0.5, label=rock_type)
+            plt.xlabel('Density (g/cm³)')
+            plt.ylabel('Porosity')
+            plt.title('Density-Porosity Relationship')
+            plt.legend()
         
         plt.tight_layout()
         
         if output_file:
-            plt.savefig(output_file, bbox_inches='tight', dpi=300)
+            plt.savefig(output_file)
+        else:
+            plt.show()
+            
         plt.close()
 
 def identify_rocks_from_model(model_file: str,
@@ -641,5 +599,75 @@ def _load_model_data(model_file: str) -> Dict[str, np.ndarray]:
     return {
         'vp': np.array([3.5, 4.5, 5.5, 6.0]),
         'vs': np.array([2.0, 2.5, 3.0, 3.5]),
-        'density': np.array([2.35, 2.55, 2.65, 2.85])
-    } 
+        'density': np.array([2.35, 2.55, 2.65, 2.85]),
+        'porosity': np.array([0.05, 0.10, 0.15, 0.20]),
+        'pressure': np.array([100.0, 150.0, 200.0, 250.0]),
+        'temperature': np.array([20.0, 25.0, 30.0, 35.0]),
+        'tectonic_setting': np.array([TectonicSetting.CONTINENTAL_CRUST, TectonicSetting.OCEANIC_CRUST, TectonicSetting.SUBDUCTION_ZONE, TectonicSetting.CONTINENTAL_CRUST])
+    }
+
+def identify_rock_type(vp: float, 
+                      vs: Optional[float] = None,
+                      density: Optional[float] = None) -> Tuple[str, float]:
+    """基于物性参数识别岩石类型。
+
+    Args:
+        vp (float): P波速度 (km/s)
+        vs (Optional[float]): S波速度 (km/s)
+        density (Optional[float]): 密度 (g/cm³)
+
+    Returns:
+        Tuple[str, float]: (岩石类型, 置信度)
+    """
+    # 定义常见岩石的物性范围
+    rock_ranges = {
+        'sandstone': {'vp': (1.5, 4.5), 'vs': (0.8, 2.8), 'density': (1.9, 2.7)},
+        'limestone': {'vp': (3.5, 6.5), 'vs': (2.0, 3.5), 'density': (2.3, 2.8)},
+        'granite': {'vp': (4.5, 6.5), 'vs': (2.5, 3.8), 'density': (2.5, 2.8)},
+        'basalt': {'vp': (5.0, 7.0), 'vs': (2.8, 4.0), 'density': (2.7, 3.1)},
+        'shale': {'vp': (1.5, 4.0), 'vs': (0.7, 2.3), 'density': (2.0, 2.7)}
+    }
+
+    # 计算每种岩石的匹配度
+    scores = {}
+    for rock_type, ranges in rock_ranges.items():
+        score = 0.0
+        count = 0
+
+        # 检查vp
+        if vp >= ranges['vp'][0] and vp <= ranges['vp'][1]:
+            score += 1.0
+        else:
+            # 计算距离最近边界的归一化距离
+            min_dist = min(abs(vp - ranges['vp'][0]), abs(vp - ranges['vp'][1]))
+            range_width = ranges['vp'][1] - ranges['vp'][0]
+            score += max(0, 1 - min_dist/range_width)
+        count += 1
+
+        # 检查vs（如果提供）
+        if vs is not None:
+            if vs >= ranges['vs'][0] and vs <= ranges['vs'][1]:
+                score += 1.0
+            else:
+                min_dist = min(abs(vs - ranges['vs'][0]), abs(vs - ranges['vs'][1]))
+                range_width = ranges['vs'][1] - ranges['vs'][0]
+                score += max(0, 1 - min_dist/range_width)
+            count += 1
+
+        # 检查密度（如果提供）
+        if density is not None:
+            if density >= ranges['density'][0] and density <= ranges['density'][1]:
+                score += 1.0
+            else:
+                min_dist = min(abs(density - ranges['density'][0]), 
+                             abs(density - ranges['density'][1]))
+                range_width = ranges['density'][1] - ranges['density'][0]
+                score += max(0, 1 - min_dist/range_width)
+            count += 1
+
+        # 计算平均分数
+        scores[rock_type] = score / count
+
+    # 找出最匹配的岩石类型
+    best_rock_type = max(scores.items(), key=lambda x: x[1])
+    return best_rock_type[0], best_rock_type[1] 

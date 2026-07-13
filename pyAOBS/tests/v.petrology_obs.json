@@ -1,0 +1,9 @@
+{
+  "h_whole_km": 14.949629421146449,
+  "v_lc_km_s": 6.7085846926541794,
+  "f_lower": 0.7,
+  "v_lc_sigma_km_s": null,
+  "source": "imodel_interfaces",
+  "x_km": 250.0,
+  "n_samples": 12
+}

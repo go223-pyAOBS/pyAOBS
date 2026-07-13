@@ -1,0 +1,29 @@
+{
+  "software": "Petrolog3",
+  "models": {
+    "olivine": "Weaver & Langmuir (1990)",
+    "plagioclase": "Weaver & Langmuir (1990)",
+    "clinopyroxene": "Weaver & Langmuir (1990)",
+    "high_pressure_cpx": "Langmuir et al. (1992)"
+  },
+  "path": "fc_100",
+  "crystallization_mode": "fractional",
+  "pressure_MPa": {
+    "start": 100.0,
+    "end": 100.0
+  },
+  "temperature_C": 100.0,
+  "f_solid_max": 0.8,
+  "primary_melt_wt_percent": {
+    "SiO2": 48.26757460444623,
+    "TiO2": 0.9413178449829762,
+    "Al2O3": 16.422992189064686,
+    "Cr2O3": 0.12016823552974162,
+    "FeO": 7.971159623472862,
+    "MgO": 12.51752453434809,
+    "CaO": 11.415982375325456,
+    "Na2O": 2.2731824554376128,
+    "K2O": 0.0700981373923493
+  },
+  "export_instructions": "Run Petrolog3 \u2192 export spreadsheet \u2192 set PETROLOG3_XLSX to that .xlsx path."
+}

@@ -1,0 +1,18 @@
+c
+c
+c     parameter statement for ZPLOT
+c
+c
+c     npmax - number of points per trace
+c
+c     ntmax - number of traces in data file
+c
+c     nsmax - number of records in data file
+c
+c     npickw - number of pick header words (do not use less than 5)
+c
+c     nptemp - number of points defining pick template
+c
+      parameter (npmax=10000, ntmax=100000, nsmax=100, npickw=40,
+     +           nptemp=1000)
+c

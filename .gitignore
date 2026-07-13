@@ -20,18 +20,26 @@ wheels/
 .installed.cfg
 *.egg
 
-# IDE
+# IDE / editor
 .idea/
 .vscode/
+.cursor/
 *.swp
 *.swo
 
-# Environment
+# Secrets / env
 .env
-.venv
+.env.*
+!.env.example
+credentials.json
+*.pem
+*.key
+
+# Virtual environments
+.venv/
 **/.venv/
-env/
 venv/
+env/
 ENV/
 
 # Packaging / local junk (do not commit into installable tree)
@@ -40,33 +48,68 @@ pyAOBS/.cursor/
 pyAOBS/output/
 pyAOBS/petrology/_tmp*/
 pyAOBS/petrology/ScienceDirect_files_*/
+pyAOBS/petrology/article/**/.venv/
+pyAOBS/visualization/zplotpy/test/
 pyAOBS/visualization/zplotpy - 副本/
+pyAOBS/visualization/zplot/pickunc-hhb/
+pyAOBS/processors/raw2sac/OBEM2SAC_jf_zjz/
+pyAOBS/processors/raw2sac/OBEM2SEGY_jf_zjz/
+pyAOBS/petrology/Perple_X_v7.2.5_Linux_64_gfortran/
+pyAOBS/field/tests/
 
-# Output
+# Heavy / local data (prefer explicit paths; do NOT blanket-ignore all data/)
+# data/ — removed: blocked petrology catalogs and small example data
 output/
-*.png
+**/output/**/*.in
+**/output/**/*.out
+**/output/**/*.dat
+**/output/**/*.bin
+
+# Large binaries / dumps (keep source examples shippable)
+*.bin
+*.sac
+*.segy
+*.sgy
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+
+# Image / media: ignore common junk dirs; allow UI/assets/figures PNGs
 *.jpg
+*.jpeg
 *.pdf
 *.grd
 *.nc
+# Do NOT blanket-ignore *.png
+**/_tmp*/**/*.png
+**/ScienceDirect_files_*/**/*.png
+**/zplotpy/test/**/*.png
+**/field/tests/**/*.png
 
-# Data
-data/
-*.in
-*.out
-*.dat
-*.bin
+# Compiled objects
+**/*.o
+**/*.obj
+**/*.exe
+**/*.dll
+**/*.dylib
 
-# Documentation
+# Documentation build
 docs/_build/
 docs/_static/
 docs/_templates/
 
-# Testing
+# Testing / coverage
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Jupyter Notebook
+# Jupyter
 .ipynb_checkpoints
-*.ipynb 
+
+# Windows reserved-name phantom files
+pyAOBS/NUL.png
+**/NUL.*
+**/pickunc-hhb/

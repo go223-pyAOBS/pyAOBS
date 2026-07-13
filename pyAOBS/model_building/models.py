@@ -114,9 +114,9 @@ class TrapezoidCell2d:
         b2 (float): Lower boundary intercept
     """
     
-    def __init__(self, x1: float, x2: float, 
-                 z1: float, z2: float, z3: float, z4: float,
-                 v1: float, v2: float, v3: float, v4: float):
+    def __init__(self, x1: float, x2: float, z1: float, z2: float, 
+                 z3: float, z4: float, v1: float, v2: float, v3: float, v4: float,
+                 layer: int = 1):
         """Initialize a trapezoid cell.
         
         Args:
@@ -130,6 +130,7 @@ class TrapezoidCell2d:
             v2 (float): Upper right velocity
             v3 (float): Lower left velocity
             v4 (float): Lower right velocity
+            layer (int): Layer number
             
         Raises:
             ValueError: If x1 equals x2 (zero width cell)
@@ -138,8 +139,11 @@ class TrapezoidCell2d:
             raise ValueError("Cell width too small")
             
         self.x1, self.x2 = x1, x2
+        self.z1, self.z2 = z1, z2
+        self.z3, self.z4 = z3, z4
         self.v1, self.v2 = v1, v2
         self.v3, self.v4 = v3, v4
+        self.layer = layer
 
         rdx = 1.0/(x1-x2)
         # Calculate boundary line parameters
@@ -176,6 +180,26 @@ class TrapezoidCell2d:
         z_up = self.s1 * p.x + self.b1
         z_down = self.s2 * p.x + self.b2
         if p.z < z_up or p.z > z_down:
+            return False
+            
+        return True
+
+    def is_in_with_tolerance(self, p: Point2d, eps: float = 1e-6) -> bool:
+        """Check if a point is inside the cell with tolerance.
+        
+        Args:
+            p (Point2d): Point to test
+            eps (float): Tolerance value for boundary checks
+            
+        Returns:
+            bool: True if point is inside or on boundary (within tolerance)
+        """
+        if p.x < self.x1 - eps or p.x > self.x2 + eps:
+            return False
+        
+        z_up = self.s1 * p.x + self.b1
+        z_down = self.s2 * p.x + self.b2
+        if p.z < z_up - eps or p.z > z_down + eps:
             return False
             
         return True

@@ -1,0 +1,7 @@
+1 7
+# MORB glass (typical)
+# Representative N-MORB glass composition (literature average)
+# source: literature composite
+# oxides wt%: SiO2 50.08, TiO2 1.21, Al2O3 15.98, Cr2O3 0.10, FeO 10.32, MgO 7.89, CaO 11.63, Na2O 2.63, K2O 0.15
+# columns: CAA NAAL MGO FEO CAWO TIO2 SIO2
+0.082412 0.061182 0.141128 0.103533 0.600788 0.010957 0.000000

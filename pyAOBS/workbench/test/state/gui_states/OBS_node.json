@@ -1,0 +1,15 @@
+{
+  "imodel_gui": {
+    "model_file": "",
+    "show_interfaces": false,
+    "basement_selection": "",
+    "seafloor_selection": "",
+    "interface_files": [],
+    "gravity_obs_data_dir": "/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/data",
+    "gravity_obs_filename": "gravity_world.grd",
+    "gravity_profile_lon_lat_csv": "",
+    "gravity_obs_overlay": false,
+    "petrology_f_lower": 0.7,
+    "petrology_export_x_km": 0.0
+  }
+}

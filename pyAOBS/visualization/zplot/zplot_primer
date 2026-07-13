@@ -1,0 +1,114 @@
+
+1. convert segy data to z-format data file.
+
+Normally each shot or receiver gather is in its own
+segy file. Multiple shot or receiver gathers can be put
+together into one z-format file, for example, for all the data
+along one profile.
+
+Run the program sgy2z like:
+
+sgy2z < sgy2z.rsp
+
+The file sgy2z.rsp should contain the names of the segy files
+to be converted into one z-format file.
+
+The file sgy2z.in contains the input parameters to run the 
+program sgy2z. There is documentation for sgy2z (sgy2z.doc).
+
+Two data files will be created after running sgy2z. First, the 
+converted data file in z-format (dfile), and the header
+file (hfile) which just contains the headers for each trace.
+
+2. create record file
+
+In addition you need to create a "record" file. You have one
+called test.rec. It conists of 1 line for each record (gather),
+with 6 columns. The columns are: record number, x position (along a 2D
+model/profile), x, y coordinate of shot or receiver for common
+shot or receiver gather (mainly for 3D data), azimuth, and 
+a plot title.
+
+3. Run zplot
+
+Then you are set to run zplot. Input parameters are in the zplot.in
+file. Make sure the parameters dfile, hfile and rfile are set
+to the correct data file, header file, and record file.
+
+To run zplot interactively, use iplot=1. To make a hard copy postscript
+plot (outfile file will be p.out), use iplot=0.
+
+Not that the documentation for zplot (zplot.doc) is not 100% accurate
+or up-to-date. In particular, the following options are additional
+features that can be applied by entries from the keyboard:
+
+1,2,3,4,5 - change ixaxis to this value and replot
+u,v - move up and down the plot by an amount equal to tlinc
+- change sign of ixaxis to the value -ixaxis and replot
+<,> - replot using an xmin (<) or xmax (>) value for the plot such that
+      all traces to the left or right for this record will be plotted
+0,6,7,8,9 - change reducing velocity to this value and replot
+c - plot in the "clip mode" using the values clipamp and clipval
+    (to return to the normal plot mode, enter "c" again)
+
+4. run headup
+
+After exiting zplot by enter "q" or clicking on "quit", you must run
+headup to update the header file with the new picks and edits you
+have made. If you do not want to update (save) the picks you just made
+then don't run headup. To run headup, use
+
+headup < headup.rsp
+
+The response file headup.rsp will look like:
+
+test.hdr
+10
+
+Here test.dat is the header file, and 10 is the number of pick
+words (determined by the file of npick when you ran sgy2z
+to convert the data to z-format).
+
+5. run pickunc
+
+To estimate the pick uncertainties by using the signal-to-ratio
+at each pick, run the program pickunc. For this you need an 
+input parameter file called pickunc.in. The parameters in
+this input file should be obvious by looking at the file we used.
+
+6. run z2tx
+
+Once you have the header file updated, you may want to obtain a
+pick file (tx.in) that can be used as input for rayinvr. In this
+case run z2tx. The input parameter file is z2tx.in. The documentation
+for the input parameters is:
+
+Here is a z2tx.in input file example.
+ 
+  &par
+    hfile='new.hdr'
+    picku=0.05,9*0.10,
+    npick=10,
+    xmod= 44.952, 48.750, 53.999, 60.882, 69.929,
+    azimuth=5*90.,
+    nshot=5,
+  &end
+ 
+hfile - binary header file name
+picku - pick uncertainties in seconds for each pick word
+npick - number of pick words (must be same as your binary header file)
+xmod - model position of each shot (km) corresponding in order to
+       shot records in your zplot data file
+azimuth - for 2D data likely use 90, or 0.
+nshot - total number of shot gathers in data file
+ 
+Note:
+-----
+Instead of using picku, you could use ufile='pickunc.hdr' if you have
+run the program pickunc to determine the uncertainties by analyzing the
+signal-to-ratio at each pick.
+
+
+
+
+

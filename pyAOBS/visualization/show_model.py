@@ -6,15 +6,72 @@ It supports plotting velocity fields and layer interfaces, as well as model conv
 """
 
 import numpy as np
-import pygmt
 import xarray as xr
+
+# 可选依赖：pygmt
+try:
+    import pygmt
+    HAS_PYGMT = True
+except ImportError:
+    HAS_PYGMT = False
+    pygmt = None
 from pathlib import Path
 from typing import Optional, List, Tuple, Dict, Union
 import os
+
+from .xarray_nc import open_netcdf_like_dataset
 from matplotlib.colors import LinearSegmentedColormap
 
-from pyAOBS.model_building.zeltform import ZeltVelocityModel2d,EnhancedZeltModel
-from pyAOBS.model_building.tomoform import SlownessMesh2D
+from ..model_building.zeltform import ZeltVelocityModel2d, EnhancedZeltModel
+from ..model_building.tomoform import SlownessMesh2D
+
+# 导入经验公式库
+try:
+    from ..utils.empirical_formulas import (
+        calculate_density as _calculate_density
+    )
+except ImportError:
+    # 备用导入路径（用于开发模式）
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+    from pyAOBS.utils.empirical_formulas import (
+        calculate_density as _calculate_density
+    )
+
+
+def parse_gmt_cpt_for_matplotlib(cpt_file: str) -> Tuple[LinearSegmentedColormap, float, float]:
+    """解析 GMT 分段 CPT（每行 8 列：z1 r1 g1 b1 z2 r2 g2 b2），生成 Matplotlib 色标并返回 CPT 数据域 [z_min, z_max]。
+
+    使用 CPT 绘图时，``imshow`` 的 vmin/vmax 应与该数据域一致，否则颜色会与 GMT 不一致
+    （例如水体 ~1.5 km/s 应对应 CPT 左端白色，若误用更低分位数作 vmin 会偏粉）。
+    """
+    cpt_rows: List[List[float]] = []
+    z_samples: List[float] = []
+    with open(cpt_file, "r", encoding="utf-8", errors="replace") as fh:
+        for line in fh:
+            s = line.strip()
+            if not s or s.startswith("#"):
+                continue
+            parts = s.split()
+            if len(parts) != 8:
+                continue
+            z1, r1, g1, b1, z2, r2, g2, b2 = map(float, parts)
+            z_samples.extend((z1, z2))
+            cpt_rows.append([z1, r1 / 255.0, g1 / 255.0, b1 / 255.0])
+            cpt_rows.append([z2, r2 / 255.0, g2 / 255.0, b2 / 255.0])
+    if not cpt_rows:
+        raise ValueError(f"CPT 中无有效 8 列色标段: {cpt_file!r}")
+    arr = np.array(cpt_rows, dtype=float)
+    z_min = float(min(z_samples))
+    z_max = float(max(z_samples))
+    if z_max <= z_min:
+        raise ValueError(f"CPT 数据域无效 z_min={z_min}, z_max={z_max}: {cpt_file!r}")
+    z_norm = (arr[:, 0] - z_min) / (z_max - z_min)
+    colors = arr[:, 1:]
+    cmap = LinearSegmentedColormap.from_list("custom_gmt_cpt", list(zip(z_norm, colors)))
+    return cmap, z_min, z_max
+
 
 class ZeltModelVisualizer:
     """用于可视化 Zelt 速度模型的类。
@@ -136,36 +193,12 @@ class ZeltModelVisualizer:
         self.saved_files['velocity_grid'] = self.grid_file
 
             
-    def load_cpt(self, cpt_file: str) -> str:
-        """加载 CPT 文件并返回其内容。
-        
-        参数:
-            cpt_file (str): CPT 文件的路径
-            Returns:
-        LinearSegmentedColormap: matplotlib 颜色映射对象
-        """
-        cpt_data = []
-        with open(cpt_file, 'r') as file:
-            lines = file.readlines()
-        for line in lines:
-            #skip the comment lines
-            if line.startswith('#'):
-                continue
-            #parse the cpt data
-            data = line.strip().split()
-            if len(data) == 8: # standard cpt file format
-                z1, r1, g1, b1, z2, r2, g2, b2 = map(float, data)
-                cpt_data.append([z1, r1/255, g1/255, b1/255])
-                cpt_data.append([z2, r2/255, g2/255, b2/255])
-        # covert into numpy
-        cpt_data = np.array(cpt_data)
-        # 归一化
-        z_normalized = (cpt_data[:, 0] - cpt_data[:, 0].min()) / (cpt_data[:, 0].max() - cpt_data[:, 0].min())
-        colors = cpt_data[:, 1:]
-        cmap = LinearSegmentedColormap.from_list('custom_cpt', list(zip(z_normalized, colors)))
+    def load_cpt(self, cpt_file: str) -> LinearSegmentedColormap:
+        """加载 GMT CPT 为 Matplotlib LinearSegmentedColormap（与 ``parse_gmt_cpt_for_matplotlib`` 一致）。"""
+        cmap, _, _ = parse_gmt_cpt_for_matplotlib(cpt_file)
         return cmap
-    
-    def plot_zeltmodel(self, 
+
+    def plot_zeltmodel(self,
                       output_file: str, 
                       title: str = 'Zelt Velocity Model',
                       xlabel: str = 'Distance (km)',
@@ -604,35 +637,11 @@ class GridModelVisualizer:
         # 创建新的色板
         return LinearSegmentedColormap.from_list('zero_transparent', colors)
             
-    def load_cpt(self, cpt_file: str) -> str:
-        """加载 CPT 文件并返回其内容。
-        
-        参数:
-            cpt_file (str): CPT 文件的路径
-            Returns:
-        LinearSegmentedColormap: matplotlib 颜色映射对象
-        """
-        cpt_data = []
-        with open(cpt_file, 'r') as file:
-            lines = file.readlines()
-        for line in lines:
-            #skip the comment lines
-            if line.startswith('#'):
-                continue
-            #parse the cpt data
-            data = line.strip().split()
-            if len(data) == 8: # standard cpt file format
-                z1, r1, g1, b1, z2, r2, g2, b2 = map(float, data)
-                cpt_data.append([z1, r1/255, g1/255, b1/255])
-                cpt_data.append([z2, r2/255, g2/255, b2/255])
-        # covert into numpy
-        cpt_data = np.array(cpt_data)
-        # 归一化
-        z_normalized = (cpt_data[:, 0] - cpt_data[:, 0].min()) / (cpt_data[:, 0].max() - cpt_data[:, 0].min())
-        colors = cpt_data[:, 1:]
-        cmap = LinearSegmentedColormap.from_list('custom_cpt', list(zip(z_normalized, colors)))
+    def load_cpt(self, cpt_file: str) -> LinearSegmentedColormap:
+        """加载 GMT CPT 为 Matplotlib LinearSegmentedColormap。"""
+        cmap, _, _ = parse_gmt_cpt_for_matplotlib(cpt_file)
         return cmap
-            
+
     def load_grid(self, grid_file: str) -> None:
         """Load a grid file.
         
@@ -723,6 +732,11 @@ class GridModelVisualizer:
                 else:
                     colorbar_label = "Value"
             
+        if not HAS_PYGMT:
+            raise ImportError(
+                "pygmt is required for this functionality. "
+                "Install it with: pip install pygmt or pip install pyAOBS[gmt]"
+            )
         self.fig = pygmt.Figure()
         projection = f'X{figsize[0]}i/{figsize[1]}i'
         current_region = list(region) if region else self.plot_region
@@ -882,6 +896,11 @@ class GridModelVisualizer:
             raise FileNotFoundError(f"找不到上层网格文件: {upper_grid_file}")
             
         # 创建新的 PyGMT 图像
+        if not HAS_PYGMT:
+            raise ImportError(
+                "pygmt is required for this functionality. "
+                "Install it with: pip install pygmt or pip install pyAOBS[gmt]"
+            )
         self.fig = pygmt.Figure()
         
         # 设置投影
@@ -1215,6 +1234,179 @@ class GridModelVisualizer:
         plt.savefig(output_fig, dpi=300, bbox_inches='tight')
         plt.close()
 
+    def _plot_velocity_field(
+        self,
+        ax,
+        fig,
+        data: xr.Dataset,
+        *,
+        figsize: Tuple[float, float] = (10, 8),
+        cmap: str = "seismic",
+        title: Optional[str] = None,
+        colorbar_label: Optional[str] = None,
+        plot_region: Optional[Tuple[float, float, float, float]] = None,
+        clim: Optional[List[float]] = None,
+        colorbar_orientation: str = "vertical",
+        colorbar_fraction: float = 0.046,
+        colorbar_pad: float = 0.04,
+        xlabel: str = "Distance (km)",
+        ylabel: str = "Depth (km)",
+        plot_interfaces: bool = False,
+        model: Optional[Union[ZeltVelocityModel2d, EnhancedZeltModel, SlownessMesh2D]] = None,
+        interface_color: Union[str, List[str]] = "black",
+        interface_linewidth: Union[float, List[float]] = 0.5,
+        interface_linestyle: Union[str, List[str]] = "-",
+        plot_contours: bool = False,
+        contour_interval: Optional[float] = None,
+        contour_levels: Optional[List[float]] = None,
+        contour_colors: Union[str, List[str]] = "black",
+        contour_linewidths: Union[float, List[float]] = 0.5,
+        contour_linestyles: Union[str, List[str]] = "-",
+        contour_label_fmt: str = "%.2f",
+        contour_label_fontsize: float = 8,
+        contour_inline: bool = True,
+        contour_inline_spacing: float = 5,
+        extra_interfaces: Optional[List[Dict[str, Union[np.ndarray, str, float]]]] = None,
+    ) -> None:
+        """在已有 Matplotlib Axes 上绘制速度场与界面（供 plot_xarray / Tk 嵌入复用）。"""
+        data_var = next(iter(data.data_vars))
+        plot_data = data[data_var].values
+
+        cpt_zmin: Optional[float] = None
+        cpt_zmax: Optional[float] = None
+        if isinstance(cmap, str) and cmap.lower().endswith(".cpt") and os.path.exists(cmap):
+            cmap, cpt_zmin, cpt_zmax = parse_gmt_cpt_for_matplotlib(cmap)
+
+        if clim is None:
+            if cpt_zmin is not None and cpt_zmax is not None:
+                # 与 GMT 一致：CPT 定义的是绝对数据值刻度，不能用数据分位数替代 vmin/vmax
+                vmin, vmax = cpt_zmin, cpt_zmax
+            else:
+                vmin = np.percentile(plot_data[~np.isnan(plot_data)], 1)
+                vmax = np.percentile(plot_data[~np.isnan(plot_data)], 99)
+        else:
+            vmin = np.percentile(plot_data[~np.isnan(plot_data)], clim[0])
+            vmax = np.percentile(plot_data[~np.isnan(plot_data)], clim[1])
+
+        coords = list(data.coords)
+        x_coord = next((c for c in coords if c in ["x", "lon", "longitude"]), None)
+        z_coord = next((c for c in coords if c in ["z", "y", "depth", "t"]), None)
+
+        if x_coord is None or z_coord is None:
+            raise ValueError(f"无法识别坐标变量，可用的坐标: {coords}")
+
+        extent = [
+            float(data[x_coord].min()),
+            float(data[x_coord].max()),
+            float(data[z_coord].max()),
+            float(data[z_coord].min()),
+        ]
+
+        if plot_region:
+            extent = [
+                plot_region[0],
+                plot_region[1],
+                plot_region[3],
+                plot_region[2],
+            ]
+
+        im = ax.imshow(
+            plot_data,
+            extent=extent,
+            cmap=cmap,
+            aspect="auto",
+            vmin=vmin,
+            vmax=vmax,
+        )
+        fig.colorbar(
+            im,
+            ax=ax,
+            label=colorbar_label if colorbar_label else "Value",
+            orientation=colorbar_orientation,
+            fraction=colorbar_fraction,
+            pad=colorbar_pad,
+        )
+
+        if plot_contours:
+            if contour_levels is not None:
+                levels = contour_levels
+            elif contour_interval is not None:
+                levels = np.arange(vmin, vmax + contour_interval, contour_interval)
+            else:
+                levels = np.linspace(vmin, vmax, 10)
+
+            x = data[x_coord].values
+            z = data[z_coord].values
+            X, Z = np.meshgrid(x, z)
+
+            CS = ax.contour(
+                X,
+                Z,
+                plot_data,
+                levels=levels,
+                colors=contour_colors,
+                linewidths=contour_linewidths,
+                linestyles=contour_linestyles,
+            )
+
+            if contour_inline:
+                ax.clabel(
+                    CS,
+                    CS.levels,
+                    fmt=contour_label_fmt,
+                    fontsize=contour_label_fontsize,
+                    inline=True,
+                    inline_spacing=contour_inline_spacing,
+                )
+
+        interfaces: List[Dict[str, np.ndarray]] = []
+        if plot_interfaces and model is not None:
+            interfaces = self.get_model_interfaces(model)
+
+            if isinstance(interface_color, str):
+                interface_color = [interface_color] * len(interfaces)
+            if isinstance(interface_linewidth, (int, float)):
+                interface_linewidth = [interface_linewidth] * len(interfaces)
+            if isinstance(interface_linestyle, str):
+                interface_linestyle = [interface_linestyle] * len(interfaces)
+
+            for i, interface in enumerate(interfaces):
+                ax.plot(
+                    interface["x"],
+                    interface["z"],
+                    color=interface_color[i],
+                    linewidth=interface_linewidth[i],
+                    linestyle=interface_linestyle[i],
+                    label=interface.get("label", f"Interface {i+1}"),
+                )
+
+        if extra_interfaces:
+            for i, interface in enumerate(extra_interfaces):
+                ax.plot(
+                    interface["x"],
+                    interface["z"],
+                    color=interface.get("color", "crimson"),
+                    linewidth=float(interface.get("linewidth", 1.5)),
+                    linestyle=str(interface.get("linestyle", "--")),
+                    label=str(interface.get("label", f"Reflector {i+1}")),
+                )
+
+        legend_needed = (plot_interfaces and model is not None and len(interfaces) > 1) or (
+            extra_interfaces and len(extra_interfaces) > 0
+        )
+        if plot_interfaces and model is not None and len(interfaces) == 1 and extra_interfaces:
+            legend_needed = True
+        if legend_needed:
+            ax.legend(loc="best", fontsize="small")
+
+        if title:
+            ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.axis(extent)
+        if figsize[1] < 0:
+            ax.invert_yaxis()
+
     def plot_xarray(self,
                     output_fig: str,
                     data: Union[xr.Dataset, str],
@@ -1243,7 +1435,8 @@ class GridModelVisualizer:
                     contour_label_fmt: str = '%.2f',
                     contour_label_fontsize: float = 8,
                     contour_inline: bool = True,
-                    contour_inline_spacing: float = 5) -> None:
+                    contour_inline_spacing: float = 5,
+                    extra_interfaces: Optional[List[Dict[str, Union[np.ndarray, str, float]]]] = None) -> None:
         """Plot xarray dataset using matplotlib
         
         Args:
@@ -1276,146 +1469,177 @@ class GridModelVisualizer:
             contour_label_fontsize (float): Fontsize for contour labels
             contour_inline (bool): Whether to plot inline labels
             contour_inline_spacing (float): Spacing for inline labels
+            extra_interfaces: 额外界面折线（如 tomo2d ``-F`` 反射界面），每项含 ``x``、``z`` 数组，
+                可选 ``label``、``color``、``linewidth``、``linestyle``（默认深红虚线）。
         """
         import matplotlib.pyplot as plt
-        
-        # 创建图形
-        plt.figure(figsize=(abs(figsize[0]), abs(figsize[1])))
-        
-        # 如果输入是文件路径，则加载数据
+
+        close_ds = False
         if isinstance(data, str):
             data = xr.open_dataset(data)
-        
-        # 获取数据变量
-        data_var = next(iter(data.data_vars))
-        plot_data = data[data_var].values
-        
-        # 振幅剪切处理
-        if clim is None:
-            # 默认使用1-99百分位数作为剪切范围
-            vmin = np.percentile(plot_data[~np.isnan(plot_data)], 1)
-            vmax = np.percentile(plot_data[~np.isnan(plot_data)], 99)
-        else:
-            # 使用指定的百分比范围
-            vmin = np.percentile(plot_data[~np.isnan(plot_data)], clim[0])
-            vmax = np.percentile(plot_data[~np.isnan(plot_data)], clim[1])
-        
-        # 获取坐标变量
-        coords = list(data.coords)
-        x_coord = next((c for c in coords if c in ['x', 'lon', 'longitude']), None)
-        z_coord = next((c for c in coords if c in ['z', 'y', 'depth', 't']), None)
-        
-        if x_coord is None or z_coord is None:
-            raise ValueError(f"无法识别坐标变量，可用的坐标: {coords}")
-        
-        # 设置数据范围
-        extent = [
-            float(data[x_coord].min()),
-            float(data[x_coord].max()),
-            float(data[z_coord].max()),  # 注意：反转z轴
-            float(data[z_coord].min())
-        ]
-        
-        # 确定最终的绘图区域
-        if plot_region:
-            extent = [
-                plot_region[0],
-                plot_region[1],
-                plot_region[3],  # 注意：反转顺序以保持深度向下增加
-                plot_region[2]
-            ]
-            
-        # 解析cmap
-        if isinstance(cmap, str) and cmap.lower().endswith('.cpt') and os.path.exists(cmap):
-            cmap = self.load_cpt(cmap)
-            
-        # 绘制数据
-        im = plt.imshow(plot_data, 
-                       extent=extent,  # 使用数据的实际范围
-                       cmap=cmap,
-                       aspect='auto',
-                       vmin=vmin,
-                       vmax=vmax)
-        plt.colorbar(im, 
-                    label=colorbar_label if colorbar_label else "Value",
-                    orientation=colorbar_orientation,
-                    fraction=colorbar_fraction,
-                    pad=colorbar_pad)
-        
-        # 绘制等值线
-        if plot_contours:
-            # 准备等值线水平
-            if contour_levels is not None:
-                levels = contour_levels
-            elif contour_interval is not None:
-                levels = np.arange(vmin, vmax + contour_interval, contour_interval)
-            else:
-                # 自动计算10条等值线
-                levels = np.linspace(vmin, vmax, 10)
-            
-            # 获取网格坐标
-            x = data[x_coord].values
-            z = data[z_coord].values
-            X, Z = np.meshgrid(x, z)
-            
-            # 绘制等值线
-            CS = plt.contour(X, Z, plot_data,
-                           levels=levels,
-                           colors=contour_colors,
-                           linewidths=contour_linewidths,
-                           linestyles=contour_linestyles)
-            
-            # 添加等值线标签
-            if contour_inline:
-                plt.clabel(CS, CS.levels,
-                          fmt=contour_label_fmt,
-                          fontsize=contour_label_fontsize,
-                          inline=True,
-                          inline_spacing=contour_inline_spacing)
-        
-        # 如果需要绘制界面
-        if plot_interfaces and model is not None:
-            interfaces = self.get_model_interfaces(model)
-            
-            # 处理界面样式参数
-            if isinstance(interface_color, str):
-                interface_color = [interface_color] * len(interfaces)
-            if isinstance(interface_linewidth, (int, float)):
-                interface_linewidth = [interface_linewidth] * len(interfaces)
-            if isinstance(interface_linestyle, str):
-                interface_linestyle = [interface_linestyle] * len(interfaces)
-                
-            # 绘制每个界面
-            for i, interface in enumerate(interfaces):
-                plt.plot(interface['x'], interface['z'],
-                        color=interface_color[i],
-                        linewidth=interface_linewidth[i],
-                        linestyle=interface_linestyle[i],
-                        label=interface.get('label', f'Interface {i+1}'))
-            
-            if len(interfaces) > 1:  # 如果有多个界面，添加图例
-                plt.legend(loc='best', fontsize='small')
-        
-        # 设置标题和轴标签
-        if title:
-            plt.title(title)
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-        
-        # 设置绘图区域
-        plt.axis(extent)
-        
-        # 如果需要反转y轴
-        if figsize[1] < 0:
-            plt.gca().invert_yaxis()
-        
-        # 保存图像
-        plt.savefig(output_fig, dpi=300, bbox_inches='tight')
-        plt.close()
-        
-        # 如果输入是文件，关闭数据集
+            close_ds = True
+        try:
+            plt.figure(figsize=(abs(figsize[0]), abs(figsize[1])))
+            ax = plt.gca()
+            fig = plt.gcf()
+            self._plot_velocity_field(
+                ax,
+                fig,
+                data,
+                figsize=figsize,
+                cmap=cmap,
+                title=title,
+                colorbar_label=colorbar_label,
+                plot_region=plot_region,
+                clim=clim,
+                colorbar_orientation=colorbar_orientation,
+                colorbar_fraction=colorbar_fraction,
+                colorbar_pad=colorbar_pad,
+                xlabel=xlabel,
+                ylabel=ylabel,
+                plot_interfaces=plot_interfaces,
+                model=model,
+                interface_color=interface_color,
+                interface_linewidth=interface_linewidth,
+                interface_linestyle=interface_linestyle,
+                plot_contours=plot_contours,
+                contour_interval=contour_interval,
+                contour_levels=contour_levels,
+                contour_colors=contour_colors,
+                contour_linewidths=contour_linewidths,
+                contour_linestyles=contour_linestyles,
+                contour_label_fmt=contour_label_fmt,
+                contour_label_fontsize=contour_label_fontsize,
+                contour_inline=contour_inline,
+                contour_inline_spacing=contour_inline_spacing,
+                extra_interfaces=extra_interfaces,
+            )
+            plt.savefig(output_fig, dpi=300, bbox_inches="tight")
+        finally:
+            plt.close()
+            if close_ds:
+                data.close()
+
+    def embed_velocity_in_tk(
+        self,
+        parent,
+        data: Union[xr.Dataset, str],
+        *,
+        save_path: Optional[str] = None,
+        figsize: Tuple[float, float] = (10, 5.0),
+        cmap: str = "seismic",
+        title: Optional[str] = None,
+        colorbar_label: Optional[str] = None,
+        plot_region: Optional[Tuple[float, float, float, float]] = None,
+        clim: Optional[List[float]] = None,
+        colorbar_orientation: str = "vertical",
+        colorbar_fraction: float = 0.046,
+        colorbar_pad: float = 0.04,
+        xlabel: str = "Distance (km)",
+        ylabel: str = "Depth (km)",
+        plot_interfaces: bool = False,
+        model: Optional[Union[ZeltVelocityModel2d, EnhancedZeltModel, SlownessMesh2D]] = None,
+        interface_color: Union[str, List[str]] = "black",
+        interface_linewidth: Union[float, List[float]] = 0.5,
+        interface_linestyle: Union[str, List[str]] = "-",
+        plot_contours: bool = False,
+        contour_interval: Optional[float] = None,
+        contour_levels: Optional[List[float]] = None,
+        contour_colors: Union[str, List[str]] = "black",
+        contour_linewidths: Union[float, List[float]] = 0.5,
+        contour_linestyles: Union[str, List[str]] = "-",
+        contour_label_fmt: str = "%.2f",
+        contour_label_fontsize: float = 8,
+        contour_inline: bool = True,
+        contour_inline_spacing: float = 5,
+        extra_interfaces: Optional[List[Dict[str, Union[np.ndarray, str, float]]]] = None,
+        savefig_directory: Optional[str] = None,
+    ) -> None:
+        """在 Tk 父控件中嵌入**单个** Matplotlib 速度图窗口（含导航工具栏）；可选同时保存 PNG。
+
+        工具栏「保存」对话框的初始目录由 Matplotlib 的 ``savefig.directory`` 决定（默认常为用户主目录），
+        与数据文件路径无关。若传入 ``savefig_directory``，或 ``data`` 为 NetCDF 等文件路径字符串，
+        则保存时优先打开该目录。
+        """
+        import matplotlib as mpl
+        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+        from matplotlib.figure import Figure
+
+        class _ToolbarSaveDir(NavigationToolbar2Tk):
+            """在弹出保存对话框时临时设置 ``savefig.directory``，避免改全局默认。"""
+
+            def __init__(self, canvas, parent, *, save_dir=None):
+                self._save_dir = save_dir
+                super().__init__(canvas, parent)
+
+            def save_figure(self, *args):
+                old = mpl.rcParams["savefig.directory"]
+                try:
+                    if self._save_dir:
+                        mpl.rcParams["savefig.directory"] = self._save_dir
+                    return super().save_figure(*args)
+                finally:
+                    mpl.rcParams["savefig.directory"] = old
+
+        close_ds = False
+        data_path_for_save: Optional[str] = None
         if isinstance(data, str):
-            data.close()
+            data_path_for_save = os.path.abspath(data)
+            data = xr.open_dataset(data)
+            close_ds = True
+        try:
+            fig = Figure(figsize=(abs(figsize[0]), abs(figsize[1])), dpi=100)
+            ax = fig.add_subplot(111)
+            self._plot_velocity_field(
+                ax,
+                fig,
+                data,
+                figsize=figsize,
+                cmap=cmap,
+                title=title,
+                colorbar_label=colorbar_label,
+                plot_region=plot_region,
+                clim=clim,
+                colorbar_orientation=colorbar_orientation,
+                colorbar_fraction=colorbar_fraction,
+                colorbar_pad=colorbar_pad,
+                xlabel=xlabel,
+                ylabel=ylabel,
+                plot_interfaces=plot_interfaces,
+                model=model,
+                interface_color=interface_color,
+                interface_linewidth=interface_linewidth,
+                interface_linestyle=interface_linestyle,
+                plot_contours=plot_contours,
+                contour_interval=contour_interval,
+                contour_levels=contour_levels,
+                contour_colors=contour_colors,
+                contour_linewidths=contour_linewidths,
+                contour_linestyles=contour_linestyles,
+                contour_label_fmt=contour_label_fmt,
+                contour_label_fontsize=contour_label_fontsize,
+                contour_inline=contour_inline,
+                contour_inline_spacing=contour_inline_spacing,
+                extra_interfaces=extra_interfaces,
+            )
+            if save_path:
+                fig.savefig(save_path, dpi=300, bbox_inches="tight")
+
+            init_save_dir = savefig_directory
+            if init_save_dir is None and data_path_for_save:
+                init_save_dir = os.path.dirname(data_path_for_save)
+            if init_save_dir:
+                init_save_dir = os.path.abspath(os.path.expanduser(init_save_dir))
+
+            canvas = FigureCanvasTkAgg(fig, master=parent)
+            canvas.draw()
+            toolbar = _ToolbarSaveDir(canvas, parent, save_dir=init_save_dir)
+            toolbar.update()
+            toolbar.pack(side="bottom", fill="x")
+            canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
+        finally:
+            if close_ds:
+                data.close()
 
     def get_model_interfaces(self, model: Union[ZeltVelocityModel2d, EnhancedZeltModel, SlownessMesh2D, None] = None) -> List[Dict[str, np.ndarray]]:
         """从不同类型的模型中获取界面数据
@@ -1494,7 +1718,7 @@ class GridModelProcessor:
             self.grid_file = Path(grid_file)
             if not self.grid_file.exists():
                 raise FileNotFoundError(f"找不到网格文件: {self.grid_file}")
-            self.velocity_grid = xr.open_dataset(grid_file)
+            self.velocity_grid = open_netcdf_like_dataset(str(self.grid_file))
         else:
             # 如果输入是xarray数据集，直接使用
             self.velocity_grid = grid_file
@@ -1575,44 +1799,35 @@ class GridModelProcessor:
                     bs_z = np.interp(x, basement_x, basement_z)
                     mh_z = np.interp(x, moho_x, moho_z)
                     
-                    # 根据深度确定层位并计算密度
+                    # 根据深度确定层位并计算密度（使用经验公式库）
                     if z < sf_z:  # 海水层
                         density[i, j] = 1.03
-                    elif z < bs_z:  # 沉积层
-                        density[i, j] = 0.31 * (v * 1000) ** 0.25
-                    elif z < mh_z:  # 地壳层
-                        density[i, j] = (1.6612 * v - 0.4721 * v**2 + 0.0671 * v**3 - 
-                                       0.0043 * v**4 + 0.000106 * v**5)
+                    elif z < bs_z:  # 沉积层 - 使用Gardner公式
+                        density[i, j] = _calculate_density(v, method='gardner')
+                    elif z < mh_z:  # 地壳层 - 使用Brocher公式
+                        density[i, j] = _calculate_density(v, method='brocher')
                     else:  # 地幔层
                         density[i, j] = 3.33  # 固定密度值
                         
         else:
-            # 使用单一关系的原有逻辑
-            if method.lower() == 'gardner':
-                # Gardner et al. (1974)
-                a = kwargs.get('a', 0.31)
-                b = kwargs.get('b', 0.25)
-                density = a * (velocity * 1000) ** b  # 转换为m/s
+            # 使用单一关系的原有逻辑（使用经验公式库）
+            method_lower = method.lower()
+            
+            # 支持的方法映射
+            if method_lower == 'gardner':
+                # 如果提供了自定义参数，需要特殊处理
+                if 'a' in kwargs or 'b' in kwargs:
+                    # 自定义参数的Gardner公式（保持向后兼容）
+                    a = kwargs.get('a', 0.31)
+                    b = kwargs.get('b', 0.25)
+                    density = a * (velocity * 1000) ** b  # 转换为m/s
+                else:
+                    # 使用标准Gardner公式（经验公式库）
+                    density = _calculate_density(velocity, method='gardner')
                 
-            elif method.lower() == 'castagna':
-                # Castagna et al. (1993)
-                density = 1.66 * (velocity * 1000) ** 0.261  # 转换为m/s
-                
-            elif method.lower() == 'brocher':
-                # Brocher (2005)
-                v = velocity  # 使用km/s
-                density = (1.6612 * v - 0.4721 * v**2 + 0.0671 * v**3 - 
-                          0.0043 * v**4 + 0.000106 * v**5)
-                
-            elif method.lower() == 'lindseth':
-                # Lindseth (1979)
-                density = 0.31 * velocity + 1.7
-                
-            elif method.lower() == 'nafe_drake':
-                # Nafe-Drake (1963)
-                v = velocity  # 使用km/s
-                density = (1.6612 * v - 0.4721 * v**2 + 0.0671 * v**3 - 
-                          0.0043 * v**4 + 0.000106 * v**5)
+            elif method_lower in ['castagna', 'brocher', 'lindseth', 'nafe_drake']:
+                # 使用经验公式库
+                density = _calculate_density(velocity, method=method_lower)
                 
             else:
                 raise ValueError(f"未知的转换方法: {method}")
@@ -1656,16 +1871,23 @@ class GridModelProcessor:
             
         # Get density
         density_grid = self.velocity_to_density(method=density_method, **kwargs)
-        density = density_grid.density.values
+        density = density_grid.density.values  # 单位: g/cm³
         
         # Get velocities
         vp = self.velocity_grid.velocity.values * 1000  # Convert to m/s
         vs = vp / vp_vs_ratio
         
+        # Convert density from g/cm³ to kg/m³ for elastic moduli calculation
+        density_kg_m3 = density * 1000  # 转换为 kg/m³
+        
         # Calculate elastic moduli
-        mu = density * vs * vs  # Shear modulus
-        lambda_ = density * (vp * vp - 2 * vs * vs)  # Lamé's first parameter
-        k = lambda_ + 2 * mu / 3  # Bulk modulus
+        # 注意：弹性模量计算需要使用SI单位 (kg/m³, m/s)
+        # μ = ρ * Vs² (单位: Pa = kg/(m·s²))
+        mu = density_kg_m3 * vs * vs * 1e-9  # Shear modulus (转换为 GPa)
+        # λ = ρ * (Vp² - 2*Vs²) (单位: Pa)
+        lambda_ = density_kg_m3 * (vp * vp - 2 * vs * vs) * 1e-9  # Lamé's first parameter (转换为 GPa)
+        # K = λ + 2*μ/3 (单位: GPa)
+        k = lambda_ + 2 * mu / 3  # Bulk modulus (GPa)
         
         # Create datasets
         lame_grid = xr.Dataset(

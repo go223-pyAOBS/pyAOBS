@@ -1,0 +1,23 @@
+{
+  "id": "kinzler1997_morb_primary_fig2",
+  "source": "Kinzler (1997); KKHS02 Figure 2 starting liquid",
+  "description": "Polybaric near-fractional melt aggregated from triangular melting regime; mean F=0.09, mean P_melt=1.5 GPa",
+  "P_melt_GPa": 1.5,
+  "F_melt": 0.09,
+  "oxides_wt_percent": {
+    "SiO2": 48.2,
+    "TiO2": 0.94,
+    "Al2O3": 16.4,
+    "Cr2O3": 0.12,
+    "FeO": 7.96,
+    "MgO": 12.5,
+    "CaO": 11.4,
+    "K2O": 0.07,
+    "Na2O": 2.27
+  },
+  "fig2_reference_state": {
+    "pressure_MPa": 100,
+    "temperature_C": 100,
+    "bulk_norm_vp_km_s": 7.17
+  }
+}

@@ -1,0 +1,9 @@
+# strategy 0 1 4
+# ray_trace 4 4 0.8 8 0.0001
+# smooth_vel 1 100 100 101 1
+# smooth_dep 1 10 10 11
+# damp_vel 1 0.2
+# damp_dep 1 0.2
+# ndata 3153
+# nnodes 185998 410 1
+# LSQR 0.001

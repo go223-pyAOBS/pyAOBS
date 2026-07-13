@@ -1,0 +1,8 @@
+# KKHS02 Fig.5 — GetData export template
+# Paper axes: x = V_LC (km/s), y = ΔVp (km/s)
+# Native GetData files: 100Mpa.txt / 400Mpa.txt with Fxl=0.5/0.6/0.7/0.8 sections
+#
+# Import:
+#   py -3.11 petrology/validation/import_figure05_digitized.py
+#
+# Each F-locus is robust poly2-fitted (outliers removed) before plotting.

@@ -1,0 +1,90 @@
+{
+  "description": "Eq.(1) coefficients re-fit to digitized KKHS02 Fig.3 V(P,F) contours (GetData). Window parameters fixed to paper values. NOT a replacement for the published table - use for print-figure alignment only.",
+  "source_digitized": "petrology/data/ScreenShot_2026-07-09_105537_962.txt",
+  "window_functions": {
+    "alpha": 0.6,
+    "beta": 8.4,
+    "P_t_GPa": 1.0,
+    "F_t": 0.05
+  },
+  "paper_table": {
+    "comment": "Published KKHS02 \u00a72.2 / data/korenaga2002_eq1.json",
+    "a0": 7.52,
+    "b": [
+      -1.73,
+      0.55,
+      7.71,
+      -0.11,
+      8.87,
+      -146.11
+    ],
+    "c": [
+      -0.35,
+      0.034,
+      0.51,
+      0.0016,
+      -0.04,
+      0.046
+    ]
+  },
+  "paper_b1_neg": {
+    "comment": "Ablation: paper table with only b1 -> -|b1| (other coeffs unchanged)",
+    "a0": 7.52,
+    "b": [
+      -1.73,
+      -0.55,
+      7.71,
+      -0.11,
+      8.87,
+      -146.11
+    ],
+    "c": [
+      -0.35,
+      0.034,
+      0.51,
+      0.0016,
+      -0.04,
+      0.046
+    ]
+  },
+  "user_lbfgs": {
+    "comment": "article/\u590d\u73b0korenaga/test1.py L-BFGS-B (reported by user); b1 sign flip vs paper",
+    "a0": 7.5215,
+    "b": [
+      -1.7386,
+      -0.5441,
+      7.7352,
+      -0.1109,
+      8.836,
+      -146.1129
+    ],
+    "c": [
+      -0.3518,
+      0.0333,
+      0.5207,
+      0.0017,
+      -0.0393,
+      0.0247
+    ]
+  },
+  "lstsq": {
+    "comment": "Exact linear least-squares with fixed windows (canonical print-fit)",
+    "a0": 7.522151262169368,
+    "b": [
+      -1.780684603691744,
+      -0.5252110205953062,
+      8.494027260336743,
+      -0.11407041163748156,
+      8.821745735584614,
+      -149.82864325989536
+    ],
+    "c": [
+      -0.3543625984459898,
+      0.03340003298495641,
+      0.5275637101165608,
+      0.0016989705414204993,
+      -0.04073731173785139,
+      0.02692299877676228
+    ]
+  }
+}

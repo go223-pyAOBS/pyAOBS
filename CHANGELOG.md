@@ -5,6 +5,13 @@ All notable changes to **pyAOBS** are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [SemVer](https://semver.org/) (major bumps may skip intermediate public majors when the product milestone warrants it).
 
+## [3.0.0rc2] — 2026-07-13
+
+First tag that includes full workbench/petrology/imodel source tree on GitHub.
+
+- Publish the previously local-only source tree (workbench, petrology, imodel/zplot, related modules)
+- Keep large test dumps, vendored Fortran/tool trees, and ScienceDirect caches out of git
+- Install (Direct URL): `pip install "pyAOBS[gui-qt] @ git+https://github.com/go223-pyAOBS/pyAOBS.git@v3.0.0rc2"`
 ## [3.0.0rc1] — 2026-07-13
 
 First **3.0** release candidate. Scope is a usable install of the main OBS / workbench stack plus KKHS02 petrology GUI; research dumps and multi‑GB test data are **not** shipped in the sdist.
@@ -27,7 +34,10 @@ First **3.0** release candidate. Scope is a usable install of the main OBS / wor
 
 ### Packaging notes
 
-- Prefer: `pip install -e ".[gui-qt]"` from a clean clone, then `python -m pyAOBS.workbench.app`
+- Prefer editable: `pip install -e ".[gui-qt]"` from a clean clone, then `python -m pyAOBS.workbench.app`
+- From the Git tag (Direct URL; modern pip):
+  `pip install "pyAOBS[gui-qt] @ git+https://github.com/go223-pyAOBS/pyAOBS.git@v3.0.0rc1"`
+- Do **not** use `#egg=pyAOBS[gui-qt]` — newer pip raises `invalid-egg-fragment`
 - `import petrology` (bare) is supported via a path bootstrap when `pyAOBS` is imported; editable installs remain the recommended path for GUI work
 - Vendored BurnMan / pyrolite trees remain available for offline petrology; prefer `pip install burnman` when convenient
 

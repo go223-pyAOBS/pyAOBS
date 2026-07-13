@@ -1,0 +1,7 @@
+1 7
+# Magnesian tholeiite
+# High-Mg demo; crystallizes under Langmuir Kd @ 1273–1473 K
+# source: run_basalt1990.py / test_basalt1990_fortran.py
+# oxides wt%: SiO2 45.18, TiO2 0.50, Al2O3 10.04, FeO 8.03, MgO 25.10, CaO 10.04, Na2O 1.00, K2O 0.10
+# columns: CAA NAAL MGO FEO CAWO TIO2 SIO2
+0.051180 0.020155 0.387419 0.069549 0.467788 0.003910 0.000000

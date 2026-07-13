@@ -1,0 +1,134 @@
+
+           Documentation for SGY2Z
+           -----------------------
+
+A program to convert seg-y data files into z-format. 
+z-format is the file format used by (x)zplot.
+
+
+Date:       June 1997
+
+Written by:
+
+----|---/---------------------------------------------------------------
+    |  /
+    \ /     Colin A. Zelt                             tel:(713) 527-4757
+     V      Rice University                           fax:(713) 285-5214
+    @@ " ^  Dept of Geology and Geophysics, MS-126
+    /    /  P.O. Box 1892    
+   /__  /   Houston, Texas                         email: czelt@rice.edu
+     \- |   USA, 77005-1892                        room:  205B
+      \ |
+                        www: "http://zephyr.rice.edu/department/faculty"
+------------------------------------------------------------------------
+
+
+idump = 1 to write an ascii file of some of the seg-y header values
+        2 to write an ascii file of most of the seg-y header values
+
+tstart - the trace start time (s) of the seg-y data; tstart is an array,
+         each element corresponding in order to the seg-y files which
+         are read in for conversion
+
+nbytes - number of bytes per word for the seg-y data (if set incorrectly 
+         in the headers 
+
+npts0 - number of points (only use this if you suspect it is set wrong
+        in the seg-y header) 
+
+npick - the number of pick header words to create for the z-format data 
+        (this determines how many picks can be made for each trace)
+
+src = "r" for common-receiver gather data (otherwise common-shot is assumed)
+
+itype - used to select only specific traces from seg-y file using a 
+        user-supplied "itype" file
+
+dfile - name of output data file containing z-format data
+
+hfile - name of output header file corresponding to z-format data in dfile
+
+iout = 1 to write the data in z-format and create the header file
+
+nfile - the number of distinct seg-y files to be converted into one 
+        z-format file 
+
+vred0 - the reducing velocity (km/s) of the original seg-y data
+
+vred - the reducing velocity (km/s) of the z-format data
+
+tmin, tmax - the minimum and maximum trace time (s) of the z-format data
+
+omit0 - omit dead traces (i.e., traces containing all zero values)
+
+xmax - omit traces with offsets (km) greater than xmax 
+
+omax - print a warning message indicating all traces which have offsets
+       in their seg-y headers which are different from the calculated
+       value by more than omax 
+
+iocalc = 1 to calculate the shot-receiver offset using the shot and
+           receiver positions specified in the seg-y headers; otherwise
+           the offset already in the seg-y is used
+
+itcorrect = 1 to add the time delay in the seg-y header to the trace  
+              start time
+           -1 to subtract the time delay in the seg-y hearder to the trace
+              start time
+           (itcorrect is an array, each element corresponding in order to 
+            the seg-y files which are read in for conversion)
+
+fmt = 'int' - trace values are read and written as 2 byte integers.
+      'sun' - trace values are read and written as 4 byte IEEE reals.
+      'ibm' - trace values are read as 4 byte IBM reals and written
+              as 4 byte IEEE reals.
+
+nt1, nt2 - the first and last trace in each seg-y file to convert to
+           z-format
+
+cm - central meridian (degrees, positive for east) for calculation of
+     utm coordinates using iutm=1
+
+x0, y0, x00, y00, rot - used to shift and rotate the utm coordinates into 
+                        any position and orientation according to the 
+                        equation:
+
+        xutm'=(xutm-x0)*cos(rot)-(yutm-y0)*sin(rot)+x00
+        yutm'=(xutm-x0)*sin(rot)+(yutm-y0)*cos(rot)+y00
+
+        where xutm and yutm are the utm coordinates obtained from the
+        latitude and longitude in the seg-y header, and xutm' and yutm'
+        are the transformed coordinates
+
+iutm = 1 to calculate utm (x,y cartesian) coordinates given the latitude
+       and longitude values in the seg-y hearders
+
+xumin, xumax, yumin, yumax - omit traces with transformed utm coordinates
+                             that fall outside the box defined by xumin,
+                             xumax, yumin, yumax 
+
+tbulk - a bulk time shift (s) to be applied to all traces; tbulk is an 
+        array, each element corresponding in order to the seg-y files 
+        which are read in for conversion
+
+rdepth - set the receiver depth to this value (m) 
+
+resamp = 1 to decimate data by a factor of two
+
+nrecord - force this number of traces per record in the output file
+
+cfact - the seg-y header words containing latitudes and longitudes
+        are divided by cfact to obtain values in degrees 
+
+--------------------------
+
+The following are specialized parameters that can be ignored:
+
+numread -
+nchange - 
+clat - 
+clong - 
+xlatlong - 
+xelev - 
+xutm - 
+

@@ -25,16 +25,26 @@ A Python toolkit for active-source ocean-bottom seismology: Zelt velocity models
 ```bash
 git clone https://github.com/go223-pyAOBS/pyAOBS.git
 cd pyAOBS
-git checkout v3.0.0rc1   # after the tag is published
+git checkout v3.0.0rc2   # after the tag is published
 pip install -e ".[gui-qt]"
 # optional petrology extras:
 # pip install -e ".[gui-qt,petrology]"
 ```
 
-### From PyPI
-Stable PyPI wheels may lag behind GitHub tags. Prefer a tagged source install for RC builds:
+### From a Git tag (recommended for 3.0.0rc1)
+Use Direct URL syntax (modern pip; do **not** use `#egg=...[extra]`):
 ```bash
-pip install "git+https://github.com/go223-pyAOBS/pyAOBS.git@v3.0.0rc1#egg=pyAOBS[gui-qt]"
+pip install "pyAOBS[gui-qt] @ git+https://github.com/go223-pyAOBS/pyAOBS.git@v3.0.0rc2"
+```
+Core package only (no Qt extras):
+```bash
+pip install "pyAOBS @ git+https://github.com/go223-pyAOBS/pyAOBS.git@v3.0.0rc2"
+```
+
+### From PyPI
+Stable PyPI wheels may lag behind GitHub tags; prefer the Git tag install above for RC builds:
+```bash
+pip install "pyAOBS[gui-qt]"
 ```
 
 ## Dependencies

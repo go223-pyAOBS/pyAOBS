@@ -1,0 +1,17 @@
+id,x_h2o_wt_pct,delta_t_c,study_id,source_short,verified,notes
+HK95_1,0.8,22.0,HK95,Hirose_Kawamoto_1995,partial,1 GPa peridotite; melt H2O vs solidus shift — verify vs Katz ESI
+HK95_2,1.5,48.0,HK95,Hirose_Kawamoto_1995,partial,Hirose & Kawamoto (1995) compilation point
+HK95_3,2.4,75.0,HK95,Hirose_Kawamoto_1995,partial,
+KH97_1,1.0,38.0,KH97,Kawamoto_Holloway_1997,partial,Kawamoto & Holloway (1997)
+KH97_2,2.0,68.0,KH97,Kawamoto_Holloway_1997,partial,
+KH97_3,3.2,98.0,KH97,Kawamoto_Holloway_1997,partial,
+GG98_1,1.2,35.0,GG98,Gaetani_Grove_1998,partial,Gaetani & Grove (1998) 1.2 GPa lherzolite
+GG98_2,2.0,62.0,GG98,Gaetani_Grove_1998,partial,
+GG98_3,3.0,88.0,GG98,Gaetani_Grove_1998,partial,
+GG98_4,4.2,118.0,GG98,Gaetani_Grove_1998,partial,
+GG98_5,5.5,148.0,GG98,Gaetani_Grove_1998,partial,
+G01_1,0.6,18.0,G01,Grove_2001,partial,Grove (2001) hydrous melting brackets
+G01_2,1.8,55.0,G01,Grove_2001,partial,
+G01_3,2.8,82.0,G01,Grove_2001,partial,
+G01_4,4.0,112.0,G01,Grove_2001,partial,
+G01_5,5.2,138.0,G01,Grove_2001,partial,

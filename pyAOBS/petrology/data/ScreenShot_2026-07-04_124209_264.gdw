@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GetDataWorkspace>
+  <version>2.22</version>
+  <File>
+    <Name>C:\Users\go223\Desktop\ScreenShot_2026-07-04_124209_264.jpg</Name>
+    <Width>511</Width>
+    <Height>340</Height>
+  </File>
+  <Line>
+    <Caption>X=1</Caption>
+    <LineColor>38,37,37</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>220,70,220</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1012,2065,1120,1939,1219,1840,1309,1759,1453,1633,1561,1534,1678,1444,1795,1354,1921,1273,2119,1147</Points>
+    <Points MF="9">2290,1057,2506,940,2731,841,3073,688,3469,535,3766,418,4036,337,4243,274</Points>
+  </Line>
+  <Line>
+    <Caption>x=8</Caption>
+    <LineColor>38,37,37</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>230,220,20</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">1084,2137,1246,1966,1417,1804,1579,1660,1723,1525,1885,1399,2011,1282,2209,1147,2389,1021,2515,940</Points>
+    <Points MF="9">2839,787,3055,688,3415,553,3820,409,4081,328,4243,274</Points>
+  </Line>
+  <CurrentLine>1</CurrentLine>
+  <Xmin MF="9">1003,2146,1.250000e+003</Xmin>
+  <Xmax MF="9">4270,2146,1.600000e+003</Xmax>
+  <Ymin MF="9">1003,2146,6.900000e+000</Ymin>
+  <Ymax MF="9">1003,184,7.400000e+000</Ymax>
+  <XScale>linear</XScale>
+  <YScale>linear</YScale>
+  <Position>-32,-37</Position>
+  <Zoom>
+    <Scale>200.0</Scale>
+  </Zoom>
+  <Digitize>
+    <IgnorePixels>1</IgnorePixels>
+    <LineIDMethod>2</LineIDMethod>
+  </Digitize>
+  <AutoTrace>
+    <TraceDistance>8</TraceDistance>
+    <SmoothLines>1</SmoothLines>
+  </AutoTrace>
+  <DigitizeArea>
+    <LineOrArea>0</LineOrArea>
+    <RotateAngle>0.000000</RotateAngle>
+    <dx>8.000000</dx>
+  </DigitizeArea>
+  <GridSettings>
+    <ShowGrid>0</ShowGrid>
+    <AreaType>0</AreaType>
+    <dx>15.000000</dx>
+    <dy>15.000000</dy>
+  </GridSettings>
+</GetDataWorkspace>

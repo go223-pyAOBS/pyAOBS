@@ -1,0 +1,6 @@
+! 演示成分：低 Al2O3、高 CaO、中等 MgO/FeO，适用于 BASALT 模型 1 atm 平衡结晶
+! 原始氧化物 (wt%): SiO2=50.0; TiO2=1.0; Al2O3=12.0; Cr2O3=0.0; FeO=8.0; MgO=8.0; CaO=15.0; K2O=0.1; Na2O=2.0
+! Mapping: CAA=CaAl2O4, NAAL=NaAlO2, MGO=MgO, FEO=FeO+Cr2O3, CAWO=CaSiO3, TIO2=TiO2, SIO2=SiO2
+! 列顺序: CAA   NAAL  MGO   FEO   CAWO  TIO2  SIO2
+
+0.0566 0.0448 0.1333 0.0753 0.1229 0.0084 0.5587

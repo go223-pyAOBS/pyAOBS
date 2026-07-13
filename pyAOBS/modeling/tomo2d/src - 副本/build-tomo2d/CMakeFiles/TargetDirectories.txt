@@ -1,0 +1,12 @@
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/tomo2d_core.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/gen_smesh.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/tt_forward.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/tt_inverse.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/gen_damp.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/gen_vcorr.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/stat_smesh.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/edit_smesh.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/edit_smesh_HHB.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/edit_smesh_HHB2.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/edit_cache.dir
+/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/rebuild_cache.dir

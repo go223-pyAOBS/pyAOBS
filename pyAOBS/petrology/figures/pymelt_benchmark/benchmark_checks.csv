@@ -1,0 +1,41 @@
+case,geometry,tp_c,chi,phi,b_km,param,tier,unit,ree,pm,delta,tol,pass,note
+case_1,reebox,1350.0,4.0,0.1,20.0,P0,shared_geometry,GPa,2.786591957695782,2.786591957695782,0.0,0.015,True,对齐 Katz 固相线 ∩ 绝热线
+case_1,reebox,1350.0,4.0,0.1,20.0,Pf,shared_geometry,GPa,0.64746,0.6505919576957799,-0.0031319576957798967,0.025,True,同 P0/Pf 边界
+case_1,reebox,1350.0,4.0,0.1,20.0,H_common,shared_algorithm,km,6.778006952147305,6.774878527567056,0.0031284245802494226,1.5,True,本代码三角积分 + pyMelt F(P) vs pyMelt spreadingCentre
+case_1,reebox,1350.0,4.0,0.1,20.0,H_passive_reebox_f,shared_algorithm,km,18.03944080200937,6.774878527567056,11.264562274442314,,,同积分器 + 等熵 F；与 H_common 差反映 F 差异 (Δ vs pyMelt SC=+11.3 km)
+case_1,reebox,1350.0,4.0,0.1,20.0,H,different_physics,km,26.16377494584233,6.774878527567056,19.388896418275273,,,REEBOX 等熵 F + 可选 χ 权重
+case_1,reebox,1350.0,4.0,0.1,20.0,F_rmse,different_physics,,0.2851218720684656,,nan,,,等熵 vs PM2001；物理不同时偏大属正常
+case_1,reebox,1350.0,4.0,0.1,20.0,F_path,different_physics,,0.3480529167133874,0.11024431364261636,0.23780860307077104,,,PM2001 vs 等熵
+case_1,reebox,1350.0,4.0,0.1,20.0,F_pf,different_physics,,0.731437574172594,0.21182973413994302,0.519607840032651,,,柱底熔融分数
+case_2,reebox,1300.0,8.0,0.1,0.0,P0,shared_geometry,GPa,2.4198226133361462,2.4198226133361462,0.0,0.015,True,对齐 Katz 固相线 ∩ 绝热线
+case_2,reebox,1300.0,8.0,0.1,0.0,Pf,shared_geometry,GPa,0.05,0.05182261333614413,-0.0018226133361441271,0.025,True,同 P0/Pf 边界
+case_2,reebox,1300.0,8.0,0.1,0.0,H_common,shared_algorithm,km,7.7418478002401265,7.728706680427383,0.013141119812743796,1.5,True,本代码三角积分 + pyMelt F(P) vs pyMelt spreadingCentre
+case_2,reebox,1300.0,8.0,0.1,0.0,H_passive_reebox_f,shared_algorithm,km,22.482073249206618,7.728706680427383,14.753366568779235,,,同积分器 + 等熵 F；与 H_common 差反映 F 差异 (Δ vs pyMelt SC=+14.8 km)
+case_2,reebox,1300.0,8.0,0.1,0.0,H,different_physics,km,39.02755950203268,7.728706680427383,31.298852821605298,,,REEBOX 等熵 F + 可选 χ 权重
+case_2,reebox,1300.0,8.0,0.1,0.0,F_rmse,different_physics,,0.3318054525756587,,nan,,,等熵 vs PM2001；物理不同时偏大属正常
+case_2,reebox,1300.0,8.0,0.1,0.0,F_path,different_physics,,0.38803331990989093,0.10961426577252988,0.27841905413736107,,,PM2001 vs 等熵
+case_2,reebox,1300.0,8.0,0.1,0.0,F_pf,different_physics,,0.8195710954838129,0.22326792185349142,0.5963031736303215,,,柱底熔融分数
+case_3,reebox,1380.0,16.0,0.15,0.0,P0,shared_geometry,GPa,3.0116400748491277,3.0116400748491277,0.0,0.015,True,对齐 Katz 固相线 ∩ 绝热线
+case_3,reebox,1380.0,16.0,0.15,0.0,Pf,shared_geometry,GPa,0.05,0.05164007484912503,-0.0016400748491250255,0.025,True,同 P0/Pf 边界
+case_3,reebox,1380.0,16.0,0.15,0.0,H_common,shared_algorithm,km,14.90184642222128,14.891323888962914,0.010522533258365385,1.5,True,本代码三角积分 + pyMelt F(P) vs pyMelt spreadingCentre
+case_3,reebox,1380.0,16.0,0.15,0.0,H_passive_reebox_f,shared_algorithm,km,34.05247700578172,14.891323888962914,19.161153116818802,,,同积分器 + 等熵 F；与 H_common 差反映 F 差异 (Δ vs pyMelt SC=+19.2 km)
+case_3,reebox,1380.0,16.0,0.15,0.0,H,different_physics,km,63.023543335512876,14.891323888962914,48.13221944654996,,,REEBOX 等熵 F + 可选 χ 权重
+case_3,reebox,1380.0,16.0,0.15,0.0,F_rmse,different_physics,,0.4129113751060435,,nan,,,等熵 vs PM2001；物理不同时偏大属正常
+case_3,reebox,1380.0,16.0,0.15,0.0,F_path,different_physics,,0.5128773230564203,0.174935493053619,0.3379418300028013,,,PM2001 vs 等熵
+case_3,reebox,1380.0,16.0,0.15,0.0,F_pf,different_physics,,1.0725142664874863,0.317079970704813,0.7554342957826733,,,柱底熔融分数
+case_4,reebox,1350.0,4.0,0.0,0.0,P0,shared_geometry,GPa,2.786591957695782,2.7846868057643333,0.0019051519314485788,0.015,True,对齐 Katz 固相线 ∩ 绝热线
+case_4,reebox,1350.0,4.0,0.0,0.0,Pf,shared_geometry,GPa,0.05,0.04868680576433082,0.0013131942356691823,0.025,True,同 P0/Pf 边界
+case_4,reebox,1350.0,4.0,0.0,0.0,H_common,shared_algorithm,km,8.187525179714935,8.187521969460906,3.2102540288292403e-06,1.5,True,本代码三角积分 + pyMelt F(P) vs pyMelt spreadingCentre
+case_4,reebox,1350.0,4.0,0.0,0.0,H_passive_reebox_f,shared_algorithm,km,29.49670901322084,8.187521969460906,21.309187043759934,,,同积分器 + 等熵 F；与 H_common 差反映 F 差异 (Δ vs pyMelt SC=+21.3 km)
+case_4,reebox,1350.0,4.0,0.0,0.0,H,different_physics,km,39.940071072199494,8.187521969460906,31.752549102738588,,,REEBOX 等熵 F + 可选 χ 权重
+case_4,reebox,1350.0,4.0,0.0,0.0,F_rmse,different_physics,,0.4269587617844422,,nan,,,等熵 vs PM2001；物理不同时偏大属正常
+case_4,reebox,1350.0,4.0,0.0,0.0,F_path,different_physics,,0.46632498082403107,0.1008396419675917,0.36548533885643936,,,PM2001 vs 等熵
+case_4,reebox,1350.0,4.0,0.0,0.0,F_pf,different_physics,,0.9792931106015732,0.2313052165573639,0.7479878940442093,,,柱底熔融分数
+case_5,reebox,1350.0,1.0,0.1,0.0,P0,shared_geometry,GPa,2.786591957695782,2.786591957695782,0.0,0.015,True,对齐 Katz 固相线 ∩ 绝热线
+case_5,reebox,1350.0,1.0,0.1,0.0,Pf,shared_geometry,GPa,0.05,0.0505919576957794,-0.0005919576957793965,0.025,True,同 P0/Pf 边界
+case_5,reebox,1350.0,1.0,0.1,0.0,H_common,shared_algorithm,km,11.10716827128876,11.088539994426785,0.01862827686197477,1.5,True,本代码三角积分 + pyMelt F(P) vs pyMelt spreadingCentre
+case_5,reebox,1350.0,1.0,0.1,0.0,H_passive_reebox_f,shared_algorithm,km,29.564401083412168,11.088539994426785,18.475861088985383,,,同积分器 + 等熵 F；与 H_common 差反映 F 差异 (Δ vs pyMelt SC=+18.5 km)
+case_5,reebox,1350.0,1.0,0.1,0.0,H,different_physics,km,29.564401083412168,11.088539994426785,18.475861088985383,,,REEBOX 等熵 F + 可选 χ 权重
+case_5,reebox,1350.0,1.0,0.1,0.0,F_rmse,different_physics,,0.3930495152356128,,nan,,,等熵 vs PM2001；物理不同时偏大属正常
+case_5,reebox,1350.0,1.0,0.1,0.0,F_path,different_physics,,0.4658961719355527,0.13876109351640084,0.3271350784191519,,,PM2001 vs 等熵
+case_5,reebox,1350.0,1.0,0.1,0.0,F_pf,different_physics,,0.9789889771788732,0.2692274678452238,0.7097615093336495,,,柱底熔融分数

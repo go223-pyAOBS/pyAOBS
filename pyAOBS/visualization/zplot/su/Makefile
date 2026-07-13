@@ -1,0 +1,36 @@
+# Makefile for ...su/main
+
+include $(CWPROOT)/src/Makefile.config
+#include /usr/local/SU42/src/Makefile.config
+
+B = ../bin
+
+D = $L/libcwp.a $L/libpar.a $L/libsu.a
+
+LFLAGS= $(PRELFLAGS) -L$L -lsu -lpar -lcwp -lm $(POSTLFLAGS)
+
+PROGS =			\
+	supswigbx2	\
+        readsegy        \
+	suxwigbx2	\
+	su2z     \
+	su2z_hhb  \
+	surchwn
+
+
+INSTALL	:	$(PROGS)
+	@-rm -f INSTALL
+	@touch $@
+
+
+$(PROGS):	$(CTARGET) $D
+	-$(CC) $(CFLAGS) $(@F).c $(LFLAGS) -o $@
+	@chmod 755 $@
+	@echo $(@F) installed in $B
+
+remake	:
+	-rm -f $(PROGS) INSTALL
+	$(MAKE)
+
+clean:
+	rm -f a.out junk* JUNK* core

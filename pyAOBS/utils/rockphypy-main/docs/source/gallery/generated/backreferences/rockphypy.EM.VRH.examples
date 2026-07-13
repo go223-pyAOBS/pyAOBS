@@ -1,0 +1,39 @@
+
+
+Examples using ``rockphypy.EM.VRH``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. start-sphx-glr-thumbnails
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Varying Patchiness Cement Model(VPCM)">
+
+.. only:: html
+
+  .. image:: /advanced_examples/images/thumb/sphx_glr_VPCM_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_advanced_examples_VPCM.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Varying Patchiness Cement Model(VPCM)</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_advanced_examples_VPCM.py`
+
+.. raw:: html
+
+    </div>
+

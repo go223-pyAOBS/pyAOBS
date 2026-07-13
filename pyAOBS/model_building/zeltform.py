@@ -11,8 +11,8 @@ from typing import List, Tuple, Optional, Union
 import xarray as xr
 from pathlib import Path
 
-from pyAOBS.model_building.models import Point2d, ZNode2d, TrapezoidCell2d
-from pyAOBS.model_building.read import read_vin_model
+from .models import Point2d, ZNode2d, TrapezoidCell2d
+from .read import read_vin_model
 
 class ZeltVelocityModel2d:
     """Base class for 2D velocity models in Zelt format.
@@ -146,8 +146,8 @@ class ZeltVelocityModel2d:
                 v3 = self.vlower_nodes[ilayer].get_value_at(x1)
                 v4 = self.vlower_nodes[ilayer].get_value_at(x2)
                 
-                # Create cell
-                cell = TrapezoidCell2d(x1, x2, z1, z2, z3, z4, v1, v2, v3, v4)
+                # Create cell with layer information
+                cell = TrapezoidCell2d(x1, x2, z1, z2, z3, z4, v1, v2, v3, v4, layer=ilayer+1)
                 self.cells.append(cell)
     
     def at(self, x: float, z: float) -> float:
@@ -200,12 +200,12 @@ class ZeltVelocityModel2d:
         z_max = max(node.get_values()[-1] for node in self.depth_nodes)
         return x_min, x_max, z_min, z_max
     
-    def to_xarray(self, dx: float = 10.0, dz: float = 3.0) -> xr.Dataset:
+    def to_xarray(self, dx: float = 2.0, dz: float = 1.0) -> xr.Dataset:
         """将模型转换为 xarray 数据集。
 
         Args:
-            dx (float): x方向的采样间隔（km），默认1.0 km
-            dz (float): z方向的采样间隔（km），默认0.25 km
+            dx (float): x方向的采样间隔（km），默认4.0 km
+            dz (float): z方向的采样间隔（km），默认1.0 km
 
         Returns:
             xr.Dataset: 包含速度场的数据集。

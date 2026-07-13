@@ -1,0 +1,3 @@
+! Demo v2 composition: SiO2=44, TiO2=1, Al2O3=22, FeO=7, MgO=6, CaO=16, K2O=0.1, Na2O=4.0
+! Converted to BASALT model components (CAA NAAL MGO FEO CAWO TIO2 SIO2)
+0.1066 0.0932 0.1057 0.0697 0.0960 0.0089 0.5199

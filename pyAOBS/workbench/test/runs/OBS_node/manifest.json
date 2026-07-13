@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "run_id": "OBS_node",
+  "node_id": "OBS_node",
+  "status": "success",
+  "created_at": "2026-07-06T02:04:55Z",
+  "started_at": "2026-07-06T02:04:55Z",
+  "finished_at": "2026-07-06T02:05:11Z",
+  "elapsed_s": 16.0,
+  "return_code": 0,
+  "params": {
+    "plugin": "imodel.gui",
+    "launcher": "python_module",
+    "module": "pyAOBS.workbench.gui_audit_launchers.imodel_gui",
+    "executable": "python",
+    "args_text": "",
+    "cwd": ""
+  },
+  "env_overrides": {
+    "TOMO2D_INV_OMP": "1",
+    "OMP_NUM_THREADS": "4",
+    "OMP_PLACES": "threads",
+    "OMP_PROC_BIND": "spread"
+  },
+  "command": [
+    "python",
+    "-m",
+    "pyAOBS.workbench.gui_audit_launchers.imodel_gui"
+  ],
+  "cwd": "/mnt/d/python-learn/pyAOBS/pyAOBS/workbench/test/runs/OBS_node/outputs/imodel",
+  "logs": {
+    "stdout": "logs/stdout.log",
+    "stderr": "logs/stderr.log"
+  },
+  "outputs": [],
+  "input_files": [],
+  "error": null,
+  "platform": {
+    "python": "3.11.6 | packaged by conda-forge | (main, Oct  3 2023, 10:40:35) [GCC 12.3.0]",
+    "os_name": "posix"
+  },
+  "sandbox": {
+    "mode": "gui_run_sandbox",
+    "run_dir": "/mnt/d/python-learn/pyAOBS/pyAOBS/workbench/test/runs/OBS_node",
+    "inputs_dir": "/mnt/d/python-learn/pyAOBS/pyAOBS/workbench/test/runs/OBS_node/inputs/imodel",
+    "outputs_dir": "/mnt/d/python-learn/pyAOBS/pyAOBS/workbench/test/runs/OBS_node/outputs/imodel",
+    "requested_cwd_ignored": ""
+  },
+  "audit": {
+    "session_log": "state/gui_sessions/OBS_node.jsonl"
+  },
+  "gui_state": {
+    "state_file": "state/gui_states/OBS_node.json"
+  },
+  "pid": 439
+}

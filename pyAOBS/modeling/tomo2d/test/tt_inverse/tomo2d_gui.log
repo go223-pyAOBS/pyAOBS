@@ -1,0 +1,147 @@
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 09:58:15 ========
+[2026-04-09 09:58:15] 配置已保存: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 10:44:21 ========
+[2026-04-09 10:44:21] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 11:09:41] 配置已保存: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 11:10:55 ========
+[2026-04-09 11:10:55] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 11:14:37] 配置已保存: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 11:14:59 ========
+[2026-04-09 11:14:59] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 11:46:50] 配置已保存: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 11:47:08 ========
+[2026-04-09 11:47:08] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 11:48:30] [tt_inverse] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 11:58:22] [tt_inverse] 用时 592.25s
+[2026-04-09 11:58:22] [tt_inverse] 成功
+[2026-04-09 11:58:22] 命令: /mnt/d/WSL/tomo2d/Distrib/tt_inverse -Minputs/mesh.dat -Ginputs/data.dat -N4/4/0.8/8/0.0001/1e-05 -Finputs/refl.dat -W1 -Loutputs/tt_inverse.log -Ooutputs/out -Koutputs/dws.dat -Q0.001 -I5 -J1.0 -SV100 -SD10 -CVinputs/corr_v.dat -CDinputs/corr_d.dat -DV1 -DD20 -DQinputs/damp_v.dat -V1
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 12:47:48 ========
+[2026-04-09 12:47:48] 已从 manifest 加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/20260409T034829Z_b26e6f/manifest.json（含 gui_profile 时已恢复整界面）
+[2026-04-09 12:48:11] [tt_inverse] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 12:49:51] [tt_forward] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 12:49:51] [tt_forward] 用时 0.07s
+[2026-04-09 12:49:51] 命令: /mnt/d/WSL/tomo2d/Distrib/tt_forward -Msmesh.dat -Ggeom.dat -Frefl_init_vpfd41_P.dat -N4/4/0.8/8/0.0001/1e-05 -V1
+[2026-04-09 12:49:51] [tt_forward] 失败: 命令执行失败 (exit=1): /mnt/d/WSL/tomo2d/Distrib/tt_forward -Msmesh.dat -Ggeom.dat -Frefl_init_vpfd41_P.dat -N4/4/0.8/8/0.0001/1e-05 -V1
+stderr: SlownessMesh2d::cannot open smesh.dat
+[2026-04-09 12:57:43] [tt_inverse] 用时 572.20s
+[2026-04-09 12:57:43] [tt_inverse] 成功
+[2026-04-09 12:57:43] 命令: /mnt/d/WSL/tomo2d/Distrib/tt_inverse -Minputs/mesh.dat -Ginputs/data.dat -N4/4/0.8/8/0.0001/1e-05 -Finputs/refl.dat -W1 -Loutputs/tt_inverse.log -Ooutputs/out -Koutputs/dws.dat -Q0.001 -I5 -J1.0 -SV100 -SD10 -CVinputs/corr_v.dat -CDinputs/corr_d.dat -DV1 -DD20 -DQinputs/damp_v.dat -V1
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 14:05:59 ========
+[2026-04-09 14:05:59] 已从 manifest 加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/20260409T044810Z_b5a6c5/manifest.json（含 gui_profile 时已恢复整界面）
+[2026-04-09 14:07:28] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 14:27:35 ========
+[2026-04-09 14:27:35] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 14:30:04] [tt_forward] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 14:30:38] [tt_forward] 用时 34.53s
+[2026-04-09 14:30:38] [tt_forward] 成功
+[2026-04-09 14:30:38] 命令: /mnt/d/WSL/tomo2d/Distrib/tt_forward -M../smesh.dat -G../geom.dat -F../refl_init_vpfd41_P.dat -N4/4/0.8/8/0.0001/1e-05 -V1
+[2026-04-09 14:32:34] [tt_inverse] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 14:40:02] 配置已保存: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 14:40:30 ========
+[2026-04-09 14:40:30] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 14:40:41] [tt_forward] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 14:41:17] [tt_forward] 用时 35.78s
+[2026-04-09 14:41:17] [tt_forward] 成功
+[2026-04-09 14:41:17] 命令: /mnt/d/WSL/tomo2d/Distrib/tt_forward -M../smesh.dat -G../geom.dat -F../refl_init_vpfd41_P.dat -N4/4/0.8/8/0.0001/1e-05 -V1
+[2026-04-09 14:42:24] [tt_inverse] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 14:53:13] [tt_inverse] 用时 649.48s
+[2026-04-09 14:53:13] [tt_inverse] 成功
+[2026-04-09 14:53:13] 命令: /mnt/d/WSL/tomo2d/Distrib/tt_inverse -Minputs/mesh.dat -Ginputs/data.dat -N4/4/0.8/8/0.0001/1e-05 -Finputs/refl.dat -W1 -Loutputs/tt_inverse.log -Ooutputs/out -Koutputs/dws.dat -Q0.001 -I5 -J1.0 -SV100 -SD10 -CVinputs/corr_v.dat -CDinputs/corr_d.dat -DV1 -DD20 -DQinputs/damp_v.dat -V1
+[2026-04-09 16:13:32] 配置已保存: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 16:13:57 ========
+[2026-04-09 16:13:57] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 17:05:55 ========
+[2026-04-09 17:05:55] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 17:07:29] [tt_inverse] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 17:17:38] [tt_inverse] 用时 608.83s
+[2026-04-09 17:17:38] [tt_inverse] 成功
+[2026-04-09 17:17:38] 命令: /mnt/d/WSL/tomo2d/Distrib/tt_inverse -Minputs/mesh.dat -Ginputs/data.dat -N4/4/0.8/8/0.0001/1e-05 -Finputs/refl.dat -W1 -Loutputs/tt_inverse.log -Ooutputs/out -Koutputs/dws.dat -Q0.001 -I5 -J1.0 -SV100 -SD10 -CVinputs/corr_v.dat -CDinputs/corr_d.dat -DV1 -DD20 -DQinputs/damp_v.dat -V1
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 17:18:26 ========
+[2026-04-09 17:18:26] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-09 17:33:49 ========
+[2026-04-09 17:33:49] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 17:34:45] [tx.in→tomo2d] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-09 17:34:45] [tx.in→tomo2d] 用时 0.04s
+[2026-04-09 17:34:45] [tx.in→tomo2d] 成功: station 行数=61, nshot=15, ntime=1073
+  data → /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/ttimes.dat
+  geom → /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/geom.dat
+[2026-04-09 17:34:57] 配置已保存: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-09 17:35:34] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/smesh_vpfd41_P.dat
+[2026-04-09 17:35:34] [绘制 smesh] 叠加反射界面: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/../refl_init_vpfd41_P.dat
+[2026-04-09 17:35:36] [绘制 smesh] 用时 1.74s
+[2026-04-09 17:35:36] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-10 10:28:30 ========
+[2026-04-10 10:28:30] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+[2026-04-10 10:30:01] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.smesh.5.1
+[2026-04-10 10:30:01] [绘制 smesh] 叠加反射界面: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/../refl_init_vpfd41_P.dat
+[2026-04-10 10:30:03] [绘制 smesh] 用时 1.79s
+[2026-04-10 10:30:03] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+[2026-04-10 10:30:41] 已从 manifest 加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/manifest.json（含 gui_profile 时已恢复整界面）
+[2026-04-10 10:31:25] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.smesh.5.1
+[2026-04-10 10:31:25] [绘制 smesh] 叠加反射界面: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.refl.5.1
+[2026-04-10 10:31:26] [绘制 smesh] 用时 0.94s
+[2026-04-10 10:31:26] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+[2026-04-10 10:32:10] [tt_inverse] 开始，工作目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse
+[2026-04-10 10:41:42] [tt_inverse] 用时 572.20s
+[2026-04-10 10:41:42] [tt_inverse] 成功
+[2026-04-10 10:41:42] 命令: /mnt/d/WSL/tomo2d/Distrib/tt_inverse -Minputs/mesh.dat -Ginputs/data.dat -N4/4/0.8/8/0.0001/1e-05 -Finputs/refl.dat -W1 -Loutputs/tt_inverse.log -Ooutputs/out -Koutputs/dws.dat -Q0.001 -I5 -J1 -SV100 -SD10 -CVinputs/corr_v.dat -CDinputs/corr_d.dat -DV1 -DD20 -DQinputs/damp_v.dat -V1
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-10 11:03:26 ========
+[2026-04-10 11:03:26] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-10 11:09:13 ========
+[2026-04-10 11:09:13] 配置已加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-15 14:25:25 ========
+[2026-04-15 14:25:25] 已从 manifest 加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/manifest.json（含 gui_profile 时已恢复整界面）
+[2026-04-15 14:25:41] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.smesh.5.1
+[2026-04-15 14:25:41] [绘制 smesh] 未叠加反射界面（取消或未选文件 / 表单无有效 refl）
+[2026-04-15 14:25:42] [绘制 smesh] 用时 1.78s
+[2026-04-15 14:25:42] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-15 14:51:35 ========
+[2026-04-15 14:51:35] 已从 manifest 加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/manifest.json（含 gui_profile 时已恢复整界面）
+[2026-04-15 14:51:48] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.smesh.5.1
+[2026-04-15 14:51:48] [绘制 smesh] 未叠加反射界面（取消或未选文件 / 表单无有效 refl）
+[2026-04-15 14:51:50] [绘制 smesh] 用时 1.37s
+[2026-04-15 14:51:50] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+[2026-04-15 15:04:03] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.smesh.5.1
+[2026-04-15 15:04:03] [绘制 smesh] 未叠加反射界面（取消或未选文件 / 表单无有效 refl）
+[2026-04-15 15:04:04] [绘制 smesh] 用时 1.31s
+[2026-04-15 15:04:04] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+[2026-04-15 15:08:50] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.smesh.5.1
+[2026-04-15 15:08:50] [绘制 smesh] 未叠加反射界面（取消或未选文件 / 表单无有效 refl）
+[2026-04-15 15:08:52] [绘制 smesh] 用时 1.35s
+[2026-04-15 15:08:52] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+[2026-04-15 15:25:16] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.smesh.5.1
+[2026-04-15 15:25:16] [绘制 smesh] 未叠加反射界面（取消或未选文件 / 表单无有效 refl）
+[2026-04-15 15:25:17] [绘制 smesh] 用时 0.98s
+[2026-04-15 15:25:17] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+[2026-04-15 15:42:14] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/outputs/out.smesh.5.1
+[2026-04-15 15:42:14] [绘制 smesh] 未叠加反射界面（取消或未选文件 / 表单无有效 refl）
+[2026-04-15 15:42:15] [绘制 smesh] 用时 1.00s
+[2026-04-15 15:42:15] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-19 20:00:11 ========
+[2026-04-19 20:00:11] 已从 manifest 加载: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse/runs/ttinv_smesh_init_vpfd41_P_ttimes_st36_38_ph8_1_20260409T170729_bda12c/manifest.json（含 gui_profile 时已恢复整界面）
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/tt_inverse | 开始记录 2026-04-23 09:28:43 ========
+[2026-04-23 09:28:43] 配置已加载: /mnt/d/python-learn/pyAOBS/test_workbench/runs/OBS_node/inputs/project.json
+[2026-04-23 09:28:54] [绘制 smesh] 读取: /mnt/d/python-learn/pyAOBS/test_workbench/runs/OBS_node/inputs/smesh_vpfd41_P.dat
+[2026-04-23 09:28:54] [绘制 smesh] 未叠加反射界面（取消或未选文件 / 表单无有效 refl）
+[2026-04-23 09:28:56] [绘制 smesh] 用时 1.91s
+[2026-04-23 09:28:56] [绘制 smesh] 已打开 Matplotlib 窗口（工具栏可保存 PNG）；色标: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/test/scale_p.cpt

@@ -1,0 +1,32 @@
+id,p_gpa,t_c,f,study_id,source_short,verified,notes
+TK86_KLB_1atm_solidus,0.0,1100,0.02,KLB1,Takahashi_1986,partial,~1 atm; near-solidus — pressure rounded to 0 GPa for Fig.6 (a)
+TK86_KLB_1atm_mid,0.0,1250,0.12,KLB1,Takahashi_1986,partial,Low-P KLB-1 branch; confirm Katz pressure assignment
+FG88_10kbar_low,0.0,1280,0.08,FG87,Falloon_Green_1988,partial,Originally 1 GPa experiments sometimes shown on 0 GPa panel as 1 atm proxy — verify Katz mapping
+JG80_2k_1150,0.2,1150,0.21,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 pyrolite; 2 kbar
+JG80_2k_1200,0.2,1200,0.24,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 pyrolite; 2 kbar
+JG80_2k_1250,0.2,1250,0.31,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 pyrolite; 2 kbar
+JG80_2k_1300,0.2,1300,0.39,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 pyrolite; 2 kbar
+JG80TQ_2k_1350,0.2,1350,0.36,JG1980_TQ,Jaques_Green_1980,partial,Jaques & Green (1980) Table 5 Tinaquillo; 2 kbar
+JG80_5k_1250,0.5,1250,0.25,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 pyrolite; 5 kbar
+JG80_5k_1300,0.5,1300,0.31,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 pyrolite; 5 kbar
+JG80_5k_1350,0.5,1350,0.38,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 pyrolite; 5 kbar
+JG80TQ_5k_1400,0.5,1400,0.39,JG1980_TQ,Jaques_Green_1980,partial,Jaques & Green (1980) Table 5 Tinaquillo; 5 kbar
+JG80_10k_1250,1,1250,0.16,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 10 kbar; F=% melt/100
+BS94_55T,1.0,1270,0.06,MM3,Baker_Stolper_1994,partial,Baker & Stolper (1994) run 55T @ 10 kbar; F from paper Table 2 — confirm vs Katz ESI Table S2
+FG99_T4258,1.0,1275,0.05,MM3_FG99,Falloon_1999,partial,Just above solidus; F approximate from phase assemblage
+FG99_T4242,1.0,1300,0.08,MM3_FG99,Falloon_1999,partial,MM-3 forward melt; F from modal mass balance (Falloon et al. 1999 Table 3)
+BS94_24,1.0,1330,0.13,MM3,Baker_Stolper_1994,partial,Run 24; Katz/Hirschmann compilations use subset of Baker points
+FG99_T4226,1.0,1350,0.18,MM3_FG99,Falloon_1999,partial,Cpx present; F from mass balance in Table 3
+BS94_26,1.0,1390,0.35,MM3,Baker_Stolper_1994,partial,Run 26; Falloon (1999) argues not full equilibrium — Katz may still plot
+FG99_T4243,1.0,1400,0.28,MM3_FG99,Falloon_1999,partial,Opx+lherz residue
+JG80_10k_1450,1,1450,0.44,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 10 kbar; F=% melt/100
+JG80_11k_1200,1.1,1200,0.2,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 pyrolite; 11 kbar
+FG99_T4235_15,1.5,1350,0.10,MM3_FG99,Falloon_1999,partial,MM-3 @ 1.5 GPa; solidus ~1300–1350 C
+JG80_15k_1400,1.5,1400,0.25,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 15 kbar; F=% melt/100
+FG99_T4335_15,1.5,1425,0.22,MM3_FG99,Falloon_1999,partial,Cpx-out region ~1425 C
+JG80_15k_1450,1.5,1450,0.32,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 15 kbar; F=% melt/100
+FG99_T4269_15,1.5,1500,0.40,MM3_FG99,Falloon_1999,partial,Opx melting interval
+JG80_15k_1550,1.5,1550,0.51,JG1980_HP,Jaques_Green_1980,partial,Jaques & Green (1980) Table 4 Hawaiian pyrolite; 15 kbar; F=% melt/100
+W98_KR_3GPa_solidus,3.0,1480,0.02,KR4003,Walter_1998,partial,Near-solidus bracket Walter (1998) KR4003 @ 3 GPa
+W98_KR_3GPa_mid,3.0,1550,0.15,KR4003,Walter_1998,partial,Intermediate melting; F from Walter modal balance — verify digitization
+W98_KR_3GPa_high,3.0,1650,0.45,KR4003,Walter_1998,partial,High-T partial melt region

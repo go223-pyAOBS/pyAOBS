@@ -1,0 +1,13 @@
+6 7
+# case 1: kinzler1997_morb_primary — Kinzler (1997) MORB primary
+# case 2: magnesian_tholeiite — Magnesian tholeiite
+# case 3: picrite_high_mg — Picrite (high MgO)
+# case 4: ferro_basalt — Ferro-basalt
+# case 5: alkali_basalt — Alkali basalt
+# case 6: mid_ocean_ridge_glass — MORB glass (typical)
+0.086722 0.051138 0.216519 0.077349 0.560054 0.008217 0.000000
+0.051180 0.020155 0.387419 0.069549 0.467788 0.003910 0.000000
+0.041076 0.015050 0.462868 0.060859 0.417227 0.002920 0.000000
+0.064006 0.069695 0.080383 0.140293 0.623088 0.022536 0.000000
+0.057983 0.106024 0.144927 0.101629 0.571153 0.018284 0.000000
+0.082412 0.061182 0.141128 0.103533 0.600788 0.010957 0.000000

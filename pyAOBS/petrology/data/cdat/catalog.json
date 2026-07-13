@@ -1,0 +1,193 @@
+{
+  "samples": [
+    {
+      "id": "kinzler1997_morb_primary",
+      "name": "Kinzler (1997) MORB primary",
+      "description": "KKHS02 Fig.2 starting liquid; polybaric aggregated melt F\u22480.09 @ 1.5 GPa",
+      "source": "petrology/data/mantle_melts/kinzler1997_morb_primary.json",
+      "notes": "",
+      "tags": [
+        "morb",
+        "fig2",
+        "kkhs02"
+      ],
+      "oxides_wt_percent": {
+        "SiO2": 48.26757460444623,
+        "TiO2": 0.9413178449829763,
+        "Al2O3": 16.42299218906469,
+        "Cr2O3": 0.12016823552974165,
+        "FeO": 7.971159623472863,
+        "MgO": 12.51752453434809,
+        "CaO": 11.415982375325457,
+        "Na2O": 2.273182455437613,
+        "K2O": 0.07009813739234931
+      },
+      "csj": {
+        "CAA": 0.08672175097183844,
+        "NAAL": 0.0511382704277134,
+        "MGO": 0.21651929796919303,
+        "FEO": 0.07734946443003043,
+        "CAWO": 0.5600543520847989,
+        "TIO2": 0.008216864116425802
+      },
+      "cdat_file": "kinzler1997_morb_primary.cdat"
+    },
+    {
+      "id": "magnesian_tholeiite",
+      "name": "Magnesian tholeiite",
+      "description": "High-Mg demo; crystallizes under Langmuir Kd @ 1273\u20131473 K",
+      "source": "run_basalt1990.py / test_basalt1990_fortran.py",
+      "notes": "",
+      "tags": [
+        "demo",
+        "crystallizes",
+        "high_mg"
+      ],
+      "oxides_wt_percent": {
+        "SiO2": 45.18072289156627,
+        "TiO2": 0.5020080321285141,
+        "Al2O3": 10.040160642570282,
+        "Cr2O3": 0.0,
+        "FeO": 8.032128514056225,
+        "MgO": 25.100401606425706,
+        "CaO": 10.040160642570282,
+        "Na2O": 1.0040160642570282,
+        "K2O": 0.10040160642570281
+      },
+      "csj": {
+        "CAA": 0.051179535043994986,
+        "NAAL": 0.02015459378528732,
+        "MGO": 0.38741860864254246,
+        "FEO": 0.06954855343345709,
+        "CAWO": 0.467788480683592,
+        "TIO2": 0.003910228411126034
+      },
+      "cdat_file": "magnesian_tholeiite.cdat"
+    },
+    {
+      "id": "picrite_high_mg",
+      "name": "Picrite (high MgO)",
+      "description": "Very magnesian; olivine-saturated liquid proxy",
+      "source": "synthetic",
+      "notes": "",
+      "tags": [
+        "picrite",
+        "high_mg",
+        "crystallizes"
+      ],
+      "oxides_wt_percent": {
+        "SiO2": 43.0,
+        "TiO2": 0.4,
+        "Al2O3": 8.5,
+        "Cr2O3": 0.25,
+        "FeO": 7.5,
+        "MgO": 32.0,
+        "CaO": 7.5,
+        "Na2O": 0.8,
+        "K2O": 0.05
+      },
+      "csj": {
+        "CAA": 0.041075571638357206,
+        "NAAL": 0.015049813680432846,
+        "MGO": 0.46286840120064876,
+        "FEO": 0.06085923159681572,
+        "CAWO": 0.41722714089551677,
+        "TIO2": 0.002919840988228722
+      },
+      "cdat_file": "picrite_high_mg.cdat"
+    },
+    {
+      "id": "ferro_basalt",
+      "name": "Ferro-basalt",
+      "description": "Evolved low-Mg, high-Fe basalt end-member",
+      "source": "synthetic",
+      "notes": "",
+      "tags": [
+        "evolved",
+        "low_mg"
+      ],
+      "oxides_wt_percent": {
+        "SiO2": 52.23505775991964,
+        "TiO2": 2.5113008538422905,
+        "Al2O3": 14.063284781516826,
+        "Cr2O3": 0.050226017076845805,
+        "FeO": 14.063284781516826,
+        "MgO": 4.520341536916122,
+        "CaO": 9.040683073832245,
+        "Na2O": 3.0135610246107483,
+        "K2O": 0.5022601707684581
+      },
+      "csj": {
+        "CAA": 0.0640056371460073,
+        "NAAL": 0.06969538914260241,
+        "MGO": 0.08038254001468877,
+        "FEO": 0.14029264176867232,
+        "CAWO": 0.6230875822634423,
+        "TIO2": 0.022536209664586884
+      },
+      "cdat_file": "ferro_basalt.cdat"
+    },
+    {
+      "id": "alkali_basalt",
+      "name": "Alkali basalt",
+      "description": "Higher Na2O + K2O; stronger plagioclase control",
+      "source": "synthetic",
+      "notes": "",
+      "tags": [
+        "alkali",
+        "morb"
+      ],
+      "oxides_wt_percent": {
+        "SiO2": 47.667342799188646,
+        "TiO2": 2.028397565922921,
+        "Al2O3": 15.720081135902637,
+        "Cr2O3": 0.10141987829614606,
+        "FeO": 10.141987829614605,
+        "MgO": 8.113590263691684,
+        "CaO": 10.141987829614605,
+        "Na2O": 4.563894523326573,
+        "K2O": 1.5212981744421907
+      },
+      "csj": {
+        "CAA": 0.057983132001966094,
+        "NAAL": 0.10602403725908577,
+        "MGO": 0.14492664208197428,
+        "FEO": 0.10162858732935058,
+        "CAWO": 0.5711532358907239,
+        "TIO2": 0.01828436543689943
+      },
+      "cdat_file": "alkali_basalt.cdat"
+    },
+    {
+      "id": "mid_ocean_ridge_glass",
+      "name": "MORB glass (typical)",
+      "description": "Representative N-MORB glass composition (literature average)",
+      "source": "literature composite",
+      "notes": "",
+      "tags": [
+        "morb",
+        "glass"
+      ],
+      "oxides_wt_percent": {
+        "SiO2": 50.07587253414264,
+        "TiO2": 1.2139605462822458,
+        "Al2O3": 15.983813859382904,
+        "Cr2O3": 0.10116337885685382,
+        "FeO": 10.318664643399089,
+        "MgO": 7.890743550834598,
+        "CaO": 11.63378856853819,
+        "Na2O": 2.6302478502781996,
+        "K2O": 0.15174506828528073
+      },
+      "csj": {
+        "CAA": 0.08241195554874535,
+        "NAAL": 0.06118236911578041,
+        "MGO": 0.1411282523605704,
+        "FEO": 0.1035326138400159,
+        "CAWO": 0.6007877940119827,
+        "TIO2": 0.010957015122905346
+      },
+      "cdat_file": "mid_ocean_ridge_glass.cdat"
+    }
+  ]
+}

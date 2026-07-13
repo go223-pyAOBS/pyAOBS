@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GetDataWorkspace>
+  <version>2.22</version>
+  <File>
+    <Name>C:\Users\go223\Desktop\图片2.jpg</Name>
+    <Width>570</Width>
+    <Height>667</Height>
+  </File>
+  <Line>
+    <Caption>Fxl=0.8</Caption>
+    <LineColor>1,1,1</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>220,70,220</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">3307,1147,3388,1246,3460,1327,3532,1381,3622,1453,3694,1498,3775,1534,3865,1552,3964,1561,4072,1552</Points>
+    <Points MF="9">4162,1525,4261,1489,4360,1408,4477,1300,4576,1192,4675,1066,4783,904,4900,706,4990,526,5044,427</Points>
+  </Line>
+  <Line>
+    <Caption>Fxl=0.7</Caption>
+    <LineColor>1,1,1</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>230,220,20</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">3316,1156,3352,1210,3415,1264,3496,1327,3568,1381,3667,1435,3748,1462,3874,1480,4045,1462,4162,1417</Points>
+    <Points MF="9">4315,1336,4414,1246,4549,1066,4630,949,4738,787,4855,580,4963,373,5026,247</Points>
+  </Line>
+  <Line>
+    <Caption>Fxl=0.6</Caption>
+    <LineColor>1,1,1</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>255,20,160</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">3307,1039,3388,1147,3496,1237,3595,1318,3694,1372,3811,1399,3937,1408,4045,1381,4207,1300,4288,1219</Points>
+    <Points MF="9">4369,1156,4459,1048,4540,913,4693,706,4792,517,4855,382,4909,247</Points>
+  </Line>
+  <Line>
+    <Caption>Fxl=0.5</Caption>
+    <LineColor>1,1,1</LineColor>
+    <BkColor>254,254,254</BkColor>
+    <PtColor>128,220,255</PtColor>
+    <LineType>0</LineType>
+    <Points MF="9">3307,1066,3406,1174,3514,1264,3649,1318,3748,1345,3829,1354,3955,1327,4117,1291,4279,1165,4396,1030</Points>
+    <Points MF="9">4486,913,4621,697,4738,481,4828,301,4855,247</Points>
+  </Line>
+  <CurrentLine>3</CurrentLine>
+  <Xmin MF="9">3307,1975,6.800000e+000</Xmin>
+  <Xmax MF="9">5053,1975,7.800000e+000</Xmax>
+  <Ymin MF="9">3298,1975,5.000000e-002</Ymin>
+  <Ymax MF="9">3298,229,3.500000e-001</Ymax>
+  <XScale>linear</XScale>
+  <YScale>linear</YScale>
+  <Position>-269,-71</Position>
+  <Zoom>
+    <Scale>100.0</Scale>
+  </Zoom>
+  <Digitize>
+    <IgnorePixels>1</IgnorePixels>
+    <LineIDMethod>2</LineIDMethod>
+  </Digitize>
+  <AutoTrace>
+    <TraceDistance>8</TraceDistance>
+    <SmoothLines>1</SmoothLines>
+  </AutoTrace>
+  <DigitizeArea>
+    <LineOrArea>0</LineOrArea>
+    <RotateAngle>0.000000</RotateAngle>
+    <dx>8.000000</dx>
+  </DigitizeArea>
+  <GridSettings>
+    <ShowGrid>0</ShowGrid>
+    <AreaType>0</AreaType>
+    <dx>15.000000</dx>
+    <dy>15.000000</dy>
+  </GridSettings>
+</GetDataWorkspace>

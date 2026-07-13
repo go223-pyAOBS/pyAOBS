@@ -1,0 +1,91 @@
+{
+  "presets": {
+    "p3": {
+      "description": "P3 (Pressure-temperature-dependent physical properties) style columns",
+      "field_map": {
+        "rock_type": ["rock_type", "rock name", "lithology", "sample_lithology"],
+        "abbrev": ["abbrev", "abbr"],
+        "岩石属性": ["岩石属性", "rock_name_cn"],
+        "density": ["density", "rho", "rho_gcc", "bulk_density", "density_g_cm_3", "density_g_cm3"],
+        "density_unit": ["density_unit", "rho_unit"],
+        "det_den": ["det_den", "density_std", "rho_std"],
+        "vp": ["vp", "p_velocity", "vp_km_s", "vp_km_s_", "vp_km_s_0_02", "vp_km_s_0_04", "vp_km_s_0_05", "vp_km_s_0_06", "vp_km_s_0_08"],
+        "dvp": ["dvp", "vp_std", "vp_sigma"],
+        "vs": ["vs", "s_velocity", "vs_km_s", "vs_data"],
+        "dvs": ["dvs", "vs_std", "vs_sigma"],
+        "pressure": ["pressure", "p_mpa", "confining_pressure_mpa", "pressure_gpa"],
+        "pressure_unit": ["pressure_unit", "p_unit", "pressure_uom"],
+        "temperature": ["temperature", "t_c", "temp_c"],
+        "felsic_or_mafic": ["felsic_or_mafic", "felsic or mafic", "composition_class"],
+        "rock_facies": ["rock_facies", "rock facies", "facies"],
+        "sio2_wt": ["sio2_wt", "sio2", "sio2_wt_percent", "sio2, wt.%"],
+        "source": ["source", "reference", "citation"],
+        "method": ["method", "measurement_method", "technique"]
+      },
+      "defaults": {
+        "density_unit": "kg/m3",
+        "pressure": "0.02",
+        "pressure_unit": "GPa",
+        "temperature": "25",
+        "source": "P3",
+        "method": "compiled"
+      }
+    },
+    "usgs": {
+      "description": "USGS/NCM style columns",
+      "field_map": {
+        "rock_type": ["lithology", "rock_type", "unit_name"],
+        "abbrev": ["abbrev", "code", "unit_code"],
+        "岩石属性": ["岩石属性", "lithology_cn"],
+        "density": ["density", "rho", "density_kgm3"],
+        "density_unit": ["density_unit"],
+        "det_den": ["det_den", "density_uncertainty"],
+        "vp": ["vp", "vp_km_s", "p_wave_velocity"],
+        "dvp": ["dvp", "vp_uncertainty"],
+        "vs": ["vs", "vs_km_s", "s_wave_velocity"],
+        "dvs": ["dvs", "vs_uncertainty"],
+        "pressure": ["pressure", "pressure_mpa"],
+        "pressure_unit": ["pressure_unit", "pressure_uom"],
+        "temperature": ["temperature", "temperature_c"],
+        "felsic_or_mafic": ["felsic_or_mafic", "composition_class"],
+        "rock_facies": ["rock_facies", "facies"],
+        "sio2_wt": ["sio2_wt", "sio2"],
+        "source": ["source", "dataset", "reference"],
+        "method": ["method", "inversion_method", "measurement_method"]
+      },
+      "defaults": {
+        "density_unit": "kg/m3",
+        "pressure_unit": "MPa",
+        "source": "USGS"
+      }
+    },
+    "earthchem": {
+      "description": "EarthChem/PetDB exported table style columns",
+      "field_map": {
+        "rock_type": ["rock_name", "lithology", "rock_type"],
+        "abbrev": ["abbrev"],
+        "岩石属性": ["岩石属性"],
+        "density": ["density", "density_g_cm3", "rho"],
+        "density_unit": ["density_unit"],
+        "det_den": ["det_den"],
+        "vp": ["vp", "vp_km_s"],
+        "dvp": ["dvp"],
+        "vs": ["vs", "vs_km_s"],
+        "dvs": ["dvs"],
+        "pressure": ["pressure", "pressure_mpa"],
+        "pressure_unit": ["pressure_unit", "pressure_uom"],
+        "temperature": ["temperature", "temperature_c"],
+        "felsic_or_mafic": ["felsic_or_mafic", "composition_class"],
+        "rock_facies": ["rock_facies", "facies"],
+        "sio2_wt": ["sio2_wt", "sio2"],
+        "source": ["source", "doi", "reference"],
+        "method": ["method", "analysis_method"]
+      },
+      "defaults": {
+        "density_unit": "g/cm3",
+        "pressure_unit": "MPa",
+        "source": "EarthChem"
+      }
+    }
+  }
+}
