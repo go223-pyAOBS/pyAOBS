@@ -4,6 +4,9 @@
 tt_inverse 可复现运行包：在 work_dir/runs/<可读目录名>/ 下创建 inputs/、outputs/，
 目录名默认含 mesh/data 文件名主干、**本地**紧凑时间戳与短随机后缀；可选备注插入其中。
 快照输入并写入 manifest.json，便于日后对照命令行与哈希复现。
+
+运行结束后将 ``outputs/`` 扁平产物归入 ``models/`` ``residuals/`` ``rays/``
+``dws/`` ``logs/`` ``other/``；**不**自动写 final.smesh（选用由用户决定）。
 """
 
 from __future__ import annotations
@@ -21,7 +24,27 @@ import shutil
 import copy
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
+
+# 子进程仍写到 outputs/ 扁平文件；结束后按类型移入子目录（不写 final.smesh）
+_KIND_SUBDIR = {
+    "model": "models",
+    "reflector": "models",
+    "residual": "residuals",
+    "ray": "rays",
+    "dws": "dws",
+    "log": "logs",
+    "other": "other",
+}
+
+_RE_SMESH = re.compile(r"^.+\.smesh\.\d+\.\d+$", re.IGNORECASE)
+_RE_REFL = re.compile(r"^.+\.refl\.\d+\.\d+$", re.IGNORECASE)
+_RE_TRES = re.compile(r"^.+\.tres\.\d+\.\d+$", re.IGNORECASE)
+_RE_OUTLIERS = re.compile(
+    r"^.+\.outliers\.(\d+\.\d+|final)$", re.IGNORECASE
+)
+_RE_RAY = re.compile(r"^.+\.ray\.\d+\.\d+$", re.IGNORECASE)
+_RE_RGRAV = re.compile(r"^.+\.rgrav\.\d+$", re.IGNORECASE)
 
 
 def _utc_now_iso() -> str:
@@ -180,11 +203,14 @@ def bundle_argv_preview_paths(
     不创建目录、不复制文件；与 ``TtInverseBundleBuilder.prepare`` 的路径规则一致。
     """
     kw = copy.deepcopy(dict(kwargs))
+    kw.pop("_refl_stride", None)
     mesh_r = _bundle_input_rel("mesh", mesh)
     data_r = _bundle_input_rel("data", data)
 
     if kw.get("refl_file"):
         kw["refl_file"] = _bundle_input_rel("refl", str(kw["refl_file"]))
+    if kw.get("seafloor_file"):
+        kw["seafloor_file"] = _bundle_input_rel("seafloor", str(kw["seafloor_file"]))
     if kw.get("filter_bound_file"):
         kw["filter_bound_file"] = _bundle_input_rel("bound", str(kw["filter_bound_file"]))
 
@@ -271,7 +297,9 @@ class TtInverseBundleBuilder:
                 return cand
             n += 1
 
-    def add_input_file(self, role: str, path_str: str, run_dir: Path) -> str:
+    def add_input_file(
+        self, role: str, path_str: str, run_dir: Path, *, stride: int = 1
+    ) -> str:
         full = _resolve_under_work(self.work_dir, path_str)
         if not full.is_file():
             raise FileNotFoundError(
@@ -284,18 +312,27 @@ class TtInverseBundleBuilder:
             return self._src_to_rel[key]
         name = self._alloc_name(role, full)
         dest = run_dir / "inputs" / name
-        shutil.copy2(full, dest)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        if role == "refl" and stride > 1:
+            from .gui.services.refl_stride import write_subsampled_refl
+
+            write_subsampled_refl(full, dest, stride)
+            hashed = dest
+        else:
+            shutil.copy2(full, dest)
+            hashed = dest
         rel = f"inputs/{name}"
         self._src_to_rel[key] = rel
-        self.inputs_rows.append(
-            {
-                "role": role,
-                "path_in_run": rel,
-                "original_path": str(full),
-                "sha256": _sha256_file(full),
-                "bytes": full.stat().st_size,
-            }
-        )
+        row = {
+            "role": role,
+            "path_in_run": rel,
+            "original_path": str(full),
+            "sha256": _sha256_file(hashed),
+            "bytes": hashed.stat().st_size,
+        }
+        if role == "refl" and stride > 1:
+            row["refl_stride"] = stride
+        self.inputs_rows.append(row)
         return rel
 
     def prepare(
@@ -318,12 +355,21 @@ class TtInverseBundleBuilder:
         (run_dir / "outputs").mkdir(exist_ok=True)
 
         kw = copy.deepcopy(dict(kwargs))
+        from .gui.services.refl_stride import pop_refl_stride
+
+        refl_stride = pop_refl_stride(kw)
 
         mesh_r = self.add_input_file("mesh", mesh, run_dir)
         data_r = self.add_input_file("data", data, run_dir)
 
         if kw.get("refl_file"):
-            kw["refl_file"] = self.add_input_file("refl", str(kw["refl_file"]), run_dir)
+            kw["refl_file"] = self.add_input_file(
+                "refl", str(kw["refl_file"]), run_dir, stride=refl_stride
+            )
+        if kw.get("seafloor_file"):
+            kw["seafloor_file"] = self.add_input_file(
+                "seafloor", str(kw["seafloor_file"]), run_dir
+            )
         if kw.get("filter_bound_file"):
             kw["filter_bound_file"] = self.add_input_file(
                 "bound", str(kw["filter_bound_file"]), run_dir
@@ -439,13 +485,98 @@ def write_tt_inverse_manifest(
     )
 
 
+def classify_tt_inverse_output_kind(filename: str) -> str:
+    """按 tt_inverse 命名约定判定文件类型（非「最优」评判）。"""
+    name = Path(filename).name
+    if _RE_SMESH.match(name):
+        return "model"
+    if _RE_REFL.match(name):
+        return "reflector"
+    if _RE_TRES.match(name) or _RE_RGRAV.match(name) or _RE_OUTLIERS.match(name):
+        return "residual"
+    if _RE_RAY.match(name):
+        return "ray"
+    low = name.lower()
+    if "dws" in low:
+        return "dws"
+    if low.endswith(".log") or low.endswith(".jsonl") or low == "status.jsonl":
+        return "log"
+    return "other"
+
+
+def classify_tt_inverse_outputs(outputs_dir: Path | str) -> List[dict]:
+    """
+    将 ``outputs/``（或任意目录）下**直接子文件**按类型移入子目录：
+
+    ``models/`` ``residuals/`` ``rays/`` ``dws/`` ``logs/`` ``other/``
+
+    不创建 final.smesh；选用哪次模型由用户事后决定。
+    已位于上述子目录中的文件不重复移动（幂等）。
+    返回归类后的条目 ``{path, kind, bytes}``（``path`` 相对 ``outputs_dir``）。
+    """
+    root = Path(outputs_dir)
+    if not root.is_dir():
+        return []
+
+    reserved = set(_KIND_SUBDIR.values())
+    moved: List[tuple[Path, str]] = []
+
+    for p in sorted(root.iterdir()):
+        if not p.is_file():
+            continue
+        kind = classify_tt_inverse_output_kind(p.name)
+        sub = _KIND_SUBDIR[kind]
+        dest_dir = root / sub
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        dest = dest_dir / p.name
+        if dest.resolve() == p.resolve():
+            moved.append((dest, kind))
+            continue
+        if dest.exists():
+            # 避免覆盖：保留已有目标，删除源仅当内容路径冲突极少见
+            dest = dest_dir / f"{p.stem}_{secrets.token_hex(2)}{p.suffix}"
+        try:
+            shutil.move(str(p), str(dest))
+            moved.append((dest, kind))
+        except OSError:
+            moved.append((p, kind))
+
+    # 已在子目录中的文件一并列入清单
+    listed: Dict[Path, str] = {p.resolve(): k for p, k in moved}
+    for p in sorted(root.rglob("*")):
+        if not p.is_file():
+            continue
+        try:
+            rel_parts = p.relative_to(root).parts
+        except ValueError:
+            continue
+        if len(rel_parts) >= 2 and rel_parts[0] in reserved:
+            key = p.resolve()
+            if key not in listed:
+                listed[key] = classify_tt_inverse_output_kind(p.name)
+
+    rows: List[dict] = []
+    for p_res, kind in sorted(listed.items(), key=lambda kv: str(kv[0])):
+        p = Path(p_res)
+        try:
+            rel = p.relative_to(root).as_posix()
+        except ValueError:
+            rel = p.name
+        try:
+            sz = p.stat().st_size
+        except OSError:
+            sz = -1
+        rows.append({"path": rel, "kind": kind, "bytes": sz})
+    return rows
+
+
 def finalize_tt_inverse_manifest(
     manifest_path: Path,
     *,
     result: Any,
     err: Optional[BaseException],
 ) -> None:
-    """在子进程结束后更新 manifest（工作线程内调用即可）。"""
+    """在子进程结束后归类 outputs/ 并更新 manifest（工作线程内调用即可）。"""
     path = Path(manifest_path)
     if not path.is_file():
         return
@@ -455,25 +586,36 @@ def finalize_tt_inverse_manifest(
         return
 
     run_dir = path.parent
-    outs: List[dict] = []
     od = run_dir / "outputs"
-    if od.is_dir():
-        for p in sorted(od.rglob("*")):
-            if p.is_file():
-                try:
-                    rel = p.relative_to(run_dir).as_posix()
-                except ValueError:
-                    rel = str(p)
-                try:
-                    sz = p.stat().st_size
-                except OSError:
-                    sz = -1
-                outs.append({"path": rel, "bytes": sz})
+    classified = classify_tt_inverse_outputs(od) if od.is_dir() else []
+    outs: List[dict] = []
+    for row in classified:
+        outs.append(
+            {
+                "path": f"outputs/{row['path']}",
+                "kind": row["kind"],
+                "bytes": row["bytes"],
+            }
+        )
 
     finished = _utc_now_iso()
     pr: Dict[str, Any] = {
         "finished_utc": finished,
         "output_files": outs,
+        "output_layout": {
+            "note": (
+                "outputs/ 下按类型分子目录；不自动选定最优模型。"
+                "请结合 -L 日志、参数与地质认识后自行选用 models/ 中某次迭代。"
+            ),
+            "dirs": {
+                "models": "smesh / refl（按 iter.iset）",
+                "residuals": "tres / rgrav",
+                "rays": "ray（需较高 out_level）",
+                "dws": "dws / grav_dws",
+                "logs": "tt_inverse.log 等",
+                "other": "未能识别的文件",
+            },
+        },
     }
     if err is None and result is not None:
         pr["status"] = "finished"
@@ -486,6 +628,7 @@ def finalize_tt_inverse_manifest(
         pr["error"] = repr(err) if err else None
 
     data["post_run"] = {**data.get("post_run", {}), **pr}
+    data["schema_version"] = SCHEMA_VERSION
     try:
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     except OSError:

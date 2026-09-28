@@ -5,9 +5,114 @@ tt_inverse ``-L`` 日志解析与反演结果可视化（与 ``inverse.cc`` 数�
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, List, Sequence, Tuple
+from typing import Any, Dict, List, Sequence, Tuple
 
 import numpy as np
+
+
+def format_decimal_log_tick(x, _pos=None) -> str:
+    """对数轴刻度标签用十进制（600 而不是 6×10²）。"""
+    try:
+        v = float(x)
+    except (TypeError, ValueError):
+        return ""
+    if not np.isfinite(v) or v <= 0:
+        return ""
+    av = abs(v)
+    nint = round(v)
+    if abs(v - nint) <= max(1e-12, 1e-9 * av):
+        return str(int(nint))
+    if av >= 1:
+        return f"{v:.8f}".rstrip("0").rstrip(".")
+    return f"{v:.12f}".rstrip("0").rstrip(".")
+
+
+def _positive_unique(xs) -> np.ndarray:
+    arr = np.asarray(list(xs), dtype=float).ravel()
+    return np.unique(arr[np.isfinite(arr) & (arr > 0)])
+
+
+def _nonsingular_log_range(v0, v1) -> tuple[float, float]:
+    if v0 > v1:
+        v0, v1 = v1, v0
+    if not np.isfinite(v0) or not np.isfinite(v1) or v1 <= 0:
+        return 0.1, 10.0
+    if v0 <= 0:
+        v0 = v1 / 100.0 if v1 > 0 else 0.1
+    if v1 <= v0 * 1.01:
+        mid = float(np.sqrt(max(v0, 1e-12) * max(v1, 1e-12)))
+        return mid / 5.0, mid * 5.0
+    return float(v0), float(v1)
+
+
+def decimal_log_tick_values(vmin, vmax, data_xs=()) -> np.ndarray:
+    """对数轴线性主刻度：数据点（如 150）以及 1 / 1.5 / 2 / 3 / 5×10ⁿ。"""
+    vmin, vmax = _nonsingular_log_range(vmin, vmax)
+    data = _positive_unique(data_xs)
+    ticks = [float(v) for v in data if vmin <= float(v) <= vmax]
+    e0 = int(np.floor(np.log10(max(vmin, 1e-300))))
+    e1 = int(np.ceil(np.log10(max(vmax, 1e-300))))
+    for e in range(e0, e1 + 1):
+        for m in (1.0, 1.5, 2.0, 3.0, 5.0):
+            t = m * (10.0 ** e)
+            if vmin <= t <= vmax:
+                ticks.append(float(t))
+    ticks = sorted({round(t, 12) for t in ticks if t > 0})
+    if len(ticks) > 8:
+        known = {round(float(v), 12) for v in data}
+        keep = []
+        for t in ticks:
+            if t in known:
+                keep.append(t)
+                continue
+            mag = 10.0 ** np.floor(np.log10(t))
+            mant = t / mag
+            if min(abs(mant - 1.0), abs(mant - 2.0), abs(mant - 5.0)) < 1e-6:
+                keep.append(t)
+        ticks = keep or ticks[:8]
+    return np.asarray(ticks if ticks else [vmin, vmax], dtype=float)
+
+
+def _decimal_log_locator(data_xs):
+    from matplotlib.ticker import Locator
+
+    data = _positive_unique(data_xs)
+
+    class DecimalLogLocator(Locator):
+        def nonsingular(self, v0, v1):
+            return _nonsingular_log_range(v0, v1)
+
+        def view_limits(self, vmin, vmax):
+            vmin, vmax = self.nonsingular(vmin, vmax)
+            if data.size:
+                lo, hi = float(data.min()), float(data.max())
+                g = float(np.exp(np.mean(np.log(data))))
+                if hi / lo < 1.05:
+                    return g / 5.0, g * 5.0
+                if np.log10(hi) - np.log10(lo) < 0.8:
+                    return min(vmin, lo / 2.5), max(vmax, hi * 2.5)
+            return vmin, vmax
+
+        def tick_values(self, vmin, vmax):
+            return decimal_log_tick_values(vmin, vmax, data)
+
+        def __call__(self):
+            return self.tick_values(*self.axis.get_view_interval())
+
+    return DecimalLogLocator()
+
+
+def _use_decimal_log_xaxis(ax, xs=None) -> None:
+    from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter
+
+    ax.set_xscale("log")
+    loc = _decimal_log_locator([] if xs is None else xs)
+    ax.xaxis.set_major_locator(loc)
+    ax.xaxis.set_major_formatter(FuncFormatter(format_decimal_log_tick))
+    ax.xaxis.set_minor_locator(LogLocator(base=10.0, subs=np.arange(2, 10), numticks=12))
+    ax.xaxis.set_minor_formatter(NullFormatter())
+    vmin, vmax = ax.get_xlim()
+    ax.set_xlim(*loc.view_limits(vmin, vmax))
 
 # 列索引（0 起，与 help_docs 中 1–26 对应）
 COL_ITER = 0
@@ -77,9 +182,11 @@ def ensure_matplotlib_cjk_font() -> None:
                 )
             )
 
-        def _cjk_preference_score(fname: str) -> int:
-            """越小越优先作为 sans-serif 首选。"""
+        def _cjk_preference_score(fname: str, family: str = "") -> int:
+            """越小越优先作为 sans-serif 首选。细体（Light/Thin）会把图上的字画成灰。"""
             pl = fname.lower().replace("\\", "/")
+            fam = str(family or "").lower()
+            blob = f"{pl} {fam}"
             order = (
                 ("notosanscjk", 0),
                 ("notoserifcjk", 1),
@@ -102,6 +209,20 @@ def ensure_matplotlib_cjk_font() -> None:
             for key, rank in order:
                 if key in pl:
                     best = min(best, rank)
+            if any(
+                k in blob
+                for k in (
+                    "msyhl",
+                    "msyhs",
+                    "ultralight",
+                    "extralight",
+                    "semilight",
+                    "demilight",
+                    "light",
+                    "thin",
+                )
+            ):
+                best += 80
             return best
 
         # 只使用磁盘上真实存在的字体；按路径判断 CJK，避免对虚构族名调用 findfont。
@@ -115,7 +236,7 @@ def ensure_matplotlib_cjk_font() -> None:
             if name in seen:
                 continue
             seen.add(name)
-            scored.append((_cjk_preference_score(font.fname), idx, name))
+            scored.append((_cjk_preference_score(font.fname, name), idx, name))
 
         scored.sort(key=lambda t: (t[0], t[1]))
         families_ordered = [t[2] for t in scored]
@@ -127,6 +248,14 @@ def ensure_matplotlib_cjk_font() -> None:
             ]
         # 未检测到任何 CJK 文件：不写入虚构族名列表，避免 findfont 对每个名字告警
         matplotlib.rcParams["axes.unicode_minus"] = False
+        matplotlib.rcParams["text.color"] = "black"
+        matplotlib.rcParams["axes.labelcolor"] = "black"
+        matplotlib.rcParams["xtick.color"] = "black"
+        matplotlib.rcParams["ytick.color"] = "black"
+        try:
+            matplotlib.rcParams["axes.titlecolor"] = "black"
+        except KeyError:
+            pass
     except Exception:
         pass
 
@@ -151,6 +280,272 @@ def parse_tt_inverse_log(path: Path) -> List[List[float]]:
             continue
         rows.append(vals)
     return rows
+
+
+def _header_token_map(s: str) -> Dict[str, str]:
+    """``# key=val`` 或 ``-TV_percent=20`` 一类空白分隔标记。"""
+    out: Dict[str, str] = {}
+    for tok in s.split():
+        if "=" not in tok:
+            continue
+        k, v = tok.split("=", 1)
+        k = k.strip().lstrip("-")
+        if k:
+            out[k] = v.strip()
+    return out
+
+
+def _parse_on_flag(raw: str | None) -> bool | None:
+    if raw is None:
+        return None
+    t = str(raw).strip().lower()
+    if t in ("1", "on", "true"):
+        return True
+    if t in ("0", "off", "false"):
+        return False
+    return None
+
+
+def _parse_float_tok(raw: str | None) -> float | None:
+    if raw is None or str(raw).strip() == "":
+        return None
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return None
+
+
+def parse_tt_inverse_log_header(path: Path) -> Dict[str, Any]:
+    """
+    解析 -L 文件开头的 ``#`` 行，识别阻尼模式（-T / -D）与是否开了 -s。
+    同时兼容旧头（``# damp_vel`` / ``# fixed_damping`` / smooth_vel 末位为滤波）。
+    """
+    info: Dict[str, Any] = {
+        "damping_mode": None,
+        "filter_2d": None,
+        "lsqr_precond": None,
+        "lsqr_precond_maxd": None,
+        "reuse_forward": None,
+        "reuse_thresh": None,
+        "coarse2fine": None,
+        "legacy_baseline": None,
+        "jumping": None,
+        "robust": None,
+        "crit_chi": None,
+        "sv_on": None,
+        "sv_wmin": None,
+        "sv_wmax": None,
+        "sd_on": None,
+        "sd_wmin": None,
+        "sd_wmax": None,
+        "tv_percent": None,
+        "td_percent": None,
+        "dv_weight": None,
+        "dd_weight": None,
+        "lsqr_atol": None,
+        "lines": [],
+    }
+    raw = path.read_text(encoding="utf-8", errors="replace")
+    for line in raw.splitlines():
+        s = line.strip()
+        if not s:
+            continue
+        if not s.startswith("#"):
+            break
+        info["lines"].append(s)
+        sl = s.lower()
+        compact = sl.replace(" ", "")
+        kv = _header_token_map(s)
+        if sl.startswith("# strategy"):
+            j = _parse_on_flag(kv.get("jumping"))
+            if j is not None:
+                info["jumping"] = j
+            r = _parse_on_flag(kv.get("robust"))
+            if r is not None:
+                info["robust"] = r
+            chi = _parse_float_tok(kv.get("crit_chi"))
+            if chi is not None:
+                info["crit_chi"] = chi
+        elif sl.startswith("# smooth_vel"):
+            on = _parse_on_flag(kv.get("on"))
+            if on is not None:
+                info["sv_on"] = on
+            wmin = _parse_float_tok(kv.get("wmin"))
+            wmax = _parse_float_tok(kv.get("wmax"))
+            if wmin is not None:
+                info["sv_wmin"] = wmin
+            if wmax is not None:
+                info["sv_wmax"] = wmax
+        elif sl.startswith("# smooth_dep"):
+            on = _parse_on_flag(kv.get("on"))
+            if on is not None:
+                info["sd_on"] = on
+            wmin = _parse_float_tok(kv.get("wmin"))
+            wmax = _parse_float_tok(kv.get("wmax"))
+            if wmin is not None:
+                info["sd_wmin"] = wmin
+            if wmax is not None:
+                info["sd_wmax"] = wmax
+        if sl.startswith("# lsqr") and "precond" not in sl:
+            atol = _parse_float_tok(kv.get("atol"))
+            if atol is not None:
+                info["lsqr_atol"] = atol
+        tv = _parse_float_tok(kv.get("TV_percent") or kv.get("tv_percent"))
+        if tv is not None:
+            info["tv_percent"] = tv
+        td = _parse_float_tok(kv.get("TD_percent") or kv.get("td_percent"))
+        if td is not None:
+            info["td_percent"] = td
+        dv = _parse_float_tok(kv.get("DV") or kv.get("dv"))
+        if dv is not None:
+            info["dv_weight"] = dv
+        dd = _parse_float_tok(kv.get("DD") or kv.get("dd"))
+        if dd is not None:
+            info["dd_weight"] = dd
+        if "mode=fixed" in compact or "damping_modefixed" in compact:
+            info["damping_mode"] = "fixed"
+        elif s.startswith("# fixed_damping") and info["damping_mode"] is None:
+            info["damping_mode"] = "fixed"
+        elif "mode=auto" in compact or "damping_modeauto" in compact:
+            info["damping_mode"] = "auto"
+        elif (
+            s.startswith("# damp_vel") or s.startswith("# auto_damp")
+        ) and info["damping_mode"] is None:
+            info["damping_mode"] = "auto"
+        elif "mode=none" in compact or "damping_modenone" in compact:
+            info["damping_mode"] = "none"
+        if sl.startswith("# filter_-s"):
+            # "# filter_-s: ON  (ON=2D ...)" — 只看冒号后第一个词
+            after = sl.split(":", 1)[-1].strip() if ":" in sl else sl
+            tok = after.split()[0] if after.split() else ""
+            if tok == "on":
+                info["filter_2d"] = True
+            elif tok == "off":
+                info["filter_2d"] = False
+        elif sl.startswith("# lsqr_precond"):
+            after = sl.split(":", 1)[-1].strip() if ":" in sl else sl
+            parts = after.split()
+            tok = parts[0] if parts else ""
+            if tok == "on":
+                info["lsqr_precond"] = True
+            elif tok == "off":
+                info["lsqr_precond"] = False
+            for p in parts:
+                if p.startswith("maxd="):
+                    try:
+                        info["lsqr_precond_maxd"] = float(p.split("=", 1)[1])
+                    except ValueError:
+                        pass
+        elif sl.startswith("# accel"):
+            after = sl.split(":", 1)[-1].strip() if ":" in sl else sl
+            for p in after.split():
+                if p.startswith("reuse="):
+                    info["reuse_forward"] = p.split("=", 1)[1] == "on"
+                elif p.startswith("thresh="):
+                    try:
+                        info["reuse_thresh"] = float(p.split("=", 1)[1])
+                    except ValueError:
+                        pass
+                elif p.startswith("c2f="):
+                    info["coarse2fine"] = p.split("=", 1)[1] == "on"
+                elif p.startswith("legacy="):
+                    info["legacy_baseline"] = p.split("=", 1)[1] == "on"
+        elif sl.startswith("# filter_2d"):
+            if "on=1" in compact:
+                info["filter_2d"] = True
+            elif "on=0" in compact:
+                info["filter_2d"] = False
+        elif s.startswith("# smooth_vel") and "-SV" not in s and "log10" not in sl:
+            parts = s.split()
+            if len(parts) >= 3:
+                try:
+                    info["filter_2d"] = int(float(parts[-1])) != 0
+                except ValueError:
+                    pass
+    return info
+
+
+def format_tt_inverse_log_header_summary(info: Dict[str, Any]) -> str:
+    """已开功能清单（不写「=开」；关的项省略）。"""
+    bits: List[str] = []
+    mode = info.get("damping_mode")
+    if mode == "fixed":
+        bits.append("固定阻尼 -D")
+    elif mode == "auto":
+        bits.append("自动阻尼 -T")
+    if info.get("filter_2d") is True:
+        bits.append("滤波 -s")
+    if info.get("legacy_baseline") is True:
+        bits.append("Legacy")
+    else:
+        if info.get("reuse_forward") is True:
+            th = info.get("reuse_thresh")
+            bits.append(
+                "前向复用" + (f" 阈={th:g}" if th not in (None, 0, 0.0) else "")
+            )
+        if info.get("coarse2fine") is True:
+            bits.append("C2F")
+    if info.get("lsqr_precond") is True:
+        mx = info.get("lsqr_precond_maxd")
+        bits.append("列预条件" + (f" maxD={mx:g}" if mx is not None else ""))
+    return " · ".join(bits)
+
+
+def _fmt_sv_sd(flag: str, on: Any, wmin: Any, wmax: Any) -> str | None:
+    if on is False:
+        return None
+    if wmin is None and wmax is None:
+        return flag if on else None
+    lo = wmin if wmin is not None else wmax
+    hi = wmax if wmax is not None else wmin
+    try:
+        a, b = float(lo), float(hi)
+    except (TypeError, ValueError):
+        return f"{flag}{lo}"
+    if abs(a - b) < 1e-12:
+        return f"{flag}{a:g}"
+    return f"{flag}{a:g}…{b:g}"
+
+
+def format_tt_inverse_run_params(info: Dict[str, Any]) -> str:
+    """挑选/对照用：平滑权、阻尼数值、跳跃与已开策略（含 -SV/-TV 等）。"""
+    bits: List[str] = []
+    if info.get("jumping") is True:
+        bits.append("跳跃")
+    if info.get("robust") is True:
+        chi = info.get("crit_chi")
+        bits.append("稳健 -R" + (f" χ={chi:g}" if chi is not None else ""))
+    sv = _fmt_sv_sd("-SV", info.get("sv_on"), info.get("sv_wmin"), info.get("sv_wmax"))
+    if sv:
+        bits.append(sv)
+    sd = _fmt_sv_sd("-SD", info.get("sd_on"), info.get("sd_wmin"), info.get("sd_wmax"))
+    if sd:
+        bits.append(sd)
+    mode = info.get("damping_mode")
+    if mode == "auto":
+        extra = []
+        if info.get("tv_percent") is not None:
+            extra.append(f"-TV{float(info['tv_percent']):g}%")
+        if info.get("td_percent") is not None:
+            extra.append(f"-TD{float(info['td_percent']):g}%")
+        bits.append("自动阻尼 " + (" ".join(extra) if extra else "-T"))
+    elif mode == "fixed":
+        extra = []
+        if info.get("dv_weight") is not None:
+            extra.append(f"-DV{float(info['dv_weight']):g}")
+        if info.get("dd_weight") is not None:
+            extra.append(f"-DD{float(info['dd_weight']):g}")
+        bits.append("固定阻尼 " + (" ".join(extra) if extra else "-D"))
+    strat = format_tt_inverse_log_header_summary(info)
+    for bit in strat.split(" · "):
+        b = bit.strip()
+        if not b:
+            continue
+        if b.startswith("自动阻尼") or b.startswith("固定阻尼"):
+            continue
+        if b not in bits:
+            bits.append(b)
+    return " · ".join(bits)
 
 
 def sort_log_rows(rows: Sequence[Sequence[float]]) -> List[List[float]]:
@@ -204,13 +599,110 @@ def _collect_last_metrics_series(
     return names, metrics
 
 
+def single_log_curve_data(rows: Sequence[Sequence[float]]) -> Dict[str, Any]:
+    """单日志折线数组（iteration / RMS / χ²）。"""
+    if not rows:
+        raise ValueError("日志无有效数据行（需至少一行 ≥26 列数值）")
+    s = sort_log_rows(rows)
+    return {
+        "iter": np.array([r[COL_ITER] for r in s], dtype=float),
+        "rms_pg": np.array([r[COL_RMS_PG] for r in s], dtype=float),
+        "rms_pmp": np.array([r[COL_RMS_PMP] for r in s], dtype=float),
+        "chi_tot": np.array([r[COL_CHI_TOT] for r in s], dtype=float),
+        "pred_chi": np.array([r[COL_PRED_CHI] for r in s], dtype=float),
+    }
+
+
+def overlay_curve_series(
+    series: Dict[str, Sequence[Sequence[float]]],
+) -> List[Dict[str, Any]]:
+    """多日志叠画：每项含 name 与折线数组。"""
+    out: List[Dict[str, Any]] = []
+    for name, rows in series.items():
+        if not rows:
+            continue
+        d = single_log_curve_data(rows)
+        d["name"] = name
+        out.append(d)
+    if not out:
+        raise ValueError("没有可用的多日志数据")
+    return out
+
+
+def pareto_score_data(
+    series: Dict[str, Sequence[Sequence[float]]],
+    rough_weight: float = 0.001,
+) -> Dict[str, Any]:
+    names, metrics = _collect_last_metrics_series(series)
+    if not names:
+        raise ValueError("没有可用的多日志数据")
+    pred = np.array([m["pred_chi"] for m in metrics], dtype=float)
+    rough = np.array([m["roughness_sum"] for m in metrics], dtype=float)
+    scores = np.array(
+        [
+            composite_score(float(m["pred_chi"]), float(m["roughness_sum"]), float(rough_weight))
+            for m in metrics
+        ],
+        dtype=float,
+    )
+    params = [format_params_compact(m) for m in metrics]
+    order = np.argsort(scores, kind="mergesort")
+    return {
+        "names": list(names),
+        "metrics": metrics,
+        "pred_chi": pred,
+        "rough": rough,
+        "scores": scores,
+        "params": params,
+        "bar_order": [int(i) for i in order],
+        "rough_weight": float(rough_weight),
+    }
+
+
+PARAM_INFLUENCE_AXES: Tuple[Tuple[str, str], ...] = (
+    ("w_sv", "weight_s_v（平滑·速度）"),
+    ("w_sd", "weight_s_d（平滑·深度）"),
+    ("w_dv", "w_dv（阻尼·速度）"),
+    ("w_dd", "w_dd（阻尼·深度）"),
+)
+
+
+def param_influence_data(
+    series: Dict[str, Sequence[Sequence[float]]],
+) -> Dict[str, Any]:
+    names, metrics = _collect_last_metrics_series(series)
+    if not names:
+        raise ValueError("没有可用的多日志数据")
+    return {"names": list(names), "metrics": metrics}
+
+
+def summary_table_ranked(
+    series: Dict[str, Sequence[Sequence[float]]],
+    rough_weight: float = 0.001,
+) -> List[Tuple[float, str, Dict[str, float]]]:
+    """末步按 score 升序：``(score, name, metrics)``。"""
+    names, metrics = _collect_last_metrics_series(series)
+    if not names:
+        raise ValueError("没有可用的多日志数据")
+    ranked: List[Tuple[float, str, Dict[str, float]]] = []
+    for nm, m in zip(names, metrics):
+        sc = composite_score(
+            float(m["pred_chi"]),
+            float(m["roughness_sum"]),
+            float(rough_weight),
+        )
+        ranked.append((sc, nm, m))
+    ranked.sort(key=lambda t: (t[0], t[1]))
+    return ranked
+
+
 def build_figure_multi_param_influence(
     series: Dict[str, Sequence[Sequence[float]]],
     title: str = "",
 ):
     """
     末步：各反演在日志中记录的平滑/阻尼权重与 pred χ²、粗糙度 R 的关系（每组反演一个点）。
-    横轴为对数刻度，便于跨数量级比较不同参数组。
+    横轴为对数刻度（十进制标签，含图上实际参数值如 150）。不附图例与点旁文件名；右击点识别该次日志。
     """
     import matplotlib.pyplot as plt
 
@@ -231,6 +723,7 @@ def build_figure_multi_param_influence(
         title or "反演参数影响（末步）：日志列 14–17 与 pred χ² / 粗糙度 R",
         fontsize=11,
     )
+    scatters: List[Any] = []
 
     for i, (key, xlab) in enumerate(param_axes):
         w_raw = np.array([float(m[key]) for m in metrics], dtype=float)
@@ -239,37 +732,29 @@ def build_figure_multi_param_influence(
         rough = np.array([m["roughness_sum"] for m in metrics], dtype=float)
 
         ax_l, ax_r = axes[i, 0], axes[i, 1]
-        ax_l.scatter(w_plot, pred, s=72, c=range(len(names)), cmap="tab10", zorder=3)
-        ax_r.scatter(w_plot, rough, s=72, c=range(len(names)), cmap="tab10", zorder=3)
-        for j, nm in enumerate(names):
-            if not np.isfinite(w_plot[j]):
-                continue
-            ax_l.annotate(
-                nm,
-                (w_plot[j], pred[j]),
-                xytext=(4, 4),
-                textcoords="offset points",
-                fontsize=6,
-            )
-            ax_r.annotate(
-                nm,
-                (w_plot[j], rough[j]),
-                xytext=(4, 4),
-                textcoords="offset points",
-                fontsize=6,
-            )
-        ax_l.set_xscale("log")
+        sl = ax_l.scatter(
+            w_plot, pred, s=72, c=range(len(names)), cmap="tab10", zorder=3, picker=8
+        )
+        sr = ax_r.scatter(
+            w_plot, rough, s=72, c=range(len(names)), cmap="tab10", zorder=3, picker=8
+        )
+        scatters.extend([sl, sr])
+        _use_decimal_log_xaxis(ax_l, w_plot)
         ax_l.set_ylabel("pred χ² (LSQR)")
         ax_l.set_xlabel(xlab)
         ax_l.grid(True, alpha=0.3)
         ax_l.set_title("pred χ²")
 
-        ax_r.set_xscale("log")
+        _use_decimal_log_xaxis(ax_r, w_plot)
         ax_r.set_ylabel("R = |Lmvh|+|Lmvv|+|Lmd|")
         ax_r.set_xlabel(xlab)
         ax_r.grid(True, alpha=0.3)
         ax_r.set_title("粗糙度 R")
 
+    fig._pyaobs_pareto = {  # type: ignore[attr-defined]
+        "scatters": scatters,
+        "names": list(names),
+    }
     return fig
 
 
@@ -278,7 +763,7 @@ def build_figure_multi_summary_table(
     rough_weight: float = 0.001,
     title: str = "",
 ):
-    """末步数值表：便于对照文件名与平滑/阻尼及指标；含综合得分 ``pred_chi*(1+w*R)``（与 Pareto 页同一 *w*）。"""
+    """末步数值表：按综合得分升序（越小越好），对照文件名与平滑/阻尼及指标。"""
     import matplotlib.pyplot as plt
 
     ensure_matplotlib_cjk_font()
@@ -299,16 +784,20 @@ def build_figure_multi_summary_table(
         "dd",
         "pred chi2",
         "R",
-        f"score (w={rough_weight:g})",
+        f"score↑ (w={rough_weight:g})",
         "RMS",
     ]
-    cell_text: List[List[str]] = []
+    ranked: List[Tuple[float, str, Dict[str, float]]] = []
     for nm, m in zip(names, metrics):
         sc = composite_score(
             float(m["pred_chi"]),
             float(m["roughness_sum"]),
             float(rough_weight),
         )
+        ranked.append((sc, nm, m))
+    ranked.sort(key=lambda t: (t[0], t[1]))
+    cell_text: List[List[str]] = []
+    for sc, nm, m in ranked:
         cell_text.append(
             [
                 nm[:36] + ("…" if len(nm) > 36 else ""),
@@ -333,16 +822,22 @@ def build_figure_multi_summary_table(
     tbl.scale(1.08, 2.05)
     fig.suptitle(
         title
-        or f"末步汇总：平滑/阻尼（列 14–17）与 pred chi2、R、score（w={rough_weight:g}）、RMS",
+        or f"末步汇总（按 score 升序，越小越好）：平滑/阻尼与 pred chi2、R、score（w={rough_weight:g}）、RMS",
         fontsize=13,
         y=0.99,
     )
     plt.subplots_adjust(top=0.88, left=0.04, right=0.98, bottom=0.02)
+    order = [nm for _sc, nm, _m in ranked]
+    fig._pyaobs_summary_order = order  # type: ignore[attr-defined]
+    fig._pyaobs_pareto = {  # type: ignore[attr-defined]
+        "names": list(order),
+        "table": tbl,
+    }
     return fig
 
 
 def build_figure_single_log(rows: Sequence[Sequence[float]], title: str = ""):
-    """单日志：RMS / 卡方 随迭代（横轴为 iteration，行已按 iter、iset 排序）。"""
+    """单日志：折射/反射 RMS 与卡方随迭代（横轴为 iteration）。"""
     import matplotlib.pyplot as plt
 
     ensure_matplotlib_cjk_font()
@@ -350,69 +845,29 @@ def build_figure_single_log(rows: Sequence[Sequence[float]], title: str = ""):
         raise ValueError("日志无有效数据行（需至少一行 ≥26 列数值）")
     s = sort_log_rows(rows)
     it = np.array([r[COL_ITER] for r in s], dtype=float)
-    rms = np.array([r[COL_RMS_TOT] for r in s])
+    rms_pg = np.array([r[COL_RMS_PG] for r in s])
+    rms_pmp = np.array([r[COL_RMS_PMP] for r in s])
     chi0 = np.array([r[COL_CHI_TOT] for r in s])
     pred = np.array([r[COL_PRED_CHI] for r in s])
 
-    fig, axes = plt.subplots(2, 1, figsize=(9, 6), sharex=True, constrained_layout=True)
-    fig.suptitle(title or "tt_inverse 日志：走时残差与卡方随迭代", fontsize=12)
+    fig, axes = plt.subplots(3, 1, figsize=(9, 7.2), sharex=True, constrained_layout=True)
+    fig.suptitle(title or "tt_inverse 日志：折射/反射 RMS 与卡方随迭代", fontsize=12)
 
-    axes[0].plot(it, rms, "b-o", markersize=4, lw=1.2)
-    axes[0].set_ylabel("RMS traveltime (Pg+PmP)")
+    axes[0].plot(it, rms_pg, "b-o", markersize=4, lw=1.2)
+    axes[0].set_ylabel("RMS 折射 (Pg)")
     axes[0].grid(True, alpha=0.3)
 
-    axes[1].plot(it, chi0, "g-s", markersize=4, lw=1.2, label="initial χ² (合并)")
-    axes[1].plot(it, pred, "m-^", markersize=4, lw=1.2, label="pred χ² (LSQR)")
-    axes[1].set_xlabel("iteration")
-    axes[1].set_ylabel("χ²")
-    axes[1].legend(loc="best", fontsize=8)
+    axes[1].plot(it, rms_pmp, "r-s", markersize=4, lw=1.2)
+    axes[1].set_ylabel("RMS 反射 (PmP)")
     axes[1].grid(True, alpha=0.3)
 
-    return fig
+    axes[2].plot(it, chi0, "g-s", markersize=4, lw=1.2, label="initial χ² (合并)")
+    axes[2].plot(it, pred, "m-^", markersize=4, lw=1.2, label="pred χ² (LSQR)")
+    axes[2].set_xlabel("iteration")
+    axes[2].set_ylabel("χ²")
+    axes[2].legend(loc="best", fontsize=8)
+    axes[2].grid(True, alpha=0.3)
 
-
-def build_figure_multi_last_bars(
-    series: Dict[str, Sequence[Sequence[float]]],
-    title: str = "",
-):
-    """多日志：各次反演**最后一次**数据行的 RMS、initial χ²、pred χ² 柱状对比。"""
-    import matplotlib.pyplot as plt
-
-    ensure_matplotlib_cjk_font()
-    labels: List[str] = []
-    rms_l: List[float] = []
-    chi0_l: List[float] = []
-    pred_l: List[float] = []
-    param_lines: List[str] = []
-    for name, rows in series.items():
-        m = last_row_metrics(rows)
-        if m is None:
-            continue
-        labels.append(name)
-        rms_l.append(m["rms_total"])
-        chi0_l.append(m["chi_total"])
-        pred_l.append(m["pred_chi"])
-        param_lines.append(format_params_compact(m))
-
-    if not labels:
-        raise ValueError("没有可用的多日志数据")
-
-    x = np.arange(len(labels))
-    w = 0.25
-    fig, ax = plt.subplots(figsize=(max(8, len(labels) * 1.35), 6.2), constrained_layout=True)
-    fig.suptitle(
-        title or "各反演末步：RMS 与 χ² 对比（横轴下为平滑/阻尼：sv sd dv dd）",
-        fontsize=11,
-    )
-    ax.bar(x - w, rms_l, width=w, label="RMS (Pg+PmP)", color="steelblue")
-    ax.bar(x, chi0_l, width=w, label="initial χ²", color="seagreen")
-    ax.bar(x + w, pred_l, width=w, label="pred χ² (LSQR)", color="darkorchid")
-    ax.set_xticks(x)
-    tick_labels = [f"{lb}\n{p}" for lb, p in zip(labels, param_lines)]
-    ax.set_xticklabels(tick_labels, rotation=22, ha="right", fontsize=7)
-    ax.set_ylabel("value")
-    ax.legend(loc="best", fontsize=8)
-    ax.grid(True, axis="y", alpha=0.3)
     return fig
 
 
@@ -420,32 +875,58 @@ def build_figure_multi_overlay(
     series: Dict[str, Sequence[Sequence[float]]],
     title: str = "",
 ):
-    """多日志：RMS、pred χ² 随 iteration 叠画（每文件独立曲线）。"""
+    """多日志：折射/反射 RMS、pred χ² 随 iteration 叠画（无图例；右击曲线识别该次日志）。"""
     import matplotlib.pyplot as plt
 
     ensure_matplotlib_cjk_font()
-    fig, axes = plt.subplots(2, 1, figsize=(9, 6), sharex=True, constrained_layout=True)
-    fig.suptitle(title or "多反演：RMS / pred χ² 随 iteration（叠画）", fontsize=12)
+    fig, axes = plt.subplots(3, 1, figsize=(9, 7.5), sharex=True, constrained_layout=True)
+    fig.suptitle(
+        title or "多反演：折射/反射 RMS 与 pred χ² 随 iteration（叠画）",
+        fontsize=12,
+    )
+    cmap = plt.get_cmap("tab10")
+    names: List[str] = []
+    lines: List[Any] = []
+    line_series_index: List[int] = []
 
     for name, rows in series.items():
         if not rows:
             continue
         s = sort_log_rows(rows)
         it = np.array([r[COL_ITER] for r in s], dtype=float)
-        rms = np.array([r[COL_RMS_TOT] for r in s])
+        rms_pg = np.array([r[COL_RMS_PG] for r in s])
+        rms_pmp = np.array([r[COL_RMS_PMP] for r in s])
         pred = np.array([r[COL_PRED_CHI] for r in s])
-        axes[0].plot(it, rms, "-o", markersize=3, lw=1.0, label=name)
-        axes[1].plot(it, pred, "-s", markersize=3, lw=1.0, label=name)
+        idx = len(names)
+        color = cmap(idx % 10)
+        (ln0,) = axes[0].plot(
+            it, rms_pg, "-o", markersize=3, lw=1.0, color=color, picker=8
+        )
+        (ln1,) = axes[1].plot(
+            it, rms_pmp, "-s", markersize=3, lw=1.0, color=color, picker=8
+        )
+        (ln2,) = axes[2].plot(
+            it, pred, "-^", markersize=3, lw=1.0, color=color, picker=8
+        )
+        names.append(name)
+        lines.extend([ln0, ln1, ln2])
+        line_series_index.extend([idx, idx, idx])
 
-    axes[0].set_ylabel("RMS (Pg+PmP)")
+    if not names:
+        raise ValueError("没有可用的多日志数据")
+
+    axes[0].set_ylabel("RMS 折射 (Pg)")
     axes[0].grid(True, alpha=0.3)
-    axes[0].legend(loc="best", fontsize=7, ncol=2)
-
-    axes[1].set_xlabel("iteration")
-    axes[1].set_ylabel("pred χ² (LSQR)")
+    axes[1].set_ylabel("RMS 反射 (PmP)")
     axes[1].grid(True, alpha=0.3)
-    axes[1].legend(loc="best", fontsize=7, ncol=2)
-
+    axes[2].set_xlabel("iteration")
+    axes[2].set_ylabel("pred χ² (LSQR)")
+    axes[2].grid(True, alpha=0.3)
+    fig._pyaobs_pareto = {  # type: ignore[attr-defined]
+        "names": names,
+        "lines": lines,
+        "line_series_index": line_series_index,
+    }
     return fig
 
 
@@ -494,7 +975,7 @@ def build_figure_multi_pareto_and_score(
     )
 
     ax0 = axes[0]
-    ax0.scatter(
+    scatter = ax0.scatter(
         rough,
         pred_chi,
         c=range(n),
@@ -502,15 +983,8 @@ def build_figure_multi_pareto_and_score(
         norm=norm,
         s=80,
         zorder=3,
+        picker=8,
     )
-    for i, nm in enumerate(names):
-        ax0.annotate(
-            f"{nm}\n{param_lines[i]}",
-            (rough[i], pred_chi[i]),
-            xytext=(5, 5),
-            textcoords="offset points",
-            fontsize=6,
-        )
     ax0.set_xlabel("R = |Lmvh|+|Lmvv|+|Lmd|（末步粗糙度）")
     ax0.set_ylabel("pred χ² (LSQR, 末步)")
     ax0.grid(True, alpha=0.3)
@@ -520,7 +994,7 @@ def build_figure_multi_pareto_and_score(
     order = np.argsort(scores)
     xo = np.arange(len(names))
     bar_colors = [point_colors[i] for i in order]
-    ax1.barh(xo, [scores[i] for i in order], color=bar_colors, alpha=0.85)
+    bars = ax1.barh(xo, [scores[i] for i in order], color=bar_colors, alpha=0.85)
     ax1.set_yticks(xo)
     ax1.set_yticklabels(
         [f"{names[i]}\n{param_lines[i]}" for i in order],
@@ -529,5 +1003,11 @@ def build_figure_multi_pareto_and_score(
     ax1.set_xlabel(f"score = pred_χ² × (1 + {rough_weight:g} × R)（越小越好）")
     ax1.set_title("综合得分排序（启发式）")
     ax1.grid(True, axis="x", alpha=0.3)
+    fig._pyaobs_pareto = {  # type: ignore[attr-defined]
+        "scatter": scatter,
+        "bars": bars,
+        "bar_series_index": [int(i) for i in order],
+        "names": list(names),
+    }
 
     return fig

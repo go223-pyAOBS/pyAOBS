@@ -111,5 +111,9 @@ setup(
             "figures/*.png",
             "reference/*.yaml",
         ],
+        "pyAOBS.modeling.tomo2d.gui": [
+            "assets/*.cpt",
+            "assets/contour_*",
+        ],
     },
 )
