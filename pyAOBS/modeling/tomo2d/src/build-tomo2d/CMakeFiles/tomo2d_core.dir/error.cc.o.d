@@ -1,5 +1,5 @@
 CMakeFiles/tomo2d_core.dir/error.cc.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.cc \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.cc \
  /usr/include/stdc-predef.h /usr/include/c++/12/iostream \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
@@ -150,4 +150,4 @@ CMakeFiles/tomo2d_core.dir/error.cc.o: \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h

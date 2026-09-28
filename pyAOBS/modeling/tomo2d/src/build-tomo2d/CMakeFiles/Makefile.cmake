@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/CMakeLists.txt"
+  "/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/CMakeLists.txt"
   "CMakeFiles/3.25.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.25.1/CMakeSystem.cmake"
   "/usr/share/cmake-3.25/Modules/CMakeCXXInformation.cmake"
@@ -49,6 +49,7 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/tt_inverse.dir/DependInfo.cmake"
   "CMakeFiles/gen_damp.dir/DependInfo.cmake"
   "CMakeFiles/gen_vcorr.dir/DependInfo.cmake"
+  "CMakeFiles/gen_dcorr.dir/DependInfo.cmake"
   "CMakeFiles/stat_smesh.dir/DependInfo.cmake"
   "CMakeFiles/edit_smesh.dir/DependInfo.cmake"
   "CMakeFiles/edit_smesh_HHB.dir/DependInfo.cmake"

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from pyAOBS.workbench.core.project_layout import node_id_from_work_dir
+
 
 TEMPLATE_CUSTOM = "custom"
 TEMPLATE_INVERSE_STANDARD = "tt_inverse_standard"
@@ -50,8 +52,8 @@ def _build_inverse_standard(fields: dict[str, str]) -> dict[str, str]:
     dd = fields.get("dd", "20").strip() or "20"
     verbose = fields.get("verbose", "-1").strip() or "-1"
     extra = fields.get("extra_args", "").strip()
-    cwd = fields.get("work_dir", "work").strip() or "work"
-    node_id = fields.get("node_id", "tomo2d_inverse").strip() or "tomo2d_inverse"
+    cwd = fields.get("work_dir", "tools/tomo2d").strip() or "tools/tomo2d"
+    node_id = fields.get("node_id", "").strip() or node_id_from_work_dir(cwd) or "workspace"
 
     mesh_arg = _path_for_arg(mesh, cwd)
     data_arg = _path_for_arg(data, cwd)
@@ -59,9 +61,12 @@ def _build_inverse_standard(fields: dict[str, str]) -> dict[str, str]:
         f"-M{mesh_arg} -G{data_arg} -I{iterations} "
         f"-SV{sv} -SD{sd} -DV{dv} -DD{dd} -V{verbose}"
     )
+    args, extra_inputs = _append_interface_args(
+        args, fields, cwd, seafloor_flag="Y", include_invert_flags=True
+    )
     if extra:
         args += f" {extra}"
-    inputs = "\n".join(_path_for_inputs([mesh, data], cwd)) + "\n"
+    inputs = "\n".join(_path_for_inputs([mesh, data, *extra_inputs], cwd)) + "\n"
     env_text = (
         "TOMO2D_INV_OMP=1\n"
         "OMP_NUM_THREADS=4\n"
@@ -83,15 +88,18 @@ def _build_forward_basic(fields: dict[str, str]) -> dict[str, str]:
     data = _required(fields, "data_path")
     verbose = fields.get("verbose", "-1").strip() or "-1"
     extra = fields.get("extra_args", "").strip()
-    cwd = fields.get("work_dir", "work").strip() or "work"
-    node_id = fields.get("node_id", "tomo2d_forward").strip() or "tomo2d_forward"
+    cwd = fields.get("work_dir", "tools/tomo2d").strip() or "tools/tomo2d"
+    node_id = fields.get("node_id", "").strip() or node_id_from_work_dir(cwd) or "workspace"
 
     mesh_arg = _path_for_arg(mesh, cwd)
     data_arg = _path_for_arg(data, cwd)
     args = f"-M{mesh_arg} -G{data_arg} -V{verbose}"
+    args, extra_inputs = _append_interface_args(
+        args, fields, cwd, seafloor_flag="B", include_invert_flags=False
+    )
     if extra:
         args += f" {extra}"
-    inputs = "\n".join(_path_for_inputs([mesh, data], cwd)) + "\n"
+    inputs = "\n".join(_path_for_inputs([mesh, data, *extra_inputs], cwd)) + "\n"
     env_text = (
         "TOMO2D_FWD_OMP=1\n"
         "OMP_NUM_THREADS=4\n"
@@ -106,6 +114,51 @@ def _build_forward_basic(fields: dict[str, str]) -> dict[str, str]:
         "inputs_text": inputs,
         "node_id": node_id,
     }
+
+
+def _flag_on(fields: dict[str, str], key: str) -> bool:
+    raw = str(fields.get(key, "")).strip().lower()
+    return raw in {"1", "true", "yes", "on"}
+
+
+def _append_interface_args(
+    args: str,
+    fields: dict[str, str],
+    cwd: str,
+    *,
+    seafloor_flag: str,
+    include_invert_flags: bool,
+) -> tuple[str, list[str]]:
+    """Append optional -Y/-B, -F, and inverse-only -y/-w/-u.
+
+    Empty seafloor/refl keeps icode 0/1 defaults. Invert flags are ignored on
+    forward templates.
+    """
+    extra_inputs: list[str] = []
+    seafloor = fields.get("seafloor_path", "").strip()
+    refl = fields.get("refl_path", "").strip()
+    water_only = include_invert_flags and _flag_on(fields, "invert_water_only")
+    crust_only = include_invert_flags and _flag_on(fields, "invert_crust_only")
+    freeze_refl = include_invert_flags and _flag_on(fields, "freeze_refl")
+    if water_only and crust_only:
+        raise ValueError("-y 与 -w 不能同时勾选。")
+    if (water_only or crust_only) and not seafloor and not refl:
+        raise ValueError("-y / -w 需要海底界面 (-Y/-B) 或反射界面 (-F)。")
+    if freeze_refl and not refl:
+        raise ValueError("-u 需要同时填写反射界面 (-F)。")
+    if seafloor:
+        args += f" -{seafloor_flag}{_path_for_arg(seafloor, cwd)}"
+        extra_inputs.append(seafloor)
+    if refl:
+        args += f" -F{_path_for_arg(refl, cwd)}"
+        extra_inputs.append(refl)
+    if water_only:
+        args += " -y"
+    if crust_only:
+        args += " -w"
+    if freeze_refl:
+        args += " -u"
+    return args, extra_inputs
 
 
 def _required(fields: dict[str, str], key: str) -> str:

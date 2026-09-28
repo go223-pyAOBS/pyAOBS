@@ -1,13 +1,13 @@
-"""
-main.py - 兼容主程序入口（推荐改用 gui 模块入口）
-"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""兼容启动脚本 → ``run.py`` / ``python -m …zplotpy.gui``。"""
+
+from __future__ import annotations
 
 try:
-    from .gui import main
+    from .run import main
 except ImportError:
-    # 兼容直接以脚本方式执行
-    from gui import main
+    from run import main  # type: ignore
 
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    raise SystemExit(main())

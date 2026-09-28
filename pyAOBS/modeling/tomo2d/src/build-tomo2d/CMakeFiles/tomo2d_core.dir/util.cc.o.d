@@ -1,5 +1,5 @@
 CMakeFiles/tomo2d_core.dir/util.cc.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/util.cc \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/util.cc \
  /usr/include/stdc-predef.h /usr/include/c++/12/iostream \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
@@ -154,14 +154,14 @@ CMakeFiles/tomo2d_core.dir/util.cc.o: \
  /usr/include/x86_64-linux-gnu/c++/12/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++io.h \
  /usr/include/c++/12/bits/fstream.tcc /usr/include/c++/12/stdlib.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
  /usr/include/c++/12/vector /usr/include/c++/12/bits/stl_uninitialized.h \
  /usr/include/c++/12/bits/stl_vector.h \
  /usr/include/c++/12/bits/stl_bvector.h \
  /usr/include/c++/12/bits/vector.tcc /usr/include/c++/12/cstddef \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/util.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/geom.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/util.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/geom.h \
  /usr/include/c++/12/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \

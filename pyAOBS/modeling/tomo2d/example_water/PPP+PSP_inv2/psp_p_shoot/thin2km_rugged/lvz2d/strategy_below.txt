@@ -1,0 +1,4 @@
+dstar_km 22.0000  rule overlap-rms  overlap_n 150  far_n 60
+dstar_rms_s 0.0325  sig_corr_s 0.0500  thresh_s 0.0600
+psp_frac 1  n_pick 150  n_corr 0  n_skip 0  n_out 150
+obs syn_obs.dat  fwd syn_lidfwd.dat  out syn_below.dat

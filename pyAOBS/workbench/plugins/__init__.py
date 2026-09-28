@@ -1,7 +1,12 @@
 """Workbench plugins."""
 
 from .base import WorkbenchPlugin, PluginValidationError
-from .gui_plugins import IphaseGuiPlugin, ImodelGuiPlugin, ZplotpyGuiPlugin
+from .gui_plugins import (
+    IphaseGuiPlugin,
+    ImodelGuiPlugin,
+    VeditGuiPlugin,
+    ZplotpyGuiPlugin,
+)
 from .tomo2d_plugin import Tomo2DShellPlugin
 from .tomo2d_templates import (
     TEMPLATE_CUSTOM,
@@ -18,6 +23,7 @@ __all__ = [
     "ZplotpyGuiPlugin",
     "ImodelGuiPlugin",
     "IphaseGuiPlugin",
+    "VeditGuiPlugin",
     "TEMPLATE_CUSTOM",
     "TEMPLATE_INVERSE_STANDARD",
     "TEMPLATE_FORWARD_BASIC",

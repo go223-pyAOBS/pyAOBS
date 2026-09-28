@@ -1,0 +1,825 @@
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-04 12:58:14 ========
+[2026-08-04 12:58:14] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-12 17:05:35 ========
+[2026-08-12 17:05:35] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:06:08] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-12 17:10:32] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-12 17:13:56] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-12 17:14:47] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-12 17:19:09 ========
+[2026-08-12 17:19:09] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:26:51] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-12 17:27:08 ========
+[2026-08-12 17:27:08] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:27:58] 开始 gen_smesh @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:27:58] gen_smesh 失败: gen_smesh refl_file (-F): 找不到或不是可读文件
+  参数: 'tmp'
+  proc_cwd（子进程工作目录）: '/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples'
+  解析为: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/tmp
+  提示: 请确认文件已存在；路径相对界面「工作目录」。
+[2026-08-12 17:27:58] [gen_smesh] 耗时 0.1s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-12 17:31:42 ========
+[2026-08-12 17:31:42] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:31:58] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-12 17:32:04] 开始 gen_smesh @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:32:04] gen_smesh 失败: 命令执行失败 (exit=-1): pyAOBS/modeling/tomo2d/src/build-tomo2d/gen_smesh -Cvpfd41.in/2 -F6/tmp -E0.5 -Zinputs/tmp.zs
+stderr: [Errno 2] No such file or directory: 'pyAOBS/modeling/tomo2d/src/build-tomo2d/gen_smesh'
+[2026-08-12 17:32:04] [gen_smesh] 耗时 0.1s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-12 17:35:16 ========
+[2026-08-12 17:35:16] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:35:44] 开始 gen_smesh @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:35:45] gen_smesh 完成
+[2026-08-12 17:35:45] [gen_smesh] 耗时 0.6s
+[2026-08-12 17:36:53] 开始 gen_smesh @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:36:53] gen_smesh 完成
+[2026-08-12 17:36:53] [gen_smesh] 耗时 0.6s
+[2026-08-12 17:38:11] [绘制 smesh] 已请求打开图窗
+[2026-08-12 17:40:02] [绘制 smesh] 已请求打开图窗
+[2026-08-12 17:42:25] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-12 17:42:40 ========
+[2026-08-12 17:42:40] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:43:04] [绘制 smesh] 已请求打开图窗
+[2026-08-12 17:46:40] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-12 17:51:37] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-12 17:52:17 ========
+[2026-08-12 17:52:17] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:52:23] 开始 gen_smesh @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:52:24] gen_smesh 完成
+[2026-08-12 17:52:24] [gen_smesh] 耗时 0.6s
+[2026-08-12 17:58:03] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-12 17:58:10] 开始 gen_damp @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 17:58:10] gen_damp 完成
+[2026-08-12 17:58:10] [gen_damp] 耗时 0.3s
+[2026-08-12 18:01:34] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-12 18:02:29] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-12 18:22:26 ========
+[2026-08-12 18:22:26] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 18:23:09] 开始 gen_damp @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 18:23:09] gen_damp 完成
+[2026-08-12 18:23:09] [gen_damp] 耗时 0.3s
+[2026-08-12 18:23:33] 开始 gen_damp @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 18:23:33] gen_damp 完成
+[2026-08-12 18:23:33] [gen_damp] 耗时 0.4s
+[2026-08-12 18:26:54] 开始 tx.in→tomo2d @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-12 18:26:54] tx.in→tomo2d 完成
+[2026-08-12 18:26:54] [tx.in→tomo2d] 耗时 0.0s
+[2026-08-13 13:19:12] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 13:19:59 ========
+[2026-08-13 13:19:59] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 13:30:02] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 13:32:34 ========
+[2026-08-13 13:32:34] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 13:41:37] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 13:42:27 ========
+[2026-08-13 13:42:27] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 14:01:29] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 14:16:36 ========
+[2026-08-13 14:16:36] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 14:20:34] [上游填充] 无可填充项（请先填 gen.smesh_out / fwd.out_ttime / pipeline 桥接路径，或勾选覆盖后重试）
+[2026-08-13 14:25:29] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-13 14:28:35] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-13 14:46:20] [绘制 smesh] 已请求打开图窗
+[2026-08-13 14:47:40] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-13 14:51:04] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 15:02:13] tt_inverse 完成
+[2026-08-13 15:02:13] [tt_inverse] 耗时 669.7s
+[2026-08-13 15:04:30] [绘制 smesh] 已请求打开图窗
+[2026-08-13 15:05:28] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-13 15:06:12] [绘制 smesh] 已请求打开图窗
+[2026-08-13 15:08:04] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-13 15:08:06] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 15:21:06] tt_inverse 完成
+[2026-08-13 15:21:06] [tt_inverse] 耗时 780.1s
+[2026-08-13 15:21:19] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-13 15:55:30] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 15:55:51 ========
+[2026-08-13 15:55:51] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 15:56:19] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 15:56:19] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=关
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 16:00:36 ========
+[2026-08-13 16:00:36] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 16:00:50] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 16:00:50] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=关
+[2026-08-13 16:12:29] tt_inverse 完成
+[2026-08-13 16:12:29] [tt_inverse] 耗时 699.7s
+[2026-08-13 16:18:00] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 16:18:50 ========
+[2026-08-13 16:18:50] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 16:18:56] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 16:18:56] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+[2026-08-13 16:31:41] tt_inverse 完成
+[2026-08-13 16:31:41] [tt_inverse] 耗时 764.3s
+[2026-08-13 16:34:20] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 16:34:46 ========
+[2026-08-13 16:34:46] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 16:35:14] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 16:35:14] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+[2026-08-13 16:47:06] tt_inverse 完成
+[2026-08-13 16:47:06] [tt_inverse] 耗时 711.5s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 17:00:22 ========
+[2026-08-13 17:00:22] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 17:01:47] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 17:01:47] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+[2026-08-13 17:12:57] tt_inverse 完成
+[2026-08-13 17:12:57] [tt_inverse] 耗时 669.7s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 21:11:38 ========
+[2026-08-13 21:11:38] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 21:16:24] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-13 21:16:32] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 21:16:33] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · 前向复用+C2F
+[2026-08-13 21:28:49] tt_inverse 完成
+[2026-08-13 21:28:49] [tt_inverse] 耗时 736.3s
+[2026-08-13 21:30:13] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-13 21:30:18] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 21:30:18] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+[2026-08-13 21:43:38] tt_inverse 完成
+[2026-08-13 21:43:38] [tt_inverse] 耗时 800.1s
+[2026-08-13 21:45:04] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 21:47:29 ========
+[2026-08-13 21:47:29] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 21:47:42] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 21:47:42] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+[2026-08-13 22:02:03] tt_inverse 完成
+[2026-08-13 22:02:03] [tt_inverse] 耗时 860.7s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 22:02:46 ========
+[2026-08-13 22:02:46] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:02:52] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:02:52] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 22:16:09 ========
+[2026-08-13 22:16:09] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:16:14] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:16:15] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+[2026-08-13 22:17:21] [绘制 smesh] 已请求打开图窗
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 22:21:14 ========
+[2026-08-13 22:21:14] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:21:20] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:21:20] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 22:32:42 ========
+[2026-08-13 22:32:42] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:32:49] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:32:49] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 22:37:33 ========
+[2026-08-13 22:37:33] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:37:37] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:37:37] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 22:42:03 ========
+[2026-08-13 22:42:03] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:42:08] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:42:08] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 22:46:50 ========
+[2026-08-13 22:46:50] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:46:56] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 22:46:56] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+[2026-08-13 23:01:37] tt_inverse 完成
+[2026-08-13 23:01:37] [tt_inverse] 耗时 881.5s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 23:02:10 ========
+[2026-08-13 23:02:10] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 23:02:16] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 23:02:16] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 23:09:00 ========
+[2026-08-13 23:09:00] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 23:09:05] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 23:09:05] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 23:15:44 ========
+[2026-08-13 23:15:44] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 23:15:49] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 23:15:49] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-13 23:19:26 ========
+[2026-08-13 23:19:26] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 23:19:34] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-13 23:19:34] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · C2F
+[2026-08-13 23:32:09] tt_inverse 完成
+[2026-08-13 23:32:09] [tt_inverse] 耗时 755.6s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 10:10:00 ========
+[2026-08-14 10:10:00] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 10:17:46] 开始 tx.in→tomo2d @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 10:17:46] tx.in→tomo2d 完成
+[2026-08-14 10:17:46] [tx.in→tomo2d] 耗时 0.1s
+[2026-08-14 10:28:56] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 10:28:56] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 10:59:46] tt_inverse 完成
+[2026-08-14 10:59:46] [tt_inverse] 耗时 1850.2s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 11:05:52 ========
+[2026-08-14 11:05:52] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 11:06:02] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-14 11:11:10] 开始 tx.in→tomo2d @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 11:11:10] tx.in→tomo2d 完成
+[2026-08-14 11:11:10] [tx.in→tomo2d] 耗时 0.1s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 11:15:32 ========
+[2026-08-14 11:15:32] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 11:24:28 ========
+[2026-08-14 11:24:28] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 11:35:53] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-14 11:36:52] 开始 tx.in→tomo2d @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 11:36:52] tx.in→tomo2d 完成
+[2026-08-14 11:36:52] [tx.in→tomo2d] 耗时 0.0s
+[2026-08-14 11:37:32] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 11:37:32] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 11:50:23] tt_inverse 完成
+[2026-08-14 11:50:23] [tt_inverse] 耗时 771.4s
+[2026-08-14 11:55:32] 开始 gen_smesh @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 11:55:32] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 11:55:32] gen_smesh 完成
+[2026-08-14 11:55:32] [gen_smesh] 耗时 0.6s
+[2026-08-14 11:56:11] [绘制 smesh] 已请求打开图窗
+[2026-08-14 11:58:37] 开始 tx.in→tomo2d @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 11:58:37] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 11:58:37] tx.in→tomo2d 完成
+[2026-08-14 11:58:37] [tx.in→tomo2d] 耗时 0.1s
+[2026-08-14 11:58:59] 开始 tx.in→tomo2d @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 11:58:59] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 11:58:59] tx.in→tomo2d 完成
+[2026-08-14 11:58:59] [tx.in→tomo2d] 耗时 0.1s
+[2026-08-14 12:00:08] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 12:00:08] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 12:27:25] tt_inverse 完成
+[2026-08-14 12:27:25] [tt_inverse] 耗时 1636.7s
+[2026-08-14 12:28:35] [绘制 smesh] 已请求打开图窗
+[2026-08-14 12:28:46] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 12:33:32 ========
+[2026-08-14 12:33:32] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 12:34:16] [绘制 smesh] 已请求打开图窗
+[2026-08-14 12:46:18] [绘制 smesh] 已请求打开图窗
+[2026-08-14 12:46:46] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 12:56:59 ========
+[2026-08-14 12:56:59] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 13:06:52 ========
+[2026-08-14 13:06:52] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 13:06:56] [绘制 smesh] 已请求打开图窗
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 13:37:12 ========
+[2026-08-14 13:37:12] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 13:37:57] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-14 13:37:58] 开始 gen_smesh @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 13:37:58] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 13:37:59] gen_smesh 完成
+[2026-08-14 13:37:59] [gen_smesh] 耗时 0.6s
+[2026-08-14 13:38:12] [绘制 smesh] 已请求打开图窗
+[2026-08-14 13:39:24] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-14 13:41:00] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-14 13:41:01] [绘制 smesh] 已请求打开图窗
+[2026-08-14 13:42:13] [绘制 smesh] 已请求打开图窗
+[2026-08-14 13:46:08] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 13:46:08] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 14:11:57] tt_inverse 完成
+[2026-08-14 14:11:57] [tt_inverse] 耗时 1548.5s
+[2026-08-14 14:12:39] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-14 14:19:35 ========
+[2026-08-14 14:19:35] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 14:19:38] [绘制 smesh] 已请求打开图窗
+[2026-08-14 14:20:23] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-14 14:32:40] 开始 gen_smesh @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-14 14:32:40] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-14 14:32:40] gen_smesh 完成
+[2026-08-14 14:32:40] [gen_smesh] 耗时 0.6s
+[2026-08-14 14:32:48] [绘制 smesh] 已请求打开图窗
+[2026-08-14 14:34:29] [绘制 smesh] 已请求打开图窗
+[2026-08-14 14:36:19] [绘制 smesh] 已请求打开图窗
+[2026-08-14 14:36:29] [绘制 smesh] 已请求打开图窗
+[2026-08-14 14:36:50] [绘制 smesh] 已请求打开图窗
+[2026-08-14 14:37:00] [绘制 smesh] 已请求打开图窗
+[2026-08-14 14:38:20] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-17 09:59:30 ========
+[2026-08-17 09:59:30] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-17 10:00:14] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-17 10:00:14] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-17 10:41:04] tt_inverse 完成
+[2026-08-17 10:41:04] [tt_inverse] 耗时 2450.1s
+[2026-08-17 10:51:51] [模型挑选] inv.mesh ← runs/ttinv_vpfd41_ttimes_st1_65_20260817T100012_c24fc5/outputs/models/out.smesh.8.1
+[2026-08-17 10:52:18] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-17 10:52:18] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-17 11:34:02] tt_inverse 完成
+[2026-08-17 11:34:02] [tt_inverse] 耗时 2504.1s
+[2026-08-17 14:40:10] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-17 14:40:30 ========
+[2026-08-17 14:40:30] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-17 15:02:58] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-17 15:14:00 ========
+[2026-08-17 15:14:00] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-17 15:14:08] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+[2026-08-17 15:41:08] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-17 17:59:10 ========
+[2026-08-17 17:59:10] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-17 17:59:18] [绘制 smesh] gen_dcorr 未找到网格，已请用户指定
+[2026-08-17 17:59:26] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 09:45:09 ========
+[2026-08-18 09:45:09] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 09:45:15] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+[2026-08-18 09:46:50] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-18 09:47:01] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 09:47:01] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-18 10:33:06] tt_inverse 完成
+[2026-08-18 10:33:06] [tt_inverse] 耗时 2764.5s
+[2026-08-18 10:46:00] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-18 10:46:02] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+[2026-08-18 12:34:24] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 12:34:42 ========
+[2026-08-18 12:34:42] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 12:36:12] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=关
+[2026-08-18 12:36:12] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T123609_9bfbec
+[2026-08-18 12:36:12] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 12:36:12] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-18 13:21:42] tt_inverse 完成
+[2026-08-18 13:21:42] [tt_inverse] 耗时 2730.3s
+[2026-08-18 13:46:23] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 13:47:08 ========
+[2026-08-18 13:47:08] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 13:48:11] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=开（无边界文件，用 mesh 地形）
+[2026-08-18 13:48:11] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T134808_5e1f9b
+[2026-08-18 13:48:11] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 13:48:11] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-18 14:33:05] tt_inverse 完成
+[2026-08-18 14:33:05] [tt_inverse] 耗时 2694.3s
+[2026-08-18 14:35:11] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=开（无边界文件，用 mesh 地形）
+[2026-08-18 14:35:11] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T143508_ee617d
+[2026-08-18 14:35:11] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 14:35:11] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-18 14:40:55] tt_inverse 失败: 命令执行失败 (exit=1): /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/tt_inverse -Minputs/mesh.smesh -Ginputs/data.dat -N4/4/0.8/8/0.0001/1e-05 -Finputs/refl.refl -W1 -s -Loutputs/tt_inverse.log -Ooutputs/out -o2 -Koutputs/dws.dat -R4 -Q0.001 -I8 -J1.0 -TV20 -TD20 -SV200 -SD10 -CVinputs/corr_v.dat -CDinputs/corr_d.dat
+stderr: [tt_inverse] damping MODE=auto using=-T/-TV/-TD fixed_-D=OFF -TV_percent=20 -TV_frac=0.2 -TD_percent=20 -TD_frac=0.2
+[tt_inverse] filter_-s ON
+TomographicInversion2d:: parallel ray tracing enabled (source-wise, OMP) threads=8 nsrc=61
+TomographicInversion2d::iter=1(8) OMP tracing 61 sources, threads=8
+TomographicInversion2d::iter=1 ray tracing 1/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 6/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 12/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 18/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 24/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 30/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 36/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 42/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 48/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 54/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 60/61 sources (OMP)
+TomographicInversion2d::iter=1 ray tracing 61/61 sources (OMP)
+LSQR iter= 100 nnode= 186409
+LSQR iter= 200 nnode= 186409
+LSQR iter= 206 nnode= 186409 ndata= 379204
+LSQR iter= 100 nnode= 186409
+LSQR iter= 200 nnode= 186409
+LSQR iter= 216 nnode= 186409 ndata= 378781
+LSQR iter= 100 nnode= 186409
+LSQR iter= 200 nnode= 186409
+LSQR iter= 300 nnode= 186409
+LSQR iter= 400 nnode= 186409
+LSQR iter= 500 nnode= 186409
+LSQR iter= 600 nnode= 186409
+LSQR iter= 700 nnode= 186409
+LSQR iter= 800 nnode= 186409
+LSQR iter= 900 nnode= 186409
+LSQR iter= 982 nnode= 186409 ndata= 6374
+TomographicInversion2d::iter=2(8) OMP tracing 61 sources, threads=8
+SlownessMesh2d::calc_ttime - negative traveltime encountered for (184645, 185098, -0.0307312)
+[2026-08-18 14:40:56] [tt_inverse] 耗时 344.8s
+[2026-08-18 14:56:43] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=开（无边界文件，用 mesh 地形）
+[2026-08-18 14:56:43] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T145641_3e2446
+[2026-08-18 14:56:43] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 14:56:43] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-18 15:43:08] tt_inverse 完成
+[2026-08-18 15:43:08] [tt_inverse] 耗时 2784.8s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 16:01:05 ========
+[2026-08-18 16:01:05] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 16:02:07] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=开（无边界文件，用 mesh 地形）
+[2026-08-18 16:02:07] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T160204_ebf435
+[2026-08-18 16:02:07] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 16:02:07] 并行: OMP_NUM_THREADS=8 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-18 16:51:23] tt_inverse 完成
+[2026-08-18 16:51:23] [tt_inverse] 耗时 2955.8s
+[2026-08-18 17:06:45] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 17:26:15 ========
+[2026-08-18 17:26:15] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 17:33:25] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 17:33:49 ========
+[2026-08-18 17:33:49] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 17:34:15] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=开（无边界文件，用 mesh 地形）
+[2026-08-18 17:34:15] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T173412_0c98cf
+[2026-08-18 17:34:15] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 17:34:15] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开
+[2026-08-18 18:17:27] tt_inverse 完成
+[2026-08-18 18:17:27] [tt_inverse] 耗时 2592.3s
+[2026-08-18 18:19:16] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 18:19:33 ========
+[2026-08-18 18:19:33] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 18:22:21 ========
+[2026-08-18 18:22:21] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 18:33:02] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=开（无边界文件，用 mesh 地形）
+[2026-08-18 18:33:02] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T183259_259fa7
+[2026-08-18 18:33:02] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 18:33:02] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · 前向复用
+[2026-08-18 22:02:15] tt_inverse 完成
+[2026-08-18 22:02:15] [tt_inverse] 耗时 12553.7s
+[2026-08-18 22:05:40] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-18 22:15:29] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+[2026-08-18 22:15:57] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+[2026-08-18 22:18:23] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 22:26:29 ========
+[2026-08-18 22:26:29] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 22:36:27] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-18 22:41:16 ========
+[2026-08-18 22:41:16] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 22:41:24] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+[2026-08-18 23:48:46] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=开（无边界文件，用 mesh 地形）
+[2026-08-18 23:48:46] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T234844_15dbee
+[2026-08-18 23:48:46] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-18 23:48:46] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · 前向复用+关LSQR预条件
+[2026-08-19 00:32:35] tt_inverse 完成
+[2026-08-19 00:32:35] [tt_inverse] 耗时 2628.2s
+[2026-08-19 00:33:32] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-19 00:34:11] [tt_inverse] 阻尼=自动 -T（固定 -D 未用）；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 | 滤波 -s=开（无边界文件，用 mesh 地形）
+[2026-08-19 00:34:11] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260819T003408_0a92c0
+[2026-08-19 00:34:11] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-19 00:34:11] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · 前向复用+C2F+关LSQR预条件
+[2026-08-19 01:20:02] tt_inverse 完成
+[2026-08-19 01:20:02] [tt_inverse] 耗时 2751.8s
+[2026-08-19 09:42:44] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-19 09:43:04 ========
+[2026-08-19 09:43:04] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-19 10:27:48] [tt_inverse] 自动阻尼 -T；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 · 滤波 -s（mesh 地形） | 前向复用 阈=1e-3 · C2F
+[2026-08-19 10:27:48] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd42_ttimes_st1_65_20260819T102745_167dd6
+[2026-08-19 10:27:48] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-19 10:27:48] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · 前向复用 阈=1e-3 · C2F
+[2026-08-19 11:18:28] tt_inverse 完成
+[2026-08-19 11:18:28] [tt_inverse] 耗时 3040.3s
+[2026-08-19 11:36:13] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-19 14:16:33 ========
+[2026-08-19 14:16:33] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-19 14:36:07] [绘制 smesh] tt_inverse ← vpfd42.smesh · 界面 vpfd42.refl
+[2026-08-19 14:49:48] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-19 16:37:25 ========
+[2026-08-19 16:37:25] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-21 11:14:27 ========
+[2026-08-21 11:14:27] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-21 15:00:57 ========
+[2026-08-21 15:00:57] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-21 15:02:21] [绘制 smesh] 棋盘格测试 未找到网格，已请用户指定
+[2026-08-21 15:05:54] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-21 15:07:21 ========
+[2026-08-21 15:07:21] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-21 15:07:29] [绘制 smesh] 棋盘格测试 ← out.smesh.8.1 · 界面 out.refl.8.1
+[2026-08-21 15:09:06] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-21 15:16:49 ========
+[2026-08-21 15:16:49] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-21 15:16:56] [绘制 smesh] 棋盘格测试 ← out.smesh.8.1 · 界面 out.refl.8.1
+[2026-08-21 15:20:51] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-21 15:27:25 ========
+[2026-08-21 15:27:25] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-21 15:30:41] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-21 15:43:09 ========
+[2026-08-21 15:43:09] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-21 15:43:16] [绘制 smesh] gen_smesh ← vpfd41.smesh · 界面 vpfd41.refl
+[2026-08-21 15:44:31] [写回表单] fwd.smesh ← runs/ttinv_vpfd42_ttimes_st1_65_20260819T102745_167dd6/outputs/models/out.smesh.8.1
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 17:26:47 ========
+[2026-08-22 17:26:47] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 17:31:57] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 17:32:09] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 17:32:50] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 17:36:40] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 17:43:38 ========
+[2026-08-22 17:43:38] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 17:46:24] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 17:47:12 ========
+[2026-08-22 17:47:12] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 17:51:44] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 17:51:44] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 17:51:45] checkerboard 失败: 命令执行失败 (exit=1): /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/tt_forward -Minputs/true_checkerboard.smesh -Ginputs/geom.dat -Foutputs/vpfd42.refl -N4/4/0.8/8/0.0001/1e-05 -Tinputs/syn_ttimes.dat
+stderr: countLines::can't open outputs/vpfd42.refl
+[2026-08-22 17:51:45] [checkerboard] 耗时 0.6s
+[2026-08-22 17:53:35] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 17:53:35] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 17:53:36] checkerboard 失败: 命令执行失败 (exit=1): /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/tt_forward -Minputs/true_checkerboard.smesh -Ginputs/geom.dat -Foutputs/vpfd42.refl -N4/4/0.8/8/0.0001/1e-05 -Tinputs/syn_ttimes.dat
+stderr: countLines::can't open outputs/vpfd42.refl
+[2026-08-22 17:53:36] [checkerboard] 耗时 0.6s
+[2026-08-22 17:54:43] [tt_inverse] 自动阻尼 -T；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 · 滤波 -s（mesh 地形） | Legacy
+[2026-08-22 17:54:43] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd42_ttimes_st1_65_20260822T175442_981a3c
+[2026-08-22 17:54:43] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 17:54:43] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 17:59:05] tt_inverse 完成
+[2026-08-22 17:59:05] [tt_inverse] 耗时 261.8s
+[2026-08-22 18:09:34] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 18:09:37] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 18:09:37] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 18:09:37] checkerboard 失败: 命令执行失败 (exit=1): /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/tt_forward -Minputs/true_checkerboard.smesh -Ginputs/geom.dat -Foutputs/vpfd42.refl -N4/4/0.8/8/0.0001/1e-05 -Tinputs/syn_ttimes.dat
+stderr: countLines::can't open outputs/vpfd42.refl
+[2026-08-22 18:09:37] [checkerboard] 耗时 0.6s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 18:29:04 ========
+[2026-08-22 18:29:04] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 18:30:01] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 19:03:50] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 19:03:50] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 19:06:59] checkerboard 失败: 命令执行失败 (exit=1): /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/tt_inverse -Minputs/background.smesh -Ginputs/syn_ttimes.dat -N4/4/0.8/8/0.0001/1e-05 -Finputs/vpfd42_s2.refl -W1 -s -Loutputs/tt_inverse.log -Ooutputs/out -o2 -R4 -Q0.001 -I8 -J1.0 -TV20 -TD1e-08 -SV200 -CVinputs/vcorr_vpfd41.dat
+stderr: TomographicInversion2d::invalid nsrc
+[2026-08-22 19:06:59] [checkerboard] 耗时 188.8s
+[2026-08-22 19:29:51] 开始 tx.in→tomo2d @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 19:29:51] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 19:29:51] tx.in→tomo2d 完成
+[2026-08-22 19:29:51] [tx.in→tomo2d] 耗时 0.0s
+[2026-08-22 19:30:55] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 19:30:55] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 19:34:09] checkerboard 失败: 命令执行失败 (exit=1): /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/tt_inverse -Minputs/background.smesh -Ginputs/syn_ttimes.dat -N4/4/0.8/8/0.0001/1e-05 -Finputs/vpfd42_s2.refl -W1 -s -Loutputs/tt_inverse.log -Ooutputs/out -o2 -R4 -Q0.001 -I8 -J1.0 -TV20 -TD1e-08 -SV200 -CVinputs/vcorr_vpfd41.dat
+stderr: TomographicInversion2d::invalid nsrc
+[2026-08-22 19:34:09] [checkerboard] 耗时 193.8s
+[2026-08-22 19:43:38] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 19:43:57 ========
+[2026-08-22 19:43:57] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 19:44:16] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 19:44:16] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 20:21:05] 可用顶栏「绘制 smesh」打开恢复异常场：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/checkerboard_20260822_194416/outputs/recovered_anomaly_pct.smesh
+[2026-08-22 20:21:05] checkerboard 完成
+[2026-08-22 20:21:05] [checkerboard] 耗时 2209.3s
+[2026-08-22 21:20:41] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 21:21:47 ========
+[2026-08-22 21:21:47] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 21:28:40] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 21:29:58] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 21:30:16] [绘制 smesh] 棋盘格测试 ← out.smesh.8.1 · 界面 out.refl.8.1
+[2026-08-22 21:31:41] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 21:31:53] [绘制 smesh] tt_inverse ← vpfd41.smesh · 界面 vpfd41.refl
+[2026-08-22 21:32:22] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 21:32:54] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 21:33:37] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 21:33:48] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-22 21:35:10] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 21:37:07 ========
+[2026-08-22 21:37:07] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 21:50:29] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 21:50:49 ========
+[2026-08-22 21:50:49] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 21:52:36] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 21:52:51 ========
+[2026-08-22 21:52:51] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 21:54:48] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 21:54:48] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-22 22:50:34] checkerboard 完成
+[2026-08-22 22:50:34] [checkerboard] 耗时 3345.6s
+[2026-08-22 22:54:54] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-22 23:08:53 ========
+[2026-08-22 23:08:53] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 23:09:57] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-22 23:09:57] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-23 00:01:26] checkerboard 完成
+[2026-08-23 00:01:26] [checkerboard] 耗时 3088.8s
+[2026-08-23 10:07:39] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-23 10:07:39] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-23 10:08:46] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-23 11:02:31] checkerboard 完成
+[2026-08-23 11:02:31] [checkerboard] 耗时 3292.6s
+[2026-08-23 11:03:09] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-23 11:03:09] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-23 11:12:25] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+[2026-08-23 11:54:51] checkerboard 完成
+[2026-08-23 11:54:51] [checkerboard] 耗时 3102.0s
+[2026-08-23 12:13:50] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-23 12:13:50] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-23 13:03:02] checkerboard 完成
+[2026-08-23 13:03:02] [checkerboard] 耗时 2951.8s
+[2026-08-23 13:05:13] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-23 13:05:13] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-23 13:36:17] [绘制 smesh] stat_smesh 未找到网格，已打开图窗
+[2026-08-23 13:55:09] checkerboard 完成
+[2026-08-23 13:55:09] [checkerboard] 耗时 2995.4s
+[2026-08-23 16:47:11] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-23 16:47:44 ========
+[2026-08-23 16:47:44] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-23 16:48:15] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-23 16:48:15] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-23 16:50:57] [绘制 smesh] 蒙特卡洛 ← vpfd41.smesh
+[2026-08-23 17:31:05] [绘制 smesh] 蒙特卡洛 ← vpfd41.smesh
+[2026-08-23 17:40:15] checkerboard 完成
+[2026-08-23 17:40:15] [checkerboard] 耗时 3119.8s
+[2026-08-23 17:41:28] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-23 17:42:32 ========
+[2026-08-23 17:42:32] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-23 17:42:38] [绘制 smesh] 棋盘格测试 ← out.smesh.8.1 · 界面 out.refl.8.1
+[2026-08-23 17:54:05] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 09:33:30 ========
+[2026-08-24 09:33:30] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 09:34:28] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 10:00:18 ========
+[2026-08-24 10:00:18] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 10:22:14] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 10:22:33 ========
+[2026-08-24 10:22:33] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 10:26:27 ========
+[2026-08-24 10:26:27] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 10:30:21 ========
+[2026-08-24 10:30:21] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 10:49:15 ========
+[2026-08-24 10:49:15] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 11:01:35] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 11:08:48 ========
+[2026-08-24 11:08:48] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 11:09:00] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 11:14:12 ========
+[2026-08-24 11:14:12] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 11:27:33 ========
+[2026-08-24 11:27:33] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 12:14:19 ========
+[2026-08-24 12:14:19] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 12:17:12 ========
+[2026-08-24 12:17:12] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 14:16:29 ========
+[2026-08-24 14:16:29] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 14:16:49] 开始 monte_carlo @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 14:16:49] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-24 14:16:50] monte_carlo 失败: 命令执行失败 (exit=1): /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/tt_inverse -Mreals/000/init.smesh -Greals/000/data.dat -N4/4/0.8/8/0.0001/1e-05 -Freals/000/moho.refl -W1 -s -Lreals/000/tt_inverse.log -Oreals/000/out -o2 -Kreals/000/dws.dat -R4 -Q0.001 -I8 -J1.0 -TV20 -TD20 -SV200 -SD10 -CVinputs/vcorr_vpfd41.dat -CDinputs/dcorr_vpfd41.dat
+stderr: Interface2d: illegal ordering of x nodes at i=2
+[2026-08-24 14:16:50] [monte_carlo] 耗时 1.0s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 14:21:28 ========
+[2026-08-24 14:21:28] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 14:38:59 ========
+[2026-08-24 14:38:59] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 14:40:12] 开始 monte_carlo @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 14:40:12] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 21:42:31 ========
+[2026-08-24 21:42:31] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-24 21:43:07 ========
+[2026-08-24 21:43:07] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 21:44:25] [tt_inverse] 自动阻尼 -T；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 · 滤波 -s（mesh 地形） | Legacy
+[2026-08-24 21:44:25] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260824T214423_c77eca
+[2026-08-24 21:44:25] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 21:44:25] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-24 21:52:46] tt_inverse 完成
+[2026-08-24 21:52:46] [tt_inverse] 耗时 501.1s
+[2026-08-24 22:00:28] [tt_inverse] 自动阻尼 -T；-TV 20% → 日志 frac=0.2；-TD 20% → 日志 frac=0.2 · 滤波 -s（mesh 地形） | Legacy
+[2026-08-24 22:00:28] [tt_inverse] 运行包目录: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260824T220027_b353f0
+[2026-08-24 22:00:28] 开始 tt_inverse @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 22:00:28] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-24 22:42:26] tt_inverse 完成
+[2026-08-24 22:42:26] [tt_inverse] 耗时 2517.9s
+[2026-08-24 22:58:03] 开始 monte_carlo @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-24 22:58:03] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-25 00:38:30] monte_carlo 完成
+[2026-08-25 00:38:30] [monte_carlo] 耗时 6026.8s
+[2026-08-25 06:57:03] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 06:58:27 ========
+[2026-08-25 06:58:27] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 07:29:49 ========
+[2026-08-25 07:29:49] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-25 07:36:20] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 08:03:16 ========
+[2026-08-25 08:03:16] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 08:23:33 ========
+[2026-08-25 08:23:33] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-25 08:26:06] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-25 08:26:06] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-25 08:26:06] checkerboard 失败: 背景 smesh 不存在: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/runs/ttinv_vpfd41_ttimes_st1_65_20260818T234844_15dbee/outputs/models/out.smesh.8.1
+[2026-08-25 08:26:06] [checkerboard] 耗时 0.1s
+[2026-08-25 08:27:32] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-25 08:27:32] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-25 08:39:00] checkerboard 完成
+[2026-08-25 08:39:00] [checkerboard] 耗时 687.7s
+[2026-08-25 08:41:11] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 09:19:36 ========
+[2026-08-25 09:19:36] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-25 09:24:00] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 10:37:37 ========
+[2026-08-25 10:37:37] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-25 10:45:09] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 10:51:29 ========
+[2026-08-25 10:51:29] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-25 10:54:29] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 11:19:42 ========
+[2026-08-25 11:19:42] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 11:41:05 ========
+[2026-08-25 11:41:05] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-25 12:12:08 ========
+[2026-08-25 12:12:08] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-25 12:12:17] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-26 12:33:08 ========
+[2026-08-26 12:33:08] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-26 12:33:34] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-26 12:33:34] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-26 12:46:11] checkerboard 完成
+[2026-08-26 12:46:11] [checkerboard] 耗时 756.1s
+[2026-08-26 15:48:02] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-26 15:48:02] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-26 15:58:12] checkerboard 完成
+[2026-08-26 15:58:12] [checkerboard] 耗时 609.9s
+[2026-08-26 16:00:56] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-26 16:00:56] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-26 16:10:38] checkerboard 完成
+[2026-08-26 16:10:38] [checkerboard] 耗时 581.8s
+[2026-08-26 17:29:13] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-26 17:29:13] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-26 17:38:44] checkerboard 完成
+[2026-08-26 17:38:44] [checkerboard] 耗时 571.1s
+[2026-08-26 17:39:36] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-26 17:39:36] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-26 21:19:02] checkerboard 完成
+[2026-08-26 21:19:02] [checkerboard] 耗时 13166.4s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-27 09:57:02 ========
+[2026-08-27 09:57:02] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-27 09:58:22] 开始 checkerboard @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+[2026-08-27 09:58:22] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-27 10:08:18] checkerboard 完成
+[2026-08-27 10:08:18] [checkerboard] 耗时 595.3s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-08-27 13:46:04 ========
+[2026-08-27 13:46:04] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-09-02 14:46:05 ========
+[2026-09-02 14:46:05] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples | 开始记录 2026-09-02 15:24:07 ========
+[2026-09-02 15:24:07] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/examples

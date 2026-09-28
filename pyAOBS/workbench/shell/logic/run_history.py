@@ -5,71 +5,81 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from ...core.project_layout import iter_runs_dirs
+
 
 def scan_run_history(
     project_root: Path,
     *,
     scan_limit: int = 1200,
 ) -> tuple[list[dict[str, str | Path]], set[str], set[str], bool]:
-    runs_dir = project_root / "runs"
     records: list[dict[str, str | Path]] = []
     statuses: set[str] = set()
     nodes: set[str] = set()
     truncated = False
-    if not runs_dir.exists():
-        return records, statuses, nodes, truncated
-
     scanned = 0
-    try:
-        run_dirs = sorted(runs_dir.iterdir(), key=lambda p: p.name, reverse=True)
-    except OSError:
-        run_dirs = []
+    seen: set[Path] = set()
 
-    for run_dir in run_dirs:
-        if scanned >= scan_limit:
-            truncated = True
-            break
-        if not run_dir.is_dir():
-            continue
-        scanned += 1
-        manifest_path = run_dir / "manifest.json"
-        if not manifest_path.exists():
-            continue
+    for runs_dir in iter_runs_dirs(project_root):
         try:
-            m = json.loads(manifest_path.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        run_id = str(m.get("run_id", run_dir.name))
-        node_id = str(m.get("node_id", ""))
-        status = str(m.get("status", ""))
-        finished_at = str(m.get("finished_at", "") or "")
-        elapsed = m.get("elapsed_s", "")
-        elapsed_str = f"{elapsed:.2f}" if isinstance(elapsed, (int, float)) else str(elapsed)
-        command_text = " ".join([str(x) for x in m.get("command", [])]) or ""
-        error_text = str(m.get("error", "") or "")
-        search_blob = " ".join(
-            [run_id, node_id, status, finished_at, elapsed_str, command_text, error_text]
-        ).lower()
-        records.append(
-            {
-                "run_id": run_id,
-                "node_id": node_id,
-                "status": status,
-                "finished_at": finished_at,
-                "elapsed_s": elapsed_str,
-                "return_code": str(m.get("return_code", "")),
-                "created_at": str(m.get("created_at", "") or ""),
-                "command": command_text,
-                "error": error_text,
-                "manifest_file": manifest_path,
-                "run_dir": run_dir,
-                "search_blob": search_blob,
-            }
-        )
-        if status:
-            statuses.add(status)
-        if node_id:
-            nodes.add(node_id)
+            run_dirs = sorted(runs_dir.iterdir(), key=lambda p: p.name, reverse=True)
+        except OSError:
+            run_dirs = []
+
+        for run_dir in run_dirs:
+            if scanned >= scan_limit:
+                truncated = True
+                break
+            if not run_dir.is_dir():
+                continue
+            try:
+                resolved = run_dir.resolve()
+            except OSError:
+                resolved = run_dir
+            if resolved in seen:
+                continue
+            seen.add(resolved)
+            scanned += 1
+            manifest_path = run_dir / "manifest.json"
+            if not manifest_path.exists():
+                continue
+            try:
+                m = json.loads(manifest_path.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            run_id = str(m.get("run_id", run_dir.name))
+            node_id = str(m.get("node_id", ""))
+            status = str(m.get("status", ""))
+            finished_at = str(m.get("finished_at", "") or "")
+            elapsed = m.get("elapsed_s", "")
+            elapsed_str = f"{elapsed:.2f}" if isinstance(elapsed, (int, float)) else str(elapsed)
+            command_text = " ".join([str(x) for x in m.get("command", [])]) or ""
+            error_text = str(m.get("error", "") or "")
+            search_blob = " ".join(
+                [run_id, node_id, status, finished_at, elapsed_str, command_text, error_text]
+            ).lower()
+            records.append(
+                {
+                    "run_id": run_id,
+                    "node_id": node_id,
+                    "status": status,
+                    "finished_at": finished_at,
+                    "elapsed_s": elapsed_str,
+                    "return_code": str(m.get("return_code", "")),
+                    "created_at": str(m.get("created_at", "") or ""),
+                    "command": command_text,
+                    "error": error_text,
+                    "manifest_file": manifest_path,
+                    "run_dir": run_dir,
+                    "search_blob": search_blob,
+                }
+            )
+            if status:
+                statuses.add(status)
+            if node_id:
+                nodes.add(node_id)
+        if truncated:
+            break
     return records, statuses, nodes, truncated
 
 

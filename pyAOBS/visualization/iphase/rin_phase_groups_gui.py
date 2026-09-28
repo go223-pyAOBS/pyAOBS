@@ -7,16 +7,29 @@
 - 诊断与数组预览放在 Notebook 分栏，减少单屏大块 Text 同时刷新。
 - “安全模式”仅不展开 rbnd/cbnd；“完整解析”同步加载全部路径数组。
 
-用途：编辑 ray / nrbnd / rbnd / ncbnd / cbnd / nray / ivray，调试稳定后再接入 iphase_gui。
+用途：编辑 ray / nrbnd / rbnd / ncbnd / cbnd / nray / ivray，调试稳定后再接入 iphase Qt GUI。
 """
 
 from __future__ import annotations
 
 import argparse
 import os
+import sys
 from pathlib import Path
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
+
+
+def _bootstrap_pkg_root() -> None:
+    """允许直接 python rin_phase_groups_gui.py 时找到 pyAOBS 包。"""
+    # .../pyAOBS/visualization/iphase/rin_phase_groups_gui.py → repo root
+    root = Path(__file__).resolve().parents[3]
+    s = str(root)
+    if s not in sys.path:
+        sys.path.insert(0, s)
+
+
+_bootstrap_pkg_root()
 
 try:
     from .rin_phase_groups import (

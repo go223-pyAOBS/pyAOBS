@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src
+CXX_INCLUDES = -I/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src
 
 CXX_FLAGS = -O3 -DNDEBUG -O3 -fopenmp -std=c++17
 

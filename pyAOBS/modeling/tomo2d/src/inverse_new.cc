@@ -383,6 +383,9 @@ void TomographicInversion2d::solve(int niter)
 		    char transfn[MaxStr];
 		    sprintf(transfn, "%s.tres.%d.%d", out_root, iter, isrc);
 		    tres_os_p = new ofstream(transfn);
+		    if (tres_os_p){
+			*tres_os_p << "# rcv_x residual raytype\n";
+		    }
 		}
 		if (out_level >= 2){
 		    char transfn[MaxStr];
@@ -524,7 +527,8 @@ void TomographicInversion2d::solve(int niter)
 		if (printTransient || (printFinal && isFinal)){
 		    if (out_level>=1){
 			*tres_os_p << rcv(isrc)(ircv).x() << " "
-				   << res_ttime(isrc)(ircv) << '\n';
+				   << res_ttime(isrc)(ircv) << " "
+				   << raytype(isrc)(ircv) << '\n';
 		    }
 		    if (out_level>=2){
 			*ray_os_p << ">\n";

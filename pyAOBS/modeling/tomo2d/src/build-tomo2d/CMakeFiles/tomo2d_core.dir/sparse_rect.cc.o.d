@@ -1,7 +1,7 @@
 CMakeFiles/tomo2d_core.dir/sparse_rect.cc.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/sparse_rect.cc \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/sparse_rect.cc \
  /usr/include/stdc-predef.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/sparse_rect.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/sparse_rect.h \
  /usr/include/c++/12/map /usr/include/c++/12/bits/stl_tree.h \
  /usr/include/c++/12/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
@@ -47,7 +47,7 @@ CMakeFiles/tomo2d_core.dir/sparse_rect.cc.o: \
  /usr/include/c++/12/bits/stl_multimap.h \
  /usr/include/c++/12/bits/range_access.h \
  /usr/include/c++/12/bits/erase_if.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
  /usr/include/c++/12/vector /usr/include/c++/12/bits/stl_uninitialized.h \
  /usr/include/c++/12/bits/stl_vector.h \
  /usr/include/c++/12/bits/stl_bvector.h \
@@ -161,7 +161,7 @@ CMakeFiles/tomo2d_core.dir/sparse_rect.cc.o: \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h \
  /usr/include/c++/12/fstream /usr/include/c++/12/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++io.h \

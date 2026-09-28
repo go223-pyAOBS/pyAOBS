@@ -98,6 +98,25 @@ class RayinvrWrapper:
             ctypes.POINTER(ctypes.c_int)     # max_points
         ]
         self.lib.get_stored_ray_.restype = None
+
+        # 获取射线各点 P/S（+1=P, -1=S）；旧库可能无此符号
+        self._has_ray_ips = hasattr(self.lib, "get_stored_ray_ips_")
+        if self._has_ray_ips:
+            self.lib.get_stored_ray_ips_.argtypes = [
+                ctypes.POINTER(ctypes.c_int),
+                ndpointer(dtype=np.int32),
+                ctypes.POINTER(ctypes.c_int),
+                ctypes.POINTER(ctypes.c_int),
+            ]
+            self.lib.get_stored_ray_ips_.restype = None
+
+        self._has_ray_phase = hasattr(self.lib, "get_stored_ray_phase_")
+        if self._has_ray_phase:
+            self.lib.get_stored_ray_phase_.argtypes = [
+                ctypes.POINTER(ctypes.c_int),
+                ctypes.POINTER(ctypes.c_int),
+            ]
+            self.lib.get_stored_ray_phase_.restype = None
         
         # 获取射线走时
         self.lib.get_ray_time_.argtypes = [
@@ -405,6 +424,34 @@ class RayinvrWrapper:
                 'total_time': travel_time.value,
                 'npoints': n_points.value
             }
+
+            # P/S 标志（与 pltray/irayps 相同）；旧 librayinvr 无符号则跳过
+            if getattr(self, "_has_ray_ips", False):
+                try:
+                    ips_array = np.zeros(max_points, dtype=np.int32)
+                    n_ips = ctypes.c_int(0)
+                    self.lib.get_stored_ray_ips_(
+                        ctypes.byref(ctypes.c_int(ray_idx)),
+                        ips_array,
+                        ctypes.byref(n_ips),
+                        ctypes.byref(ctypes.c_int(max_points)),
+                    )
+                    if n_ips.value == n_points.value and n_ips.value > 0:
+                        ray_data["ips"] = ips_array[: n_ips.value].copy()
+                except Exception:
+                    pass
+
+            if getattr(self, "_has_ray_phase", False):
+                try:
+                    iphase = ctypes.c_int(0)
+                    self.lib.get_stored_ray_phase_(
+                        ctypes.byref(ctypes.c_int(ray_idx)),
+                        ctypes.byref(iphase),
+                    )
+                    if iphase.value > 0:
+                        ray_data["phase_id"] = int(iphase.value)
+                except Exception:
+                    pass
             
             # print(f"Successfully retrieved ray {ray_idx} with {n_points.value} points")
             return ray_data
@@ -413,55 +460,30 @@ class RayinvrWrapper:
             print(f"Error in get_stored_ray: {str(e)}")
             return None
 
-    def get_all_rays(self, max_rays=100):
+    def get_all_rays(self, max_rays=0, shot_xs=None):
         """获取所有存储的射线
         
         Parameters
         ----------
         max_rays : int, optional
-            最大返回射线数，默认为100
+            最大返回射线数；``<=0`` 表示取 Fortran 存储的全部射线
+            （上限 ``pshot2*prayf`` ≈ 24000，见 ``rayinvr.par``）。
+        shot_xs : sequence of float, optional
+            TRAPAR ``xshot``；截断收集时保证每个炮点至少有一条射线。
             
         Returns
         -------
         list
             包含所有射线的列表
         """
-        try:
-            # print("\n========== Getting All Rays ==========")
-            n_rays = self.get_ray_count()
-            # print(f"Total rays found: {n_rays}")
-            
-            if n_rays == 0:
-                print("警告：没有找到存储的射线")
-                return []
-            
-            rays = []
-            for i in range(1, min(n_rays+1, max_rays+1)):
-                try:
-                    # print(f"Getting ray {i}...")
-                    ray = self.get_stored_ray(i)
-                    if ray is not None and ray['npoints'] > 0:
-                        # 验证数据有效性
-                        if (len(ray['x']) == ray['npoints'] and 
-                            len(ray['z']) == ray['npoints'] and 
-                            len(ray['time']) == ray['npoints']):
-                            rays.append(ray)
-                            # print(f"Successfully added ray {i} with {ray['npoints']} points")
-                        else:
-                            print(f"Warning: Invalid data for ray {i}")
-                    else:
-                        print(f"Warning: No data for ray {i}")
-                except Exception as e:
-                    print(f"Error getting ray {i}: {str(e)}")
-                    continue
-            
-            # print(f"Successfully retrieved {len(rays)} rays")
-            # print("========== Getting All Rays Completed ==========\n")
-            return rays
-            
-        except Exception as e:
-            print(f"Error in get_all_rays: {str(e)}")
-            return []
+        from pyAOBS.modeling.rayinvr.ray_collect import collect_stored_rays
+
+        rays, note = collect_stored_rays(
+            self, max_rays=max_rays, shot_xs=shot_xs
+        )
+        if note:
+            print(f"警告：{note}")
+        return rays
 
     def get_observed_data(self):
         """获取观测走时数据

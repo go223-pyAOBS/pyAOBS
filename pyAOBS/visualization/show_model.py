@@ -40,37 +40,8 @@ except ImportError:
     )
 
 
-def parse_gmt_cpt_for_matplotlib(cpt_file: str) -> Tuple[LinearSegmentedColormap, float, float]:
-    """解析 GMT 分段 CPT（每行 8 列：z1 r1 g1 b1 z2 r2 g2 b2），生成 Matplotlib 色标并返回 CPT 数据域 [z_min, z_max]。
-
-    使用 CPT 绘图时，``imshow`` 的 vmin/vmax 应与该数据域一致，否则颜色会与 GMT 不一致
-    （例如水体 ~1.5 km/s 应对应 CPT 左端白色，若误用更低分位数作 vmin 会偏粉）。
-    """
-    cpt_rows: List[List[float]] = []
-    z_samples: List[float] = []
-    with open(cpt_file, "r", encoding="utf-8", errors="replace") as fh:
-        for line in fh:
-            s = line.strip()
-            if not s or s.startswith("#"):
-                continue
-            parts = s.split()
-            if len(parts) != 8:
-                continue
-            z1, r1, g1, b1, z2, r2, g2, b2 = map(float, parts)
-            z_samples.extend((z1, z2))
-            cpt_rows.append([z1, r1 / 255.0, g1 / 255.0, b1 / 255.0])
-            cpt_rows.append([z2, r2 / 255.0, g2 / 255.0, b2 / 255.0])
-    if not cpt_rows:
-        raise ValueError(f"CPT 中无有效 8 列色标段: {cpt_file!r}")
-    arr = np.array(cpt_rows, dtype=float)
-    z_min = float(min(z_samples))
-    z_max = float(max(z_samples))
-    if z_max <= z_min:
-        raise ValueError(f"CPT 数据域无效 z_min={z_min}, z_max={z_max}: {cpt_file!r}")
-    z_norm = (arr[:, 0] - z_min) / (z_max - z_min)
-    colors = arr[:, 1:]
-    cmap = LinearSegmentedColormap.from_list("custom_gmt_cpt", list(zip(z_norm, colors)))
-    return cmap, z_min, z_max
+from .gmt_cpt import gmt_cpt_segment_rgb as _gmt_cpt_segment_rgb
+from .gmt_cpt import parse_gmt_cpt_for_matplotlib
 
 
 class ZeltModelVisualizer:
@@ -1389,6 +1360,7 @@ class GridModelVisualizer:
                     linewidth=float(interface.get("linewidth", 1.5)),
                     linestyle=str(interface.get("linestyle", "--")),
                     label=str(interface.get("label", f"Reflector {i+1}")),
+                    zorder=3,
                 )
 
         legend_needed = (plot_interfaces and model is not None and len(interfaces) > 1) or (

@@ -9,6 +9,7 @@ from ..plugins.gui_plugins import (
     ImodelGuiPlugin,
     PetrologyLipGuiPlugin,
     Tomo2dGuiPlugin,
+    VeditGuiPlugin,
     ZplotpyGuiPlugin,
 )
 from ..plugins.tomo2d_plugin import Tomo2DShellPlugin
@@ -22,6 +23,7 @@ def create_builtin_registry() -> ToolRegistry:
     reg.register(ImodelGuiPlugin())
     reg.register(IphaseGuiPlugin())
     reg.register(PetrologyLipGuiPlugin())
+    reg.register(VeditGuiPlugin())
     reg.register(DataGuiPlugin())
     return reg
 

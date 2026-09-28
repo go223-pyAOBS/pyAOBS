@@ -571,11 +571,17 @@ def apply_workbench_chrome(win: QMainWindow) -> None:
     win.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
     win.setStyleSheet(WORKBENCH_QSS)
 
+    from pyAOBS.utils.qt_independent_window import mark_chrome_frame
+
     central = win.centralWidget()
-    if central is None or central.objectName() == "WorkbenchMainFrame":
+    if central is None:
+        return
+    if central.objectName() == "WorkbenchMainFrame":
+        mark_chrome_frame(central)
         return
     frame = QWidget()
     frame.setObjectName("WorkbenchMainFrame")
+    mark_chrome_frame(frame)
     lay = QVBoxLayout(frame)
     lay.setContentsMargins(10, 10, 10, 10)
     lay.setSpacing(0)

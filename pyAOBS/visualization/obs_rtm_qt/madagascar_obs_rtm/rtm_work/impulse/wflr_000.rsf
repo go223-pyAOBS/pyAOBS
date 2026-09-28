@@ -1,0 +1,58 @@
+in=/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/obs_rtm_qt/madagascar_obs_rtm/rtm_work/impulse/obs_gath_000.rsf@
+n1=5018
+d1=0.004
+o1=0
+label1=Time
+unit1=s
+n2=1
+d2=1
+o2=0
+label2=ImpulseShot
+unit2=
+data_format=native_float
+esize=4
+4.2	sfwindow	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:51 2026
+
+	o1=0
+	label1="Time"
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/mut_t_000.rsf@"
+	unit1="s"
+	d1=0.004
+	n1=5018
+4.2	sftransp	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:51 2026
+
+	o1=0
+	d2=0.004
+	n2=5018
+	label1="ImpulseShot"
+	o2=0
+	data_format="native_float"
+	label2="Time"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/dat_adj_000.rsf@"
+	unit1=""
+	unit2="s"
+	d1=1
+	n1=1
+4.2	sfawefd2d	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:52 2026
+
+	d2=0.5
+	n2=821
+	o1=0
+	d3=0.5
+	n3=41
+	o2=0
+	label1=""
+	data_format="native_float"
+	o3=0
+	label2=""
+	label3="t"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/wflr_000.rsf@"
+	unit1=""
+	unit2=""
+	unit3="s"
+	d1=0.25
+	n1=241

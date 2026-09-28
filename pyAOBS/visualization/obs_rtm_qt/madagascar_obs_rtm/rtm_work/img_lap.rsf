@@ -1,0 +1,89 @@
+4.2	sfspike	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:15 2026
+
+	o1=0
+	label1="Time"
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.004
+	n1=7501
+	in="stdin"
+
+4.2	sfricker1	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:15 2026
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sfscale	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:15 2026
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sftransp	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:15 2026
+
+	d2=0.004
+	n2=7501
+	o2=0
+	data_format="native_float"
+	label2="Time"
+	esize=4
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/wav.rsf@"
+	unit2="s"
+	n1=1
+4.2	sfawefd2d	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:16 2026
+
+	d2=0.5
+	n2=821
+	o1=0
+	d3=0.32
+	n3=94
+	o2=0
+	label1=""
+	data_format="native_float"
+	o3=0
+	label2=""
+	label3="t"
+	esize=4
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/wfls_000.rsf@"
+	unit1=""
+	unit2=""
+	unit3="s"
+	d1=0.25
+	n1=241
+4.2	sfadd	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:58 2026
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sfstack	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:58 2026
+
+	n3=1
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/img_obs_000.rsf@"
+4.2	sfcp	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:58 2026
+
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/img_stack.rsf@"
+4.2	sfmath	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:58 2026
+
+	x2=3
+	input=0
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/img_solid.rsf@"
+	b=1
+	x1=2
+4.2	sflaplac	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:59 2026
+
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/img_lap.rsf@"

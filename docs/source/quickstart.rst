@@ -56,8 +56,8 @@ Standalone GUIs
 
 .. code-block:: bash
 
-   python -m pyAOBS.visualization.imodel_qt
+   python -m pyAOBS.visualization.imodel.gui
    python -m pyAOBS.visualization.zplotpy.gui
-   python -m pyAOBS.visualization.iphase.iphase_gui
+   python -m pyAOBS.visualization.iphase.gui
    python -m pyAOBS.modeling.tomo2d.gui
    python -m pyAOBS.petrology.gui

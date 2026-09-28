@@ -8,12 +8,33 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <cstdio>
 #include "smesh.h"
 #include "interface.h"
 #include "d_nr.h"
+#include "error.h"
+
+// 慢度下限（对应 vmax=30 km/s）。NaN / 非正 / 过小一律钳到此值，避免 1/p 爆炸或负走时。
+static const double kSlownessPmin = 1.0/30.0;
+
+static double clamp_nonneg_ttime(int nsrc, int nrcv, double ttime)
+{
+    if (ttime >= 0.0) return ttime;
+    static int nwarn = 0;
+    if (nwarn < 20){
+	cerr << "SlownessMesh2d::calc_ttime - negative traveltime ("
+	     << nsrc << ", " << nrcv << ", " << ttime
+	     << "); clamped to 0 (not aborting)\n";
+	nwarn++;
+	if (nwarn == 20){
+	    cerr << "SlownessMesh2d::calc_ttime - further negative-ttime warnings suppressed\n";
+	}
+    }
+    return 0.0;
+}
 
 SlownessMesh2d::SlownessMesh2d(const char* fn)
-    : eps(1e-6)
+    : dual_vs(false), mix_kappa(1.0), mix_kappa_below(1.0), eps(1e-6)
 {
     ifstream s(fn);
     if (!s){
@@ -114,12 +135,22 @@ void SlownessMesh2d::set(const Array1d<double>& u)
     if (u.size() != nnodes) error("SlownessMesh2d::set - size mismatch");
 
     int N=1;
+    int nclip=0;
     for (int i=1; i<=nx; i++){
 	for (int k=1; k<=nz; k++){
-	    pgrid(i,k) = u(N);
-	    vgrid(i,k) = 1.0/pgrid(i,k);
+	    double p = u(N);
+	    if (!(p > kSlownessPmin)){
+		p = kSlownessPmin;
+		nclip++;
+	    }
+	    pgrid(i,k) = p;
+	    vgrid(i,k) = 1.0/p;
 	    N++;
 	}
+    }
+    if (nclip>0){
+	cerr << "SlownessMesh2d::set - clamped " << nclip
+	     << " nodes to pmin=" << kSlownessPmin << " (vmax=30 km/s)\n";
     }
 }
 
@@ -147,6 +178,245 @@ void SlownessMesh2d::vget(Array1d<double>& v) const
 	    N++;
 	}
     }
+}
+
+void SlownessMesh2d::setVp(const Array1d<double>& u)
+{
+    if (!dual_vs){
+	set(u);
+	return;
+    }
+    if (u.size() != nnodes) error("SlownessMesh2d::setVp - size mismatch");
+
+    int N=1;
+    int nclip=0;
+    for (int i=1; i<=nx; i++){
+	for (int k=1; k<=nz; k++){
+	    double p = u(N);
+	    if (!(p > kSlownessPmin)){
+		p = kSlownessPmin;
+		nclip++;
+	    }
+	    pgrid_vp(i,k) = p;
+	    vgrid_vp(i,k) = 1.0/p;
+	    N++;
+	}
+    }
+    if (nclip>0){
+	cerr << "SlownessMesh2d::setVp - clamped " << nclip
+	     << " nodes to pmin=" << kSlownessPmin << " (vmax=30 km/s)\n";
+    }
+}
+
+void SlownessMesh2d::getVp(Array1d<double>& u) const
+{
+    if (!dual_vs){
+	get(u);
+	return;
+    }
+    if (u.size() != nnodes) error("SlownessMesh2d::getVp - size mismatch");
+
+    int N=1;
+    for (int i=1; i<=nx; i++){
+	for (int k=1; k<=nz; k++){
+	    u(N) = pgrid_vp(i,k);
+	    N++;
+	}
+    }
+}
+
+bool parseVpVsKappa(const char* s, double& k_lid, double& k_below)
+{
+    if (!s || s[0]=='\0') return false;
+    double a=0.0, b=0.0;
+    int n = sscanf(s, "%lf/%lf", &a, &b);
+    if (n==1 && a>0.0){ k_lid = k_below = a; return true; }
+    if (n==2 && a>0.0 && b>0.0){ k_lid = a; k_below = b; return true; }
+    return false;
+}
+
+void SlownessMesh2d::setMixKappa(double k)
+{
+    setMixKappa(k, k);
+}
+
+void SlownessMesh2d::setMixKappa(double k_lid, double k_below)
+{
+    if (k_lid<=0.0 || k_below<=0.0)
+	error("SlownessMesh2d::setMixKappa - kappa must be positive.");
+    if (!dual_vs){
+	mix_kappa = k_lid;
+	mix_kappa_below = k_below;
+    }
+}
+
+void SlownessMesh2d::enableDualVs(double kappa)
+{
+    enableDualVs(kappa, kappa, 0);
+}
+
+void SlownessMesh2d::enableDualVs(double k_lid, double k_below,
+				  const Interface2d* conv)
+{
+    if (k_lid<=0.0 || k_below<=0.0)
+	error("SlownessMesh2d::enableDualVs - kappa must be positive.");
+    if (dual_vs) return;
+    mix_kappa = k_lid;
+    mix_kappa_below = k_below;
+
+    pgrid_vp.resize(nx,nz);
+    vgrid_vp.resize(nx,nz);
+    for (int i=1; i<=nx; i++){
+	for (int k=1; k<=nz; k++){
+	    pgrid_vp(i,k) = pgrid(i,k);
+	    vgrid_vp(i,k) = vgrid(i,k);
+	    Point2d p = nodePos(ser_index(i,k));
+	    if (inWater(p) || inAir(p)) continue;
+	    if (abs(pgrid(i,k) - p_water) < 1e-8) continue;
+	    const bool below = conv && (p.y() >= conv->z(p.x()) - 1e-6);
+	    double kappa = below ? k_below : k_lid;
+	    double ps = kappa*pgrid_vp(i,k);
+	    if (!(ps > kSlownessPmin)) ps = kSlownessPmin;
+	    pgrid(i,k) = ps;
+	    vgrid(i,k) = 1.0/ps;
+	}
+    }
+    dual_vs = true;
+}
+
+void SlownessMesh2d::resetVsFromVpBelow(double kappa, const Interface2d& conv)
+{
+    if (!dual_vs || kappa<=0.0) return;
+    for (int i=1; i<=nx; i++){
+	for (int k=1; k<=nz; k++){
+	    Point2d p = nodePos(ser_index(i,k));
+	    if (inWater(p) || inAir(p)) continue;
+	    if (p.y() < conv.z(p.x()) - 1e-6) continue;
+	    double ps = kappa*pgrid_vp(i,k);
+	    if (!(ps > kSlownessPmin)) ps = kSlownessPmin;
+	    pgrid(i,k) = ps;
+	    vgrid(i,k) = 1.0/ps;
+	}
+    }
+}
+
+void SlownessMesh2d::resetVsFromVp(double k_lid, double k_below,
+				   const Interface2d* conv)
+{
+    if (!dual_vs) return;
+    if (k_lid<=0.0) k_lid = 1.0;
+    if (k_below<=0.0) k_below = k_lid;
+    for (int i=1; i<=nx; i++){
+	for (int k=1; k<=nz; k++){
+	    Point2d p = nodePos(ser_index(i,k));
+	    if (inWater(p) || inAir(p)) continue;
+	    if (abs(pgrid_vp(i,k) - p_water) < 1e-8) continue;
+	    const bool below = conv && (p.y() >= conv->z(p.x()) - 1e-6);
+	    double kappa = below ? k_below : k_lid;
+	    double ps = kappa*pgrid_vp(i,k);
+	    if (!(ps > kSlownessPmin)) ps = kSlownessPmin;
+	    pgrid(i,k) = ps;
+	    vgrid(i,k) = 1.0/ps;
+	}
+    }
+}
+
+void SlownessMesh2d::loadDualVs(const char* vsfn)
+{
+    if (dual_vs) return;
+    SlownessMesh2d vs(vsfn);
+    if (vs.Nx() != nx || vs.Nz() != nz)
+	error("SlownessMesh2d::loadDualVs - Vs mesh nx/nz mismatch");
+
+    pgrid_vp.resize(nx,nz);
+    vgrid_vp.resize(nx,nz);
+    for (int i=1; i<=nx; i++){
+	for (int k=1; k<=nz; k++){
+	    pgrid_vp(i,k) = pgrid(i,k);
+	    vgrid_vp(i,k) = vgrid(i,k);
+	    Point2d p = nodePos(ser_index(i,k));
+            if (inWater(p) || inAir(p)) continue;
+	    if (abs(pgrid(i,k) - p_water) < 1e-8) continue;
+	    double ps = vs.pgrid(i,k);
+	    double vel = vs.vgrid(i,k);
+	    if (!(vel > 0.0) || !(ps > kSlownessPmin)) continue;
+	    pgrid(i,k) = ps;
+	    vgrid(i,k) = vel;
+	}
+    }
+    dual_vs = true;
+}
+
+double SlownessMesh2d::atVp(const Point2d& pos) const
+{
+    Index2d guess = nodeIndex(nearest(pos));
+    return atVp(pos,guess);
+}
+
+double SlownessMesh2d::atVp(const Point2d& pos, Index2d& guess) const
+{
+    if (!dual_vs) return at(pos,guess);
+    upperleft(pos,guess);
+    if (in_water(pos,guess)) return p_water;
+    if (in_air(pos,guess)) return p_air;
+
+    int i=guess.i(), k=guess.k();
+    if (i < 1) i = 1;
+    if (k < 1) k = 1;
+    if (i > nx-1) i = nx-1;
+    if (k > nz-1) k = nz-1;
+    guess.set(i, k);
+    double r,s,rr,ss;
+    calc_local(pos,i,k,r,s,rr,ss);
+    double u=
+	rr*ss*vgrid_vp(i,k)+rr*s*vgrid_vp(i,k+1)
+	+r*s*vgrid_vp(i+1,k+1)+r*ss*vgrid_vp(i+1,k);
+    return 1.0/u;
+}
+
+double SlownessMesh2d::atVp(const Point2d& pos, Index2d& guess,
+			    double& dudx, double& dudz) const
+{
+    if (!dual_vs) return at(pos, guess, dudx, dudz);
+    upperleft(pos,guess);
+    if (in_water(pos,guess)){
+	dudx=dudz=0.0;
+	return p_water;
+    }
+    if (in_air(pos,guess)){
+	dudx=dudz=0.0;
+	return p_air;
+    }
+
+    int i=guess.i(), k=guess.k();
+    if (i < 1) i = 1;
+    if (k < 1) k = 1;
+    if (i > nx-1) i = nx-1;
+    if (k > nz-1) k = nz-1;
+    guess.set(i, k);
+    double r,s,rr,ss;
+    calc_local(pos,i,k,r,s,rr,ss);
+
+    double u1 = vgrid_vp(i,k);
+    double u2 = vgrid_vp(i,k+1);
+    double u3 = vgrid_vp(i+1,k+1);
+    double u4 = vgrid_vp(i+1,k);
+    double u = rr*ss*u1+rr*s*u2+r*s*u3+r*ss*u4;
+
+    double rDX = rdx_vec(i);
+    double rDZ = rdz_vec(k);
+    double B = b_vec(i);
+    double a = ss*u1+s*u2;
+    double b = s*u3+ss*u4-a;
+    double a_br = a+b*r;
+    double dudr = -b/(a_br*a_br);
+    double c = rr*u1+r*u4;
+    double d = rr*u2+r*u3-c;
+    double c_ds = c+d*s;
+    double duds = -d/(c_ds*c_ds);
+    dudz = rDZ*duds;
+    dudx = rDX*(dudr-B*dudz);
+    return 1.0/u;
 }
 
 double SlownessMesh2d::xmin() const { return xpos.front(); }
@@ -186,6 +456,68 @@ Point2d SlownessMesh2d::nodePos(int i) const
 
 double SlownessMesh2d::calc_ttime(int nsrc, int nrcv) const
 {
+    return calc_ttime_on(nsrc, nrcv, pgrid);
+}
+
+double SlownessMesh2d::calc_ttime_vp(int nsrc, int nrcv) const
+{
+    if (!dual_vs) return calc_ttime(nsrc, nrcv);
+    return calc_ttime_on(nsrc, nrcv, pgrid_vp);
+}
+
+double SlownessMesh2d::calc_ttime_converse_dual(int nsrc, int nrcv,
+					       const Interface2d& conv) const
+{
+    if (!dual_vs) return calc_ttime(nsrc, nrcv);
+    return calc_ttime_on(nsrc, nrcv, pgrid, &conv);
+}
+
+double SlownessMesh2d::calc_ttime_psx(int nsrc, int nrcv,
+				     const Interface2d& conv, bool want_s) const
+{
+    return calc_ttime_psx(nsrc, nrcv, conv, want_s ? 2 : 1);
+}
+
+double SlownessMesh2d::calc_ttime_psx(int nsrc, int nrcv,
+				     const Interface2d& conv, int psx_mode) const
+{
+    return calc_ttime_on(nsrc, nrcv, pgrid, &conv, psx_mode);
+}
+
+double SlownessMesh2d::p_on_node(int i, int k, const Array2d<double>& pg,
+				const Interface2d* mix_conv, int psx_leg) const
+{
+    if (psx_leg != 0 && mix_conv){
+	Point2d p(xpos(i), zpos(k)+topo(i));
+	const bool want_s = (psx_leg == 2 || psx_leg == 3);
+	if (inWater(p) || inAir(p)){
+	    if (!want_s && dual_vs) return pgrid_vp(i,k);
+	    return pgrid(i,k);
+	}
+	bool sample_below;
+	if (psx_leg == 4)
+	    sample_below = p.y() >= mix_conv->z(p.x()) + 1e-3;
+	else if (psx_leg == 2)
+	    sample_below = true;
+	else
+	    sample_below = false;
+	double v = psx_corner_vel(i, k, *mix_conv, want_s, sample_below);
+	if (v > 0.0) return 1.0/v;
+	return (!want_s && dual_vs) ? pgrid_vp(i,k) : pgrid(i,k);
+    }
+    if (mix_conv && dual_vs){
+	Point2d p(xpos(i), zpos(k)+topo(i));
+	if (inWater(p) || inAir(p)) return pgrid(i,k);
+	if (p.y() >= mix_conv->z(p.x()) - 1e-6) return pgrid(i,k);
+	return pgrid_vp(i,k);
+    }
+    return pg(i,k);
+}
+
+double SlownessMesh2d::calc_ttime_on(int nsrc, int nrcv,
+				    const Array2d<double>& pg,
+				    const Interface2d* mix_conv, int psx_leg) const
+{
     if (nsrc<1 || nsrc>nnodes || nrcv<1 || nrcv>nnodes)
 	error("SlownessMesh2d::calc_ttime - invalid input");
     Index2d src=node_index(nsrc);
@@ -202,17 +534,18 @@ double SlownessMesh2d::calc_ttime(int nsrc, int nrcv) const
 	int k1=ksrc, k2=ksrc+dkk;
 	while (dk!=0){
 	    double dz=abs(zpos(k1)-zpos(k2));
-	    double pave = 0.5*(pgrid(isrc,k1)+pgrid(isrc,k2));
+	    double pave = 0.5*(p_on_node(isrc,k1,pg,mix_conv,psx_leg)
+			       +p_on_node(isrc,k2,pg,mix_conv,psx_leg));
 	    ttime += dz*pave;
 	    dk -= dkk; k1 += dkk; k2 += dkk;
 	}
     }else if (abs(di)==1){ // ray path within a single sheared column
 	double dx = abs(xpos(isrc)-xpos(ircv));
-	double pave1 = pgrid(isrc,ksrc);
+	double pave1 = p_on_node(isrc,ksrc,pg,mix_conv,psx_leg);
 	double dtopo = abs(topo(isrc)-topo(ircv));
 	if (dk==0){
 	    double dist = sqrt(dtopo*dtopo+dx*dx);
-	    double pave2 = pgrid(ircv,ksrc);
+	    double pave2 = p_on_node(ircv,ksrc,pg,mix_conv,psx_leg);
 	    double pave = 0.5*(pave1+pave2);
 	    ttime += dist*pave;
 	}else{
@@ -225,7 +558,8 @@ double SlownessMesh2d::calc_ttime(int nsrc, int nrcv) const
 	    while (dk!=0){
 		double dz=abs(zpos(k1)-zpos(k2))+dtopo;
 		double dist = sqrt(dz*dz+ddx2);
-		double pave2 = (1.0-ratio)*pgrid(isrc,k2)+ratio*pgrid(ircv,k2);
+		double pave2 = (1.0-ratio)*p_on_node(isrc,k2,pg,mix_conv,psx_leg)
+		    +ratio*p_on_node(ircv,k2,pg,mix_conv,psx_leg);
 		double pave = 0.5*(pave1+pave2);
 		ttime += dist*pave;
 		dk -= dkk; k1 += dkk; k2 += dkk;
@@ -239,7 +573,7 @@ double SlownessMesh2d::calc_ttime(int nsrc, int nrcv) const
 	double zs=topo(isrc)+zpos(ksrc), zr=topo(ircv)+zpos(krcv);
 	double dz = zr-zs;
 	double x1=xs, z1=zs;
-	double pave1 = pgrid(isrc,ksrc);
+	double pave1 = p_on_node(isrc,ksrc,pg,mix_conv,psx_leg);
 	int i2 = isrc+dii;
 	double pave2;
 	while (di!=0){
@@ -248,7 +582,7 @@ double SlownessMesh2d::calc_ttime(int nsrc, int nrcv) const
 	    if (topo(i2)+zpos(1) > z2){ // above the model domain
 		pave2 = p_water;
 	    }else if (topo(i2)+zpos(nz) < z2){ // below the model domain
-		pave2 = pgrid(i2,nz);
+		pave2 = p_on_node(i2,nz,pg,mix_conv,psx_leg);
 	    }else{
 		// search for enclosing nodes
 		int k1=-1, k2=-1;
@@ -285,13 +619,14 @@ double SlownessMesh2d::calc_ttime(int nsrc, int nrcv) const
 		    }
 		}
 		if (k1==k2){
-		    pave2 = pgrid(i2,k1);
+		    pave2 = p_on_node(i2,k1,pg,mix_conv,psx_leg);
 		}else{
 		    double ztest1=topo(i2)+zpos(k1);
 		    double ztest2=topo(i2)+zpos(k2);
 		    double dztest=ztest2-ztest1;
 		    double ratio = (z2-ztest1)/dztest;
-		    pave2 = ratio*pgrid(i2,k1)+(1.0-ratio)*pgrid(i2,k2);
+		    pave2 = ratio*p_on_node(i2,k1,pg,mix_conv,psx_leg)
+			+(1.0-ratio)*p_on_node(i2,k2,pg,mix_conv,psx_leg);
 		}
 	    }
 	    double ddx=x2-x1;
@@ -307,9 +642,7 @@ double SlownessMesh2d::calc_ttime(int nsrc, int nrcv) const
     }
 
     if (ttime<0){
-	cerr << "SlownessMesh2d::calc_ttime - negative traveltime encountered for ("
-	     << nsrc << ", " << nrcv << ", " << ttime <<")\n";
-	exit(1);
+	ttime = clamp_nonneg_ttime(nsrc, nrcv, ttime);
     }
     return ttime;
 }
@@ -437,9 +770,7 @@ double SlownessMesh2d::calc_ttime3(int nsrc, int nrcv) const
     }
 
     if (ttime<0){
-	cerr << "SlownessMesh2d::calc_ttime - negative traveltime encountered for ("
-	     << nsrc << ", " << nrcv << ")\n";
-	exit(1);
+	ttime = clamp_nonneg_ttime(nsrc, nrcv, ttime);
     }
     return ttime;
 }
@@ -464,6 +795,10 @@ void SlownessMesh2d::upperleft(const Point2d& p, Index2d& guess) const
     // note: this code guarantees that the final guess index is bounded by
     //       valid range (1...nx-1)(1...nz-1).
     int i_guess=guess.i(), k_guess=guess.k();
+    if (i_guess < 1) i_guess = 1;
+    if (i_guess > nx) i_guess = nx;
+    if (k_guess < 1) k_guess = 1;
+    if (k_guess > nz) k_guess = nz;
 
     if (xpos(i_guess)<=p.x()){
 	if (i_guess < nx) i_guess++;
@@ -512,6 +847,11 @@ double SlownessMesh2d::at(const Point2d& pos, Index2d& guess) const
     if (in_air(pos,guess)) return p_air;
 	
     int i=guess.i(), k=guess.k();
+    if (i < 1) i = 1;
+    if (k < 1) k = 1;
+    if (i > nx-1) i = nx-1;
+    if (k > nz-1) k = nz-1;
+    guess.set(i, k);
     double r,s,rr,ss;
     calc_local(pos,i,k,r,s,rr,ss);
 
@@ -548,6 +888,11 @@ double SlownessMesh2d::at(const Point2d& pos, Index2d& guess,
     }
     
     int i=guess.i(), k=guess.k();
+    if (i < 1) i = 1;
+    if (k < 1) k = 1;
+    if (i > nx-1) i = nx-1;
+    if (k > nz-1) k = nz-1;
+    guess.set(i, k);
     double r,s,rr,ss;
     calc_local(pos,i,k,r,s,rr,ss);
 
@@ -576,6 +921,110 @@ double SlownessMesh2d::at(const Point2d& pos, Index2d& guess,
     dudx = rDX*(dudr-B*dudz);
     
     return 1.0/u;
+}
+
+double SlownessMesh2d::psx_node_phase_vel(int i, int k, const Interface2d& conv,
+					  bool want_s) const
+{
+    Point2d p(xpos(i), zpos(k)+topo(i));
+    if (inWater(p) || inAir(p)){
+	if (!want_s && dual_vs) return vgrid_vp(i, k);
+	return vgrid(i, k);
+    }
+    if (dual_vs)
+	return want_s ? vgrid(i, k) : vgrid_vp(i, k);
+
+    // Folded mixed: generate the missing field at this node (locked dual).
+    const bool below = p.y() >= conv.z(p.x()) - 1e-6;
+    const double v = vgrid(i, k);
+    if (!(v > 0.0) || mix_kappa <= 0.0 || mix_kappa_below <= 0.0) return v;
+    if (want_s) return below ? v : v / mix_kappa;
+    return below ? v * mix_kappa_below : v;
+}
+
+double SlownessMesh2d::psx_corner_vel(int i, int k, const Interface2d& conv,
+				      bool want_s, bool sample_below) const
+{
+    Point2d p(xpos(i), zpos(k)+topo(i));
+    const double zc = conv.z(p.x());
+    const bool node_below = p.y() >= zc - 1e-6;
+    if (sample_below){
+	if (!node_below){
+	    for (int kk=k; kk<=nz; ++kk){
+		Point2d q(xpos(i), zpos(kk)+topo(i));
+		if (inWater(q) || inAir(q)) continue;
+		if (q.y() >= zc - 1e-6)
+		    return psx_node_phase_vel(i, kk, conv, want_s);
+	    }
+	}
+	return psx_node_phase_vel(i, k, conv, want_s);
+    }
+    if (node_below){
+	for (int kk=k-1; kk>=1; --kk){
+	    Point2d q(xpos(i), zpos(kk)+topo(i));
+	    if (inWater(q) || inAir(q)) continue;
+	    if (q.y() < zc - 1e-6)
+		return psx_node_phase_vel(i, kk, conv, want_s);
+	}
+    }
+    return psx_node_phase_vel(i, k, conv, want_s);
+}
+
+double SlownessMesh2d::atPsx_interp(const Point2d& pos, const Interface2d& conv,
+				    bool want_s, bool sample_below, Index2d& guess,
+				    double* dudx, double* dudz) const
+{
+    upperleft(pos, guess);
+    if (in_water(pos, guess)){
+	if (dudx && dudz) *dudx = *dudz = 0.0;
+	return p_water;
+    }
+    if (in_air(pos, guess)){
+	if (dudx && dudz) *dudx = *dudz = 0.0;
+	return p_air;
+    }
+    int i=guess.i(), k=guess.k();
+    if (i < 1) i = 1;
+    if (k < 1) k = 1;
+    if (i > nx-1) i = nx-1;
+    if (k > nz-1) k = nz-1;
+    guess.set(i, k);
+    double r,s,rr,ss;
+    calc_local(pos,i,k,r,s,rr,ss);
+    double u1 = psx_corner_vel(i,   k,   conv, want_s, sample_below);
+    double u2 = psx_corner_vel(i,   k+1, conv, want_s, sample_below);
+    double u3 = psx_corner_vel(i+1, k+1, conv, want_s, sample_below);
+    double u4 = psx_corner_vel(i+1, k,   conv, want_s, sample_below);
+    double u = rr*ss*u1+rr*s*u2+r*s*u3+r*ss*u4;
+    if (dudx && dudz){
+	double rDX = rdx_vec(i);
+	double rDZ = rdz_vec(k);
+	double B = b_vec(i);
+	double a = ss*u1+s*u2;
+	double b = s*u3+ss*u4-a;
+	double a_br = a+b*r;
+	double dudr = -b/(a_br*a_br);
+	double c = rr*u1+r*u4;
+	double d = rr*u2+r*u3-c;
+	double c_ds = c+d*s;
+	double duds = -d/(c_ds*c_ds);
+	*dudz = rDZ*duds;
+	*dudx = rDX*(dudr-B*(*dudz));
+    }
+    return 1.0/u;
+}
+
+double SlownessMesh2d::atPsx(const Point2d& pos, const Interface2d& conv,
+			     bool want_s, bool sample_below, Index2d& guess) const
+{
+    return atPsx_interp(pos, conv, want_s, sample_below, guess, 0, 0);
+}
+
+double SlownessMesh2d::atPsx(const Point2d& pos, const Interface2d& conv,
+			     bool want_s, bool sample_below, Index2d& guess,
+			     double& dudx, double& dudz) const
+{
+    return atPsx_interp(pos, conv, want_s, sample_below, guess, &dudx, &dudz);
 }
 
 void SlownessMesh2d::cellNodes(int icell, int& j1, int& j2, int& j3, int& j4) const
@@ -795,6 +1244,26 @@ void SlownessMesh2d::outMesh(ostream& os) const
 //	    os.precision(20);
 	    os << 1.0/pgrid(i,k) << " ";
 	}
+	os << '\n';
+    }
+}
+
+void SlownessMesh2d::outMeshVp(ostream& os) const
+{
+    if (!dual_vs){
+	outMesh(os);
+	return;
+    }
+    os << nx << " " << nz << " "
+       << 1.0/p_water << " " << 1.0/p_air << '\n';
+    for (int i=1; i<=nx; i++) os << xpos(i) << " ";
+    os << '\n';
+    for (int i=1; i<=nx; i++) os << topo(i) << " ";
+    os << '\n';
+    for (int k=1; k<=nz; k++) os << zpos(k) << " ";
+    os << '\n';
+    for (int i=1; i<=nx; i++){
+	for (int k=1; k<=nz; k++) os << 1.0/pgrid_vp(i,k) << " ";
 	os << '\n';
     }
 }

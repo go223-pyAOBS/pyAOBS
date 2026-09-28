@@ -14,6 +14,8 @@
 #include "betaspline.h"
 #include "interface.h"
 
+struct PsxBendSpec;
+
 class BendingSolver2d {
 public:
     BendingSolver2d(const SlownessMesh2d& s, const BetaSpline2d& bs,
@@ -23,6 +25,20 @@ public:
     int refine(Array1d<Point2d>& path, double& orig_time, double& new_time,
 	       const Array1d<int>& start_i, const Array1d<int>& end_i,
 	       const Array1d<const Interface2d*>& interf);
+    // Graph stars stay; CG/spline each P or S leg on its own (no stencil across hinges).
+    int refinePsxPhaseLegs(Array1d<Point2d>& path, double& orig_time, double& new_time,
+			   int i0, int i1, int iu0, int iu1, int id0, int id1,
+			   const Interface2d* bathy, const Interface2d* conv,
+			   double kappa, bool below_is_s, bool lid_is_s);
+    // Water phases only: clip path and travel-time samples to [z_lo, z_hi].
+    // Pass 0,0 to disable (code 0/1). Same solver instance is shared.
+    void setWaterColClip(const Interface2d* z_lo, const Interface2d* z_hi);
+    // PPS/PSS: piecewise P/S slowness in calcTravelTime / dTdV. Clear after use.
+    void setPsxBend(int iu1, int id0, int id1, double kappa, bool below_is_s,
+		    const Interface2d* conv, bool lid_is_s=true);
+    // Type 12/13: S-leg stays above Moho. Type 6/8 turning rays do not call this.
+    void setPsxMoho(const Interface2d* moho);
+    void clearPsxBend();
     double tolerance() const { return cg_tol; }
     double brentTolerance() const { return brent_tol; }
     
@@ -48,11 +64,24 @@ private:
     double brent(double ax, double bx, double cx, double *xmin, PF1DIM);
     double f1dim(double x);
     double f1dim_interf(double x);
+    void clip_if_water(Array1d<Point2d>& p) const;
+    void clamp_psx_below(Array1d<Point2d>& p) const;
+    const PsxBendSpec* psxArg(PsxBendSpec& spec) const;
 		    
     const SlownessMesh2d& smesh;
     const BetaSpline2d& bs;
     const int nintp;
     const double cg_tol, brent_tol, eps;
+    const Interface2d *clip_lo, *clip_hi;
+    bool psx_active;
+    int psx_iu1, psx_id0, psx_id1;
+    double psx_kappa;
+    bool psx_below_is_s;
+    bool psx_lid_is_s;
+    const Interface2d* psx_conv;
+    const Interface2d* psx_moho;
+    bool psx_leg_mode;      // per-leg bending: tighter below-interface clamp
+    Array1d<int> freeze_idx; // per-leg bending: hinge duplicate pins to freeze
 
     Array1d<Point2d> Q, dQdu;
     Array1d<const Point2d*> pp, new_pp;

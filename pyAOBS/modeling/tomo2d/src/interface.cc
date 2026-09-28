@@ -6,6 +6,7 @@
  */
 
 #include "interface.h"
+#include <cmath>
 #include <iostream>
 #include <fstream>
 #include <error.h>
@@ -54,7 +55,7 @@ double Interface2d::xmax() const { return xpos.back(); }
 
 double Interface2d::z(double x) const
 {
-    if (x<=xpos.front()) return zpos.front();
+    if (!std::isfinite(x) || x<=xpos.front()) return zpos.front();
     if (x>=xpos.back()) return zpos.back();
     
     int nx=xpos.size();
@@ -73,13 +74,12 @@ double Interface2d::z(double x) const
 	}
     }
 
-    error("Interface2d::z - impossible!");
-    return zpos.front();
+    return zpos.back();
 }
 
 double Interface2d::dzdx(double x) const
 {
-    if (x<=xpos.front() || x>=xpos.back()) return 0.0; // out of bounds
+    if (!std::isfinite(x) || x<=xpos.front() || x>=xpos.back()) return 0.0;
 
     int nx=xpos.size();
     for (int i=1; i<nx; i++){

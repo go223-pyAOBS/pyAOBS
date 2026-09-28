@@ -1,10 +1,15 @@
 /*
  * tt_forward.cc - forward traveltime calculation
  *
- * usage: tt_forward -Msmesh [ -Ggeom -Frefl -A ] \
+ * usage: tt_forward -Msmesh [ -Ggeom -Frefl -Bseafloor -Xconv -Uvsmesh -A ] \
+ *                 [ -k<k> | -k<k_lid>/<k_below> ] \
  *                 [ -Nxorder/zorder/clen/nintp/tot1/tot2 -Eelem -g \
  *                   -Tttime -Oobs_ttime -rv0 -Ddiff -Rray -Ssrc -Ivel -iw/e/s/n/dx/dz -n -Cused_time -Vlevel ]
  *
+ * geom r-line raytype: 0 Pg, 1 PmP (-F), 2/3 water, 4/5 recv peg,
+ *   6 PSP  7 PPS  8 PSS, 9 recv water peg of 6,
+ *   10/11 lid SS peg of 7/8, 14/15 water S→P peg of 7/8,
+ *   12 PSP-Moho  13 PSS-Moho (-X conv, -F Moho).
  * if -G is not specified, only operations regarding a slowness mesh will be done.
  *
  * Jun Korenaga, MIT/WHOI
@@ -20,18 +25,19 @@
 
 int main(int argc, char** argv)
 {
-    bool getMesh=false, getGeom=false, refl=false;
+    bool getMesh=false, getGeom=false, refl=false, getSeafloor=false, getConv=false;
     bool outTime=false, outOTime=false, outSource=false;
     bool outVgrid=false, outRay=false, outElements=false;
     bool outDiff=false, useClock=false, verbose=false, err=false;
     bool graph_only=false, getWESN=false, printAW=true;
-    bool doFullRefl=false;
+    bool doFullRefl=false, getKappa=false, getVsMesh=false;
     int verbose_level;
-    char *mfn, *gfn, *efn, *ofn, *rfn, *tfn, *sfn, *dfn, *vfn, *reflfn, *cfn;
+    char *mfn, *gfn, *efn, *ofn, *rfn, *tfn, *sfn, *dfn, *vfn, *reflfn, *cfn, *seafloorfn, *convfn, *vsfn;
     double vred=0.0;
     int xorder=4, zorder=4, nintp=8;
     double clen=0.0, bend_cg_tol=1e-4, bend_br_tol=1e-7;
     double west,east,north,south,dx,dz;
+    double vpvs_kappa=1.73, vpvs_kappa_below=1.73;
 
     for (int i=1; i<argc; i++){
 	if (argv[i][0] == '-'){
@@ -51,8 +57,27 @@ int main(int argc, char** argv)
 		reflfn = &argv[i][2];
 		refl = true;
 		break;
+	    case 'B':
+		seafloorfn = &argv[i][2];
+		getSeafloor = true;
+		break;
+	    case 'X':
+		convfn = &argv[i][2];
+		getConv = true;
+		break;
 	    case 'A':
 		doFullRefl = true;
+		break;
+	    case 'k':
+		if (!parseVpVsKappa(&argv[i][2], vpvs_kappa, vpvs_kappa_below)){
+		    cerr << "invalid -k (use -k<k> or -k<k_lid>/<k_below>)\n";
+		    err = true;
+		}
+		getKappa = true;
+		break;
+	    case 'U':
+		vsfn = &argv[i][2];
+		getVsMesh = true;
 		break;
 	    case 'N':
 	    {
@@ -138,6 +163,7 @@ int main(int argc, char** argv)
     if (err) error("usage: tt_forward ...");
 
     SlownessMesh2d smesh(mfn);
+    if (getVsMesh) smesh.loadDualVs(vsfn);
     if (outElements){
 	ofstream os(efn);
 	smesh.printElements(os);
@@ -159,6 +185,10 @@ int main(int argc, char** argv)
 	syngen.readRefl(reflfn);
 	if (doFullRefl) syngen.doFullRefl();
     }
+    if (getSeafloor) syngen.readSeafloor(seafloorfn);
+    if (getConv) syngen.readConv(convfn);
+    if (getKappa) syngen.setKappa(vpvs_kappa, vpvs_kappa_below);
+    else if (getVsMesh) syngen.setKappa(1.0);
     if (outRay) syngen.outputRay(rfn);
     if (useClock) syngen.useClock(cfn);
     if (graph_only) syngen.graphOnly();

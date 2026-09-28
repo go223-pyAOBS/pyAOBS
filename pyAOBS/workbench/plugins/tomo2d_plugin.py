@@ -7,6 +7,7 @@ from pathlib import Path
 import shlex
 
 from .base import PluginCommandSpec, PluginValidationError
+from ..core.project_layout import node_id_from_work_dir
 
 
 class Tomo2DShellPlugin:
@@ -24,8 +25,12 @@ class Tomo2DShellPlugin:
     def build_spec(self, project_root: Path, payload: dict) -> PluginCommandSpec:
         executable = str(payload.get("executable", "")).strip()
         args_text = str(payload.get("args", "")).strip()
-        node_id = str(payload.get("node_id", "")).strip() or "tomo2d_node"
         cwd_text = str(payload.get("cwd", "")).strip()
+        node_id = (
+            str(payload.get("node_id", "")).strip()
+            or node_id_from_work_dir(cwd_text)
+            or "workspace"
+        )
         env_text = str(payload.get("env_text", "")).strip()
         inputs_text = str(payload.get("inputs_text", "")).strip()
 

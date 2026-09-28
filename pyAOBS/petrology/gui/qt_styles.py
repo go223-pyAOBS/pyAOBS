@@ -1,11 +1,11 @@
-"""Qt dialog styling — re-export imodel_qt styles or local fallback."""
+"""Qt dialog styling — re-export imodel.gui styles or local fallback."""
 
 from __future__ import annotations
 
 from PySide6.QtWidgets import QLabel, QPushButton
 
 try:
-    from visualization.imodel_qt.styles import (
+    from pyAOBS.visualization.imodel.gui.styles import (
         COLOR_ACCENT,
         COLOR_BORDER_LIGHT,
         COLOR_BORDER_MED,
@@ -32,9 +32,13 @@ except ImportError:
     COLOR_TEXT_SECONDARY = "#2a2a2a"
 
     def apply_dialog_style(dialog) -> None:
+        from pyAOBS.utils.qt_independent_window import apply_independent_window_frame
+
         dialog.setStyleSheet(
-            f"QDialog {{ background-color: {COLOR_SHELL}; color: {COLOR_TEXT}; }}"
+            f"QDialog {{ background-color: {COLOR_SHELL}; color: {COLOR_TEXT};"
+            f" border: 3px solid {COLOR_BORDER_MED}; }}"
         )
+        apply_independent_window_frame(dialog)
 
     def hint_label(text: str) -> QLabel:
         lbl = QLabel(text)

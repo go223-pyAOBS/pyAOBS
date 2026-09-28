@@ -7,7 +7,8 @@ recursive-include pyAOBS/utils *.xlsx *.csv
 recursive-include pyAOBS/petrology/data *.json *.csv *.yaml *.yml *.txt
 recursive-include pyAOBS/petrology/figures *.png
 recursive-include pyAOBS/petrology/reference *.yaml *.yml
-recursive-include pyAOBS/visualization *.bat *.sh
+include pyAOBS/modeling/tomo2d/gui/assets/*.cpt
+include pyAOBS/modeling/tomo2d/gui/assets/contour_*
 
 # Vendored libraries (not always discovered as setuptools packages)
 recursive-include pyAOBS/petrology/burnman/burnman *

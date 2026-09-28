@@ -13,6 +13,7 @@ from workbench.plugins.gui_plugins import (
     Raw2SacPlugin,
     Sac2yPlugin,
     Tomo2dGuiPlugin,
+    VeditGuiPlugin,
     ZplotpyGuiPlugin,
 )
 
@@ -44,7 +45,7 @@ def test_imodel_plugin_default_node(tmp_path: Path) -> None:
         "inputs_text": "",
     }
     spec = plugin.build_spec(tmp_path, payload)
-    assert spec.node_id == "imodel_gui"
+    assert spec.node_id == "workspace"
     assert spec.command[:3] == ["python", "-m", "pyAOBS.workbench.gui_audit_launchers.imodel_gui"]
 
 
@@ -60,7 +61,7 @@ def test_iphase_plugin_with_relative_cwd(tmp_path: Path) -> None:
         "inputs_text": "",
     }
     spec = plugin.build_spec(tmp_path, payload)
-    assert spec.node_id == "iphase_gui"
+    assert spec.node_id == "work"
     assert spec.cwd == (tmp_path / "work").resolve()
     assert spec.command[:3] == ["python", "-m", "pyAOBS.workbench.gui_audit_launchers.iphase_gui"]
 
@@ -76,8 +77,12 @@ def test_tomo2d_gui_plugin_default_node(tmp_path: Path) -> None:
         "inputs_text": "",
     }
     spec = plugin.build_spec(tmp_path, payload)
-    assert spec.node_id == "tomo2d_gui"
-    assert spec.command[:3] == ["python", "-m", "pyAOBS.modeling.tomo2d.gui"]
+    assert spec.node_id == "workspace"
+    assert spec.command[:3] == [
+        "python",
+        "-m",
+        "pyAOBS.workbench.gui_audit_launchers.tomo2d_gui",
+    ]
 
 
 def test_obem_tsm_plugin_default_node(tmp_path: Path) -> None:
@@ -137,6 +142,26 @@ def test_raw2sac_plugin_default_node(tmp_path: Path) -> None:
     ]
 
 
+def test_vedit_plugin_default_node(tmp_path: Path) -> None:
+    plugin = VeditGuiPlugin()
+    payload = {
+        "node_id": "",
+        "executable": "python",
+        "args": "",
+        "cwd": "",
+        "env_text": "",
+        "inputs_text": "",
+    }
+    spec = plugin.build_spec(tmp_path, payload)
+    assert plugin.id == "vedit.gui"
+    assert spec.node_id == "workspace"
+    assert spec.command[:3] == [
+        "python",
+        "-m",
+        "pyAOBS.workbench.gui_audit_launchers.vedit_gui",
+    ]
+
+
 def test_data_gui_plugin_default_node(tmp_path: Path) -> None:
     plugin = DataGuiPlugin()
     payload = {
@@ -148,10 +173,10 @@ def test_data_gui_plugin_default_node(tmp_path: Path) -> None:
         "inputs_text": "",
     }
     spec = plugin.build_spec(tmp_path, payload)
-    assert spec.node_id == "data_gui"
+    assert spec.node_id == "workspace"
     assert spec.command[0] == "python"
-    assert spec.command[1].endswith("processors\\raw2sac\\idata.py") or spec.command[1].endswith(
-        "processors/raw2sac/idata.py"
+    assert spec.command[1].endswith("processors\\idata\\run.py") or spec.command[1].endswith(
+        "processors/idata/run.py"
     )
     assert spec.command[2:] == []
 

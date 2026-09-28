@@ -19,4 +19,5 @@ def test_save_and_load_ui_state(tmp_path: Path) -> None:
 
     restored = store.load_ui_state(project)
     assert restored == state
+    assert "_wb" in str(ref.path).replace("\\", "/")
 

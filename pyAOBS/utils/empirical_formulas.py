@@ -929,7 +929,9 @@ def _dem_critical_porosity(k1, mu1, k2, mu2, asp, phic):
     # 创建ODE求解器
     # 使用Runge-Kutta 4/5阶方法（dopri5），匹配MATLAB的ode45
     solver = ode(_dem_ode_rhs)
-    solver.set_integrator('dopri5', atol=1e-10, rtol=1e-10)
+    # nsteps：扁/尖纵横比或 t→1 时方程变硬，默认步数上限易触发
+    # “dopri5: larger nsteps is needed”
+    solver.set_integrator('dopri5', atol=1e-10, rtol=1e-10, nsteps=50000)
     
     # 设置初始条件
     y0 = np.array([k1, mu1])

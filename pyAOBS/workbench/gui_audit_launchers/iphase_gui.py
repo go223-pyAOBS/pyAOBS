@@ -7,7 +7,7 @@ from ._common import AuditRuntimeHooks, write_audit
 
 
 def main() -> int:
-    target = "pyAOBS.visualization.iphase.iphase_gui"
+    target = "pyAOBS.visualization.iphase.gui"
     old_argv = list(sys.argv)
     hooks = AuditRuntimeHooks()
     try:

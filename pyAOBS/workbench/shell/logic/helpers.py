@@ -18,6 +18,7 @@ def ordered_plugin_ids(plugin_ids: list[str]) -> list[str]:
         "imodel.gui",
         "iphase.gui",
         "petrology.lip.gui",
+        "vedit.gui",
     ]
     seen: set[str] = set()
     ordered: list[str] = []

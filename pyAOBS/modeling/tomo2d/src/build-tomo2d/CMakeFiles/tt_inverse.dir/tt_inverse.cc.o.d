@@ -1,5 +1,5 @@
 CMakeFiles/tt_inverse.dir/tt_inverse.cc.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/tt_inverse.cc \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/tt_inverse.cc \
  /usr/include/stdc-predef.h /usr/include/c++/12/iostream \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
@@ -154,14 +154,14 @@ CMakeFiles/tt_inverse.dir/tt_inverse.cc.o: \
  /usr/include/x86_64-linux-gnu/c++/12/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++io.h \
  /usr/include/c++/12/bits/fstream.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
  /usr/include/c++/12/vector /usr/include/c++/12/bits/stl_uninitialized.h \
  /usr/include/c++/12/bits/stl_vector.h \
  /usr/include/c++/12/bits/stl_bvector.h \
  /usr/include/c++/12/bits/vector.tcc /usr/include/c++/12/cstddef \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/util.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/geom.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/util.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/geom.h \
  /usr/include/c++/12/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
@@ -185,8 +185,8 @@ CMakeFiles/tt_inverse.dir/tt_inverse.cc.o: \
  /usr/include/c++/12/tr1/poly_hermite.tcc \
  /usr/include/c++/12/tr1/poly_laguerre.tcc \
  /usr/include/c++/12/tr1/riemann_zeta.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/inverse.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/inverse.h \
  /usr/include/c++/12/map /usr/include/c++/12/bits/stl_tree.h \
  /usr/include/c++/12/ext/aligned_buffer.h \
  /usr/include/c++/12/bits/node_handle.h \
@@ -194,12 +194,12 @@ CMakeFiles/tt_inverse.dir/tt_inverse.cc.o: \
  /usr/include/c++/12/bits/uses_allocator.h \
  /usr/include/c++/12/bits/stl_multimap.h \
  /usr/include/c++/12/bits/erase_if.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/smesh.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/smesh.h \
  /usr/include/c++/12/list /usr/include/c++/12/bits/stl_list.h \
  /usr/include/c++/12/bits/allocated_ptr.h \
  /usr/include/c++/12/bits/list.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/geom.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/heap_deque.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/geom.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/heap_deque.h \
  /usr/include/c++/12/deque /usr/include/c++/12/bits/stl_deque.h \
  /usr/include/c++/12/bits/deque.tcc /usr/include/c++/12/algorithm \
  /usr/include/c++/12/bits/stl_algo.h \
@@ -215,12 +215,12 @@ CMakeFiles/tt_inverse.dir/tt_inverse.cc.o: \
  /usr/include/c++/12/bits/enable_special_members.h \
  /usr/include/c++/12/bits/unordered_map.h /usr/include/c++/12/array \
  /usr/include/c++/12/compare \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/index.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/graph.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/interface.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/betaspline.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/bend.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/sparse_rect.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/corrlen.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/index.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/jgrav.h
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/index.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/graph.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/interface.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/betaspline.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/bend.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/sparse_rect.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/corrlen.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/index.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/jgrav.h

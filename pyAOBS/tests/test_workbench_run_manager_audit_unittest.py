@@ -83,7 +83,8 @@ class RunManagerAuditEnvTest(unittest.TestCase):
 
             self.assertEqual(manifest.get("status"), "success")
             self.assertIn("sandbox", manifest)
-            self.assertEqual(manifest.get("cwd"), str(run.outputs_dir))
+            expected_outputs_dir = (run.outputs_dir / "idata").resolve()
+            self.assertEqual(manifest.get("cwd"), str(expected_outputs_dir))
 
             marker = run.outputs_dir / "marker.txt"
             if not marker.exists():

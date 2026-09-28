@@ -29,42 +29,58 @@ python -m pyAOBS.workbench.app
 
 ## 2. 项目结构
 
-创建项目后，会在项目根目录生成标准结构（示意）：
+工作台只分辨**工区**；OBS / 炮 / 测线以及 tomo2d 不同参数的计算结果，都在对应 GUI 工区内部选择。
 
-- `project.yaml`：项目元信息
-- `runs/`：每次运行的目录与 `manifest.json`
-- `state/ui_state.json`：界面状态（筛选条件、页签、选中项等）
-- 其他业务目录（`datasets/`、`models/`、`picks/` 等）
+新建项目后的标准结构：
+
+```
+project.yaml          # 含 workspaces 登记表（各 GUI 工区相对路径）
+data/raw/             # 原始数据（不是工区）
+data/derived/
+tools/idata/          # 各工具工区槽（GUI 内「新建工区」才写 meta/*_project.json）
+tools/zplotpy/
+tools/tomo2d/         # 反演运行包在该工区自己的 runs/，不是工作台 _wb/runs/
+tools/imodel/
+tools/iphase/
+tools/vedit/
+_wb/runs/             # 工作台启动记录（同工区 ID 覆盖）
+_wb/state/            # 界面状态、GUI 会话
+_wb/reports/
+```
+
+旧工程（`datasets/` + 根下 `runs/` `state/`）仍可打开。新运行写入 `_wb/`（若已是 v2 布局）。
 
 ## 3. 运行节点（tomo2d）
 
 右侧“运行节点”页提供两种方式：
 
 - **模板化运行**：`tt_inverse_standard` / `tt_forward_basic`
+  - 可选 `seafloor_path`：反演拼 `-Y`，正演拼 `-B`（**留空则 icode 0/1 默认行为不变**）
+  - 可选 `refl_path`（`-F`）；反演可勾 `-y`（只反水）/`-w`（只反壳，互斥）/`-u`（冻结 `-F`）
+  - `gen_smesh` 挂海面（`-S`）仍在 `tomo2d.gui`，shell 模板不单独做
 - **自定义运行**：直接填写 `executable + args + env + inputs`
 
 已内置 GUI 插件：
 
-- `tomo2d.shell`
-- `tomo2d.gui`
+- `tomo2d.shell` / `tomo2d.gui`
 - `zplotpy.gui`
 - `imodel.gui`
 - `iphase.gui`
+- `vedit.gui`
+- `petrology.lip.gui`
 - `data.gui`（统一数据转换 UI：idata）
 
-非 tomo2d 插件支持“GUI 启动参数（插件专用）”小表单：
+GUI 插件支持“启动参数”小表单：`work_dir` 默认来自 `project.yaml` 的 `workspaces`（如 `tools/zplotpy`）。**工区 ID 是用户给的工区名**（表单填写；留空则取 `work_dir` 目录名），**不是工具名、也不是 OBS 号**。应用表单后会写回登记表，并传入 argv / `PYAOBS_*_PROJECT`。
 
-- `zplotpy.gui`：`itype/data/header/record/irec`
-- `imodel.gui`：`work_dir/node_id/model_file/aux_file/extra_args`
-- `iphase.gui`：`work_dir/node_id/tx_files/rin_file/txout_file/extra_args`
+- `data.gui`：`PYAOBS_IDATA_PROJECT`
+- `zplotpy.gui`：`PYAOBS_ZPLOTPY_PROJECT`
+- `tomo2d.gui`：`PYAOBS_TOMO2D_PROJECT`（计算结果在工区 `runs/ttinv_*`）
+- `imodel.gui`：`PYAOBS_IMODEL_PROJECT`
+- `iphase.gui`：`PYAOBS_IPHASE_PROJECT`
+- `vedit.gui`：工区优先，否则 argv 打开 v.in；`PYAOBS_VEDIT_PROJECT`
 
-说明：`imodel/iphase` 当前主要通过 GUI 内部打开数据，上述文件字段会写入运行记录的 `input_files`，
-用于追踪与复跑（不一定映射为命令行参数）。其中 **`imodel.gui` 工作台入口为 Qt 版**
-（`pyAOBS.visualization.imodel_qt`，需 PySide6）；若需旧版 Tk 界面，请直接执行
-`python -m pyAOBS.visualization.imodel_gui`。
-
-`processor.*` 三个数据转换插件默认采用“自定义运行”模式（`executable + args + inputs`），
-可通过“填入插件启动示例”一键生成参数骨架后再按项目路径修改。
+说明：`model_file` / `aux_file` 仍可写入运行记录的 `input_files` 便于追踪。
+**`imodel.gui` / `zplotpy.gui` / `iphase.gui` / `vedit.gui` 工作台入口均为现行 Qt 版**。
 
 `tomo2d.gui` 用于直接启动 TOMO2D 图形界面（命令模式并行保留 `tomo2d.shell`）。
 
@@ -75,7 +91,7 @@ python -m pyAOBS.workbench.app
 
 GUI 审计增强：
 - Workbench 运行每个节点时会注入 `PYAOBS_RUN_ID/PYAOBS_PROJECT_ROOT/PYAOBS_RUN_DIR/PYAOBS_AUDIT_LOG`
-- `manifest.json` 新增 `audit.session_log` 字段，指向 `state/gui_sessions/<run_id>.jsonl`
+- `manifest.json` 新增 `audit.session_log` 字段，指向 `_wb/state/gui_sessions/<run_id>.jsonl`
 - `data.gui(idata)` 会记录关键交互事件（启动、浏览、执行、完成、关闭）
 - `tomo2d.gui` 当前记录会话级事件（启动/关闭/异常）
 - `zplotpy.gui/imodel.gui/iphase.gui` 已通过审计包装启动器记录会话级事件（启动/关闭/异常；`imodel` 记录的 `frontend=qt`）
@@ -85,25 +101,16 @@ GUI 审计增强：
   - `subprocess_run_* / subprocess_popen_*`（GUI 内部外部命令执行）
 
 运行节点插件下拉按推荐流程排序：
-`data.gui -> zplotpy.gui -> tomo2d.gui -> tomo2d.shell -> imodel.gui -> iphase.gui`
+`data.gui -> zplotpy.gui -> tomo2d.gui -> tomo2d.shell -> imodel.gui -> iphase.gui -> petrology.lip.gui -> vedit.gui`
 
 运行节点命令区支持“目录类型一键填入”：
-- 快速设置 `cwd`：`datasets/raw`、`datasets/processed`、`picks`、`models`、`interpretation`
+- 快速设置 `cwd`：`data/raw`、`data/derived`、`tools`、`tools/tomo2d`、`tools/imodel`
 - `CWD=项目树选中目录`：以左侧项目树当前选中项（若为文件则取其父目录）设置 `cwd`
 - `选中项加入 inputs`：将左侧项目树当前选中目录或文件追加到 `inputs`
 
-其中 `iphase tx_files` 支持两种导入方式：
-
-- 文件对话框多选导入
-- 从左侧项目树当前选中节点导入（选目录时会批量扫描常见 `tx` 文件）
-- 支持 `name_filter` 关键词过滤，仅导入文件名匹配项：
-  - 单关键词：`OBS22`
-  - 多关键词 OR（逗号分隔）：`OBS22,OBS23`
-  - 通配符：`OBS2*`、`*lineA*`
-
 运行节点支持“保存节点预设 / 加载节点预设”：
 
-- 保存路径：`project/state/node_presets/*.json`
+- 保存路径：`_wb/state/node_presets/*.json`（旧工程仍可读 `state/node_presets/`）
 - 会保存：插件类型、模板类型、通用命令区内容、GUI 专用表单状态
 - 便于快速切换不同工作流配置（例如 tomo2d 参数组、iphase 批次筛选规则）
 
@@ -208,7 +215,7 @@ GUI 审计增强：
 
 ## 9. 状态持久化与自动恢复
 
-以下状态会保存到 `state/ui_state.json` 并在打开项目后自动恢复：
+以下状态会保存到 `_wb/state/ui_state.json`（旧工程为 `state/ui_state.json`）并在打开项目后自动恢复：
 
 - 窗口大小与项目树选中项
 - 右侧页签（运行历史/运行节点）
@@ -219,8 +226,8 @@ GUI 审计增强：
 
 ## 10. 备注
 
-- 目前内置插件以 `tomo2d.shell` 为主，结构上已支持扩展到 `iphase` / `zplotpy` / `imodel`。
-- 批量复跑会生成新的 run 目录，不覆盖历史记录，便于对比与追溯。
+- 工作台按工区启动 GUI；OBS / 炮 / 测线 / 反演迭代在各 GUI 工区内分辨。
+- 相同工区 ID 会覆盖 `_wb/runs/<id>/` 启动记录。tomo2d 的参数对比请用 GUI 工区里的 `runs/ttinv_*`。
 
 ## 11. 常见问题（FAQ）
 
@@ -262,5 +269,5 @@ GUI 审计增强：
 
 ### Q6: 打开项目后没有恢复到上次筛选/选中项怎么办？
 
-请确认项目目录下存在 `state/ui_state.json`，且可正常读写。  
+请确认项目目录下存在 `_wb/state/ui_state.json` 或旧版 `state/ui_state.json`，且可正常读写。  
 如果你手动修改过项目结构或 run 目录，部分历史项（如上次 `run_id`）可能无法定位，会回退到当前可见的默认选择。

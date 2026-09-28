@@ -1,0 +1,16 @@
+# Water-column Vp (km/s). Shallow/slow = warm, deep/fast = cool
+# (deeper water is colder). Air (v<~1.2 or z<topo) should be masked
+# transparent when plotting; B is white if any leftover. Sediment >1.65 → F.
+#COLOR_MODEL = RGB
+#
+1.35	210	36	24	1.40	240	92	32
+1.40	240	92	32	1.44	250	168	48
+1.44	250	168	48	1.47	250	214	88
+1.47	250	214	88	1.50	150	205	125
+1.50	150	205	125	1.53	48	176	198
+1.53	48	176	198	1.56	28	108	198
+1.56	28	108	198	1.60	20	52	158
+1.60	20	52	158	1.65	14	24	88
+B	255	255	255
+F	90	50	30
+N	255	255	255

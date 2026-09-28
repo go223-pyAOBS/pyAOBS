@@ -70,6 +70,10 @@ output/
 *.sac
 *.segy
 *.sgy
+*.su
+*.SU
+*.z
+*.Z
 *.zip
 *.tar
 *.tar.gz
@@ -103,6 +107,7 @@ docs/_templates/
 
 # Testing / coverage
 .pytest_cache/
+**/.tomo2d_tmp/
 .coverage
 htmlcov/
 
@@ -113,3 +118,35 @@ htmlcov/
 pyAOBS/NUL.png
 **/NUL.*
 **/pickunc-hhb/
+
+# Local backups / build trees (do not ship)
+**/tomo2d - 副本/
+**/tomo2d - 副本/**
+**/src - 副本/
+**/src - 副本/**
+**/src - 副本 (2)/
+**/src - 副本 (2)/**
+**/build-tomo2d/
+**/build-tomo2d/**
+**/build-orig/
+**/build-orig/**
+
+# Heavy regenerable tomo2d products (configs/scripts stay trackable)
+pyAOBS/modeling/tomo2d/example_water/**/wave_fwd/
+pyAOBS/modeling/tomo2d/example_water/**/rays*.dat
+pyAOBS/modeling/tomo2d/example_water/**/*.npz
+pyAOBS/modeling/tomo2d/example_water/**/*.bmp
+pyAOBS/modeling/tomo2d/examples/runs/
+pyAOBS/modeling/log.log
+
+# Scratch / temp at repo root
+obs_xz.txt
+offsets.txt
+_tmp_*.py
+**/fort.63
+
+# Heavy local seismic / madagascar working trees
+**/madagascar_obs_rtm/cache/
+**/madagascar_obs_rtm/inputs/raw/
+**/processors/idata/test/
+**/processors/relocation/test/

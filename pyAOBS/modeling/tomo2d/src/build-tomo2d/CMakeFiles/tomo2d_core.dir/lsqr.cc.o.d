@@ -1,5 +1,5 @@
 CMakeFiles/tomo2d_core.dir/lsqr.cc.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/lsqr.cc \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/lsqr.cc \
  /usr/include/stdc-predef.h /usr/include/c++/12/cmath \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
@@ -84,10 +84,8 @@ CMakeFiles/tomo2d_core.dir/lsqr.cc.o: \
  /usr/include/c++/12/tr1/modified_bessel_func.tcc \
  /usr/include/c++/12/tr1/poly_hermite.tcc \
  /usr/include/c++/12/tr1/poly_laguerre.tcc \
- /usr/include/c++/12/tr1/riemann_zeta.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/lsqr.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
- /usr/include/c++/12/vector /usr/include/c++/12/bits/allocator.h \
+ /usr/include/c++/12/tr1/riemann_zeta.tcc /usr/include/c++/12/vector \
+ /usr/include/c++/12/bits/allocator.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++allocator.h \
  /usr/include/c++/12/bits/new_allocator.h /usr/include/c++/12/new \
  /usr/include/c++/12/bits/exception.h \
@@ -105,12 +103,18 @@ CMakeFiles/tomo2d_core.dir/lsqr.cc.o: \
  /usr/include/c++/12/bits/stl_function.h \
  /usr/include/c++/12/backward/binders.h \
  /usr/include/c++/12/bits/range_access.h \
- /usr/include/c++/12/bits/vector.tcc /usr/include/c++/12/cstddef \
- /usr/include/c++/12/iostream /usr/include/c++/12/ostream \
- /usr/include/c++/12/ios /usr/include/c++/12/iosfwd \
- /usr/include/c++/12/bits/stringfwd.h /usr/include/c++/12/bits/postypes.h \
- /usr/include/c++/12/cwchar /usr/include/wchar.h \
- /usr/lib/gcc/x86_64-linux-gnu/12/include/stdarg.h \
+ /usr/include/c++/12/bits/vector.tcc /usr/include/c++/12/algorithm \
+ /usr/include/c++/12/bits/stl_algo.h \
+ /usr/include/c++/12/bits/algorithmfwd.h \
+ /usr/include/c++/12/bits/stl_heap.h \
+ /usr/include/c++/12/bits/stl_tempbuf.h \
+ /usr/include/c++/12/bits/uniform_int_dist.h /usr/include/c++/12/cstdlib \
+ /usr/include/c++/12/pstl/glue_algorithm_defs.h \
+ /usr/include/c++/12/pstl/execution_defs.h /usr/include/c++/12/iostream \
+ /usr/include/c++/12/ostream /usr/include/c++/12/ios \
+ /usr/include/c++/12/iosfwd /usr/include/c++/12/bits/stringfwd.h \
+ /usr/include/c++/12/bits/postypes.h /usr/include/c++/12/cwchar \
+ /usr/include/wchar.h /usr/lib/gcc/x86_64-linux-gnu/12/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
@@ -149,9 +153,8 @@ CMakeFiles/tomo2d_core.dir/lsqr.cc.o: \
  /usr/include/c++/12/bits/cxxabi_forced.h \
  /usr/include/c++/12/bits/basic_string.h /usr/include/c++/12/string_view \
  /usr/include/c++/12/bits/string_view.tcc \
- /usr/include/c++/12/ext/string_conversions.h /usr/include/c++/12/cstdlib \
- /usr/include/c++/12/cstdio /usr/include/stdio.h \
- /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
+ /usr/include/c++/12/ext/string_conversions.h /usr/include/c++/12/cstdio \
+ /usr/include/stdio.h /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h \
@@ -178,8 +181,11 @@ CMakeFiles/tomo2d_core.dir/lsqr.cc.o: \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/sparse_rect.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/lsqr.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
+ /usr/include/c++/12/cstddef \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/sparse_rect.h \
  /usr/include/c++/12/map /usr/include/c++/12/bits/stl_tree.h \
  /usr/include/c++/12/ext/aligned_buffer.h \
  /usr/include/c++/12/bits/node_handle.h \
@@ -187,4 +193,4 @@ CMakeFiles/tomo2d_core.dir/lsqr.cc.o: \
  /usr/include/c++/12/bits/uses_allocator.h \
  /usr/include/c++/12/bits/stl_multimap.h \
  /usr/include/c++/12/bits/erase_if.h /usr/include/c++/12/stdlib.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h

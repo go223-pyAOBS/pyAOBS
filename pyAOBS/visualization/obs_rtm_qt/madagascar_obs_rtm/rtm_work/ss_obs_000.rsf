@@ -1,0 +1,26 @@
+4.2	sfmath	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:16 2026
+
+	o1=0
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/xs_obs_000.rsf@"
+	x1=0
+	d1=1
+	n1=1
+4.2	sfcat	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:16 2026
+
+	n2=2
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sftransp	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:16 2026
+
+	d2=1
+	n2=1
+	o2=0
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/ss_obs_000.rsf@"
+	n1=2

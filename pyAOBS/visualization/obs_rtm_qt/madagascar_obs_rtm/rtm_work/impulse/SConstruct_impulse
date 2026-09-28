@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+"""AUTO-GENERATED — impulse RTM (band-limited Ricker @ pick, matched to forward fm)."""
+from rsf.proj import *
+import os
+
+par = dict(
+    oz=0, dz=0.25, nz=241,
+    ox=0, dx=0.5, nx=821,
+    ot=0.0, dt=0.004, nt=5018,
+    fmin=5, fmax=12, fm=8.5, kt=29,
+    nb=40, jsnap=125, vwater=1.5,
+    verb='n',
+)
+par['zmax'] = 60
+par['xmax'] = 410
+print('Impulse RTM: OBS=0 shot=1240 t=19.2680s amp=-3.72e+04 nx=%(nx)d nz=%(nz)d nt=%(nt)d jsnap=%(jsnap)d ~40 snaps' % par, flush=True)
+VEL = '../../vel.rsf'
+REC_SHOTS = 'rec_shots.rsf'
+BATH2D_FROM = '../../bath1d.rsf'
+GATHER = 'obs_gath_000.rsf'
+_SMOOTH = 0
+IOBS, XO, ZO = 0, 345.626, 1.901
+
+if _SMOOTH > 0:
+    Flow('vels', VEL, 'smooth rect1=%d rect2=%d repeat=1' % (_SMOOTH, _SMOOTH))
+else:
+    Flow('vels', VEL, 'window')
+Flow('den', 'vels', 'math output=1')
+
+Flow('bath2d', BATH2D_FROM,     'spray axis=1 n=%(nz)d o=%(oz)g d=%(dz)g | put label1=Depth unit1=km label2=Distance unit2=km' % par)
+
+Flow('wav', None,     'spike nsp=1 n1=%(nt)d d1=%(dt)g o1=%(ot)g k1=%(kt)d | ricker1 frequency=%(fm)g | scale axis=1 | transp' % par)
+
+tag = '%03d' % int(IOBS)
+Flow('xs_obs_' + tag, None, 'math n1=1 output=%g' % float(XO))
+Flow('zs_obs_' + tag, None, 'math n1=1 output=%g' % max(float(ZO), 1e-4))
+Flow('ss_obs_' + tag, ['xs_obs_' + tag, 'zs_obs_' + tag],     'cat axis=2 space=n ${SOURCES[0]} ${SOURCES[1]} | transp', stdin=0)
+Flow('mut_t_' + tag, GATHER, 'window n1=%(nt)d' % par)
+Flow(['datf_' + tag, 'wfls_' + tag],     ['wav', 'vels', 'den', 'ss_obs_' + tag, REC_SHOTS],     'awefd2d vel=${SOURCES[1]} den=${SOURCES[2]} sou=${SOURCES[3]} rec=${SOURCES[4]} wfl=${TARGETS[1]} verb=%(verb)s free=y expl=y dabc=y nb=%(nb)d snap=y jsnap=%(jsnap)d jdata=1' % par)
+Flow('dat_adj_' + tag, 'mut_t_' + tag, 'transp')
+Flow(['datb_' + tag, 'wflr_' + tag],     ['dat_adj_' + tag, 'vels', 'den', REC_SHOTS, 'ss_obs_' + tag],     'awefd2d adj=y vel=${SOURCES[1]} den=${SOURCES[2]} sou=${SOURCES[3]} rec=${SOURCES[4]} wfl=${TARGETS[1]} verb=%(verb)s free=y expl=n dabc=y nb=%(nb)d snap=y jsnap=%(jsnap)d jdata=1' % par)
+Flow('img_impulse', ['wfls_' + tag, 'wflr_' + tag],     'add ${SOURCES[1]} mode=p | stack axis=3 norm=n')
+Flow('img_impulse_solid', 'img_impulse bath2d',     "math b=${SOURCES[1]} output='input*0.5*(1+sign(x1-b))'")
+Flow('img_impulse_lap', 'img_impulse_solid', 'laplac')
+End()

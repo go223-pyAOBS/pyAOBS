@@ -16,6 +16,7 @@
  * Note:
  *	If header words are added, run the makefile in this directory
  *	to recreate hdr.h.
+ *	Python 侧共用偏移表见同目录 segy_trace_header.py（供 su_to_shots 等）。
  *
  * Reference:
  *	K. M. Barry, D. A. Cavers and C. W. Kneale, "Special Report:

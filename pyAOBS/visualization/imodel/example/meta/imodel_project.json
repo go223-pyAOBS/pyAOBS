@@ -1,0 +1,27 @@
+{
+  "name": "example",
+  "workdir": "/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/imodel/example",
+  "version": 1,
+  "analysis": {
+    "show_interfaces": true,
+    "basement_selection": "Interface 4",
+    "seafloor_selection": "Auto",
+    "moho_selection": "Interface 8"
+  },
+  "workflow": {
+    "vp_model": "inputs/v_haiti.in",
+    "vs_model": "",
+    "interface_files": [],
+    "gravity_obs_data_dir": "/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/imodel/data",
+    "gravity_obs_filename": "gravity_world.grd",
+    "gravity_obs_overlay": false,
+    "gravity_profile_lon_lat_csv": "",
+    "petrology_obs_json": "",
+    "petrology_f_lower": null,
+    "petrology_export_x_km": 0.0,
+    "petrology_transect_windows": "",
+    "petrology_observation": null,
+    "petrology_observations": []
+  },
+  "notes": ""
+}

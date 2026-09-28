@@ -27,6 +27,32 @@ from .ray_tracer import (
 )
 
 from .rayinvr_wrapper import RayinvrWrapper
+from .service import (
+    RayinvrInputSpec,
+    RayinvrResult,
+    parse_rin_input_files,
+    prepare_rayinvr_workdir,
+    run_rayinvr,
+    run_rayinvr_collect,
+    validate_rayinvr_inputs,
+)
+from .tx_io import (
+    TxDataset,
+    TxPick,
+    TxShotBlock,
+    parse_tx_file_by_shot,
+    read_tx_file,
+    validate_tx_file,
+    write_tx_file,
+    write_tx_from_picks,
+)
+from .vin_io import (
+    is_vin_file,
+    load_edit_model,
+    load_zelt_model,
+    read_vin_dict,
+    write_vin_dict,
+)
 
 __version__ = '0.1.0'
 __author__ = 'Haibo Huang'
@@ -41,5 +67,31 @@ __all__ = [
     'RayTracerConfig',
     
     # RAYINVR Interface
-    'RayinvrWrapper'
+    'RayinvrWrapper',
+
+    # Shared service (vedit / zplotpy / iphase)
+    'RayinvrInputSpec',
+    'RayinvrResult',
+    'parse_rin_input_files',
+    'prepare_rayinvr_workdir',
+    'run_rayinvr',
+    'run_rayinvr_collect',
+    'validate_rayinvr_inputs',
+
+    # tx.in / tx.out I/O
+    'TxDataset',
+    'TxPick',
+    'TxShotBlock',
+    'parse_tx_file_by_shot',
+    'read_tx_file',
+    'validate_tx_file',
+    'write_tx_file',
+    'write_tx_from_picks',
+
+    # v.in I/O
+    'is_vin_file',
+    'load_edit_model',
+    'load_zelt_model',
+    'read_vin_dict',
+    'write_vin_dict',
 ] 

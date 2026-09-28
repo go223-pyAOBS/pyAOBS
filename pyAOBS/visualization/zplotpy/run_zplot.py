@@ -1,19 +1,19 @@
 #!/usr/bin/env python
-"""
-run_zplot.py - 兼容启动脚本（推荐改用模块启动）
+# -*- coding: utf-8 -*-
+"""兼容启动脚本 → ``run.py`` / ``python -m …zplotpy.gui``。
 
-推荐命令：
+推荐::
+
     python -m pyAOBS.visualization.zplotpy.gui
-或：
-    python -m pyaobs.visualization.zplotpy.gui
+    python pyAOBS/visualization/zplotpy/run.py
 """
+
+from __future__ import annotations
 
 try:
-    from .gui import main
+    from .run import main
 except ImportError:
-    # 兼容直接以脚本方式执行：python run_zplot.py
-    from gui import main
+    from run import main  # type: ignore
 
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    raise SystemExit(main())

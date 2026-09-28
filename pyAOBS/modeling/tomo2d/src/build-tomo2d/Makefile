@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src
+CMAKE_SOURCE_DIR = /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d
+CMAKE_BINARY_DIR = /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/CMakeFiles /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -193,6 +193,19 @@ gen_vcorr: cmake_check_build_system
 gen_vcorr/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gen_vcorr.dir/build.make CMakeFiles/gen_vcorr.dir/build
 .PHONY : gen_vcorr/fast
+
+#=============================================================================
+# Target rules for targets named gen_dcorr
+
+# Build rule for target.
+gen_dcorr: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gen_dcorr
+.PHONY : gen_dcorr
+
+# fast build rule for target.
+gen_dcorr/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gen_dcorr.dir/build.make CMakeFiles/gen_dcorr.dir/build
+.PHONY : gen_dcorr/fast
 
 #=============================================================================
 # Target rules for targets named stat_smesh
@@ -581,6 +594,30 @@ gen_damp.s: gen_damp.cc.s
 gen_damp.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gen_damp.dir/build.make CMakeFiles/gen_damp.dir/gen_damp.cc.s
 .PHONY : gen_damp.cc.s
+
+gen_dcorr.o: gen_dcorr.cc.o
+.PHONY : gen_dcorr.o
+
+# target to build an object file
+gen_dcorr.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gen_dcorr.dir/build.make CMakeFiles/gen_dcorr.dir/gen_dcorr.cc.o
+.PHONY : gen_dcorr.cc.o
+
+gen_dcorr.i: gen_dcorr.cc.i
+.PHONY : gen_dcorr.i
+
+# target to preprocess a source file
+gen_dcorr.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gen_dcorr.dir/build.make CMakeFiles/gen_dcorr.dir/gen_dcorr.cc.i
+.PHONY : gen_dcorr.cc.i
+
+gen_dcorr.s: gen_dcorr.cc.s
+.PHONY : gen_dcorr.s
+
+# target to generate assembly for a file
+gen_dcorr.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gen_dcorr.dir/build.make CMakeFiles/gen_dcorr.dir/gen_dcorr.cc.s
+.PHONY : gen_dcorr.cc.s
 
 gen_smesh.o: gen_smesh.cc.o
 .PHONY : gen_smesh.o
@@ -1026,6 +1063,7 @@ help:
 	@echo "... edit_smesh_HHB"
 	@echo "... edit_smesh_HHB2"
 	@echo "... gen_damp"
+	@echo "... gen_dcorr"
 	@echo "... gen_smesh"
 	@echo "... gen_vcorr"
 	@echo "... stat_smesh"
@@ -1074,6 +1112,9 @@ help:
 	@echo "... gen_damp.o"
 	@echo "... gen_damp.i"
 	@echo "... gen_damp.s"
+	@echo "... gen_dcorr.o"
+	@echo "... gen_dcorr.i"
+	@echo "... gen_dcorr.s"
 	@echo "... gen_smesh.o"
 	@echo "... gen_smesh.i"
 	@echo "... gen_smesh.s"

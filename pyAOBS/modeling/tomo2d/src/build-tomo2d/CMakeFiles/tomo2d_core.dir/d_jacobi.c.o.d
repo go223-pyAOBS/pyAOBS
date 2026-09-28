@@ -1,5 +1,5 @@
 CMakeFiles/tomo2d_core.dir/d_jacobi.c.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/d_jacobi.c \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/d_jacobi.c \
  /usr/include/stdc-predef.h /usr/include/c++/12/math.h \
  /usr/include/c++/12/cmath \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
@@ -86,4 +86,4 @@ CMakeFiles/tomo2d_core.dir/d_jacobi.c.o: \
  /usr/include/c++/12/tr1/poly_hermite.tcc \
  /usr/include/c++/12/tr1/poly_laguerre.tcc \
  /usr/include/c++/12/tr1/riemann_zeta.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/nrutil.h
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/nrutil.h

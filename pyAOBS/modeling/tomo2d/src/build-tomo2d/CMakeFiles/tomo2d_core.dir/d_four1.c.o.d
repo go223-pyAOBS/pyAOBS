@@ -1,5 +1,5 @@
 CMakeFiles/tomo2d_core.dir/d_four1.c.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/d_four1.c \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/d_four1.c \
  /usr/include/stdc-predef.h /usr/include/c++/12/math.h \
  /usr/include/c++/12/cmath \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \

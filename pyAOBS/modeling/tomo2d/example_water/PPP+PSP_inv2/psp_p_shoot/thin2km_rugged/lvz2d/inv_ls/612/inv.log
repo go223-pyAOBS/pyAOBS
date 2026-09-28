@@ -1,0 +1,20 @@
+# strategy jumping=0 robust=0 crit_chi=1000
+# ray_trace -N xorder=8 zorder=8 clen=0.8 nintp=8 bend_tol=0.001
+# smooth_vel -SV on=1 wmin=200 wmax=200 dw=201 -Ss=-1 log10(-XV)=0
+# smooth_dep -SD on=1 wmin=20 wmax=20 dw=21 log10(-XD)=0
+# damping: MODE=fixed  using=-D/-DV/-DD  auto_-T=OFF  -DV=30 -DD=200
+# filter_-s: OFF  (ON=2D filter after each iter; OFF=no -s)
+# water: invert_only=0 crust_only=1 seafloor=Y
+# psx: invert_vs=1 joint_vpvs=0 freeze_lid=1
+# ndata 166
+# nnodes nnodev=6156 nvel=6156 nnoded(refl)=76 freeze_-u=OFF refl_weight=1
+# LSQR atol=0.001 itermax=615600 cap=8000  (TOMO2D_INV_LSQR_MAXITER)
+# lsqr_precond: OFF maxD=10  (ON=TOMO2D_INV_LSQR_PRECOND!=0; default OFF; Legacy forces OFF; maxD=kappa vs col-norm median, empty D=0, miniter=20)
+# sens_weight: OFF kappa=10 eps=0.05  (ON=TOMO2D_INV_SENS_WEIGHT!=0; default OFF; T*=w, R couple 2/(wi+wj); median per Vp/Vs-lid/Vs-below/Moho)
+# linesearch: ON c=0.0001 rho=0.5 amin=0.03125  (ON=TOMO2D_INV_LINESEARCH!=0; default OFF; Armijo on true chi2 after re-trace)
+# accel: reuse=OFF thresh=0 c2f=OFF legacy=OFF
+1 1 0 0.0998697 99.7395 0 0 0 0 0 0 4.4e-06 88.3259 200 20 30 200 1 40 0 10.5684 0.00692415 0.00778854 0.000690402 0.00132091 0.0610343
+# linesearch: alpha=0.0625 ntry=5 chi2_0=99.7395 chi2=84.6145
+2 1 0 0.0919861 84.6145 0 0 0 0 0 0 2.60001e-06 105.315 200 20 30 200 1 24 0 12.1603 0.0073728 0.00790647 0.00109247 0.00147545 0.0620414
+# linesearch: alpha=0.5 ntry=2 chi2_0=84.6145 chi2=79.5354
+3 1 0 0.0891826 79.5354 0 0 0 0 0 0 2.49999e-06 109.179 200 20 30 200 1 20 0 8.5186 0.00359988 0.00632585 0.000546805 0.00103821 0.0489871

@@ -35,6 +35,9 @@ OBJ_GEN_DAMP = $(SRC_GEN_DAMP:.cc=.o)
 SRC_GEN_VCORR = gen_vcorr.cc zeltform.cc geom.cc error.cc util.cc
 OBJ_GEN_VCORR = $(SRC_GEN_VCORR:.cc=.o)
 
+SRC_GEN_DCORR = gen_dcorr.cc zeltform.cc geom.cc error.cc util.cc corrlen.cc
+OBJ_GEN_DCORR = $(SRC_GEN_DCORR:.cc=.o)
+
 SRC_EDIT_SMESH_HHB = edit_smesh_HHB.cc geom.cc error.cc util.cc smesh.cc interface.cc corrlen.cc
 SRC_EDIT_SMESH_HHB_C = d_jacobi.c d_choldc.c nrutil.c
 OBJ_EDIT_SMESH_HHB = $(SRC_EDIT_SMESH_HHB:.cc=.o) $(SRC_EDIT_SMESH_HHB_C:.c=.o)
@@ -63,7 +66,7 @@ OBJ_TT_INVERSE = $(SRC_TT_INVERSE:.cc=.o) $(SRC_TT_INVERSE_C:.c=.o)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: all clean
-all: gen_smesh gen_damp gen_vcorr edit_smesh_HHB stat_smesh tt_forward tt_inverse
+all: gen_smesh gen_damp gen_vcorr gen_dcorr edit_smesh_HHB stat_smesh tt_forward tt_inverse
 
 gen_smesh: $(OBJ_GEN_SMESH)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJ_GEN_SMESH) $(LDLIBS)
@@ -73,6 +76,9 @@ gen_damp: $(OBJ_GEN_DAMP)
 
 gen_vcorr: $(OBJ_GEN_VCORR)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJ_GEN_VCORR) $(LDLIBS)
+
+gen_dcorr: $(OBJ_GEN_DCORR)
+	$(CXX) $(LDFLAGS) -o $@ $(OBJ_GEN_DCORR) $(LDLIBS)
 
 edit_smesh_HHB: $(OBJ_EDIT_SMESH_HHB)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJ_EDIT_SMESH_HHB) $(LDLIBS)
@@ -87,5 +93,5 @@ tt_inverse: $(OBJ_TT_INVERSE)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJ_TT_INVERSE) $(LDLIBS)
 
 clean:
-	rm -f *.o gen_smesh gen_damp gen_vcorr edit_smesh_HHB stat_smesh tt_forward tt_inverse
+	rm -f *.o gen_smesh gen_damp gen_vcorr gen_dcorr edit_smesh_HHB stat_smesh tt_forward tt_inverse
 

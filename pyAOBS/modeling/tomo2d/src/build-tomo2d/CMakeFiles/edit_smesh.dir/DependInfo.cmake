@@ -8,12 +8,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/edit_smesh.cc" "CMakeFiles/edit_smesh.dir/edit_smesh.cc.o" "gcc" "CMakeFiles/edit_smesh.dir/edit_smesh.cc.o.d"
+  "/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/edit_smesh.cc" "CMakeFiles/edit_smesh.dir/edit_smesh.cc.o" "gcc" "CMakeFiles/edit_smesh.dir/edit_smesh.cc.o.d"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/CMakeFiles/tomo2d_core.dir/DependInfo.cmake"
+  "/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/CMakeFiles/tomo2d_core.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

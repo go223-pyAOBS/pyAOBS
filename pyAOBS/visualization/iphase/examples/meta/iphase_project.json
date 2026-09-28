@@ -1,0 +1,36 @@
+{
+  "name": "examples",
+  "workdir": "/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/iphase/examples",
+  "version": 1,
+  "analysis": {
+    "theory_mode": "2D",
+    "psp_export_mode": "picked",
+    "share_y": true,
+    "window_points": 11,
+    "smooth_half_win": "5",
+    "psp_phase_id": 40,
+    "picked_policy": "插值",
+    "strict_diff_pair": false,
+    "force_recompute": true,
+    "theory2d_auto_fallback": true,
+    "use_rin_enabled_filter": true,
+    "h_cr": 2.8,
+    "vp_cr": 3.5,
+    "vs_cr": 1.5,
+    "obs_mark_y": 2.2,
+    "pois_left": "0.350,0.450",
+    "pois_right": "0.400,0.450",
+    "pps_pss_ratio": 0.6,
+    "equi_write_equiv_psp": false,
+    "section_field_mode": "point"
+  },
+  "workflow": {
+    "tx_files": [
+      "inputs/tx_st1_65.in"
+    ],
+    "seafloor_path": "bathy.txt",
+    "shot_depth_path": "inputs/station.lis",
+    "rin_path": "r.in"
+  },
+  "notes": ""
+}

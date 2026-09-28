@@ -1,5 +1,5 @@
 CMakeFiles/tomo2d_core.dir/syngen.cc.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/syngen.cc \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/syngen.cc \
  /usr/include/stdc-predef.h /usr/include/c++/12/iostream \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
@@ -180,18 +180,25 @@ CMakeFiles/tomo2d_core.dir/syngen.cc.o: \
  /usr/include/c++/12/vector /usr/include/c++/12/bits/stl_uninitialized.h \
  /usr/include/c++/12/bits/stl_vector.h \
  /usr/include/c++/12/bits/stl_bvector.h \
- /usr/include/c++/12/bits/vector.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/syngen.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
+ /usr/include/c++/12/bits/vector.tcc /usr/include/unistd.h \
+ /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+ /usr/include/x86_64-linux-gnu/bits/environments.h \
+ /usr/include/x86_64-linux-gnu/bits/confname.h \
+ /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+ /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+ /usr/include/linux/close_range.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/syngen.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
  /usr/include/c++/12/cstddef \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/geom.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/smesh.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/geom.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/smesh.h \
  /usr/include/c++/12/list /usr/include/c++/12/bits/stl_list.h \
  /usr/include/c++/12/bits/allocated_ptr.h \
  /usr/include/c++/12/ext/aligned_buffer.h \
  /usr/include/c++/12/bits/list.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/heap_deque.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/heap_deque.h \
  /usr/include/c++/12/deque /usr/include/c++/12/bits/stl_deque.h \
  /usr/include/c++/12/bits/deque.tcc /usr/include/c++/12/algorithm \
  /usr/include/c++/12/bits/stl_algo.h \
@@ -210,11 +217,11 @@ CMakeFiles/tomo2d_core.dir/syngen.cc.o: \
  /usr/include/c++/12/bits/unordered_map.h \
  /usr/include/c++/12/bits/erase_if.h /usr/include/c++/12/array \
  /usr/include/c++/12/compare \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/index.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/graph.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/interface.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/geom.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/bend.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/betaspline.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/traveltime.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/index.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/graph.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/interface.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/geom.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/bend.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/betaspline.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/traveltime.h \
  /usr/lib/gcc/x86_64-linux-gnu/12/include/omp.h

@@ -6,6 +6,7 @@
  */
 
 #include "betaspline.h"
+#include "interface.h"
 #include <error.h> // from mconv
 
 BetaSpline2d::BetaSpline2d(double beta1, double beta2, int n)
@@ -148,8 +149,53 @@ void makeBSpoints(const list<Point2d>& orig, Array1d<const Point2d*>& pp)
     pp(np+3) = pp(np+4) = &(*pt);
 }
 
+static void printCurveRange(ostream& os,
+			    const Array1d<Point2d>& orig, const BetaSpline2d& bs,
+			    int a, int b)
+{
+    if (a < 1 || b < a || b > orig.size()) return;
+    int n = b - a + 1;
+    if (n < 2) return;
+    Array1d<Point2d> leg(n);
+    for (int i=1; i<=n; i++) leg(i) = orig(a+i-1);
+    Array1d<const Point2d*> pp;
+    makeBSpoints(leg,pp);
+    int nintp=bs.numIntp();
+    Array1d<Point2d> Q(nintp);
+    for (int i=1; i<=n+1; i++){
+	bs.interpolate(*pp(i),*pp(i+1),*pp(i+2),*pp(i+3),Q);
+	for (int j=1; j<=nintp; j++){
+	    os << Q(j).x() << " " << Q(j).y() << '\n';
+	}
+    }
+}
+
 void printCurve(ostream& os,
 		const Array1d<Point2d>& orig, const BetaSpline2d& bs)
+{
+    printCurveRange(os, orig, bs, 1, orig.size());
+}
+
+void printCurve(ostream& os,
+		const Array1d<Point2d>& orig, const BetaSpline2d& bs,
+		int iu1, int id0, int id1)
+{
+    int np = orig.size();
+    if (iu1 < 2 || iu1 > np){
+	printCurveRange(os, orig, bs, 1, np);
+	return;
+    }
+    const bool one_hinge = (id0 <= iu1);
+    printCurveRange(os, orig, bs, 1, iu1);
+    if (!one_hinge)
+	printCurveRange(os, orig, bs, iu1, id0);
+    int lid0 = one_hinge ? iu1 : id1;
+    if (lid0 < 1) lid0 = iu1;
+    printCurveRange(os, orig, bs, lid0, np);
+}
+
+void printCurve(ostream& os,
+		const list<Point2d>& orig, const BetaSpline2d& bs)
 {
     Array1d<const Point2d*> pp;
     makeBSpoints(orig,pp);
@@ -170,7 +216,8 @@ void printCurve(ostream& os,
 }
 
 void printCurve(ostream& os,
-		const list<Point2d>& orig, const BetaSpline2d& bs)
+		const Array1d<Point2d>& orig, const BetaSpline2d& bs,
+		const Interface2d& z_lo, const Interface2d& z_hi)
 {
     Array1d<const Point2d*> pp;
     makeBSpoints(orig,pp);
@@ -185,7 +232,16 @@ void printCurve(ostream& os,
 	int j4=i+3;
 	bs.interpolate(*pp(j1),*pp(j2),*pp(j3),*pp(j4),Q);
 	for (int j=1; j<=nintp; j++){
-	    os << Q(j).x() << " " << Q(j).y() << '\n';
+	    double x = Q(j).x();
+	    double z = Q(j).y();
+	    double lo = z_lo.z(x);
+	    double hi = z_hi.z(x);
+	    if (lo > hi){
+		double tmp = lo; lo = hi; hi = tmp;
+	    }
+	    if (z < lo) z = lo;
+	    if (z > hi) z = hi;
+	    os << x << " " << z << '\n';
 	}
     }
 }

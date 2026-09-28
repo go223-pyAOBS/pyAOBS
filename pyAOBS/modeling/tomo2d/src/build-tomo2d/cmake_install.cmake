@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src
+# Install script for directory: /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/build-tomo2d/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/build-tomo2d/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

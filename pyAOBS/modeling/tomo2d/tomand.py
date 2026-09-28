@@ -10,9 +10,21 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from .help_docs import TomoHelp
+
+
+def _resolve_under_proc_cwd(tomo: "TomoAnd", path: Any) -> Path:
+    cwd = tomo.proc_cwd
+    if not cwd:
+        raise FileNotFoundError("未设置 proc_cwd（工作目录）")
+    s = str(path).strip()
+    if not s:
+        raise FileNotFoundError("路径为空")
+    p = Path(s).expanduser()
+    full = p.resolve() if p.is_absolute() else (Path(cwd) / p).resolve()
+    return full
 
 
 def _assert_readable_under_proc_cwd(tomo: "TomoAnd", role: str, path: Any) -> None:
@@ -20,26 +32,102 @@ def _assert_readable_under_proc_cwd(tomo: "TomoAnd", role: str, path: Any) -> No
     gen_smesh 等对 z_file 调用 countLines/open；路径相对于进程 cwd（GUI 下即 work_dir）。
     在启动子进程前检查，避免 C 端仅打印 ``countLines::can't open``。
     """
-    cwd = tomo.proc_cwd
-    if not cwd or path is None:
+    if not tomo.proc_cwd or path is None:
         return
     s = str(path).strip()
     if not s:
         return
-    p = Path(s)
     try:
-        full = (Path(cwd) / p).resolve() if not p.is_absolute() else p.resolve()
-    except OSError as e:
+        full = _resolve_under_proc_cwd(tomo, s)
+    except (OSError, FileNotFoundError) as e:
         raise FileNotFoundError(f"{role}: 路径无效 {s!r} ({e})") from e
     if not full.is_file():
         raise FileNotFoundError(
             f"{role}: 找不到或不是可读文件\n"
             f"  参数: {s!r}\n"
-            f"  proc_cwd（子进程工作目录）: {cwd!r}\n"
+            f"  proc_cwd（子进程工作目录）: {tomo.proc_cwd!r}\n"
             f"  解析为: {full}\n"
-            f"  提示: z_file / x_file 等与 v.in 不同，可用相对路径（相对上述目录）或绝对路径；"
-            f"请确认文件已存在且路径与界面「工作目录」一致。"
+            f"  提示: 请确认文件已存在；路径相对界面「工作目录」。"
         )
+
+
+def _stage_zelt_token_under_cwd(tomo: "TomoAnd", role: str, form_path: Any) -> str:
+    """
+    ``-C v.in`` 路径段不能含 ``/``。表单可含子目录；运行前把**输入**文件
+    复制到 ``proc_cwd`` 根目录（若尚不在该处），返回 basename。
+    """
+    if form_path is None:
+        return ""
+    s = str(form_path).strip()
+    if not s:
+        return ""
+    _assert_readable_under_proc_cwd(tomo, role, s)
+    src = _resolve_under_proc_cwd(tomo, s)
+    base = os.path.basename(str(src).replace("\\", "/"))
+    cwd = Path(str(tomo.proc_cwd))
+    dest = (cwd / base).resolve()
+    if dest != src:
+        try:
+            shutil.copy2(src, dest)
+        except OSError as e:
+            raise FileNotFoundError(
+                f"{role}: 无法将 {src} 复制到工作目录根以供 -C/-F 使用 → {dest}\n{e}"
+            ) from e
+    return base
+
+
+def _prepare_zelt_output_under_cwd(
+    tomo: "TomoAnd", role: str, form_path: Any
+) -> tuple[str, Path | None]:
+    """
+    ``gen_smesh -F`` 的 refl_file 是**输出**（ofstream），不必预先存在。
+    命令行只能带 basename；返回 (basename, 若表单含目录则运行后应挪到的绝对路径)。
+    """
+    if form_path is None:
+        return "", None
+    s = str(form_path).strip()
+    if not s:
+        return "", None
+    if not tomo.proc_cwd:
+        raise FileNotFoundError(f"{role}: 未设置 proc_cwd（工作目录）")
+    cwd = Path(str(tomo.proc_cwd))
+    base = os.path.basename(s.replace("\\", "/"))
+    if not base:
+        raise ValueError(f"{role}: 无效输出路径 {s!r}")
+    desired = Path(s).expanduser()
+    try:
+        desired = (
+            desired.resolve()
+            if desired.is_absolute()
+            else (cwd / desired).resolve()
+        )
+    except OSError as e:
+        raise FileNotFoundError(f"{role}: 无法解析输出路径 {s!r} ({e})") from e
+    try:
+        desired.parent.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        raise FileNotFoundError(
+            f"{role}: 无法创建输出父目录 {desired.parent}\n{e}"
+        ) from e
+    staged = (cwd / base).resolve()
+    if staged == desired:
+        return base, None
+    return base, desired
+
+
+def _apply_zelt_output_moves(moves: list[tuple[Path, Path]]) -> None:
+    for src, dst in moves:
+        if not src.is_file():
+            continue
+        if src.resolve() == dst.resolve():
+            continue
+        try:
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(src), str(dst))
+        except OSError as e:
+            raise FileNotFoundError(
+                f"无法将 -F/-G/-d 输出从 {src} 移到 {dst}\n{e}"
+            ) from e
 
 
 def _verify_gen_mesh_family_inputs(tomo: "TomoAnd", kw: Dict[str, Any], context: str) -> None:
@@ -53,18 +141,32 @@ def _verify_gen_mesh_family_inputs(tomo: "TomoAnd", kw: Dict[str, Any], context:
         _assert_readable_under_proc_cwd(tomo, f"{context} z_file (-Z)", kw.get("z_file"))
     vo = kw.get("vel_opt")
     if vo == "zelt" and kw.get("v_in"):
-        _assert_readable_under_proc_cwd(
-            tomo, f"{context} v.in (-C)", _zelt_sscanf_token_path(str(kw["v_in"]))
+        kw["v_in"] = _stage_zelt_token_under_cwd(
+            tomo, f"{context} v.in (-C)", kw.get("v_in")
         )
-    if context == "gen_smesh" and vo == "zelt" and kw.get("refl_file"):
-        _assert_readable_under_proc_cwd(
-            tomo, f"{context} refl_file (-F)", _zelt_sscanf_token_path(str(kw["refl_file"]))
+    # gen_smesh -F 为反射面**输出**文件，不是输入
+    if context == "gen_smesh" and kw.get("refl_file"):
+        base, final = _prepare_zelt_output_under_cwd(
+            tomo, f"{context} refl_file (-F 输出)", kw.get("refl_file")
         )
+        kw["refl_file"] = base
+        if final is not None:
+            cwd = Path(str(tomo.proc_cwd))
+            kw.setdefault("_zelt_output_moves", []).append((cwd / base, final))
+    if context == "gen_smesh" and kw.get("seafloor_out"):
+        base, final = _prepare_zelt_output_under_cwd(
+            tomo, f"{context} seafloor_out (-G 输出)", kw.get("seafloor_out")
+        )
+        kw["seafloor_out"] = base
+        if final is not None:
+            cwd = Path(str(tomo.proc_cwd))
+            kw.setdefault("_zelt_output_moves", []).append((cwd / base, final))
+
 
 
 def _zelt_sscanf_token_path(path: Any) -> str:
     """
-    gen_smesh / gen_damp / gen_vcorr 中 ``-C<vpath>/<ilayer>``、``-F<layer>/<rpath>``
+    gen_smesh / gen_damp / gen_vcorr / gen_dcorr 中 ``-C<vpath>/<ilayer>``、``-F<layer>/<rpath>``
     用 ``sscanf(..., "%[^/]/...", ...)`` 解析：``vpath`` / ``rpath`` 内不能含 ``'/'``，
     否则会在第一个 ``/`` 处被截断（见 gen_smesh.cc）。
     可执行文件在 ``work_dir`` 下启动时，应只传位于该目录下的**文件名**（无目录前缀）。
@@ -77,35 +179,18 @@ def _zelt_sscanf_token_path(path: Any) -> str:
     return os.path.basename(s.replace("\\", "/"))
 
 
-def _tomo_path_should_split_for_argv(s: str) -> bool:
-    """
-    是否将 ``tt_forward`` 等单字母选项拆成 ``-M`` 与路径两个 argv。
-
-    ``-M/mnt/e/mesh`` 在老版解析里本应等价于 ``mfn=/mnt/e/mesh``；但 POSIX 绝对路径、
-    Windows 盘符/UNC、以及以 ``-`` 开头的文件名在部分环境下更易出错，故拆成两参数；
-    需使用已支持该语法的 ``tt_forward``（见 modeling/tomo2d/src/tt_forward.cc）。
-    """
-    if not s:
-        return False
-    if s.startswith("/"):
-        return True
-    if len(s) >= 2 and s[1] == ":" and s[0].isalpha():
-        return True
-    if s.startswith("\\\\"):
-        return True
-    if s.startswith("\\"):
-        return True
-    if s.startswith("-"):
-        return True
-    return False
-
-
 def _tomo_glued_path_argv(short_flag: str, path: Any) -> List[str]:
-    """``tt_forward`` 路径类选项：相对路径保持 ``-Mrel``，否则 ``-M`` + ``path``。"""
+    """
+    ``tt_forward`` 路径类选项：一律粘成 ``-M<path>`` 单个 argv。
+
+    C 端（``tt_forward.cc`` / ``tt_inverse.cc``）只读 ``&argv[i][2]``，
+    **不**支持 ``-M`` 与路径拆成两个参数；若拆开则路径为空，表现为未带目录。
+    仅当路径以 ``-`` 开头时拆开，避免被当成新选项。
+    """
     s = str(path).strip() if path is not None else ""
     if not s:
         return [f"-{short_flag}"]
-    if _tomo_path_should_split_for_argv(s):
+    if s.startswith("-"):
         return [f"-{short_flag}", s]
     return [f"-{short_flag}{s}"]
 
@@ -177,6 +262,26 @@ def validate_tomo2d_geom_data_format(path: Path) -> tuple[int, int]:
     return nsrc, total_r
 
 
+def _peel_tt_forward_stdout_ttime(kwargs: Dict[str, Any]) -> Optional[str]:
+    """
+    ``out_opts['ttime']`` 表示把 stdout（``operator<<``，与 tt_inverse -G 同构）落到该文件。
+
+    原生 ``-T`` 走 ``printSynTime``：每炮 ``>`` + ``x t``，反演读首行会报 ``invalid nsrc``。
+    若确实要原生 -T，用 ``out_opts['ttime_plot']``。
+    """
+    out_opts = dict(kwargs.get("out_opts") or {})
+    ttime_data = out_opts.pop("ttime", None)
+    ttime_plot = out_opts.pop("ttime_plot", None)
+    if ttime_plot:
+        out_opts["ttime"] = ttime_plot
+    if ttime_data is not None or ttime_plot is not None:
+        kwargs["out_opts"] = out_opts
+    if ttime_data is None:
+        return None
+    s = str(ttime_data).strip()
+    return s or None
+
+
 class TomoCommandError(RuntimeError):
     """tomo2d 命令执行异常。"""
 
@@ -203,6 +308,7 @@ class TomoAnd:
         "gen_smesh": TomoHelp.gen_smesh_help,
         "gen_damp": TomoHelp.gen_damp_help,
         "gen_vcorr": TomoHelp.gen_vcorr_help,
+        "gen_dcorr": TomoHelp.gen_dcorr_help,
         "tt_forward": TomoHelp.tt_forward_help,
         "tt_inverse": TomoHelp.tt_inverse_help,
         "stat_smesh": TomoHelp.stat_smesh_help,
@@ -217,22 +323,53 @@ class TomoAnd:
                 1) 环境变量 PYAOBS_TOMO2D_BIN
                 2) 环境变量 TOMO2D_BIN
                 3) 当前模块所在目录
-            capture_subprocess_output: 为 True（默认）时用管道捕获 stdout/stderr，进程结束后才能在
-                ``CompletedProcess`` / ``TomoCommandError`` 里查看；长时间任务若要在终端**实时**看到
-                子进程输出（含 ``tt_forward -V`` 打到 stderr 的进展），设为 False，子进程继承当前终端。
+            capture_subprocess_output: 为 True（默认）时用管道捕获 stdout/stderr。
+                若同时设置 ``stream_output_line``，则按行回调（GUI 实时日志）；否则进程结束后才能在
+                ``CompletedProcess`` / ``TomoCommandError`` 里查看。设为 False 时子进程继承当前终端。
         """
         self.bin_path = self._resolve_bin_path(bin_path)
         #: 若设置，subprocess 将在此目录下启动（相对路径输入/输出均相对该目录）。GUI 多线程下可避免依赖进程全局 chdir。
         self.proc_cwd: Optional[str] = None
         self.capture_subprocess_output = capture_subprocess_output
+        #: 子进程额外环境变量（覆盖 ``os.environ`` 中同名项）；用于 OMP / TOMO2D_* 并行开关。
+        self.run_env: Optional[Dict[str, str]] = None
+        #: 若设置且 ``capture_subprocess_output``：按行回调 ``(stream, line)``，
+        #: ``stream`` 为 ``"stdout"`` / ``"stderr"``（供 GUI 准实时刷日志）。
+        self.stream_output_line: Optional[Callable[[str, str], None]] = None
 
     def _resolve_bin_path(self, bin_path: Optional[str]) -> str:
-        if bin_path:
-            return bin_path
+        if bin_path and str(bin_path).strip():
+            return self._absolutize_bin_dir(str(bin_path).strip())
         env_path = os.getenv("PYAOBS_TOMO2D_BIN") or os.getenv("TOMO2D_BIN")
         if env_path:
-            return env_path
+            return self._absolutize_bin_dir(env_path.strip())
         return os.path.dirname(os.path.abspath(__file__))
+
+    @staticmethod
+    def _absolutize_bin_dir(path: str) -> str:
+        """将 bin 目录转为绝对路径（子进程 cwd=work_dir 时相对路径会失效）。"""
+        p = Path(path).expanduser()
+        if p.is_absolute():
+            try:
+                return str(p.resolve())
+            except OSError:
+                return str(p)
+        # 相对：优先 cwd，再试包目录（modeling/tomo2d）
+        pkg = Path(__file__).resolve().parent
+        for base in (Path.cwd(), pkg, pkg.parent.parent.parent):
+            cand = base / p
+            try:
+                if cand.is_dir() or any(
+                    (cand / name).is_file() or (cand / f"{name}.exe").is_file()
+                    for name in ("gen_smesh", "tt_forward", "tt_inverse")
+                ):
+                    return str(cand.resolve())
+            except OSError:
+                continue
+        try:
+            return str((Path.cwd() / p).resolve())
+        except OSError:
+            return str(Path.cwd() / p)
 
     def _resolve_executable(self, exe_name: str) -> str:
         candidates = []
@@ -246,7 +383,8 @@ class TomoAnd:
 
         for candidate in candidates:
             if candidate and os.path.isfile(candidate):
-                return candidate
+                # 必须绝对路径：subprocess 的 cwd 常为 work_dir
+                return os.path.abspath(candidate)
 
         raise FileNotFoundError(
             f"未找到可执行文件 '{exe_name}'。"
@@ -395,6 +533,22 @@ class TomoAnd:
             return self._print_help(exe_name)
 
         cmd = self._compose_command(exe_name, args)
+        cwd = self.proc_cwd or None
+        env = None
+        if self.run_env:
+            env = dict(os.environ)
+            for k, v in self.run_env.items():
+                if v is None:
+                    env.pop(str(k), None)
+                else:
+                    env[str(k)] = str(v)
+
+        if (
+            self.capture_subprocess_output
+            and self.stream_output_line is not None
+        ):
+            return self._run_cmd_streaming(cmd, cwd=cwd, env=env)
+
         run_kw: Dict[str, Any] = {
             "shell": False,
             "check": True,
@@ -406,8 +560,10 @@ class TomoAnd:
         else:
             run_kw["stdout"] = None
             run_kw["stderr"] = None
-        if self.proc_cwd:
-            run_kw["cwd"] = self.proc_cwd
+        if cwd:
+            run_kw["cwd"] = cwd
+        if env is not None:
+            run_kw["env"] = env
         try:
             return subprocess.run(cmd, **run_kw)
         except subprocess.CalledProcessError as e:
@@ -417,6 +573,80 @@ class TomoAnd:
                 stdout=e.stdout or "",
                 stderr=e.stderr or "",
             ) from e
+
+    def _run_cmd_streaming(
+        self,
+        cmd: List[str],
+        *,
+        cwd: Optional[str],
+        env: Optional[Dict[str, str]],
+    ) -> subprocess.CompletedProcess:
+        """Popen + 双线程按行泵出 stdout/stderr，供 GUI 实时显示。"""
+        import threading
+
+        popen_kw: Dict[str, Any] = {
+            "stdout": subprocess.PIPE,
+            "stderr": subprocess.PIPE,
+            "text": True,
+            "encoding": "utf-8",
+            "errors": "replace",
+            "bufsize": 1,
+        }
+        if cwd:
+            popen_kw["cwd"] = cwd
+        if env is not None:
+            popen_kw["env"] = env
+        # 多线程 Qt 下 fork 不安全；独立会话也避免子进程 SIGSEGV 看起来像 GUI 崩了
+        if os.name != "nt":
+            popen_kw["start_new_session"] = True
+
+        try:
+            proc = subprocess.Popen(cmd, **popen_kw)
+        except OSError as e:
+            raise TomoCommandError(
+                command=cmd, returncode=-1, stdout="", stderr=str(e)
+            ) from e
+
+        out_parts: List[str] = []
+        err_parts: List[str] = []
+        cb = self.stream_output_line
+
+        def _pump(stream, bucket: List[str], name: str) -> None:
+            try:
+                while True:
+                    line = stream.readline()
+                    if line == "":
+                        break
+                    bucket.append(line)
+                    if cb is not None:
+                        try:
+                            cb(name, line.rstrip("\r\n"))
+                        except Exception:
+                            pass
+            finally:
+                try:
+                    stream.close()
+                except Exception:
+                    pass
+
+        t_out = threading.Thread(
+            target=_pump, args=(proc.stdout, out_parts, "stdout"), daemon=True
+        )
+        t_err = threading.Thread(
+            target=_pump, args=(proc.stderr, err_parts, "stderr"), daemon=True
+        )
+        t_out.start()
+        t_err.start()
+        rc = proc.wait()
+        t_out.join(timeout=60)
+        t_err.join(timeout=60)
+        stdout = "".join(out_parts)
+        stderr = "".join(err_parts)
+        if rc != 0:
+            raise TomoCommandError(
+                command=cmd, returncode=rc, stdout=stdout, stderr=stderr
+            )
+        return subprocess.CompletedProcess(cmd, rc, stdout, stderr)
             
     def _build_edit_smesh_program_args(
         self, smesh_file: Any, cmd_type: Any, kwargs: Dict[str, Any]
@@ -544,6 +774,16 @@ class TomoAnd:
             args.append(f"-Q{kwargs['v_water']}")
         if "v_air" in kwargs and kwargs["v_air"] is not None:
             args.append(f"-R{kwargs['v_air']}")
+        hang = bool(kwargs.get("hang_sea_surface"))
+        sf_out = kwargs.get("seafloor_out")
+        if sf_out and not hang:
+            raise ValueError("gen_smesh: seafloor_out（-G）需要同时勾选 hang_sea_surface（-S）")
+        if hang:
+            if vel_opt != "zelt":
+                raise ValueError("gen_smesh: hang_sea_surface（-S）仅在 vel_opt='zelt' 时有效")
+            args.append("-S")
+            if sf_out:
+                args.append(f"-G{_zelt_sscanf_token_path(sf_out)}")
         zd = kwargs.get("zelt_dump_file")
         if zd:
             if vel_opt != "zelt":
@@ -567,9 +807,12 @@ class TomoAnd:
         【必选】vel_opt, grid_opt；缺一则仅打印帮助。
         vel_opt='zelt' 与 grid_opt='zelt' 必须同时成立（与 gen_smesh.cc 一致）。
         【条件必选】uniform→v0,gradient；zelt→v_in,ilayer；若出现 refl_layer 或 refl_file 则二者须成对。
-        zelt 时 v_in、refl_file 请传**仅文件名**（无 ``/``），文件须在 ``proc_cwd`` 根目录（与 gen_smesh.cc sscanf 一致）。
+        zelt 时 v_in 表单可含相对子目录；命令行只用 basename，运行前会复制到 ``proc_cwd`` 根目录。
+        ``refl_file``（-F）为**输出**反射面（不必预先存在）；命令行用 basename，若表单含目录则写完后挪到目标路径。
         grid: uniform→nx,nz,xmax,zmax；variable→x_file,z_file；zelt→dx,z_file。
         【可选】topo_file（variable）, water_col, v_water, v_air, zelt_dump_file（-d，仅 vel_opt=zelt）,
+            hang_sea_surface（-S，仅 zelt：topo 全 0，ilayer 当海底，以上填 v_water、以下取 v.in 绝对深度）,
+            seafloor_out（-G，写出 ilayer 海底界面，须同时有 -S；供正演 -B / 反演 -Y）,
             out_file（将 stdout 慢度网格写入该路径；命令行典型用法为 gen_smesh ... > file）。
         """
         kw = dict(kwargs)
@@ -578,7 +821,10 @@ class TomoAnd:
         if prog is None:
             return self._run_cmd("gen_smesh", check_only=True)
         _verify_gen_mesh_family_inputs(self, kw, "gen_smesh")
+        # 若 verify 把 refl 改成 basename，重建 argv 与之对齐
+        prog = self._build_gen_smesh_program_args(kw) or prog
         result = self._run_cmd("gen_smesh", args=prog)
+        _apply_zelt_output_moves(list(kw.pop("_zelt_output_moves", []) or []))
         self._write_stdout_to_file(result, out_file)
         return result
         
@@ -588,8 +834,9 @@ class TomoAnd:
 
         【必选】vel_opt, grid_opt（网格分支同 gen_smesh）。
         vel_opt='zelt' 与 grid_opt='zelt' 必须同时成立。
-        uniform→abnormal_damp, normal_damp；zelt→v_in, ilayer；
-        若出现 top_layer 或 bot_layer 则须成对。缺 vel_opt/grid_opt 时仅打印帮助。
+        【必选】abnormal_damp, normal_damp（-A；uniform/zelt 均需要数值）。
+        zelt 另须 v_in, ilayer（-C）；若出现 top_layer 或 bot_layer 则须成对（-F）。
+        缺 vel_opt/grid_opt 时仅打印帮助。
         【可选】out_file（将 stdout 写入路径）。
         """
         kw = dict(kwargs)
@@ -608,10 +855,15 @@ class TomoAnd:
         vel_opt = kwargs.get("vel_opt")
         grid_opt = kwargs.get("grid_opt")
         self._vel_grid_zelt_consistency(vel_opt, grid_opt, "gen_damp")
-        args: List[str] = []
+        # -A：异常/正常阻尼值；zelt 时 -C/-F 只划区，数值仍来自 -A（gen_damp.cc）
+        self._require_keys(
+            kwargs, ["abnormal_damp", "normal_damp"], "gen_damp(-A)"
+        )
+        args: List[str] = [
+            f"-A{kwargs['abnormal_damp']}/{kwargs['normal_damp']}"
+        ]
         if vel_opt == "uniform":
-            self._require_keys(kwargs, ["abnormal_damp", "normal_damp"], "gen_damp(vel_opt='uniform')")
-            args.append(f"-A{kwargs['abnormal_damp']}/{kwargs['normal_damp']}")
+            pass
         elif vel_opt == "zelt":
             self._require_keys(kwargs, ["v_in", "ilayer"], "gen_damp(vel_opt='zelt')")
             args.append(f"-C{_zelt_sscanf_token_path(kwargs['v_in'])}/{kwargs['ilayer']}")
@@ -635,12 +887,20 @@ class TomoAnd:
         """
         生成速度相关文件。
 
+        mode='simple_2x2'：Python 直接写出 2×2 CorrelationLength2d（顶/底 Lh/Lv），
+        不调用 gen_vcorr 二进制。【必选】Lht, Lhb, Lvt, Lvb, xmax, zmax, out_file；
+        可选 xmin/zmin/topo（默认 0）。
+
+        mode='program'（默认）：调用 gen_vcorr。
         【必选】vel_opt, grid_opt。vel_opt='zelt' 与 grid_opt='zelt' 必须同时成立。
-        uniform→abnormal_h, abnormal_v, normal_h, normal_v；
-        zelt→v_in, ilayer；-F 层界成对规则同 gen_damp。
+        【必选】abnormal_h/v、normal_h/v（-A；uniform/zelt 均需要）。
+        zelt 另须 v_in, ilayer；-F 层界成对规则同 gen_damp。
         【可选】out_file（将 stdout 写入路径）。
         """
         kw = dict(kwargs)
+        mode = kw.pop("mode", None) or "program"
+        if mode == "simple_2x2":
+            return self._gen_vcorr_simple(kw)
         out_file = kw.pop("out_file", None)
         prog = self._build_gen_vcorr_program_args(kw)
         if prog is None:
@@ -650,22 +910,38 @@ class TomoAnd:
         self._write_stdout_to_file(result, out_file)
         return result
 
+    def _gen_vcorr_simple(self, kw: Dict[str, Any]) -> str:
+        from .simple_vcorr import write_simple_vcorr
+
+        self._require_keys(
+            kw,
+            ["Lht", "Lhb", "Lvt", "Lvb", "xmax", "zmax", "out_file"],
+            "gen_vcorr(simple_2x2)",
+        )
+        out = kw["out_file"]
+        path = Path(str(out))
+        if not path.is_absolute():
+            base = self.proc_cwd or os.getcwd()
+            path = Path(base) / path
+        return write_simple_vcorr(path, **{k: v for k, v in kw.items() if k != "out_file"})
+
     def _build_gen_vcorr_program_args(self, kwargs: Dict[str, Any]) -> Optional[List[str]]:
         if not kwargs.get("vel_opt") or not kwargs.get("grid_opt"):
             return None
         vel_opt = kwargs.get("vel_opt")
         grid_opt = kwargs.get("grid_opt")
         self._vel_grid_zelt_consistency(vel_opt, grid_opt, "gen_vcorr")
-        args: List[str] = []
+        # -A：相关长度；zelt 时 -C/-F 只划区，数值仍来自 -A（gen_vcorr.cc）
+        self._require_keys(
+            kwargs,
+            ["abnormal_h", "abnormal_v", "normal_h", "normal_v"],
+            "gen_vcorr(-A)",
+        )
+        args: List[str] = [
+            f"-A{kwargs['abnormal_h']}/{kwargs['abnormal_v']}/{kwargs['normal_h']}/{kwargs['normal_v']}"
+        ]
         if vel_opt == "uniform":
-            self._require_keys(
-                kwargs,
-                ["abnormal_h", "abnormal_v", "normal_h", "normal_v"],
-                "gen_vcorr(vel_opt='uniform')",
-            )
-            args.append(
-                f"-A{kwargs['abnormal_h']}/{kwargs['abnormal_v']}/{kwargs['normal_h']}/{kwargs['normal_v']}"
-            )
+            pass
         elif vel_opt == "zelt":
             self._require_keys(kwargs, ["v_in", "ilayer"], "gen_vcorr(vel_opt='zelt')")
             args.append(f"-C{_zelt_sscanf_token_path(kwargs['v_in'])}/{kwargs['ilayer']}")
@@ -679,11 +955,104 @@ class TomoAnd:
 
     def resolve_cmdline_gen_vcorr(self, **kwargs) -> Optional[List[str]]:
         kw = dict(kwargs)
+        mode = kw.pop("mode", None) or "program"
+        if mode == "simple_2x2":
+            return None
         kw.pop("out_file", None)
         prog = self._build_gen_vcorr_program_args(kw)
         if prog is None:
             return None
         return self._compose_command("gen_vcorr", prog)
+
+    def gen_dcorr(self, **kwargs):
+        """
+        生成 tt_inverse -CD 用的 1D 反射点相关长度文件（stdout：每行 x Lh）。
+
+        【必选】mode = 'uniform' | 'zelt' | 'from_vcorr'
+        uniform：lh, xmin, xmax；可选 nx（默认 2）
+        zelt：abnormal_d, normal_d, v_in, ilayer, dx；可选 top_layer/bot_layer、refl_file
+        from_vcorr：vcorr_file, refl_file
+        【可选】out_file（将 stdout 写入路径）
+        """
+        kw = dict(kwargs)
+        out_file = kw.pop("out_file", None)
+        prog = self._build_gen_dcorr_program_args(kw)
+        if prog is None:
+            return self._run_cmd("gen_dcorr", check_only=True)
+        self._verify_gen_dcorr_inputs(kw)
+        prog = self._build_gen_dcorr_program_args(kw) or prog
+        result = self._run_cmd("gen_dcorr", args=prog)
+        self._write_stdout_to_file(result, out_file)
+        return result
+
+    def _verify_gen_dcorr_inputs(self, kw: Dict[str, Any]) -> None:
+        mode = kw.get("mode")
+        if mode == "zelt" and kw.get("v_in"):
+            kw["v_in"] = _stage_zelt_token_under_cwd(
+                self, "gen_dcorr v.in (-C)", kw.get("v_in")
+            )
+            if kw.get("refl_file"):
+                _assert_readable_under_proc_cwd(
+                    self, "gen_dcorr refl (-R)", kw.get("refl_file")
+                )
+        elif mode == "from_vcorr":
+            _assert_readable_under_proc_cwd(
+                self, "gen_dcorr vcorr (-V)", kw.get("vcorr_file")
+            )
+            _assert_readable_under_proc_cwd(
+                self, "gen_dcorr refl (-R)", kw.get("refl_file")
+            )
+
+    def _build_gen_dcorr_program_args(self, kwargs: Dict[str, Any]) -> Optional[List[str]]:
+        mode = kwargs.get("mode")
+        if not mode:
+            return None
+        if mode == "uniform":
+            self._require_keys(kwargs, ["lh", "xmin", "xmax"], "gen_dcorr(mode='uniform')")
+            args: List[str] = [
+                f"-A{kwargs['lh']}",
+                f"-D{kwargs['xmin']}/{kwargs['xmax']}",
+            ]
+            if kwargs.get("nx") not in (None, ""):
+                args.append(f"-N{kwargs['nx']}")
+            return args
+        if mode == "zelt":
+            self._require_keys(
+                kwargs,
+                ["abnormal_d", "normal_d", "v_in", "ilayer", "dx"],
+                "gen_dcorr(mode='zelt')",
+            )
+            args = [
+                f"-A{kwargs['abnormal_d']}/{kwargs['normal_d']}",
+                f"-C{_zelt_sscanf_token_path(kwargs['v_in'])}/{kwargs['ilayer']}",
+                f"-E{kwargs['dx']}",
+            ]
+            if "top_layer" in kwargs or "bot_layer" in kwargs:
+                self._require_keys(
+                    kwargs, ["top_layer", "bot_layer"], "gen_dcorr(layer bounds)"
+                )
+                args.append(f"-F{kwargs['top_layer']}/{kwargs['bot_layer']}")
+            if kwargs.get("refl_file"):
+                args.extend(_tomo_glued_path_argv("R", kwargs["refl_file"]))
+            return args
+        if mode == "from_vcorr":
+            self._require_keys(
+                kwargs, ["vcorr_file", "refl_file"], "gen_dcorr(mode='from_vcorr')"
+            )
+            args = []
+            args.extend(_tomo_glued_path_argv("V", kwargs["vcorr_file"]))
+            args.extend(_tomo_glued_path_argv("R", kwargs["refl_file"]))
+            return args
+        raise ValueError(f"gen_dcorr 不支持的 mode: {mode}")
+
+    def resolve_cmdline_gen_dcorr(self, **kwargs) -> Optional[List[str]]:
+        kw = dict(kwargs)
+        kw.pop("out_file", None)
+        prog = self._build_gen_dcorr_program_args(kw)
+        if prog is None:
+            return None
+        return self._compose_command("gen_dcorr", prog)
+
         
     def _build_tt_forward_program_args(
         self, smesh: Optional[str], geom: Optional[str], kwargs: Dict[str, Any]
@@ -696,6 +1065,14 @@ class TomoAnd:
             args.extend(_tomo_glued_path_argv("G", geom))
         if "refl_file" in kwargs and kwargs["refl_file"] is not None:
             args.extend(_tomo_glued_path_argv("F", kwargs["refl_file"]))
+        if kwargs.get("seafloor_file"):
+            args.extend(_tomo_glued_path_argv("B", kwargs["seafloor_file"]))
+        if kwargs.get("conv_file"):
+            args.extend(_tomo_glued_path_argv("X", kwargs["conv_file"]))
+        if kwargs.get("vsmesh"):
+            args.extend(_tomo_glued_path_argv("U", kwargs["vsmesh"]))
+        if kwargs.get("kappa") is not None:
+            args.append(f"-k{kwargs['kappa']}")
         if kwargs.get("do_full_refl"):
             args.append("-A")
         num_keys = ["xorder", "zorder", "clen", "nintp", "tol1", "tol2"]
@@ -746,6 +1123,7 @@ class TomoAnd:
 
     def resolve_cmdline_tt_forward(self, *, smesh=None, geom=None, **kwargs) -> Optional[List[str]]:
         kw = dict(kwargs)
+        _peel_tt_forward_stdout_ttime(kw)
         prog = self._build_tt_forward_program_args(smesh, geom, kw)
         if prog is None:
             return None
@@ -756,7 +1134,12 @@ class TomoAnd:
         正演走时计算。
 
         【必选】smesh（-M）；缺则仅打印帮助。
-        【可选】geom, refl_file, do_full_refl, out_opts 各键, vred, verbose, verbose_level。
+        【可选】geom, refl_file, seafloor_file（-B 海底，水层/台侧多次用；-F 仍是反射面/莫霍）,
+        conv_file（-X 转换面，raytype 6/7/8）, vsmesh（-U 独立 Vs，与 -M 同维）,
+        kappa（-k，Vp/Vs；可 k 或 k_lid/k_below；有 -U 可不传）,
+        do_full_refl（-A：反射贴界面走；不传时远偏移可穿幔成初至，不是精度开关）,
+        ``out_opts['ttime']`` 把 **stdout**（与 tt_inverse -G 同构）落到该文件；原生 ``-T``
+        是 ``>`` 折合图，请用 ``out_opts['ttime_plot']``。
         若传 geom 且路径可解析为本地文件（相对路径需已设 ``proc_cwd``），运行前会校验结构（首行 nsrc、每炮 s 与 nrcv 条 r、无尾部多余行），
         与 syngen.cc 一致；**正演输出**里 ``r`` 行末两列为合成走时（非 0），勿与 **geom 输入**（常为 0）混淆。
         段错误常见于 **接收点超出 smesh 模型范围** 等与格式无关的问题。
@@ -765,6 +1148,7 @@ class TomoAnd:
             vgrid_subregion（-i，west/east/south/north/dx/dz，须配合 out_opts vgrid）。
         """
         kw = dict(kwargs)
+        ttime_data = _peel_tt_forward_stdout_ttime(kw)
         prog = self._build_tt_forward_program_args(smesh, geom, kw)
         if prog is None:
             return self._run_cmd("tt_forward", check_only=True)
@@ -784,13 +1168,64 @@ class TomoAnd:
                         validate_tomo2d_geom_data_format(gfp)
                 except OSError:
                     pass
-        return self._run_cmd("tt_forward", args=prog)
+        if kw.get("refl_file"):
+            _assert_readable_under_proc_cwd(
+                self, "tt_forward refl_file (-F 输入)", kw.get("refl_file")
+            )
+        if kw.get("seafloor_file"):
+            _assert_readable_under_proc_cwd(
+                self, "tt_forward seafloor_file (-B 输入)", kw.get("seafloor_file")
+            )
+        if kw.get("conv_file"):
+            _assert_readable_under_proc_cwd(
+                self, "tt_forward conv_file (-X 转换面)", kw.get("conv_file")
+            )
+        if kw.get("vsmesh"):
+            _assert_readable_under_proc_cwd(
+                self, "tt_forward vsmesh (-U)", kw.get("vsmesh")
+            )
+        old_cap = self.capture_subprocess_output
+        old_cb = self.stream_output_line
+        if ttime_data:
+            self.capture_subprocess_output = True
+            if old_cb is not None:
+                def _stderr_only(name: str, line: str) -> None:
+                    if name != "stdout":
+                        old_cb(name, line)
+
+                self.stream_output_line = _stderr_only
+        try:
+            result = self._run_cmd("tt_forward", args=prog)
+        finally:
+            self.capture_subprocess_output = old_cap
+            self.stream_output_line = old_cb
+        if ttime_data:
+            stdout = getattr(result, "stdout", None) if result is not None else None
+            if not stdout or not str(stdout).strip():
+                raise FileNotFoundError(
+                    f"tt_forward 未在标准输出写出走时，无法写入 {ttime_data!r}。"
+                    "（合成走时在 stdout，不是原生 -T 文件。）"
+                )
+            self._write_stdout_to_file(result, ttime_data)
+            out_path = Path(ttime_data)
+            if not out_path.is_absolute():
+                base = self.proc_cwd or os.getcwd()
+                out_path = Path(base) / out_path
+            try:
+                validate_tomo2d_geom_data_format(out_path)
+            except ValueError as e:
+                raise ValueError(
+                    "tt_forward 标准输出不是 tt_inverse 可用的走时格式"
+                    f"（原生 -T 是 '>' 折合图，读了会 invalid nsrc）。\n{e}"
+                ) from e
+        return result
         
     def _build_tt_inverse_program_args(
         self, mesh: Optional[str], data: Optional[str], kwargs: Dict[str, Any]
     ) -> Optional[List[str]]:
         if mesh is None or data is None:
             return None
+        kwargs.pop("_refl_stride", None)
         args = [f"-M{mesh}", f"-G{data}"]
         num_keys = ["xorder", "zorder", "clen", "nintp", "bend_cg_tol", "bend_br_tol"]
         if any(k in kwargs for k in num_keys):
@@ -801,6 +1236,28 @@ class TomoAnd:
             )
         if "refl_file" in kwargs and kwargs["refl_file"] is not None:
             args.append(f"-F{kwargs['refl_file']}")
+        if kwargs.get("seafloor_file"):
+            args.extend(_tomo_glued_path_argv("Y", kwargs["seafloor_file"]))
+        if kwargs.get("conv_file"):
+            args.extend(_tomo_glued_path_argv("B", kwargs["conv_file"]))
+        if kwargs.get("vsmesh"):
+            args.extend(_tomo_glued_path_argv("U", kwargs["vsmesh"]))
+        if kwargs.get("kappa") is not None:
+            args.append(f"-k{kwargs['kappa']}")
+        if kwargs.get("invert_water_only") and kwargs.get("invert_crust_only"):
+            raise ValueError("tt_inverse: -y (invert water only) and -w (invert crust only) are mutually exclusive")
+        if kwargs.get("invert_water_only"):
+            if not kwargs.get("seafloor_file") and not kwargs.get("refl_file"):
+                raise ValueError("tt_inverse: -y (invert water only) requires -Y or -F")
+            args.append("-y")
+        if kwargs.get("invert_crust_only"):
+            if not kwargs.get("seafloor_file") and not kwargs.get("refl_file"):
+                raise ValueError("tt_inverse: -w (invert crust only) requires -Y or -F")
+            args.append("-w")
+        if kwargs.get("freeze_refl"):
+            if not kwargs.get("refl_file"):
+                raise ValueError("tt_inverse: -u (freeze reflector) requires -F")
+            args.append("-u")
         if kwargs.get("do_full_refl"):
             args.append("-A")
         if "refl_weight" in kwargs and kwargs["refl_weight"] is not None:
@@ -809,8 +1266,8 @@ class TomoAnd:
             args.append("-P")
         if kwargs.get("print_final_only"):
             args.append("-l")
-        if "filter_bound_file" in kwargs and kwargs["filter_bound_file"]:
-            args.append(f"-s{kwargs['filter_bound_file']}")
+        if kwargs.get("apply_filter") or kwargs.get("filter_bound_file"):
+            args.append(f"-s{kwargs.get('filter_bound_file') or ''}")
         if "log_file" in kwargs and kwargs["log_file"] is not None:
             args.append(f"-L{kwargs['log_file']}")
         if "out_root" in kwargs and kwargs["out_root"] is not None:
@@ -882,7 +1339,9 @@ class TomoAnd:
 
         【必选】mesh（-M）, data（-G）；缺一则仅打印帮助。
         【成组可选】-N：xorder,zorder,clen,nintp,bend_cg_tol,bend_br_tol（规则同 tt_forward）。
-        【可选】refl_file, do_full_refl, refl_weight, jumping, print_final_only, filter_bound_file,
+        【可选】refl_file, seafloor_file（-Y 海底；与正演 -B 不同，反演 -B 是转换波界面）,
+        conv_file（反演 -B，6 折合 PSP / 7/8 钉点；不劫持 0/1）, vsmesh（-U 独立 Vs 初值；有则不再用 Vp/κ 覆盖 Vs）, kappa（-k，6 只反面下并冻盖层；有 7/8 才解冻盖层；反演 -Q 仍是 LSQR）, invert_water_only（-y，冻壳只反水；须 -Y 或 -F）, invert_crust_only（-w，冻水只反壳；须 -Y 或 -F；与 -y 互斥）, freeze_refl（-u，冻结 -F 几何；须同时有 refl_file）, do_full_refl（-A：反射贴界面；不传时远偏移可穿幔）, refl_weight, jumping, print_final_only,
+            apply_filter（裸 -s，用 mesh 地形）, filter_bound_file（-s 文件；有文件则不必再传 apply_filter）,
             log_file, out_root, out_level, dws_file, crit_chi, lsqr_tol, niter, target_chi2,
             smooth_opts（含 vel/dep 单值或 min/max/dw 字符串、vel_log10/dep_log10）,
             auto_damp_max_dv / auto_damp_max_dd（-TV/-TD，与固定阻尼互斥）,
@@ -893,6 +1352,22 @@ class TomoAnd:
         prog = self._build_tt_inverse_program_args(mesh, data, kw)
         if prog is None:
             return self._run_cmd("tt_inverse", check_only=True)
+        if kw.get("refl_file"):
+            _assert_readable_under_proc_cwd(
+                self, "tt_inverse refl_file (-F 输入)", kw.get("refl_file")
+            )
+        if kw.get("seafloor_file"):
+            _assert_readable_under_proc_cwd(
+                self, "tt_inverse seafloor_file (-Y 输入)", kw.get("seafloor_file")
+            )
+        if kw.get("conv_file"):
+            _assert_readable_under_proc_cwd(
+                self, "tt_inverse conv_file (-B 转换面)", kw.get("conv_file")
+            )
+        if kw.get("vsmesh"):
+            _assert_readable_under_proc_cwd(
+                self, "tt_inverse vsmesh (-U)", kw.get("vsmesh")
+            )
         return self._run_cmd("tt_inverse", args=prog)
         
     def _build_stat_smesh_program_args(self, kwargs: Dict[str, Any]) -> Optional[List[str]]:

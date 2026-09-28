@@ -35,7 +35,9 @@ class VelocityModel:
         Returns:
             VelocityModel: 速度模型对象
         """
-        zelt_model = ZeltVelocityModel2d(file_path)
+        from .vin_io import load_zelt_model
+
+        zelt_model = load_zelt_model(file_path)
         return VelocityModel(zelt_model)
         
     @staticmethod

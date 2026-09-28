@@ -1,0 +1,6 @@
+# OBS x z (km), one per line; z = seafloor
+0 2.4
+5 2.5
+10 2.6
+15 2.7
+20 2.8

@@ -37,7 +37,7 @@ def run_node_command(
     env: dict[str, str] | None = None,
     cwd: str | Path | None = None,
 ) -> RunContext:
-    """Execute one node command under project/runs and persist manifest/logs."""
+    """Execute one node command under project `_wb/runs` (or legacy `runs/`) and persist manifest/logs."""
     rm = RunManager()
     return rm.run_command(
         project=project,
@@ -51,14 +51,14 @@ def run_node_command(
 
 
 def save_project_ui_state(project: ProjectContext, state: dict) -> Path:
-    """Persist UI state to project/state/ui_state.json."""
+    """Persist UI state to `_wb/state/ui_state.json` (legacy: `state/`)."""
     store = StateStore()
     ref = store.save_ui_state(project, state)
     return ref.path
 
 
 def load_project_ui_state(project: ProjectContext) -> dict:
-    """Load UI state from project/state/ui_state.json (or return empty dict)."""
+    """Load UI state from `_wb/state/ui_state.json` or legacy `state/`."""
     store = StateStore()
     return store.load_ui_state(project)
 

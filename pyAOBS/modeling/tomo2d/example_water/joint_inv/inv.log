@@ -1,0 +1,17 @@
+# strategy jumping=0 robust=0 crit_chi=1000
+# ray_trace -N xorder=4 zorder=4 clen=0.8 nintp=8 bend_tol=0.0001
+# smooth_vel -SV on=1 wmin=20 wmax=20 dw=21 log10(-XV)=0
+# smooth_dep -SD on=0 wmin=0 wmax=0 dw=1 log10(-XD)=0
+# damping: MODE=none  (neither -T nor -D)
+# filter_-s: OFF  (ON=2D filter after each iter; OFF=no -s)
+# water: invert_only=0 crust_only=0 seafloor=Y
+# ndata 84
+# nnodes nnodev=2091 nnoded(refl)=51 refl_weight=1
+# LSQR atol=0.001
+# lsqr_precond: OFF maxD=50  (ON=TOMO2D_INV_LSQR_PRECOND!=0; default OFF; Legacy forces OFF; maxD<=0=unbounded)
+# accel: reuse=OFF thresh=0 c2f=OFF legacy=OFF
+1 1 0 0.614043 3770.49 21 0.669338 4480.14 21 0.685067 4693.17 0.0127552 2.09454 20 0 0 0 1 93 0 3.24145 0.0660868 0.0393002 0.0126305 0.00693542 -1
+2 1 0 0.0655404 42.9554 21 0.0241873 5.85026 21 0.0387882 15.0452 0.0138634 1.3581 20 0 0 0 1 40 0 1.55453 0.00878285 0.00842411 0.00833917 0.0032322 -1
+3 1 0 0.01776 3.15417 21 0.0142084 2.01878 21 0.00629112 0.395782 0.014238 1.71123 20 0 0 0 1 38 0 1.65122 0.00244134 0.0116077 0.00530142 0.00254851 -1
+4 1 0 0.0275888 7.61141 21 0.0115684 1.33829 21 0.00809328 0.655011 0.0124554 1.39563 20 0 0 0 1 26 0 4.77147 0.00271967 0.0044956 0.00872945 0.00357181 -1
+5 1 0 0.0171556 2.94316 21 0.00730058 0.532985 21 0.00439856 0.193473 0.0124033 1.22981 20 0 0 0 1 23 0 1.20304 0.00184664 0.00328339 0.00676912 0.00243897 -1

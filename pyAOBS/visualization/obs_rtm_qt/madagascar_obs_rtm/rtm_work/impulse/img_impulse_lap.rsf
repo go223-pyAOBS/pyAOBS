@@ -1,0 +1,84 @@
+4.2	sfspike	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	o1=0
+	label1="Time"
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.004
+	n1=5018
+	in="stdin"
+
+4.2	sfricker1	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sfscale	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sftransp	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	d2=0.004
+	n2=5018
+	o2=0
+	data_format="native_float"
+	label2="Time"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/wav.rsf@"
+	unit2="s"
+	n1=1
+4.2	sfawefd2d	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:33 2026
+
+	d2=0.5
+	n2=821
+	o1=0
+	d3=0.5
+	n3=41
+	o2=0
+	label1=""
+	data_format="native_float"
+	o3=0
+	label2=""
+	label3="t"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/wfls_000.rsf@"
+	unit1=""
+	unit2=""
+	unit3="s"
+	d1=0.25
+	n1=241
+4.2	sfadd	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:37:09 2026
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sfstack	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:37:09 2026
+
+	n3=1
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/img_impulse.rsf@"
+4.2	sfmath	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:37:09 2026
+
+	x2=3
+	input=0
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/img_impulse_solid.rsf@"
+	b=1
+	x1=2
+4.2	sflaplac	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:37:09 2026
+
+	data_format="native_float"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/img_impulse_lap.rsf@"

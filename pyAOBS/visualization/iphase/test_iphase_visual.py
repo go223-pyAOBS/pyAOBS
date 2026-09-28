@@ -13,7 +13,8 @@ import numpy as np
 # 定位示例数据
 _IPHASE_DIR = Path(__file__).resolve().parent
 TX_DEMO = _IPHASE_DIR / "examples" / "tx_demo.in"
-TX_OBS17 = _IPHASE_DIR / "txin" / "tx_OBS27.in"
+# 正式样例；完整 OBS 合集见 _archive/datasets/txin/
+TX_OBS17 = _IPHASE_DIR / "examples" / "tx_OBS22.in"
 
 # PPP/PPS/PSS 相位号（OBS17）
 PHASE_PPP = 5

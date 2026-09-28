@@ -1,0 +1,13 @@
+in=d:\python-learn\pyAOBS\pyAOBS\visualization\obs_rtm_qt\madagascar_obs_rtm\inputs\shots\shot_1053.rsf@
+n1=13750
+d1=0.004
+o1=0
+label1=Time
+unit1=s
+n2=1
+d2=1
+o2=0
+label2=OBS
+unit2=
+data_format=native_float
+esize=4

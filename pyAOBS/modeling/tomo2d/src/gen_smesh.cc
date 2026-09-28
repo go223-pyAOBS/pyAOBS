@@ -15,7 +15,9 @@
  *     [variable spacing grid]:
  *             -Xxfile -Zzfile -Ttfile
  *     [Zelt-based grid]:
- *             -Edx -Zzfile 
+ *             -Edx -Zzfile
+ *     [hang from sea surface, topo=0]:
+ *             -S [ -Gseafloor_file ]   (needs -C; ilayer = seafloor in v.in)
  *
  * Jun Korenaga, MIT/WHOI
  * January 1999
@@ -34,11 +36,11 @@ int main(int argc, char **argv)
     bool getA=false, getB=false, readZelt=false, getN=false;
     bool getD=false, getE=false, getXfn=false, getZfn=false, getTopo=false;
     bool getWater=false, outRefl=false, err=false;
-    bool zeltdump=false;
+    bool zeltdump=false, hangSea=false, getSeafloorOut=false;
     double v0, vgrad, xmax, zmax, dx, wcol=0.0;
     int nx, nz, ilayer, imoho;
     char *xfn, *zfn, *tfn, zeltfn[MaxStr], reflfn[MaxStr];
-    char *zdfn; 
+    char *zdfn = 0, *sfn = 0;
     double v_water = 1.50;
     double v_air = 0.330;
     
@@ -100,6 +102,13 @@ int main(int argc, char **argv)
 		tfn = &argv[i][2];
 		getTopo = true;
 		break;
+	    case 'S':
+		hangSea = true;
+		break;
+	    case 'G':
+		sfn = &argv[i][2];
+		getSeafloorOut = true;
+		break;
 	    case 'W':
 		getWater = true;
 		wcol = atof(&argv[i][2]);
@@ -143,9 +152,17 @@ int main(int argc, char **argv)
 	cerr << "-C is required to use -F.\n";
 	err = true;
     }
+    if (hangSea && !readZelt){
+	cerr << "-S needs -C (zelt); ilayer is the seafloor in v.in.\n";
+	err = true;
+    }
+    if (getSeafloorOut && !hangSea){
+	cerr << "-G needs -S.\n";
+	err = true;
+    }
     if (err) error("usage: gen_smesh [ -options ]");
 
-    Array1d<double> x, topo, z, x_moho, moho;
+    Array1d<double> x, topo, z, x_moho, moho, seafloor;
     ZeltVelocityModel2d* pzelt;
     if (uniGrid){
 	x.resize(nx); topo.resize(nx); z.resize(nz);
@@ -180,6 +197,15 @@ int main(int argc, char **argv)
 	pzelt->getTopo(ilayer, dx, x, topo);
 	nx = x.size();
 	if (zeltdump) pzelt->dumpNodes(zdfn);
+	if (hangSea){
+	    seafloor.resize(nx);
+	    for (int i=1; i<=nx; i++) seafloor(i) = topo(i);
+	    for (int i=1; i<=nx; i++) topo(i) = 0.0;
+	    if (z.size()>=1 && z(1) > 1e-3){
+		cerr << "gen_smesh -S: z_file first node is " << z(1)
+		     << " km; hang-from-sea-surface expects ~0 (absolute depth).\n";
+	    }
+	}
     }
 
     cout << nx << " " << nz << " " << v_water << " " << v_air << '\n';
@@ -199,7 +225,16 @@ int main(int argc, char **argv)
 		// (e.g., to skip null cells, to get subseafloor
 		//  velocity not seawater velocity for the surface velocity)
 		const double eps=1e-10;
-		v = pzelt->at(x(i),topo(i)+z(k)+eps);
+		if (hangSea){
+		    // topo already 0; z is absolute depth from sea surface.
+		    // do not call at() in the water: v.in may have no water cells.
+		    if (z(k)+eps < seafloor(i))
+			v = v_water;
+		    else
+			v = pzelt->at(x(i), z(k)+eps);
+		}else{
+		    v = pzelt->at(x(i),topo(i)+z(k)+eps);
+		}
 	    }else{
 		if (z(k) < wcol){
 		    v = 1.5;
@@ -215,6 +250,12 @@ int main(int argc, char **argv)
 	ofstream os(reflfn);
 	for (int i=1; i<=moho.size(); i++){
 	    os << x_moho(i) << " " << moho(i) << '\n';
+	}
+    }
+    if (hangSea && getSeafloorOut){
+	ofstream os(sfn);
+	for (int i=1; i<=nx; i++){
+	    os << x(i) << " " << seafloor(i) << '\n';
 	}
     }
 }

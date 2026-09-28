@@ -5,22 +5,31 @@ from __future__ import annotations
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QDialog
 
+from pyAOBS.utils.qt_combo import (
+    connect_combo_deferred,
+    defer_after_combo_popup,
+    hide_combo_popup,
+)
+from pyAOBS.utils.qt_independent_window import (
+    apply_native_window_border,
+    configure_independent_window,
+)
+
 _registry: list[QDialog] = []
 _open_singletons: dict[type, QDialog] = {}
 
+__all__ = [
+    "configure_independent_dialog",
+    "show_modeless_dialog",
+    "connect_combo_deferred",
+    "defer_after_combo_popup",
+    "hide_combo_popup",
+]
+
 
 def configure_independent_dialog(dlg: QDialog) -> None:
-    """Detach from parent and use a normal top-level window (no focus stealing on main window)."""
-    dlg.setModal(False)
-    dlg.setWindowModality(Qt.WindowModality.NonModal)
-    dlg.setParent(None)
-    flags = (
-        Qt.WindowType.Window
-        | Qt.WindowType.WindowTitleHint
-        | Qt.WindowType.WindowCloseButtonHint
-        | Qt.WindowType.WindowMinMaxButtonsHint
-    )
-    dlg.setWindowFlags(flags)
+    """Detach from parent and use a normal top-level window with a visible frame."""
+    configure_independent_window(dlg)
 
 
 def show_modeless_dialog(
@@ -62,6 +71,7 @@ def show_modeless_dialog(
 
     dlg.finished.connect(_on_finished)
     dlg.show()
+    apply_native_window_border(dlg)
     if activate:
         dlg.raise_()
         dlg.activateWindow()

@@ -1,0 +1,32 @@
+in=/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/obs_rtm_qt/madagascar_obs_rtm/bath1d.rsf@
+n1=821
+d1=0.5
+o1=0
+label1=Distance
+unit1=km
+data_format=native_float
+esize=4
+4.2	sfspray	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:58 2026
+
+	d2=0.5
+	n2=821
+	o1=0
+	n3=1
+	o2=0
+	data_format="native_float"
+	label2="Distance"
+	esize=4
+	in="stdout"
+	unit2="km"
+	d1=0.25
+	n1=241
+	in="stdin"
+
+4.2	sfput	obs_rtm_qt/madagascar_obs_rtm/rtm_work:	go223@DESKTOP-11IK6A4	Thu Jul 23 10:09:58 2026
+
+	in="/var/tmp/obs_rtm_qt/madagascar_obs_rtm/rtm_work/bath2d.rsf@"
+	label1=Depth
+	data_format="native_float"
+	label2=Distance
+	unit1=km
+	unit2=km

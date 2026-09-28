@@ -1,0 +1,9 @@
+# GUI grid / Madagascar RTM (OBS-as-source reciprocity)
+# 输入在 ../ ；本目录为输出与 SConstruct；互易 sou=OBS, rec=炮点
+engine=madagascar
+ox=0 dx=0.5 nx=821
+oz=0 dz=0.25 nz=241
+nt=7501 dt=0.004 fmin=5 fmax=12 jsnap=80 nb=40
+vel=../vel.rsf
+shots=/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/obs_rtm_qt/madagascar_obs_rtm/shots_proc
+run: cd rtm_work && scons -f SConstruct_obs_rtm img_lap.rsf

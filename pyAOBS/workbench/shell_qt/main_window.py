@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import os
 import shutil
-import subprocess
 import sys
 import threading
 from pathlib import Path
@@ -42,6 +41,7 @@ from ..shell.logic.helpers import (
 )
 from ..shell.logic.project_tree import scan_tree_nodes
 from ..shell.logic.run_history import scan_run_history
+from pyAOBS.utils.open_path import open_path_in_file_manager
 from .history_tab import RunHistoryTab
 from .runner_tab import RunnerTab
 from .styles import (
@@ -313,6 +313,9 @@ class WorkbenchMainWindow(QMainWindow):
         )
         self._project_label.setToolTip(str(self.current_project.root))
         self._refresh_all()
+        self._runner_tab.apply_workspace_registry(
+            self.current_project.workspaces, overwrite=False
+        )
         self._set_status(status, "success")
 
     def _refresh_all(self) -> None:
@@ -381,10 +384,9 @@ class WorkbenchMainWindow(QMainWindow):
         p = self._selected_tree_path()
         if p is None or not p.exists():
             return
-        if p.is_dir():
-            subprocess.Popen(["explorer", str(p)])
-        else:
-            os.startfile(str(p))  # noqa: S606 — Windows file open
+        ok, msg = open_path_in_file_manager(p)
+        if not ok:
+            QMessageBox.information(self, "打开路径", msg)
 
     def _refresh_run_history(self) -> None:
         if self.current_project is None:
@@ -419,7 +421,21 @@ class WorkbenchMainWindow(QMainWindow):
 
     # ---- run node ----
     def _on_apply_gui_form(self) -> None:
-        msg = self._runner_tab.apply_gui_quick_form()
+        root = self.current_project.root if self.current_project else None
+        workspaces = self.current_project.workspaces if self.current_project else {}
+        msg = self._runner_tab.apply_gui_quick_form(
+            project_root=root, workspaces=workspaces
+        )
+        if self.current_project is not None:
+            work = self._runner_tab.current_workspace_path(workspaces)
+            pid = self._runner_tab.plugin_id()
+            if work and pid.endswith(".gui"):
+                try:
+                    self.current_project = self.project_manager.set_workspace(
+                        self.current_project, pid, work
+                    )
+                except ProjectError:
+                    pass
         self._set_status(msg)
 
     def _on_apply_template(self) -> None:
@@ -529,7 +545,9 @@ class WorkbenchMainWindow(QMainWindow):
     def _open_run_folder(self, run_id: str) -> None:
         run_dir = self._run_id_to_dir.get(run_id)
         if run_dir and run_dir.is_dir():
-            subprocess.Popen(["explorer", str(run_dir)])
+            ok, msg = open_path_in_file_manager(run_dir)
+            if not ok:
+                QMessageBox.information(self, "打开工作区目录", msg)
 
     def _delete_run(self, run_id: str) -> None:
         run_dir = self._run_id_to_dir.get(run_id)
@@ -622,7 +640,7 @@ class WorkbenchMainWindow(QMainWindow):
             QMessageBox.information(
                 self,
                 "未找到 imodel 会话",
-                "当前项目 runs/ 下没有带 gui_state 的 imodel.gui 运行记录。",
+                "当前项目 _wb/runs（或旧版 runs/）下没有带 gui_state 的 imodel.gui 运行记录。",
             )
             return
         self._runner_tab.set_petrology_state_path(str(state_path))
@@ -664,7 +682,7 @@ class WorkbenchMainWindow(QMainWindow):
         if sel is not None:
             state["selected_tree_path"] = str(sel)
         self.state_store.save_ui_state(self.current_project, state)
-        self._set_status("已保存界面状态到 state/ui_state.json")
+        self._set_status("已保存界面状态到 _wb/state/ui_state.json")
 
     def _restore_ui_state(self, silent: bool = False) -> None:
         if self.current_project is None:
@@ -692,6 +710,9 @@ class WorkbenchMainWindow(QMainWindow):
         rid = str(state.get("selected_run_id", "") or "")
         if rid:
             self._history_tab.select_run_id(rid)
+        self._runner_tab.apply_workspace_registry(
+            self.current_project.workspaces, overwrite=False
+        )
         if not silent:
             self._set_status("已恢复界面状态。")
 

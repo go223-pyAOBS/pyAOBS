@@ -48,8 +48,8 @@
 | **idata / raw2sac** | OBS 数据格式统一转换（RAW/OBEM/SAC/SEGY） | Workbench `data.gui` |
 | **zplotpy** | 震相拾取、剖面浏览、叠加与去噪 | `python -m pyAOBS.visualization.zplotpy.gui` |
 | **tomo2d** | 首达/反射走时正演与层析反演（Python 包装 + C++ 内核） | `python -m pyAOBS.modeling.tomo2d.gui` |
-| **imodel (Qt)** | 二维速度模型交互解释、物性/岩性、重力、petrology 导出 | `python -m pyAOBS.visualization.imodel_qt` |
-| **iphase** | `tx.in` 震相选择、合并、QC（兼容 txphase/txconv 思路） | `python -m pyAOBS.visualization.iphase.iphase_gui` |
+| **imodel (Qt)** | 二维速度模型交互解释、物性/岩性、重力、petrology 导出 | `python -m pyAOBS.visualization.imodel.gui` |
+| **iphase** | `tx.in` 震相选择、合并、QC（兼容 txphase/txconv 思路） | `python -m pyAOBS.visualization.iphase.gui` |
 | **model_building** | Zelt `v.in` 读写、插值、TOMO2D 慢度网格 | Python API |
 | **rayinvr / vedit** | 射线追踪库；`v.in` Tk 编辑器 | API / `modeling/vedit/main.py` |
 | **utils（岩性）** | 岩石数据库、温压校正、速度→岩性分类 | imodel 内嵌；`classify_velocity_model` |
@@ -193,18 +193,12 @@ from pyAOBS.utils.simple_rock_classifier import classify_velocity_model
 ### imodel（速度模型解释）— 默认 Qt
 
 ```bash
-python -m pyAOBS.visualization.imodel_qt
+python -m pyAOBS.visualization.imodel.gui
 ```
 
 能力概要：网格/Zelt 模型交互、剖面、物性与岩性、重力工具、向 petrology 导出观测/沿迹、Fig.12a / 15c 预览、Workbench 状态回写。
 
-Tk 旧版（兼容）：
-
-```bash
-python -m pyAOBS.visualization.imodel_gui
-```
-
-更多：[`IMODEL_README.md`](pyAOBS/visualization/IMODEL_README.md)、[`IMODEL_START_GUIDE.md`](pyAOBS/visualization/IMODEL_START_GUIDE.md)
+更多：[`imodel/README.md`](pyAOBS/visualization/imodel/README.md)
 
 ### zplotpy（震相拾取）
 
@@ -217,7 +211,9 @@ Qt Fast Viewer；可选对接 `processors/denoise`；Fortran/f2py 内核在 NumP
 ### iphase（tx.in 震相）
 
 ```bash
-# GUI
+# GUI（Qt）
+python -m pyAOBS.visualization.iphase.gui
+# 兼容旧模块名（同样进入 Qt）
 python -m pyAOBS.visualization.iphase.iphase_gui
 
 # CLI 示例
@@ -428,10 +424,9 @@ pyAOBS/
 | 组件 | 命令 |
 |------|------|
 | Workbench | `python -m pyAOBS.workbench.app` |
-| imodel Qt | `python -m pyAOBS.visualization.imodel_qt` |
-| imodel Tk | `python -m pyAOBS.visualization.imodel_gui` |
+| imodel (Qt) | `python -m pyAOBS.visualization.imodel.gui` |
 | zplot | `python -m pyAOBS.visualization.zplotpy.gui` |
-| iphase GUI | `python -m pyAOBS.visualization.iphase.iphase_gui` |
+| iphase GUI | `python -m pyAOBS.visualization.iphase.gui` |
 | TOMO2D GUI | `python -m pyAOBS.modeling.tomo2d.gui` |
 | LIP Petrology | `python -m pyAOBS.petrology.gui` |
 | idata | `python pyAOBS/processors/raw2sac/idata.py` |

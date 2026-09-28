@@ -11,7 +11,7 @@ from . import tomo2d
 from . import rayinvr
 from . import hybrid
 
-__all__ = ['tomo2d', 'rayinvr', 'hybrid']
+__all__ = ['tomo2d', 'rayinvr', 'hybrid', 'vedit']
 
 # Use lazy imports to avoid circular dependencies
 def __getattr__(name):

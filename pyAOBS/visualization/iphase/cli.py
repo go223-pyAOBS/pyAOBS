@@ -5,6 +5,9 @@ iphase 命令行入口
   python -m pyAOBS.visualization.iphase select tx.in -o tx.out --phases 1 2 3
   python -m pyAOBS.visualization.iphase combine tx1.in tx2.in tx3.in -o1 tx1.out -o2 tx2.out --ip1 1 --ip2 2 --ip3 3 --ip4 10 --ip5 11
   python -m pyAOBS.visualization.iphase info tx.in
+
+GUI:
+  python -m pyAOBS.visualization.iphase.gui
 """
 
 from __future__ import annotations
@@ -60,14 +63,6 @@ def cmd_info(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_gui(args: argparse.Namespace) -> int:
-    try:
-        from .iphase_gui import main as gui_main
-    except ImportError:
-        from pyAOBS.visualization.iphase.iphase_gui import main as gui_main
-    return gui_main()
-
-
 def cmd_rin_gui(args: argparse.Namespace) -> int:
     try:
         from .rin_phase_groups_gui import main as rin_gui_main
@@ -104,10 +99,6 @@ def main() -> int:
     p_info = sub.add_parser("info", help="显示 tx.in 统计信息")
     p_info.add_argument("input", help="tx.in 路径")
     p_info.set_defaults(func=cmd_info)
-
-    # gui
-    p_gui = sub.add_parser("gui", help="启动 iphase 图形界面")
-    p_gui.set_defaults(func=cmd_gui)
 
     # rin-gui
     p_rin_gui = sub.add_parser("rin-gui", help="启动 r.in 相位组专用编辑器")

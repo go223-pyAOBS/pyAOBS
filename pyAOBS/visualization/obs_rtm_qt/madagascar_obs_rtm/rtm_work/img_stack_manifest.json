@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "obs_ids": [
+    0
+  ],
+  "files": {
+    "0": {
+      "name": "img_obs_000.rsf",
+      "mtime": 1784772598.346976
+    }
+  },
+  "outputs": {
+    "img_stack": 1784772598.5245922,
+    "img_solid": 1784772598.8580642,
+    "img_lap": 1784772599.069457
+  },
+  "fingerprint": {
+    "vel_rsf": "/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/obs_rtm_qt/madagascar_obs_rtm/vel.rsf",
+    "vel_mtime": 1784772551.5232732,
+    "fmin": 5.0,
+    "fmax": 12.0,
+    "nt": 7501,
+    "dt": 0.004,
+    "jsnap": 80,
+    "use_shots_proc": true
+  }
+}

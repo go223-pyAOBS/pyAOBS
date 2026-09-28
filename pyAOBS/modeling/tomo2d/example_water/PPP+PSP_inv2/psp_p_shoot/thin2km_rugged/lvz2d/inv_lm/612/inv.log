@@ -1,0 +1,27 @@
+# strategy jumping=0 robust=0 crit_chi=1000
+# ray_trace -N xorder=8 zorder=8 clen=0.8 nintp=8 bend_tol=0.001
+# smooth_vel -SV on=1 wmin=200 wmax=200 dw=201 -Ss=-1 log10(-XV)=0
+# smooth_dep -SD on=1 wmin=20 wmax=20 dw=21 log10(-XD)=0
+# damping: MODE=fixed  using=-D/-DV/-DD  auto_-T=OFF  -DV=30 -DD=200
+# filter_-s: OFF  (ON=2D filter after each iter; OFF=no -s)
+# water: invert_only=0 crust_only=1 seafloor=Y
+# psx: invert_vs=1 joint_vpvs=0 freeze_lid=1
+# ndata 166
+# nnodes nnodev=6156 nvel=6156 nnoded(refl)=76 freeze_-u=OFF refl_weight=1
+# LSQR atol=0.001 itermax=615600 cap=8000  (TOMO2D_INV_LSQR_MAXITER)
+# lsqr_precond: OFF maxD=10  (ON=TOMO2D_INV_LSQR_PRECOND!=0; default OFF; Legacy forces OFF; maxD=kappa vs col-norm median, empty D=0, miniter=20)
+# sens_weight: OFF kappa=10 eps=0.05  (ON=TOMO2D_INV_SENS_WEIGHT!=0; default OFF; T*=w, R couple 2/(wi+wj); median per Vp/Vs-lid/Vs-below/Moho)
+# linesearch: OFF c=0.0001 rho=0.5 amin=0.03125  (ON=TOMO2D_INV_LINESEARCH!=0; default OFF; Armijo on true chi2 after re-trace)
+# lm: ON lambda=1 up=4 down=0.5 lmax=256 rho_acc=0.1 rho_good=0.5  (ON=TOMO2D_INV_LM!=0; default OFF; trust-region: scale T and re-LSQR on true chi2)
+# accel: reuse=OFF thresh=0 c2f=OFF legacy=OFF
+1 1 0 0.0998697 99.7395 0 0 0 0 0 0 3.50001e-06 149.308 200 20 30 200 1 40 0 10.5684 0.00692415 0.00778854 0.000690402 0.00132091 0.0610343
+# lm: reject rho=-86.321 lambda=1 ntry=1 chi2_0=99.7395 chi2=7797.08
+1 1 0 0.883011 99.7395 0 0 0 0 0 0 0 0 200 20 120 800 1 20 0 19.9163 0.00383842 0.00107222 0.000746952 0.00159415 0.0221269
+# lm: reject rho=-136.51 lambda=4 ntry=2 chi2_0=99.7395 chi2=10996.4
+1 1 0 1.04864 99.7395 0 0 0 0 0 0 0 0 200 20 480 3200 1 10 0 36.0779 0.00176683 8.37846e-05 0.000516793 0.00203419 0.0020393
+# lm: reject rho=-191.826 lambda=16 ntry=3 chi2_0=99.7395 chi2=12311.7
+1 1 0 1.10958 99.7395 0 0 0 0 0 0 0 0 200 20 1920 12800 1 9 0 68.3985 0.000759559 5.2381e-06 0.000204115 0.00108715 0.000130094
+# lm: reject rho=-92.3114 lambda=64 ntry=4 chi2_0=99.7395 chi2=2992.88
+1 1 0 0.547072 99.7395 0 0 0 0 0 0 0 0 200 20 7680 51200 1 7 0 96.0995 7.71284e-05 3.52269e-07 2.01938e-05 0.00011653 8.95183e-06
+# lm: accept rho=2.44437 lambda=128 ntry=5 chi2_0=99.7395 chi2=90.8419
+2 1 0 0.095311 90.8419 0 0 0 0 0 0 2.5e-06 105.33 200 20 3840 25600 1 16 0 74.2646 0.000503555 1.34802e-06 0.00029296 0.000838567 3.41298e-05

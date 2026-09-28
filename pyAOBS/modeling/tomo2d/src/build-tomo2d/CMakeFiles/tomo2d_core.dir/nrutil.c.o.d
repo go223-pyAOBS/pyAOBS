@@ -1,5 +1,5 @@
 CMakeFiles/tomo2d_core.dir/nrutil.c.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/nrutil.c \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/nrutil.c \
  /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
  /usr/include/features.h /usr/include/features-time64.h \

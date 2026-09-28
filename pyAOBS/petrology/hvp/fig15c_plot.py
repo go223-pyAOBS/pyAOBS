@@ -82,6 +82,8 @@ def plot_fig12a_model_overlays(
     ax,
     *,
     observation: CrustObservation | None = None,
+    observations: list | None = None,
+    observation_labels: list[str] | None = None,
     windows: list[TransectWindow] | None = None,
     all_series=None,
     h_lim: tuple[float, float] = H_LIM,
@@ -93,26 +95,53 @@ def plot_fig12a_model_overlays(
     show_observation_read_band: bool = True,
 ) -> None:
     """
-    Standard Fig.12a background + optional single observation and/or transect windows.
+    Standard Fig.12a background + optional observation(s) and/or transect windows.
 
-    Fig.12a (单点) 与 Fig.15c (沿迹多窗) 共用同一底图，仅叠加层不同。
+    ``observations`` 为多段累加投点；若为空则回退单点 ``observation``。
     """
     if all_series is None:
         all_series = parse_hvp_digitized(DEFAULT_HVP_DIGITIZED)
     draw_fig12a_background(ax, all_series, h_lim=h_lim, vp_lim=vp_lim, show_legend=show_legend)
 
-    if observation is not None:
+    obs_list: list = []
+    if observations:
+        obs_list = list(observations)
+    elif observation is not None:
+        obs_list = [observation]
+
+    if obs_list:
         from petrology.imodel_bridge.fig12a_overlay import crust_observation_to_point
         from petrology.hvp.observation_overlay import plot_observation_on_hvp
 
-        pt = crust_observation_to_point(observation, h_min_km=h_min_km)
-        plot_observation_on_hvp(
-            ax,
-            pt,
-            delta_vp_max_km_s=delta_vp_max_km_s,
-            h_min_km=h_min_km,
-            show_read_band=show_observation_read_band,
+        # 多点配色 / 标记（可循环）
+        colors = (
+            "#e74c3c",
+            "#2980b9",
+            "#27ae60",
+            "#8e44ad",
+            "#d35400",
+            "#16a085",
+            "#c0392b",
+            "#2c3e50",
         )
+        markers = ("*", "D", "s", "^", "v", "P", "X", "o")
+        multi = len(obs_list) > 1
+        for i, obs in enumerate(obs_list):
+            pt = crust_observation_to_point(obs, h_min_km=h_min_km)
+            if observation_labels and i < len(observation_labels) and observation_labels[i]:
+                from dataclasses import replace
+
+                pt = replace(pt, label=str(observation_labels[i]))
+            plot_observation_on_hvp(
+                ax,
+                pt,
+                delta_vp_max_km_s=delta_vp_max_km_s,
+                h_min_km=h_min_km,
+                show_read_band=show_observation_read_band and not multi,
+                color=colors[i % len(colors)] if multi else None,
+                marker=markers[i % len(markers)] if multi else None,
+                draw_guides=not multi,
+            )
 
     if windows:
         plot_transect_windows_on_ax(

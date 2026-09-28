@@ -1,8 +1,8 @@
 CMakeFiles/tomo2d_core.dir/zeltform.cc.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/zeltform.cc \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/zeltform.cc \
  /usr/include/stdc-predef.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/zeltform.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/zeltform.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
  /usr/include/c++/12/vector /usr/include/c++/12/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
@@ -155,8 +155,8 @@ CMakeFiles/tomo2d_core.dir/zeltform.cc.o: \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/geom.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/geom.h \
  /usr/include/c++/12/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
@@ -189,7 +189,7 @@ CMakeFiles/tomo2d_core.dir/zeltform.cc.o: \
  /usr/include/c++/12/ext/aligned_buffer.h \
  /usr/include/c++/12/bits/list.tcc /usr/include/c++/12/cstring \
  /usr/include/string.h /usr/include/strings.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/util.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/geom.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/util.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/geom.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h

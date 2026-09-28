@@ -23,7 +23,7 @@ configure_matplotlib_cjk()
 import numpy as np
 from matplotlib.figure import Figure
 
-from .mpl_qt import FigureCanvasQTAgg, NavigationToolbar2QT
+from .mpl_qt import FigureCanvasQTAgg, install_plot_nav_bar
 
 from PySide6.QtCore import Qt, QThread, Slot
 from PySide6.QtGui import QAction, QFont, QKeySequence, QShortcut
@@ -67,7 +67,7 @@ from petrology.melting.pymelt_lithology_adapter import (
 )
 
 from .classic_curves_dialog import ClassicCurvesDialog
-from .dialog_utils import show_modeless_dialog
+from .dialog_utils import connect_combo_deferred, show_modeless_dialog
 from .formula_reference_dialog import show_formula_reference
 from .katz2003_dialog import Katz2003Dialog
 from .melting_schematic_dialog import show_melting_schematic_dialog
@@ -504,12 +504,9 @@ class LipMainWindow(QMainWindow):
         self._ax.set_ylabel("χ")
         self._apply_plot_fonts()
         self._canvas = FigureCanvasQTAgg(self._fig)
-        tb_row = QWidget()
-        tb_lay = QHBoxLayout(tb_row)
-        tb_lay.setContentsMargins(0, 0, 0, 0)
-        tb_lay.addWidget(NavigationToolbar2QT(self._canvas, tb_row))
-        pl.addWidget(tb_row)
+        self._plot_nav = install_plot_nav_bar(pl, self._canvas, parent=plot_wrap)
         pl.addWidget(self._canvas, stretch=1)
+        self._canvas_draw()
         plot_wrap.setMinimumHeight(180)
         self._main_split.addWidget(plot_wrap)
 
@@ -530,7 +527,7 @@ class LipMainWindow(QMainWindow):
         self._out_tabs.addTab(self._log, "日志")
         apply_tab_tooltips(self._out_tabs)
         apply_group_tooltip(log_grp)
-        apply_tip(plot_wrap, "主绘图区：Tp–χ 扫描、正演柱状图或 H–Vp / 可行区热图。")
+        apply_tip(plot_wrap, "主绘图区：滚轮缩放 · 左拖平移 · 右拖缩放 · 双击/Reset 复位。")
         log_lay.addWidget(self._out_tabs)
         log_grp.setMinimumHeight(72)
         self._main_split.addWidget(log_grp)
@@ -640,7 +637,7 @@ class LipMainWindow(QMainWindow):
             0,
         )
         self._hvp_mode_combo.setCurrentIndex(default_idx)
-        self._hvp_mode_combo.currentIndexChanged.connect(self._on_hvp_display_changed)
+        connect_combo_deferred(self._hvp_mode_combo, self._on_hvp_display_changed)
         self._hvp_mode_combo.setMinimumWidth(120)
         self._read_band_chk = QCheckBox("Step-2 竖段")
         self._read_band_chk.setChecked(True)
@@ -694,12 +691,16 @@ class LipMainWindow(QMainWindow):
         _align_param_grid(lg)
         self._backend_combo = QComboBox()
         self._backend_combo.addItems(["pymelt", "native"])
-        self._backend_combo.currentTextChanged.connect(self._on_backend_changed)
+        connect_combo_deferred(
+            self._backend_combo, self._on_backend_changed, signal="currentTextChanged"
+        )
         self._backend_combo.setFixedWidth(88)
         self._preset_combo = QComboBox()
         self._preset_combo.addItem("(custom)")
         self._preset_combo.addItems(list_lithology_presets())
-        self._preset_combo.currentTextChanged.connect(self._on_preset_changed)
+        connect_combo_deferred(
+            self._preset_combo, self._on_preset_changed, signal="currentTextChanged"
+        )
         self._per_combo = QComboBox()
         self._per_combo.setEditable(True)
         self._per_combo.addItems(peridotite_lithology_keys())
@@ -816,6 +817,13 @@ class LipMainWindow(QMainWindow):
         self._pyr_combo.setCurrentText(p.pyroxenite_key)
         self._per_h2o_edit.setText(str(p.peridotite_h2o_wt))
         self._pyr_h2o_edit.setText(str(p.pyroxenite_h2o_wt))
+
+    def _canvas_draw(self) -> None:
+        """重绘并刷新 Reset View 的 home 范围。"""
+        nav = getattr(self, "_plot_nav", None)
+        if nav is not None:
+            nav.schedule_home_refresh()
+        self._canvas.draw_idle()
 
     def _apply_plot_fonts(self) -> None:
         """Matplotlib 轴标签与刻度字号（与 Qt 控件协调）."""
@@ -1211,7 +1219,7 @@ class LipMainWindow(QMainWindow):
         )
         self._fig.subplots_adjust(top=0.96, bottom=0.07, left=0.12, right=0.88)
         self._apply_plot_fonts()
-        self._canvas.draw_idle()
+        self._canvas_draw()
         self._append_log(f"已绘制 Fig.15 (a–c)（{len(windows)} 窗）")
 
     @Slot()
@@ -1269,7 +1277,7 @@ class LipMainWindow(QMainWindow):
         )
         self._fig.tight_layout()
         self._apply_plot_fonts()
-        self._canvas.draw_idle()
+        self._canvas_draw()
         n_curves = len({(r.tp_c, r.upwelling_x) for r in results})
         self._append_log(
             f"Sallarès Galápagos Fig.10 ({panel}): eq.(1) 曲线 {n_curves} 点 + "
@@ -1450,7 +1458,7 @@ class LipMainWindow(QMainWindow):
         self._ax.legend(loc="best", fontsize=UI_FONT_PT - 3)
         self._fig.tight_layout()
         self._apply_plot_fonts()
-        self._canvas.draw_idle()
+        self._canvas_draw()
 
     def _plot_scan(
         self,
@@ -1575,7 +1583,7 @@ class LipMainWindow(QMainWindow):
 
         self._fig.tight_layout()
         self._apply_plot_fonts()
-        self._canvas.draw_idle()
+        self._canvas_draw()
         self._update_scan_results_tab(result)
         self._update_read_tab(h_obs, v_lc)
 
@@ -1625,7 +1633,7 @@ class LipMainWindow(QMainWindow):
             )
             self._ax = getattr(self._fig, "_lip_primary_ax", self._fig.axes[0] if self._fig.axes else self._fig.add_subplot(111))
             self._apply_plot_fonts()
-            self._canvas.draw_idle()
+            self._canvas_draw()
             self._status_label.setText("正演完成")
 
         self._start_task("正演", worker, done)
@@ -1693,7 +1701,7 @@ class LipMainWindow(QMainWindow):
             self._ax.set_ylabel("Vp excess (km/s)")
             self._ax.set_title(f"Φ 扫描 — 总可行 {scan.n_feasible_total}")
             self._apply_plot_fonts()
-            self._canvas.draw_idle()
+            self._canvas_draw()
             self._append_log(f"Φ 扫描: 总可行 {scan.n_feasible_total}")
             for sl in scan.slices:
                 pt = sl.best_pareto
@@ -1761,7 +1769,7 @@ class LipMainWindow(QMainWindow):
             self._ax.set_title(title)
             self._ax.invert_yaxis()
             self._apply_plot_fonts()
-            self._canvas.draw_idle()
+            self._canvas_draw()
             self._status_label.setText("预设对比完成")
 
         self._start_task("预设对比", worker, done, main_thread=self._uses_burnman_refine())

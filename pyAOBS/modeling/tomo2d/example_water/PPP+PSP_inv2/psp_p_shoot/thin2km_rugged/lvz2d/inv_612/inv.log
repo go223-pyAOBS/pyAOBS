@@ -1,0 +1,24 @@
+# strategy jumping=0 robust=0 crit_chi=1000
+# ray_trace -N xorder=8 zorder=8 clen=0.8 nintp=8 bend_tol=0.001
+# smooth_vel -SV on=1 wmin=200 wmax=200 dw=201 -Ss=-1 log10(-XV)=0
+# smooth_dep -SD on=1 wmin=20 wmax=20 dw=21 log10(-XD)=0
+# damping: MODE=fixed  using=-D/-DV/-DD  auto_-T=OFF  -DV=30 -DD=200
+# filter_-s: OFF  (ON=2D filter after each iter; OFF=no -s)
+# water: invert_only=0 crust_only=1 seafloor=Y
+# psx: invert_vs=1 joint_vpvs=0 freeze_lid=1
+# ndata 166
+# nnodes nnodev=6156 nvel=6156 nnoded(refl)=76 freeze_-u=OFF refl_weight=1
+# LSQR atol=0.001 itermax=615600 cap=8000  (TOMO2D_INV_LSQR_MAXITER)
+# lsqr_precond: OFF maxD=10  (ON=TOMO2D_INV_LSQR_PRECOND!=0; default OFF; Legacy forces OFF; maxD=kappa vs col-norm median, empty D=0, miniter=20)
+# sens_weight: OFF kappa=10 eps=0.05  (ON=TOMO2D_INV_SENS_WEIGHT!=0; default OFF; T*=w, R couple 2/(wi+wj); median per Vp/Vs-lid/Vs-below/Moho)
+# linesearch: OFF c=0.0001 rho=0.5 amin=0.03125  (ON=TOMO2D_INV_LINESEARCH!=0; default OFF; Armijo on true chi2 after re-trace)
+# lm: OFF lambda=1 up=4 down=0.5 lmax=256 rho_acc=0.1 rho_good=0.5  (ON=TOMO2D_INV_LM!=0; default OFF; trust-region: scale T and re-LSQR on true chi2)
+# accel: reuse=OFF thresh=0 c2f=OFF legacy=OFF
+1 1 0 0.490305 2403.99 0 0 0 0 0 0 3.5e-06 94.6949 200 20 30 200 1 49 0 10.7633 0.037086 0.00667229 0.000910322 0.00239852 0.0546828
+2 1 0 0.139387 194.288 0 0 0 0 0 0 2.99999e-06 119.621 200 20 30 200 1 27 0 10.1038 0.0106603 0.00484115 0.00083596 0.00217903 0.039683
+3 1 0 0.12344 152.374 0 0 0 0 0 0 2.70002e-06 117.343 200 20 30 200 1 16 0 9.37152 0.00265133 0.0036701 0.000782842 0.00171731 0.0239663
+4 1 0 0.0912069 83.187 0 0 0 0 0 0 4e-06 108.351 200 20 30 200 1 25 0 9.54821 0.00417799 0.00266945 0.000814528 0.00173111 0.0171237
+5 1 0 0.06412 41.1138 0 0 0 0 0 0 2.69999e-06 110.43 200 20 30 200 1 23 0 6.05882 0.002733 0.00187377 0.00061352 0.00121033 0.0131176
+6 1 0 0.0365254 13.341 0 0 0 0 0 0 3.6e-06 96.4753 200 20 30 200 1 27 0 5.62687 0.00270558 0.00146771 0.00046561 0.00100534 0.0122387
+7 1 0 0.0322319 10.3889 0 0 0 0 0 0 4.4e-06 101.844 200 20 30 200 1 25 0 4.06776 0.00178626 0.00137427 0.000381121 0.000806278 0.010873
+8 1 0 0.0317458 10.078 0 0 0 0 0 0 3.4e-06 95.5475 200 20 30 200 1 26 0 4.22996 0.00188736 0.00091503 0.000356303 0.000764435 0.00927926

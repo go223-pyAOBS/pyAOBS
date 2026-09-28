@@ -6,6 +6,10 @@ Python implementation of sac2y_v2.1.c using ObsPy and NumPy
 Convert SAC format seismic data to SEGY format, extracting waveform segments
 based on shot point information from UKOOA files.
 
+Geometry (SEGY literal):
+    sx,sy = shot UTM; gx,gy = OBS/station UTM; gelev=OBS elev; swdep=shot water depth.
+    Byte layout follows segy.h via pack_trace_header.
+
 Original C program:
     program name: sac2y.c (sac format convert to segy format)
     written by: Minghui Zhao & Xuelin Qiu
@@ -514,12 +518,16 @@ def convert_sac_to_segy(sac_file: str, ukooa_file: str, output_file: str,
         
         # 注意：offset应该保留符号（正数或负数），不要使用绝对值
         # 对应C代码：if(lat2<=lat1) tr.offset=-tr.offset; 然后直接写入SEGY
+        #
+        # 约定（SEGY 字面）：循环内 sx,sy=炮点 UTM，gx,gy=台站/OBS UTM
+        #   道头：sx/sy=炮，gx/gy=OBS；gelev=OBS 高程；swdep=炮水深
         trace_header = create_segy_trace_header(
             shot_info=shot,
-            sx=sx, sy=sy, gx=gx, gy=gy,
+            sx=sx, sy=sy,  # 炮点
+            gx=gx, gy=gy,  # OBS / 台站
             offset=offset,  # 使用有符号的offset（不是绝对值）
-            gelev=gelev,
-            swdep=shot['water_depth'],
+            gelev=gelev,  # 台站高程 → 道头 gelev
+            swdep=shot['water_depth'],  # 炮水深 → 道头 swdep
             delrt=int(params['tcoor'] * (-1000)),
             ns=n_samples,
             dt=int(delta * 1e6 + 0.5),

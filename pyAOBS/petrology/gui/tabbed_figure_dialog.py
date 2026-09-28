@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from .mpl_qt import FigureCanvasQTAgg, NavigationToolbar2QT
+from .mpl_qt import FigureCanvasQTAgg, install_plot_nav_bar, notify_plot_updated
 
 
 class TabbedFigureDialog(QDialog):
@@ -130,9 +130,10 @@ class TabbedFigureDialog(QDialog):
             lay = QVBoxLayout(page)
             lay.setContentsMargins(0, 0, 0, 0)
             canvas = FigureCanvasQTAgg(fig)
-            toolbar = NavigationToolbar2QT(canvas, page)
-            lay.addWidget(toolbar)
+            install_plot_nav_bar(lay, canvas, parent=page)
             lay.addWidget(canvas, stretch=1)
+            canvas.draw()
+            notify_plot_updated(canvas)
             self._tabs.addTab(page, title)
 
     def _save_current(self) -> None:

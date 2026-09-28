@@ -17,6 +17,15 @@ import xarray as xr
 from scipy.interpolate import interp1d, griddata
 from scipy.ndimage import gaussian_filter
 
+
+def _pgrid_from_v(vgrid) -> np.ndarray:
+    """速度 → 慢度。v=0（如百分异常场）处为 +inf，不触发 divide-by-zero 警告。"""
+    v = np.asarray(vgrid, dtype=float)
+    p = np.full(v.shape, np.inf, dtype=float)
+    np.divide(1.0, v, out=p, where=np.abs(v) > 0)
+    return p
+
+
 class SlownessMesh2D:
     """2D slowness mesh class"""
     
@@ -40,7 +49,7 @@ class SlownessMesh2D:
         self.topo = np.zeros(nx)
         self.z = np.zeros(nz)
         self.vgrid = np.ones((nx, nz)) * v_water
-        self.pgrid = 1.0 / self.vgrid
+        self.pgrid = _pgrid_from_v(self.vgrid)
         
     @classmethod
     def from_file(cls, filename: str) -> 'SlownessMesh2D':
@@ -71,7 +80,7 @@ class SlownessMesh2D:
             for i in range(nx):
                 mesh.vgrid[i,:] = list(map(float, f.readline().split()))
                         
-            mesh.pgrid = 1.0 / mesh.vgrid
+            mesh.pgrid = _pgrid_from_v(mesh.vgrid)
             return mesh
             
     def to_file(self, filename: str):
@@ -110,7 +119,7 @@ class SlownessMesh2D:
         
         # 应用平滑
         self.vgrid = gaussian_filter(self.vgrid, sigma=[sigma_v, sigma_h], mode='reflect')
-        self.pgrid = 1.0 / self.vgrid
+        self.pgrid = _pgrid_from_v(self.vgrid)
     
     def add_checkerboard(self, 
                         amplitude: float,
@@ -126,7 +135,7 @@ class SlownessMesh2D:
         x, z = np.meshgrid(self.xpos, self.z, indexing='ij')
         pattern = amplitude * 0.01 * np.sin(2*np.pi*x/ch) * np.sin(2*np.pi*z/cv)
         self.vgrid *= (1.0 + pattern)
-        self.pgrid = 1.0 / self.vgrid
+        self.pgrid = _pgrid_from_v(self.vgrid)
 
         
     def add_anomaly(self,
@@ -149,7 +158,7 @@ class SlownessMesh2D:
 
 
         self.vgrid[mask] *= (1.0 + amplitude * 0.01)
-        self.pgrid = 1.0 / self.vgrid
+        self.pgrid = _pgrid_from_v(self.vgrid)
         
     def add_gaussian(self,
                     amplitude: float,
@@ -170,8 +179,113 @@ class SlownessMesh2D:
         r2 = ((x - x0)/Lh)**2 + ((z - z0)/Lv)**2
         pattern = amplitude * 0.01 * np.exp(-r2)
         self.vgrid *= (1.0 + pattern)
-        self.pgrid = 1.0 / self.vgrid
+        self.pgrid = _pgrid_from_v(self.vgrid)
         
+
+    def _regular_plot_axes(self, dx: float = None, dz: float = None):
+        """``to_xarray`` 用的规则 (x, z) 轴，与历史 ``np.arange`` 边界一致。"""
+        dz_orig = self.zpos[1] - self.zpos[0]
+        dx_orig = self.xpos[1] - self.xpos[0]
+        dz = dz_orig if dz is None else dz
+        dx = dx_orig if dx is None else dx
+        topo = np.asarray(self.topo, dtype=float)
+        curr_min = np.where(topo < 0.0, topo - 1.0, -1.0)
+        curr_max = float(self.zpos[-1]) + topo
+        min_height = float(np.min(curr_min))
+        max_depth = float(np.max(curr_max))
+        full_zpos = np.arange(min_height, max_depth + dz, dz)
+        # np.arange 跨 0 时常得到 -2e-16，会被当成空气
+        full_zpos = np.where(np.abs(full_zpos) < 1e-10, 0.0, full_zpos)
+        x_new = np.arange(self.xpos[0], self.xpos[-1] + dx, dx)
+        return x_new, full_zpos
+
+    def _vgrid_on_regular(
+        self,
+        vgrid,
+        x_new,
+        full_zpos,
+        v_air: float,
+        v_water: float,
+    ) -> np.ndarray:
+        """把节点 ``vgrid (nx, nz)`` 铺到规则绘图网格 ``(len(x_new), len(full_zpos))``。"""
+        xpos = np.asarray(self.xpos, dtype=float)
+        zpos = np.asarray(self.zpos, dtype=float)
+        topo = np.asarray(self.topo, dtype=float)
+        vg = np.asarray(vgrid, dtype=float)
+        x_new = np.asarray(x_new, dtype=float)
+        full_zpos = np.asarray(full_zpos, dtype=float)
+        nx = int(xpos.size)
+        nz = int(zpos.size)
+        ix = np.searchsorted(xpos, x_new)
+        ix = np.minimum(ix, nx - 1)
+        left = np.maximum(ix - 1, 0)
+        use_left = (ix > 0) & ((x_new - xpos[left]) < (xpos[ix] - x_new))
+        ix = np.where(use_left, left, ix)
+        at_end = ix >= nx - 1
+        ix_r = np.minimum(ix + 1, nx - 1)
+        x1, x2 = xpos[ix], xpos[ix_r]
+        t1, t2 = topo[ix], topo[ix_r]
+        den_x = x2 - x1
+        frac = np.zeros_like(x_new, dtype=float)
+        ok_x = (~at_end) & (den_x != 0.0)
+        frac[ok_x] = (x_new[ok_x] - x1[ok_x]) / den_x[ok_x]
+        topo_val = np.where(at_end, t1, t1 + frac * (t2 - t1))
+
+        rel_z = full_zpos[np.newaxis, :] - topo_val[:, np.newaxis]
+        k = np.searchsorted(zpos, rel_z)
+        k_lo = np.clip(k - 1, 0, nz - 1)
+        k_hi = np.clip(k, 0, nz - 1)
+        ix2 = ix[:, np.newaxis]
+        v_lo = vg[ix2, k_lo]
+        v_hi = vg[ix2, k_hi]
+        z_lo = zpos[k_lo]
+        z_hi = zpos[k_hi]
+        den_z = z_hi - z_lo
+        lerp = np.array(v_lo, copy=True)
+        ok_z = den_z != 0.0
+        lerp[ok_z] = v_lo[ok_z] + (v_hi[ok_z] - v_lo[ok_z]) * (
+            rel_z[ok_z] - z_lo[ok_z]
+        ) / den_z[ok_z]
+        v_sub = np.where(
+            k == 0,
+            vg[ix2, 0],
+            np.where(k == nz, vg[ix2, nz - 1], lerp),
+        )
+        z_abs = full_zpos[np.newaxis, :]
+        sea = -1e-8
+        air = z_abs < sea
+        # topo≈0：网格挂在海面，水速已在 vgrid，不要再用均匀 v_water 盖住
+        has_water_col = topo_val[:, np.newaxis] > 1e-8
+        water = has_water_col & (z_abs >= sea) & (
+            z_abs <= topo_val[:, np.newaxis] + 1e-8
+        )
+        return np.where(air, float(v_air), np.where(water, float(v_water), v_sub))
+
+    def _regular_velocity_dataset(
+        self,
+        x_new,
+        full_zpos,
+        full_vgrid,
+        *,
+        v_air: Optional[float] = None,
+        v_water: Optional[float] = None,
+    ) -> xr.Dataset:
+        va = self.v_air if v_air is None else v_air
+        vw = self.v_water if v_water is None else v_water
+        full_vgrid_t = np.asarray(full_vgrid, dtype=float).T
+        with np.errstate(divide="ignore", invalid="ignore"):
+            slow = 1.0 / full_vgrid_t
+        return xr.Dataset(
+            data_vars={
+                "velocity": (("z", "x"), full_vgrid_t),
+                "slowness": (("z", "x"), slow),
+                "topo": ("x", np.interp(x_new, self.xpos, self.topo)),
+                "v_water": vw,
+                "v_air": va,
+            },
+            coords={"x": x_new, "z": full_zpos},
+            attrs={"description": "Velocity model with air and water layers"},
+        )
 
     def to_xarray(self, dx: float = None, dz: float = None) -> xr.Dataset:
         """将模型转换为 xarray 数据集。
@@ -183,103 +297,11 @@ class SlownessMesh2D:
         Returns:
             xr.Dataset: 包含速度场的数据集。
         """
-        # 计算原始深度间隔
-        dz_orig = self.zpos[1] - self.zpos[0]
-        dx_orig = self.xpos[1] - self.xpos[0]
-        
-        # 对每个水平位置计算深度范围
-        max_depth = float('-inf')
-        min_height = float('inf')
-        
-        for i in range(self.nx):
-            # 计算该位置的深度范围
-            if self.topo[i] < 0:  # 地形在海平面以上
-                # 空气层从地形上方1km开始
-                curr_min = self.topo[i] - 1.0
-                # 最大深度是相对于地形的深度加上地形高度
-                curr_max = self.zpos[-1] + self.topo[i]
-            else:  # 地形在海平面以下
-                # 空气层从海平面上方1km开始
-                curr_min = -1.0
-                # 最大深度是相对于地形的深度加上地形高度
-                curr_max = self.zpos[-1] + self.topo[i]
-            
-            max_depth = max(max_depth, curr_max)
-            min_height = min(min_height, curr_min)
-        
-        # 生成统一的深度节点，使用指定的采样间隔或原始间隔
-        dz = dz if dz is not None else dz_orig
-        dx = dx if dx is not None else dx_orig
-        
-        full_zpos = np.arange(min_height, max_depth + dz, dz)
-        x_new = np.arange(self.xpos[0], self.xpos[-1] + dx, dx)
-        
-        nz_full = len(full_zpos)
-        nx_new = len(x_new)
-        
-        # 创建新的速度网格
-        full_vgrid = np.ones((nx_new, nz_full))
-        
-        # 对每个水平位置填充速度值
-        for i, x in enumerate(x_new):
-            # 找到最近的原始x坐标索引
-            ix = np.searchsorted(self.xpos, x)
-            if ix == len(self.xpos):
-                ix = len(self.xpos) - 1
-            elif ix > 0 and (x - self.xpos[ix-1]) < (self.xpos[ix] - x):
-                ix = ix - 1
-                
-            # 获取该位置的地形值（线性插值）
-            if ix == len(self.xpos) - 1:
-                topo_val = self.topo[ix]
-            else:
-                x1, x2 = self.xpos[ix], self.xpos[ix + 1]
-                t1, t2 = self.topo[ix], self.topo[ix + 1]
-                topo_val = t1 + (x - x1) * (t2 - t1) / (x2 - x1)
-            
-            for j, z in enumerate(full_zpos):
-                actual_z = z  # 现在z已经是实际深度
-                if actual_z < 0:  # 海平面以上
-                    full_vgrid[i,j] = self.v_air
-                elif 0 <= actual_z <= topo_val:  # 水层
-                    full_vgrid[i,j] = self.v_water
-                else:  # 地下
-                    # 计算相对于地形的深度
-                    rel_z = actual_z - topo_val
-                    if rel_z in self.zpos:
-                        k = np.where(self.zpos == rel_z)[0][0]
-                        full_vgrid[i,j] = self.vgrid[ix,k]
-                    else:
-                        # 线性插值
-                        k = np.searchsorted(self.zpos, rel_z)
-                        if k == 0:
-                            full_vgrid[i,j] = self.vgrid[ix,0]
-                        elif k == len(self.zpos):
-                            full_vgrid[i,j] = self.vgrid[ix,-1]
-                        else:
-                            z1, z2 = self.zpos[k-1], self.zpos[k]
-                            v1, v2 = self.vgrid[ix,k-1], self.vgrid[ix,k]
-                            full_vgrid[i,j] = v1 + (v2-v1)*(rel_z-z1)/(z2-z1)
-        
-        # 转置以匹配xarray格式
-        full_vgrid_t = full_vgrid.T
-        
-        return xr.Dataset(
-            data_vars={
-                'velocity': (('z', 'x'), full_vgrid_t),
-                'slowness': (('z', 'x'), 1.0/full_vgrid_t),
-                'topo': ('x', np.interp(x_new, self.xpos, self.topo)),
-                'v_water': self.v_water,
-                'v_air': self.v_air
-            },
-            coords={
-                'x': x_new,
-                'z': full_zpos
-            },
-            attrs={
-                'description': 'Velocity model with air and water layers'
-            }
+        x_new, full_zpos = self._regular_plot_axes(dx, dz)
+        full_vgrid = self._vgrid_on_regular(
+            self.vgrid, x_new, full_zpos, self.v_air, self.v_water
         )
+        return self._regular_velocity_dataset(x_new, full_zpos, full_vgrid)
 
 
 class VelocityModelGenerator:
@@ -319,7 +341,7 @@ class VelocityModelGenerator:
         # Generate velocity field
         z = np.tile(mesh.zpos, (nx, 1))
         mesh.vgrid = v0 + gradient * z
-        mesh.pgrid = 1.0 / mesh.vgrid
+        mesh.pgrid = _pgrid_from_v(mesh.vgrid)
         
         return mesh
     
@@ -368,7 +390,7 @@ class VelocityModelGenerator:
                 mask = mesh.zpos >= z_int[i]
                 mesh.vgrid[i,mask] = velocity
                 
-        mesh.pgrid = 1.0 / mesh.vgrid
+        mesh.pgrid = _pgrid_from_v(mesh.vgrid)
         return mesh
 
 

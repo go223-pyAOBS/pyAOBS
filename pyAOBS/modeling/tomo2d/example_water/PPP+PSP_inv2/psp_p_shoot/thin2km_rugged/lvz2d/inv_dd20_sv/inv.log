@@ -1,0 +1,24 @@
+# strategy jumping=0 robust=0 crit_chi=1000
+# ray_trace -N xorder=8 zorder=8 clen=0.8 nintp=8 bend_tol=0.001
+# smooth_vel -SV on=1 wmin=400 wmax=400 dw=401 -Ss=-1 log10(-XV)=0
+# smooth_dep -SD on=1 wmin=10 wmax=10 dw=11 log10(-XD)=0
+# damping: MODE=fixed  using=-D/-DV/-DD  auto_-T=OFF  -DV=30 -DD=20
+# filter_-s: OFF  (ON=2D filter after each iter; OFF=no -s)
+# water: invert_only=0 crust_only=1 seafloor=Y
+# psx: invert_vs=1 joint_vpvs=0 freeze_lid=1
+# ndata 166
+# nnodes nnodev=6156 nvel=6156 nnoded(refl)=76 freeze_-u=OFF refl_weight=1
+# LSQR atol=0.001 itermax=615600 cap=8000  (TOMO2D_INV_LSQR_MAXITER)
+# lsqr_precond: OFF maxD=10  (ON=TOMO2D_INV_LSQR_PRECOND!=0; default OFF; Legacy forces OFF; maxD=kappa vs col-norm median, empty D=0, miniter=20)
+# sens_weight: OFF kappa=10 eps=0.05  (ON=TOMO2D_INV_SENS_WEIGHT!=0; default OFF; T*=w, R couple 2/(wi+wj); median per Vp/Vs-lid/Vs-below/Moho)
+# linesearch: OFF c=0.0001 rho=0.5 amin=0.03125  (ON=TOMO2D_INV_LINESEARCH!=0; default OFF; Armijo on true chi2 after re-trace)
+# lm: OFF lambda=1 up=4 down=0.5 lmax=256 rho_acc=0.1 rho_good=0.5  (ON=TOMO2D_INV_LM!=0; default OFF; trust-region: scale T and re-LSQR on true chi2)
+# accel: reuse=OFF thresh=0 c2f=OFF legacy=OFF
+1 1 0 0.490305 2403.99 0 0 0 0 0 0 2.29999e-06 75.4025 400 10 30 20 1 56 0 14.842 0.0385097 0.0365511 0.000400014 0.00131285 0.0767848
+2 1 0 0.248917 619.597 0 0 0 0 0 0 2.60002e-06 90.1706 400 10 30 20 1 35 0 67.1536 0.0203111 0.0330632 0.00101095 0.00261039 0.206273
+3 1 0 0.129137 166.762 0 0 0 0 0 0 2.00002e-06 94.3137 400 10 30 20 1 31 0 31.5578 0.00962758 0.0311737 0.000402869 0.000780325 0.113214
+4 1 0 0.151944 230.869 0 0 0 0 0 0 2.80002e-06 112.885 400 10 30 20 1 22 0 48.1972 0.0070504 0.0151205 0.000666748 0.00192351 0.144631
+5 1 0 0.0743272 55.2453 0 0 0 0 0 0 2.59999e-06 97.0823 400 10 30 20 1 27 0 22.042 0.00495376 0.0195543 0.00040925 0.000883803 0.13501
+6 1 0 0.100127 100.254 0 0 0 0 0 0 3.10002e-06 100.449 400 10 30 20 1 31 0 25.4393 0.00622141 0.0327457 0.000620249 0.00105805 0.239809
+7 1 0 0.084811 71.9291 0 0 0 0 0 0 2.09999e-06 118.505 400 10 30 20 1 20 0 25.0142 0.00301309 0.0196491 0.000407828 0.0010356 0.124543
+8 1 0 0.0523135 27.367 0 0 0 0 0 0 3.00002e-06 111.113 400 10 30 20 1 27 0 18.0274 0.00247566 0.0135611 0.00029654 0.00059233 0.103501

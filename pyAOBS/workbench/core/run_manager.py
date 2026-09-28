@@ -21,12 +21,11 @@ import threading
 import time
 from typing import Any, Sequence
 
+from .project_layout import primary_runs_dir, state_rel_from_root
 from .project_manager import ProjectContext, ProjectError
 
 
 RUN_MANIFEST_FILE = "manifest.json"
-GUI_AUDIT_REL_DIR = Path("state") / "gui_sessions"
-GUI_STATE_REL_DIR = Path("state") / "gui_states"
 
 
 @dataclass(frozen=True)
@@ -58,7 +57,7 @@ class RunManager:
         env: dict[str, str] | None = None,
     ) -> RunContext:
         run_id = self._new_run_id(node_id)
-        run_dir = project.resolve(Path("runs") / run_id)
+        run_dir = primary_runs_dir(project.root) / run_id
         inputs_dir = run_dir / "inputs"
         outputs_dir = run_dir / "outputs"
         logs_dir = run_dir / "logs"
@@ -144,10 +143,11 @@ class RunManager:
             run = self.start_run(project, node_id, params=params, inputs=inputs, env=env)
             stdout_path = run.logs_dir / "stdout.log"
             stderr_path = run.logs_dir / "stderr.log"
-            audit_rel = GUI_AUDIT_REL_DIR / f"{run.run_id}.jsonl"
+            state_rel = state_rel_from_root(project.root)
+            audit_rel = state_rel / "gui_sessions" / f"{run.run_id}.jsonl"
             audit_abs = project.resolve(audit_rel)
             audit_abs.parent.mkdir(parents=True, exist_ok=True)
-            gui_state_rel = GUI_STATE_REL_DIR / f"{run.run_id}.json"
+            gui_state_rel = state_rel / "gui_states" / f"{run.run_id}.json"
             gui_state_abs = project.resolve(gui_state_rel)
             gui_state_abs.parent.mkdir(parents=True, exist_ok=True)
 
@@ -288,7 +288,7 @@ class RunManager:
     @staticmethod
     def _new_run_id(node_id: str) -> str:
         safe_node = "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in node_id)
-        return safe_node or "OBS_node"
+        return safe_node or "node"
 
     @staticmethod
     def _gui_inputs_subdir(plugin_id: str) -> str:

@@ -1,0 +1,51 @@
+4.2	sfspike	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	o1=0
+	label1="Time"
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	unit1="s"
+	d1=0.004
+	n1=5018
+	in="stdin"
+
+4.2	sfricker1	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sfscale	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	data_format="native_float"
+	esize=4
+	in="stdout"
+	in="stdin"
+
+4.2	sftransp	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	d2=0.004
+	n2=5018
+	o2=0
+	data_format="native_float"
+	label2="Time"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/wav.rsf@"
+	unit2="s"
+	n1=1
+4.2	sfawefd2d	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:33 2026
+
+	d2=0.004
+	n2=5018
+	o1=0
+	o2=0
+	label1="r"
+	data_format="native_float"
+	label2="t"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/datf_000.rsf@"
+	unit2="s"
+	d1=1
+	n1=1

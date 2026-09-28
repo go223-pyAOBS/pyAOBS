@@ -22,6 +22,9 @@ class TomoHelp:
         return """
 TomoAnd — Python 封装说明
 
+GUI 操作（工区、反演监视、模型挑选/对比、DWS 遮罩、分析图等）见帮助窗默认页
+「GUI 快速说明」，或 ``modeling/tomo2d/docs/HELP.md``。逐字段悬停说明见 param_hints.py。
+
 可执行文件目录（按优先级）:
   1) 构造参数: TomoAnd(bin_path=".../tomo2d/bin")
   2) 环境变量: PYAOBS_TOMO2D_BIN
@@ -62,19 +65,31 @@ gen_smesh(**kwargs)
              grid_opt=variable → x_file, z_file
              grid_opt=zelt     → dx, z_file（仅与 vel_opt=zelt）
   【可选】topo_file（仅 variable）, water_col, v_water, v_air, zelt_dump_file（-d，仅 vel_opt=zelt）,
+         hang_sea_surface（-S，仅 zelt：topo=0，ilayer 当海底，以上水速以下壳幔）,
+         seafloor_out（-G，须 -S；写出海底给正演 -B / 反演 -Y）,
          out_file（可选，将 stdout 慢度网格写入该路径；等价于 shell 下 gen_smesh ... > file）
 
 gen_damp / gen_vcorr(**kwargs)
-  【必选】vel_opt, grid_opt（网格分支同 gen_smesh；zelt 配套规则同 gen_smesh）
-  【可选】out_file（将 stdout 写入路径，规则同 gen_smesh）
-  gen_damp 【条件必选】uniform → abnormal_damp, normal_damp
-           zelt → v_in, ilayer；若出现 top_layer 或 bot_layer 则须成对
-  gen_vcorr【条件必选】uniform → abnormal_h, abnormal_v, normal_h, normal_v
-           zelt → 同 gen_damp
+  【可选】out_file（将 stdout 写入路径，规则同 gen_smesh；simple_2x2 为写盘路径且必选）
+  gen_damp 【必选】abnormal_damp, normal_damp（-A，uniform/zelt 均要）
+           zelt 另须 → v_in, ilayer；若出现 top_layer 或 bot_layer 则须成对（-C/-F 划区）
+  gen_vcorr mode='simple_2x2'：不调二进制，写出 2×2 CorrelationLength2d
+           【必选】Lht, Lhb, Lvt, Lvb, xmax, zmax, out_file；可选 xmin/zmin/topo（默认 0）
+  gen_vcorr mode='program'（默认）【必选】vel_opt, grid_opt（网格分支同 gen_smesh；zelt 配套同 gen_smesh）
+           【必选】abnormal_h/v, normal_h/v（-A，uniform/zelt 均要）
+           zelt 另须 → 同 gen_damp 的 -C/-F
+
+gen_dcorr(**kwargs)
+  【必选】mode = uniform | zelt | from_vcorr
+  uniform → lh, xmin, xmax；可选 nx（默认两端点）
+  zelt → abnormal_d, normal_d, v_in, ilayer, dx；可选 top/bot、-R refl
+  from_vcorr → vcorr_file, refl_file（在反射点取样 2D 速度水平相关长度）
+  【可选】out_file（stdout 落盘，供 tt_inverse -CD）
 
 tt_forward(smesh, geom=None, **kwargs)
   【必选】smesh（对应 -M）
   【可选】geom, refl_file, do_full_refl, out_opts 各项, vred, verbose, verbose_level,
+         out_opts['ttime']：stdout 落盘（tt_inverse -G 格式）；原生 -T 折合图用 out_opts['ttime_plot'],
          graph_only（-g）, clock_file（-C）, omit_air_water（-n）
   【成组可选】-N 六项: xorder, zorder, clen, nintp, tol1, tol2
              （与 tt_inverse 的 bend_cg_tol、bend_br_tol 同位；GUI 两页字段名与 inverse 一致，forward 收集为 tol1/tol2。）
@@ -84,7 +99,8 @@ tt_forward(smesh, geom=None, **kwargs)
 tt_inverse(mesh, data, **kwargs)
   【必选】mesh, data（-M / -G）
   【成组可选】-N 六项（规则同 tt_forward）
-  【可选】refl_file, do_full_refl, refl_weight, jumping, print_final_only, filter_bound_file,
+  【可选】refl_file, seafloor_file（-Y 海底；反演 -B 仍是转换波）, invert_water_only（-y，须 -Y 或 -F）, invert_crust_only（-w，须 -Y 或 -F；与 -y 互斥）, freeze_refl（-u，须同时有 refl_file）, do_full_refl, refl_weight, jumping, print_final_only,
+         apply_filter（裸 -s，用 mesh 地形作上边界）, filter_bound_file（-s 边界文件）,
          log_file, out_root, out_level, dws_file, crit_chi, lsqr_tol, niter, target_chi2,
          auto_damp_max_dv, auto_damp_max_dd（与 damp_opts 互斥）,
          smooth_opts: vel/dep（数值或 "wmin/wmax/dw" 字符串）, corr_v_fn, corr_d_fn, vel_log10, dep_log10,
@@ -199,10 +215,16 @@ gen_smesh - 生成慢度网格文件
     -B<gradient>  速度梯度
   
   [Zelt格式输入]:
-    -C<v.in>/<ilayer>  
-                  从Zelt格式文件读取；须指定海面层号 ilayer
+    -C<v.in>/<ilayer>
+                  从 Zelt v.in 读取。ilayer 默认写入 smesh 的 topo（OBS 通常是海底层）。
+                  勾选 -S 时该层当作海底分界，不再写入 topo。
     -F<jlayer>/<refl_file>
                   可选。将 jlayer 层顶作为反射界面写入 refl_file（如 Moho）
+    -S            可选，须配合 -C。网格挂海面：topo 全 0；ilayer 当海底；
+                  其上填 -Q 水速（默认 1.5），其下按绝对深度取 v.in。
+                  z_file 须从 ~0 起算（海面以下绝对深度，不是海底以下）。
+    -G<seafloor>  可选，须配合 -S。把 ilayer 海底写成界面文件
+                  （供 tt_forward -B / tt_inverse -Y；不是 tt_inverse 的 -G 走时）
     -d<dump_file>
                   可选，与 Zelt 流程联用：将节点信息等到 dump_file（gen_smesh.cc -d）
 
@@ -230,8 +252,10 @@ gen_smesh - 生成慢度网格文件
   均匀梯度+均匀网格: -A3.0 -B0.5 -N51/51 -D25/10
   均匀梯度+变间距:  -A3.0 -B0.5 -X<xfile> -Z<zfile> [-T<tfile>，tfile 点数须与 xfile 一致]
   Zelt+近似水平距:  -C<v.in>/<ilayer> -E<dx> -Z<zfile> [ -F<j>/<refl> ]；程序可在原地形节点间加密
+  Zelt 挂海面 topo=0:  -C<v.in>/<ilayer> -E<dx> -Z<zfile> -S [ -Gseafloor.refl ] [ -F<moho>/<moho.refl> ]
+                       zfile 第一点约 0（绝对深度）；ilayer 为海底层；-G 给正演 -B / 反演 -Y
 
-TomoAnd: vel_opt+grid_opt 为【必选】；zelt_dump_file（-d）见 python_wrapper_help()（仅 zelt）。
+TomoAnd: vel_opt+grid_opt 为【必选】；hang_sea_surface（-S）、seafloor_out（-G）、zelt_dump_file（-d）见 python_wrapper_help()（仅 zelt）。
 """
 
     @staticmethod
@@ -244,16 +268,14 @@ gen_damp - 生成阻尼文件
 
 说明: readme 正文以 gen_smesh 为主；阻尼网格的构造方式与 gen_smesh 的速度+网格选项一一对应。
 
-速度设置选项:
-  [均匀梯度]:
-    -A<abnormal>/<normal>
-                  异常和正常区域的阻尼值
-  
-  [Zelt格式输入]:
+数值与划区:
+  -A<abnormal>/<normal>
+                异常区和正常区的阻尼值（uniform / zelt 都需要）
+  [Zelt 划区，可选配合 -A]:
     -C<v.in>/<ilayer>
-                  从Zelt格式文件读取
+                从 Zelt 读地形/层几何
     -F<top_layer>/<bot_layer>
-                  指定上下边界层
+                异常区上下界面层号（与 -A 数值配合）
 
 网格生成选项:
   与gen_smesh相同:
@@ -261,7 +283,7 @@ gen_damp - 生成阻尼文件
     [变间距网格]: -X<xfile> -Z<zfile> -T<tfile>
     [Zelt网格]: -E<dx> -Z<zfile>
 
-TomoAnd: 规则同 gen_smesh；uniform 须 abnormal_damp/normal_damp；zelt 须 v_in/ilayer。
+TomoAnd: 始终须 abnormal_damp/normal_damp；zelt 另须 v_in/ilayer（及可选层界）。
 """
 
     @staticmethod
@@ -274,16 +296,27 @@ gen_vcorr - 生成速度相关文件
 
 说明: 与 gen_smesh 共用同一套网格生成语义；相关长度分区与 Zelt/uniform 的对应关系见 readme 及源码。
 
-速度设置选项:
-  [均匀梯度]:
-    -A<abnormal_h>/<abnormal_v>/<normal_h>/<normal_v>
-                  异常和正常区域的水平/垂直相关长度
-  
-  [Zelt格式输入]:
+GUI / TomoAnd 另提供 mode=simple_2x2：不调用本二进制，直接写出 2×2 CorrelationLength2d
+（水平/垂直相关长度只随深度从顶到变到底，沿 x 不变），对应::
+
+    2 2
+    xmin xmax
+    topo topo
+    zmin zmax
+    Lht Lhb
+    Lht Lhb
+    Lvt Lvb
+    Lvt Lvb
+
+数值与划区（mode=program，本二进制）:
+  -A<abnormal_h>/<abnormal_v>/<normal_h>/<normal_v>
+                异常/正常区水平与垂直相关长度（uniform / zelt 都需要）
+                注意：这不是顶/底 Lht/Lhb，不要把 simple_2x2 的四个长度填进 -A。
+  [Zelt 划区，可选配合 -A]:
     -C<v.in>/<ilayer>
-                  从Zelt格式文件读取
+                从 Zelt 读地形/层几何
     -F<top_layer>/<bot_layer>
-                  指定上下边界层
+                异常区上下界面层号
 
 网格生成选项:
   与gen_smesh相同:
@@ -291,7 +324,37 @@ gen_vcorr - 生成速度相关文件
     [变间距网格]: -X<xfile> -Z<zfile> -T<tfile>
     [Zelt网格]: -E<dx> -Z<zfile>
 
-TomoAnd: 规则同 gen_smesh；uniform 须四段相关长度；zelt 须 v_in/ilayer。
+TomoAnd: simple_2x2 须 Lht/Lhb/Lvt/Lvb + xmax/zmax + out_file；
+         program 始终须四段 -A；zelt 另须 v_in/ilayer（及可选层界）。
+"""
+
+    @staticmethod
+    def gen_dcorr_help():
+        """生成反射点 1D 相关长度（tt_inverse -CD）的帮助文档"""
+        return """
+gen_dcorr - 生成反射点相关长度文件（-CD）
+
+用法: gen_dcorr [选项]
+
+说明: 上游 tomo2d 没有 gen_dcorr；本命令按 CorrelationLength1d 格式写出
+      每行 ``x(km)  Lh(km)``，供 tt_inverse -CD。
+      若不提供 -CD，反演可在反射点上从 -CV 的水平相关长度取样（readme 3.3）。
+
+均匀（两端或等距抽样）:
+  -A<Lh> -D<xmin>/<xmax> [ -N<nx> ]
+                缺 -N 时只写 xmin、xmax 两点（与手工两行 dcorr 相同）
+
+Zelt 划区（与 gen_vcorr 水平相关长度同一套层几何）:
+  -A<anorm>/<norm> -C<v.in>/<ilayer> -E<dx>
+  [ -F<top_layer>/<bot_layer> ] [ -R<refl> ]
+                沿界面 x 取样；深度落在 -F 上下界面之间用 anorm，否则 norm。
+                有 -R 时用反射面节点，否则用 Zelt 层 ilayer。
+
+从二维 vcorr 取样:
+  -V<corr_v_fn> -R<refl_file>
+                对每个反射节点取 CorrelationLength2d 的水平分量 Lh
+
+TomoAnd: 用 mode=uniform|zelt|from_vcorr；可选 out_file 写 stdout。
 """
 
     @staticmethod
@@ -301,7 +364,7 @@ TomoAnd: 规则同 gen_smesh；uniform 须四段相关长度；zelt 须 v_in/ila
 tt_forward - 正演走时计算
 
 用法（readme 4.2 / tt_forward.cc）:
-  tt_forward -M<mesh> [ -G<geom> -F<refl> -A ]
+  tt_forward -M<mesh> [ -G<geom> -F<refl> -B<seafloor> -X<conv> -U<vsmesh> -A ]
     [ -N<x>/<z>/<clen>/<nintp>/<tot1>/<tot2> -E<elem> -g
       -T<ttime> -O<obs> -r<v0> -D<diff> -R<ray> -S<src> -I<vel>
       -i<w>/<e>/<s>/<n>/<dx>/<dz> -n -C<clock> -V[level] ]
@@ -314,8 +377,14 @@ tt_forward - 正演走时计算
 
 几何与反射（无 -G 时仅做与网格有关的输出，不进行震源-接收正演）:
   -G<geom>       几何文件（格式同走时数据文件，走时与误差可填 0）
-  -F<refl>       反射界面文件
-  -A             反射震相额外精细处理（更耗时）
+  -F<refl>       反射界面文件（壳内反射 / 莫霍；raytype 1）
+  -B<seafloor>   海底界面（水层 2/3 与台侧多次 4/5 的水柱底。缺省时 2/3/4 沿用 -F）
+  -X<conv>       转换界面（raytype 6 折合 PSP；7=PPS、8=PSS）。
+                 示例：example_water/converse_fwd、ps_fwd
+  -k<kappa>      Vp/Vs（-k1.73 或 -k1.73/1.80 面上/面下）。单场 -M 为 Vp 时 Vs=Vp/k。
+                 真双场有 -U 时可不传。
+  -U<vsmesh>     独立 Vs 网格（与 -M 的 Vp 同维）。6/7/8 走双场：P 段读 -M，S 段读 -U。
+  -A             反射沿界面贴面走（远偏移常为界面首波）。不传时远偏移可穿幔成初至。改路径，更耗时；OpenMP 正演会退回串行。
 
 数值参数（可选；不传则用程序内置默认。TomoAnd：六项须同时给出且合法，否则不要传 -N）:
   -N<xorder>/<zorder>/<clen>/<nintp>/<tot1>/<tot2>
@@ -334,7 +403,8 @@ tt_forward - 正演走时计算
   -C<clock_file> 使用时钟文件
 
 走时与射线输出（须配合 -G）:
-  -T<ttime>      计算走时输出文件
+  -T<ttime>      折合走时绘图（printSynTime：每炮 ``>`` + x t，**不能**当 tt_inverse -G）
+                  TomoAnd/GUI 的 out_opts['ttime'] / fwd.out_ttime 改为保存 stdout 同构走时
   -O<obs_ttime>  将输入观测走时抄出到文件
   -r<v0>         折合速度 v0（折合走时输出）
   -D<diff>       差分走时及 misfit/chisq 等
@@ -353,6 +423,8 @@ OpenMP 并行（源码 ``syngen.cc`` 的 source 级并行）:
     • ``-A``（full reflection）模式下会自动回退串行（需临时改写共享网格）。
     • 并行时逐 source 进度符号（* . + #）会被抑制；射线路径输出仍按 source 顺序写入。
     • ``-V-1`` 已支持，等效静默级别。
+    • 图论加速：``TOMO2D_GRAPH_FS_ENUM=1`` 按 forward-star 枚举邻居；未设或 0 为原扫 C/B。
+      GUI「并行/策略 → 图论FS枚举」不勾选即回退。
 
 TomoAnd / GUI：已映射 -N/-r/-V、graph_only/clock_file/omit_air_water、vgrid_subregion（-i）等，见 tomand.tt_forward。
 """
@@ -366,8 +438,8 @@ tt_inverse - 走时反演（折射 + 反射联合走时层析；可选联合重�
 用法（readme 4.3 SYNOPSIS 概括）:
   tt_inverse -M<grid> -G<data>
     [ -N<x>/<z>/<clen>/<nintp>/<tol1>/<tol2> ]
-    [ -F<refl> -A -W<weight> -L<log> -O<root> [ -o<level> ] -l -K<dws> ]
-    [ -P -R<crit_chi> -Q<lsqr_tol> -s<bound_file> -V[level] ]
+    [ -F<refl> -Y<seafloor> -y -w -A -W<weight> -L<log> -O<root> [ -o<level> ] -l -K<dws> ]
+    [ -P -R<crit_chi> -Q<lsqr_tol> -k<kappa> -s<bound_file> -V[level] ]
     [ -CV<vcorr> -CD<dcorr> ]
     [ 迭代选项 ] [ 平滑选项 ] [ 阻尼选项 ] [ 联合重力选项 ]
 
@@ -382,23 +454,44 @@ tt_inverse - 走时反演（折射 + 反射联合走时层析；可选联合重�
                   图论阶数、路径细分长度、样条控制点数、弯曲 CG/Brent 容差（同 tt_forward）
 
 反射与权重:
-  -F<refl>       反射界面文件（联合重力反演时源码要求必须提供反射面）
-  -A             反射走时更精细计算（与 tt_forward -A 同义）
+  -F<refl>       反射界面文件（联合重力反演时源码要求必须提供反射面；raytype 1 的反射面/莫霍）
+  -Y<seafloor>   海底界面（水层 raytype 2/3、台侧多次 4/5 的水柱底）。反演 **-B 是转换波界面**（raytype 6），不能当海底。
+  -B<conv>       转换界面（raytype 6 PSP；7/8 PPS+PSS 的钉点）。
+                 6 无 -k：converse_inv（冻盖层只反面下）。
+                 6 有 -k、无 7/8：双场，冻盖层只反面下（核/平滑/阻尼/dm）。
+                 6+7/8 有 -k：双场；须同时 -Y；盖层不冻（7/8 盖层 S）。
+  -k<kappa>      Vp/Vs 冷启动。有 raytype 6/7/8 时：冻 Vp，初值 Vs=Vp/kappa（水保持水速），
+                 输出 smesh 为 Vs。P 段不进 Vs 核（6 盖层 P 跳过；7/8 台侧 S、6/8 面下 S 写入）。
+                 与正演 -k 相同；反演 -Q 仍是 LSQR 容差。不要混 0/1。示例：example_water/ps_inv。
+  -U<vsmesh>     双场初值 Vs。有则不再用 Vp/κ 覆盖 Vs；可不传 -k。盖层 P 仍读 -M。
+                 双场 PSP 以 converse 为准：转换面上及以下用 Vs，不用壳幔 Vp 跑 P 头波。
+                 无 -Y 时 2/3/4 仍沿用 -F（与 water_fwd 只用 -F 兼容）。raytype 5 必须同时有 -Y 与 -F（莫霍）。
+  -y             只反水：海底以下速度结点不进核、平滑/阻尼不跨海底。须同时有 -Y 或 -F。
+                 不加 -y 时 0/1 默认路径与核完全不变。
+  -w             只反壳：海底以上速度结点不进核、平滑/阻尼不跨海底。须同时有 -Y 或 -F。
+                 海底结点本身划到壳侧。与 -y 互斥。不加 -w 时 0/1 默认路径与核完全不变。
+  -u             冻结 -F 界面（不把深度写入模型；水层 raytype 2/3 用海底当钉点时加此开关）。无 -u 时 -F 行为与原来完全相同。
+  -A             反射沿界面贴面走（与 tt_forward -A 同义）。不传时远偏移可穿幔成初至。改路径，不是把反射算得更准。
   -W<weight>     readme 称为 depth kernel weighting factor；源码中为反射权重 refl_weight（默认 1）
 
 输出与日志:
   -L<logfile>    迭代日志（详见 ``TomoHelp.tt_inverse_logfile_format_help()``：非 ``#`` 行共 26 列数值；
                  联合重力时行末多 1 列 RMS gravity misfit）。文件首若干 ``#`` 行为配置摘要。
   -O<outroot>    输出文件根名
-  -o<level>      输出级别：1 可打出走时残差；2 可打出射线路径（readme 4.3）
+  -o<level>      输出级别：1 可打出走时残差 ``{out}.tres.<iter>.<isrc>``
+                 （``rcv_x residual raytype``，第三列与 -G 一致：0/1/2/3/4/5）；
+                 2 可打出射线路径（readme 4.3）
   -l             仅输出最终模型（否则按步输出中间结果）
   -K<dws_file>   输出 DWS 至指定文件
 
 稳健性与求解控制:
   -P             纯跳跃策略（pure jumping）
-  -R<crit_chi>   稳健反演临界 chi（>0 时启用）
+  -R<crit_chi>   稳健反演临界值（>0 启用）。每轮第一次 LSQR 后若 |A·δm−d| 大于该值则本轮剔除；
+                 下一轮会加回再判。开了 ``-O`` 时写出 ``{out}.outliers.<iter>.<iset>``
+                 （末轮另有 ``{out}.outliers.final``）：isrc ircv src_x rcv_x raytype tres_s lin_res。
   -Q<lsqr_tol>   LSQR 容差（注意：空间可变阻尼**文件**在源码中为 -DQ；readme 3.4 英文版若写作 -Q 易与 LSQR 混淆）
-  -s<bound_file> 每次迭代后做 2-D 滤波；边界由 bound 文件给出（与速度平滑同时启用时由 inverse 调用）
+  -s[bound_file] 每次迭代后做 2-D 滤波（须同时开速度平滑 -SV 才生效）。
+                 可只写 ``-s``：上边界用 mesh 海底/地形；或 ``-s<file>`` 用界面文件。
 
 详细输出:
   -V[level]      verbose；可接数字级别
@@ -420,11 +513,15 @@ OpenMP 并行（源码 ``inverse.cc`` 的 source 级并行）:
     export TOMO2D_INV_LEGACY_BASELINE=1
   说明：
     • 并行粒度是 source（``for isrc``），线程数建议不超过 source 数。
-    • ``-V-1`` 已支持并可正确解析为 ``verbose_level=-1``；并行时逐 source 的细粒度进度符号（* . + #）会被抑制，以避免多线程输出交错。
+    • ``-V-1`` 已支持并可正确解析为 ``verbose_level=-1``；并行时逐 source 的细粒度进度符号（* . + #）会被抑制，改为打印 ``threads=`` / ``nsrc=`` 以及约每 10% 炮点一行 ``ray tracing k/N sources (OMP)``。
     • 若使用 ``-A``（full reflection）则会退回串行（共享网格写入路径）。
     • ``TOMO2D_INV_REUSE_FORWARD`` 仅在 ``TOMO2D_INV_REUSE_THRESH>0`` 时生效。
     • ``TOMO2D_INV_COARSE2FINE`` 启用分阶段反演：前期增强平滑/阻尼，后期逐步回落到目标参数；四个 C2F 参数应为正值。
     • ``TOMO2D_INV_LEGACY_BASELINE=1`` 会同时回退四项：关闭前向复用、kernel 归并回退 ``vector<pair>+sort+merge``、关闭 LSQR 列预条件、关闭 coarse-to-fine。
+    • LSQR 列预条件默认关。``TOMO2D_INV_LSQR_PRECOND=1`` 只开此项：按列范数中位数夹逼 ``D_j``（``κ`` 默认 10，``TOMO2D_INV_LSQR_PRECOND_MAX``），空列 ``D=0``，``test2`` 至少走 ``TOMO2D_INV_LSQR_PRECOND_MINITER``（默认 20）步才许停。无阻尼探步不加列缩放。负慢度钳到 ``pmin=1/30``。
+    • 灵敏度加权正则默认关。``TOMO2D_INV_SENS_WEIGHT=1``：按数据核列和（DWS）对本块中位数加权，暗结点加大 ``T``、亮→暗减弱 ``R`` 耦合（``2/(w_i+w_j)``）。Vp / 面上 Vs / 面下 Vs / 莫霍各自一块中位数。减射线拖曳用此项，不必与列预条件同时开。``TOMO2D_INV_SENS_KAPPA``（默认 10）、``TOMO2D_INV_SENS_EPS``（默认 0.05）。
+    • 线搜索默认关。``TOMO2D_INV_LINESEARCH=1``：LSQR 方向后按重追真实 χ² 做 Armijo 回退（α=1, 1/2, …）。扫描多组平滑权时跳过。``TOMO2D_INV_LS_C``（默认 1e-4）、``TOMO2D_INV_LS_RHO``（默认 0.5）、``TOMO2D_INV_LS_AMIN``（默认 1/32）。
+    • LM 信赖域默认关。``TOMO2D_INV_LM=1``：ρ=真实下降/线性预测，差则加大 ``-D/-T`` 并重新 LSQR（不是缩步长）。无阻尼时自动关。与线搜索同时开时以 LM 为准。
 
 相关长度（平滑前须满足源码校验）:
   -CV<vcorr>     速度节点相关长度文件（格式 readme 3.3；启用速度平滑 -SV 时**必须**）
@@ -482,7 +579,23 @@ TomoAnd（Python）/ GUI：上述选项均已映射为关键字参数（见 pyth
   TOMO2D_INV_COARSE2FINE=1         启用 coarse-to-fine 分阶段反演。
   TOMO2D_INV_C2F_SMOOTH_START/END  平滑阶段因子起止（默认 3→1）。
   TOMO2D_INV_C2F_DAMP_START/END    阻尼阶段因子起止（默认 3→1）。
+  TOMO2D_INV_LSQR_PRECOND=1        LSQR 列预条件（默认关；中位数夹逼，空列 D=0，最少 20 步）。
+  TOMO2D_INV_LSQR_PRECOND_MAX=10   相对列范数中位数的 κ（默认 10；<=0 相对不封顶，空列仍 0）。
+  TOMO2D_INV_LSQR_PRECOND_MINITER=20  预条件开启后 ATOL 停机最少迭代。
+  TOMO2D_INV_SENS_WEIGHT=1         灵敏度加权 T/R（默认关；分块 DWS 中位数，减射线拖曳）。
+  TOMO2D_INV_SENS_KAPPA=10         相对本块中位数的夹逼 κ（默认 10）。
+  TOMO2D_INV_SENS_EPS=0.05         DWS 分母稳定项 ε（默认 0.05）。
+  TOMO2D_INV_LINESEARCH=1          Gauss–Newton Armijo 线搜索（默认关；真实 χ² 回退）。
+  TOMO2D_INV_LS_C=1e-4             Armijo 常数 c。
+  TOMO2D_INV_LS_RHO=0.5            回退因子 ρ。
+  TOMO2D_INV_LS_AMIN=0.03125       最小步长 α。
+  TOMO2D_INV_LM=1                  Levenberg–Marquardt 信赖域（默认关；ρ 差则加大阻尼重解 LSQR）。
+  TOMO2D_INV_LM_LAMBDA=1           LM 初始 λ。
+  TOMO2D_INV_LM_UP=4               拒绝时 λ 放大倍数。
+  TOMO2D_INV_LM_DOWN=0.5           ρ 好时 λ 缩小倍数。
+  TOMO2D_INV_LM_LMAX=256           λ 上限。
   TOMO2D_INV_LEGACY_BASELINE=1     一键回退到优化前基线（前向复用/归并优化/LSQR 预条件/coarse-to-fine 全关闭）。
+  TOMO2D_GRAPH_FS_ENUM=1           图论按 FS 下标枚举邻居；未设或 0=原扫 C/B（GUI 不勾选即回退）。
 """
 
     @staticmethod
@@ -495,12 +608,26 @@ TomoAnd（Python）/ GUI：上述选项均已映射为关键字参数（见 pyth
 tt_inverse -L 日志文件格式（数据行）
 
 【文件结构】
-  • 开头多行以 ``#`` 开头的注释：策略、射线参数、平滑/阻尼、数据量、节点数、LSQR 容差等
-    （``inverse.cc`` 约 296–317 行）。
-    若启用 ``-DQ`` 且 ``-DV>0``，还会出现 ``# squeezing enabled wdv=...`` 以确认空间可变速度阻尼已生效。
-  • 若启用滤波，在相应迭代可能出现一行 ``# a posteriori filter check: …``（约 720–723 行）。
-  • 正文为若干行空格分隔数值；**每一行对应一次「迭代 iter × 参数组 iset」** 结束后的统计
-    （``inverse.cc`` 约 764–779 行）。
+  • 开头多行以 ``#`` 开头的注释（``inverse.cc`` ``solve()`` 开头），字段带开关名：
+      ``# strategy jumping=… robust=… crit_chi=…``
+      ``# ray_trace -N xorder=… zorder=… clen=… nintp=… bend_tol=…``
+      ``# smooth_vel -SV on=… wmin=… wmax=… dw=… log10(-XV)=…``
+      ``# smooth_dep -SD on=… … log10(-XD)=…``
+      ``# filter_-s: ON|OFF``　是否做迭代后 2D 滤波（命令行 ``-s``；旧日志把此项挤在 smooth_vel 最后一个数字里）
+      ``# damping: MODE=fixed|auto|none``
+        - ``fixed``：``using=-D/-DV/-DD  auto_-T=OFF`` 以及 ``-DV=… -DD=…``
+        - ``auto``：``using=-T/-TV/-TD  fixed_-D=OFF``；``-TV_percent`` 为命令行百分数，
+          ``-TV_frac`` = 百分数/100（例如 ``-TV 20`` → percent=20 frac=0.2）
+      ``# ndata …``　``# nnodes nnodev=… nnoded(refl)=… refl_weight=…``　``# LSQR atol=…``
+      ``# lsqr_precond: ON|OFF maxD=…``　列预条件（默认 OFF；``TOMO2D_INV_LSQR_PRECOND≠0`` 为 ON；Legacy 强制 OFF；maxD 现为相对中位数 κ，默认 10）
+      ``# sens_weight: ON|OFF kappa=… eps=…``　灵敏度加权 T/R（默认 OFF；``TOMO2D_INV_SENS_WEIGHT≠0`` 为 ON；Vp/面上Vs/面下Vs/莫霍分块）
+      ``# linesearch: ON|OFF c=… rho=… amin=…``　Armijo 线搜索（默认 OFF；``TOMO2D_INV_LINESEARCH≠0`` 为 ON；按重追真实 χ² 回退）
+      ``# lm: ON|OFF lambda=…``　LM 信赖域（默认 OFF；``TOMO2D_INV_LM≠0`` 为 ON；ρ 差则加大 T 重解 LSQR）
+      ``# accel: reuse=ON|OFF thresh=… c2f=ON|OFF legacy=ON|OFF``　前向复用 / C2F / Legacy（Legacy 开时复用与 C2F 为 OFF）
+    若启用 ``-DQ`` 且 ``-DV>0``，还有 ``# damping: -DQ=ON …``。
+    同一组开关也会打到 stderr（``[tt_inverse] damping MODE=…`` / ``filter_-s`` / ``lsqr_precond`` / ``sens_weight`` / ``linesearch`` / ``accel``），不必翻 -L 头也能看。
+  • 若启用滤波，在相应迭代可能出现一行 ``# a posteriori filter check: …``。
+  • 正文为若干行空格分隔数值；**每一行对应一次「迭代 iter × 参数组 iset」** 结束后的统计。
 
 【数据行列号与物理量】（与 readme 4.3 中 -L 说明一致；震相按数据 ``r`` 行第三列 code 分为两类：
   code=0 记入列 6–8，code=1 记入列 9–11，通常对应折射 Pg 与反射 PmP。）

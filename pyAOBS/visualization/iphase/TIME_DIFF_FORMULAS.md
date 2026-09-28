@@ -35,7 +35,7 @@ $$
 代码位置：
 
 - `phase_combine.py` 中 `compute_ppp_pps_diff_pairs`（`t_diff = t2 - t1`）  
-- `iphase_gui.py` 中 `_compute_file_result`
+- `gui/services/file_result.py` 中 `_compute_file_result`（原 Tk `iphase_gui` 已迁至 `_archive/`）
 
 ### 2.2 PSS−PSP
 
@@ -53,7 +53,7 @@ $$
 
 代码位置：
 
-- `iphase_gui.py` 中 `_compute_pss_psp_pairs_observed`
+- Qt GUI / `gui/services` 中 `_compute_pss_psp_pairs_observed`（原 Tk 对照见 `_archive/iphase_gui_tk.py`）
 
 结论：观测侧统一为“后相位减前相位”，$\Delta t > 0$ 表示后相位更晚到时。
 

@@ -72,32 +72,43 @@ except ImportError:
 
 def get_logger(name: str) -> logging.Logger:
     """Get a logger with the specified name.
-    
-    Args:
-        name (str): Name of the logger
-        
-    Returns:
-        logging.Logger: Configured logger instance
+
+    GUI 模式下（``configure_gui_logging`` 已调用）控制台仅 WARNING+，
+    INFO 由界面日志接收；并关闭 propagate，避免与 root 重复输出。
     """
     logger = logging.getLogger(name)
-    
+
     # Only add handler if logger doesn't already have handlers
     if not logger.handlers:
         handler = logging.StreamHandler()
         formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
         )
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        
+
         # Set level to INFO if not set
         if not logger.level:
             logger.setLevel(logging.INFO)
-    
+        logger.propagate = False
+
+    try:
+        from .gui_logging import apply_gui_logging_to_new_logger
+
+        apply_gui_logging_to_new_logger(logger)
+    except Exception:
+        pass
+
     return logger
+
+try:
+    from .gui_logging import configure_gui_logging
+except ImportError:  # pragma: no cover
+    configure_gui_logging = None  # type: ignore
 
 __all__ = [
     'get_logger',
+    'configure_gui_logging',
     'RockProperties',
     'Rock',
     'RockDatabase',

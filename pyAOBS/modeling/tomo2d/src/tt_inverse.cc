@@ -2,11 +2,11 @@
  * tt_inverse.cc - traveltime inversion 
  *
  * usage: tt_inverse -Mmesh -Gdata [ -Nxorder/zorder/clen/nintp/bend_cg_tol/bend_br_tol ]
- *                   [ -Frefl -A -Llogfile -Oout [-olevel -l ] -Kdws_file ]
- *                   [ -P -Rcrit_chi -Qlsqr_tol -sbound -Wd_weight -Vlevel ]
+ *                   [ -Frefl [-u] -Yseafloor -y -w -A -Llogfile -Oout [-olevel -l ] -Kdws_file ]
+ *                   [ -P -Rcrit_chi -Qlsqr_tol [-k<k>|-k<k_lid>/<k_below>] [-td] [-ts] [-Uvsmesh] -sbound -Wd_weight -Vlevel ]
  *
  *        [many iterations with a single set of parameters (type1)]
- *                   -Initer [ -Jtarget_chi2 -SVwsv -SDwsd -TVmax_dv -TDmax_dd ]
+ *                   -Initer [ -Jtarget_chi2 -SVwsv [-Sswsv_vs] -SDwsd -TVmax_dv -TDmax_dd ]
  *                           [ -DVwdv -DDwdd -DQdamp_v_fn ]
  *        [single iteration with many sets of parameters (type2)
  *         note: with the -X option, smoothing weights will be raised to
@@ -47,14 +47,18 @@
 int main(int argc, char** argv)
 {
     bool getMesh=false, getData=false;
-    char *meshfn=0, *datafn=0;
+    char *meshfn=0, *datafn=0, *vsfn=0;
+    bool getVsMesh=false;
     int xorder=3, zorder=3, nintp=8;
     double crit_len=-1, bend_cg_tol=1e-4, bend_br_tol=1e-7;
     double crit_chi=-1, lsqr_atol=1e-3;
+    double vpvs_kappa=0.0, vpvs_kappa_below=0.0;
+    bool getKappa=false, doTtDiff=false, doStrategy=false;
     double refl_weight=1;
     bool getRefl=false, outLog=false, outMask=false;
-    bool getCovt=false, doFullRefl=false;
-    char *reflfn=0, *convfn=0, *logfn=0, *maskfn=0, *outroot=0;
+    bool getCovt=false, doFullRefl=false, freezeRefl=false;
+    bool getSeafloor=false, waterOnly=false, crustOnly=false;
+    char *reflfn=0, *convfn=0, *seafloorfn=0, *logfn=0, *maskfn=0, *outroot=0;
     int outlevel=0;
     bool outStepwiseRequested=false;
     bool verbose=false, gotError=false;
@@ -65,6 +69,7 @@ int main(int argc, char** argv)
     bool apply2Dfilter=false;
     char *boundfn=0;
     double wsv_min=-1, wsv_max=-1, dwsv=-1;
+    double wsv_vs=-1;
     double wsd_min=-1, wsd_max=-1, dwsd=-1;
     double max_dv=-1, max_dd=-1;
     double wdv=0, wdd=0;
@@ -126,8 +131,42 @@ int main(int argc, char** argv)
 	    case 'Q':
 		lsqr_atol = atof(&argv[i][2]);
 		break;
+	    case 'k':
+		if (!parseVpVsKappa(&argv[i][2], vpvs_kappa, vpvs_kappa_below)){
+		    cerr << "invalid -k (use -k<k> or -k<k_lid>/<k_below>)\n";
+		    gotError = true;
+		}
+		getKappa = true;
+		break;
+	    case 't':
+		if (argv[i][2]=='d' || argv[i][2]=='\0')
+		    doTtDiff = true;
+		else if (argv[i][2]=='s')
+		    doStrategy = true;
+		else{
+		    cerr << "invalid -t option (use -td or -ts).\n";
+		    gotError = true;
+		}
+		break;
+	    case 'U':
+		vsfn = &argv[i][2];
+		getVsMesh = true;
+		break;
 	    case 'A':
 		doFullRefl = true;
+		break;
+	    case 'u':
+		freezeRefl = true;
+		break;
+	    case 'Y':
+		getSeafloor=true;
+		seafloorfn = &argv[i][2];
+		break;
+	    case 'y':
+		waterOnly = true;
+		break;
+	    case 'w':
+		crustOnly = true;
 		break;
 	    case 'F':
 		getRefl=true;
@@ -170,7 +209,7 @@ int main(int argc, char** argv)
 		{
 		    double a, b, c;
 		    int nitem=sscanf(&argv[i][3], "%lf/%lf/%lf", &a, &b, &c);
-		    if (nitem==1){ wsv_min=a; wsv_max=a; dwsv=a+1.0; }
+	if (nitem==1){ wsv_min=a; wsv_max=a; dwsv=a+1.0; }
 		    else if (nitem==3){ wsv_min=a; wsv_max=b; dwsv=c; }
 		    else{
 			cerr << "invalid -SV option.\n";
@@ -179,6 +218,13 @@ int main(int argc, char** argv)
 		    smooth_vel = true;
 		    break;
 		}
+		case 's':
+		    wsv_vs = atof(&argv[i][3]);
+		    if (!(wsv_vs>=0.0)){
+			cerr << "invalid -Ss option.\n";
+			gotError=true;
+		    }
+		    break;
 		case 'D':
 		{
 		    double a, b, c;
@@ -405,9 +451,22 @@ int main(int argc, char** argv)
 	cerr << "reflector is needed for joint gravity inversion.\n";
 	gotError=true;
     }
+    if (waterOnly && crustOnly){
+	cerr << "-y and -w are mutually exclusive.\n";
+	gotError=true;
+    }
+    if (waterOnly && !getSeafloor && !getRefl){
+	cerr << "-y (invert water only) requires -Y (seafloor) or -F.\n";
+	gotError=true;
+    }
+    if (crustOnly && !getSeafloor && !getRefl){
+	cerr << "-w (invert crust only) requires -Y (seafloor) or -F.\n";
+	gotError=true;
+    }
     if (gotError) error("usage: tt_inverse ...");
 
     SlownessMesh2d smesh(meshfn);
+    if (getVsMesh) smesh.loadDualVs(vsfn);
     TomographicInversion2d inv(smesh,datafn,xorder,zorder,crit_len,
 			       nintp,bend_cg_tol,bend_br_tol);
     if (crit_chi>0) inv.doRobust(crit_chi);
@@ -430,13 +489,27 @@ int main(int argc, char** argv)
 	inv.addRefl(reflp);
 	inv.setReflWeight(refl_weight);
 	if (doFullRefl) inv.doFullRefl();
+	if (freezeRefl) inv.freezeRefl();
+    }else if (freezeRefl){
+	error("tt_inverse: -u (freeze reflector) requires -F");
     }
+    Interface2d *seafloor_iface=0;
+    if (getSeafloor){
+	seafloor_iface = new Interface2d(seafloorfn);
+	inv.addSeafloor(seafloor_iface);
+    }
+    if (waterOnly) inv.invertWaterOnly();
+    if (crustOnly) inv.invertCrustOnly();
     if (getCovt){
     convp = new Interface2d(convfn);
     inv.doConvert(convp);
     }
+    if (getKappa) inv.setKappa(vpvs_kappa, vpvs_kappa_below);
+    if (doTtDiff) inv.enableTraveltimeDiff();
+    if (doStrategy) inv.enableStrategy();
     if (smooth_vel){
 	inv.SmoothVelocity(corr_velfn,wsv_min,wsv_max,dwsv,vlogscale);
+	if (wsv_vs>=0.0) inv.SmoothVelocityVs(wsv_vs);
 	if (apply2Dfilter) inv.applyFilter(boundfn);
     }
     if (smooth_dep){

@@ -188,6 +188,8 @@ def plot_fig15_composite_on_axes(
     *,
     windows: list[TransectWindow],
     observation: CrustObservation | None = None,
+    observations: list | None = None,
+    observation_labels: list[str] | None = None,
     transect_label: str = "transect",
     window_half_width_km: float = 10.0,
     distance_step_km: float = 10.0,
@@ -229,6 +231,8 @@ def plot_fig15_composite_on_axes(
     plot_fig12a_model_overlays(
         ax_c,
         observation=observation,
+        observations=observations,
+        observation_labels=observation_labels,
         windows=windows or None,
         all_series=all_series,
         delta_vp_max_km_s=delta_vp_max_km_s,

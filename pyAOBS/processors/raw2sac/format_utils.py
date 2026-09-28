@@ -473,6 +473,26 @@ def ieee_to_ibm_float_vectorized(ieee_data: np.ndarray) -> np.ndarray:
     return result_be
 
 
+def ibm_to_ieee_float32(buf: bytes, *, src_endian: str = "big") -> np.ndarray:
+    """IBM 32-bit 浮点字节 → IEEE float32（SU/预览常用）。
+
+    SEGY format code 1 磁带样点为 IBM；SU-on-PC 一般为 IEEE。
+    公式：value = ± fraction * 16^(exponent-64)，fraction = mantissa/2^24。
+    """
+    if not buf:
+        return np.zeros(0, dtype=np.float32)
+    if len(buf) % 4 != 0:
+        raise ValueError("IBM float buffer length must be multiple of 4")
+    dtype = ">u4" if src_endian == "big" else "<u4"
+    words = np.frombuffer(memoryview(buf), dtype=dtype).astype(np.uint32, copy=False)
+    sign = np.where((words & np.uint32(0x80000000)) != 0, -1.0, 1.0)
+    exp = ((words >> np.uint32(24)) & np.uint32(0x7F)).astype(np.int32) - 64
+    frac = (words & np.uint32(0x00FFFFFF)).astype(np.float64) / float(1 << 24)
+    # 16**exp；exp 范围通常不大
+    out = (sign * frac * np.power(16.0, exp.astype(np.float64))).astype(np.float32)
+    return out
+
+
 # ============================================================================
 # 时间字符串解析工具（来自 sac2y_v2_1_obspy.py）
 # ============================================================================

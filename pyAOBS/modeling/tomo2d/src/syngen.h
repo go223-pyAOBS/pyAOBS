@@ -23,10 +23,14 @@ public:
 
     void conduct();
     void readRefl(const char *);
+    void readSeafloor(const char *);
+    void readConv(const char *);
     void doFullRefl();
     void outputRay(const char* fn);
     void useClock(const char* fn);
     void graphOnly();
+    void setKappa(double k);
+    void setKappa(double k_lid, double k_below);
     void setVerbose(int i=0);
     
     void printSource(ostream&) const;
@@ -54,7 +58,7 @@ private:
     int nrefl;
     Array1d<int> start_i, end_i;
     Array1d<const Interface2d*> interp;
-    const Interface2d *bathyp, *reflp, *convp;
+    const Interface2d *bathyp, *reflp, *convp, *seafloorp;
     bool do_full_refl;
     
     bool outray;
@@ -63,6 +67,8 @@ private:
     bool use_clock, graph_only;
     const char* timefn;
     double graph_time, bend_time;
+    double vpvs_kappa;
+    double vpvs_kappa_below;
     
     int verbose_level;
 };

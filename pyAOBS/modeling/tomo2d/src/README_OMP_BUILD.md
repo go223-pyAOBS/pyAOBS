@@ -40,6 +40,9 @@ export OMP_NUM_THREADS=3
 export TOMO2D_INV_OMP=1
 ```
 
+> **Qt GUI**：顶栏「并行 / 策略环境变量」可设置下列变量，并写入子进程（覆盖同名系统变量）；
+> 亦随工区/`env.*` 配置保存。命令行仍可用 `export`。
+
 ### 变量含义
 
 - `TOMO2D_INV_OMP=1`  
@@ -52,6 +55,11 @@ export TOMO2D_INV_OMP=1
   - `tt_forward` 在 `-A`（full reflection）模式下会自动回退串行；
   - 并行时射线路径输出仍按 source 顺序写入。
 
+- `TOMO2D_GRAPH_FS_ENUM=1`  
+  图论 `graph.solve`（含反射/转换）按 forward-star 下标枚举邻居。  
+  未设置或 `=0`：回退原策略（扫剩余 C/B 再 `isIn`）。  
+  GUI「并行/策略 → 图论FS枚举」勾选写 1，不勾选写 0（可对拍）。
+
 - `TOMO2D_INV_LEGACY_BASELINE=1`  
   启用“回退基线模式”，用于与优化版做 A/B 对比。该模式会同时回退以下三项到旧行为：
   1) 关闭前向复用（不再按模型变化阈值复用 `A/path/res_ttime`）；  
@@ -59,7 +67,52 @@ export TOMO2D_INV_OMP=1
   3) 关闭 LSQR 列预条件（恢复原始求解路径）；
   4) 关闭分阶段反演（coarse-to-fine）。
   
-  > 优先级最高：开启后，`TOMO2D_INV_REUSE_*` 与 `TOMO2D_INV_COARSE2FINE` 将被忽略。
+  > 优先级最高：开启后，`TOMO2D_INV_REUSE_*` 与 `TOMO2D_INV_COARSE2FINE` 将被忽略；LSQR 列预条件也被强制关闭。
+
+- `TOMO2D_INV_LSQR_MAXITER=<n>`  
+  LSQR 迭代硬上限（与默认 `nnode*100` 取较小值）。≤0 或不设 = 不额外封顶。联合 Vs-only 的 `-TV` 无阻尼探步病态时，用来避免顶满上百万步。
+
+- `TOMO2D_INV_LSQR_ATOL=<tol>`  
+  覆盖 LSQR 的 `test2` 阈值。未设则用代码默认 `1e-3`。
+
+- `TOMO2D_INV_LSQR_PRECOND=1`  
+  只打开 LSQR 列预条件，不整包加速（hash 核 / 复用 / C2F 仍按各自开关）。  
+  默认关闭。`D_j=clip(s_med/‖A列‖, 1/κ, κ)`，空列 `D=0`；`test2` 至少 `MINITER` 步后才许因 ATOL 停下（避免 iter=1 假收敛）。`-TV` 无阻尼探步不加列缩放。
+
+- `TOMO2D_INV_LSQR_PRECOND_MAX`  
+  相对列范数中位数的夹逼 `κ`，默认 `10`。`<=0` = 相对不封顶（空列仍为 0）。
+
+- `TOMO2D_INV_LSQR_PRECOND_MINITER`  
+  预条件开启后允许 ATOL 停机的最少 LSQR 迭代，默认 `20`。
+
+- `TOMO2D_INV_SENS_WEIGHT=1`  
+  灵敏度加权阻尼/平滑（默认关）。按已缩放数据核的列和（DWS）对本块中位数求
+  `w_j=clip(s_med/(s_j+ε s_med), 1/κ, κ)`：暗结点 `T` 加大，亮→暗 `R` 耦合改为 `2/(w_i+w_j)`。
+  Vp、面上 Vs、面下 Vs、莫霍深度各自一块中位数。用来减弱射线路径拖曳，不针对某一层。
+  与 LSQR 列预条件都按照明缩放，减拖曳时优先只开本项。
+
+- `TOMO2D_INV_SENS_KAPPA`  
+  相对本块 DWS 中位数的夹逼 `κ`，默认 `10`。
+
+- `TOMO2D_INV_SENS_EPS`  
+  DWS 分母稳定项 `ε`，默认 `0.05`。
+
+- `TOMO2D_INV_LINESEARCH=1`  
+  Gauss–Newton 步长线搜索（默认关）。LSQR 给出方向后不整步加上去，
+  按重追后的真实 χ² 做 Armijo 回退（α=1, ρ, ρ², … 直到 α_min）。
+  Vp / Vs / 面上 / 面下 / 莫霍同一套外迭代。扫描多组 `-SV/-SD` 时自动跳过。
+  可选：`TOMO2D_INV_LS_C`（Armijo c，默认 `1e-4`）、
+  `TOMO2D_INV_LS_RHO`（回退因子，默认 `0.5`）、
+  `TOMO2D_INV_LS_AMIN`（最小 α，默认 `0.03125`=1/32）。
+  与 `TOMO2D_INV_LM` 同时开时线搜索被忽略。
+
+- `TOMO2D_INV_LM=1`  
+  Levenberg–Marquardt 信赖域（默认关）。按重追真实 χ² 与线性预测的比 ρ：
+  ρ 差则把阻尼乘 `UP`（默认 4）并重新 LSQR，不是沿原方向缩步长。
+  接受且 ρ 好则把 λ 乘 `DOWN`（默认 0.5）。无 `-D/-T` 时自动关。
+  可选：`TOMO2D_INV_LM_LAMBDA`、`TOMO2D_INV_LM_UP`、`TOMO2D_INV_LM_DOWN`、
+  `TOMO2D_INV_LM_LMAX`（默认 256）、`TOMO2D_INV_LM_RHO_ACCEPT`（默认 0.1）、
+  `TOMO2D_INV_LM_RHO_GOOD`（默认 0.5）。
 
 - `TOMO2D_INV_REUSE_FORWARD=1` 与 `TOMO2D_INV_REUSE_THRESH=<阈值>`  
   启用前向复用（默认关闭）。仅在 **未开启** `TOMO2D_INV_LEGACY_BASELINE` 时生效。  
@@ -116,6 +169,17 @@ export TOMO2D_INV_DIAG=1
 ```
 
 会输出每迭代与每个 `iset` 的 hash（`hash_res/hash_A/hash_dmodel/hash_modelv/hash_modeld`），用于定位差异来源。
+
+### 监视通道（status.jsonl）
+
+每完成一轮 `iter×iset` 追加一行 NDJSON（需重新编译含该改动的 `tt_inverse`）：
+
+```bash
+export TOMO2D_INV_STATUS_JSONL=outputs/status.jsonl
+```
+
+字段示例：`iter` `iset` `rms` `chi2` `pred_chi` `dv_norm` `dd_norm` `rough_v` `rough_d` `is_final` `smesh`。  
+GUI 默认经 `env.inv_status_jsonl_path` 写入该变量；监视窗优先用其刷新末态。留空则关闭。
 
 ---
 

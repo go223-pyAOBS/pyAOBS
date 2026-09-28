@@ -207,24 +207,32 @@ c     初始化射线存储
       return
       end
 
-c     存储当前射线
-      subroutine store_ray(n_pts, x_array, z_array, t_array, total_time)
+c     存储当前射线（含 P/S 与震相号 ivray/phase）
+      subroutine store_ray(n_pts, x_array, z_array, t_array, total_time,
+     +                     iphase)
       include 'rayinvr.par'
       include 'rayinvr.com'
       include 'rayinvr_interface.com'      
-      integer n_pts, i
+      integer n_pts, i, iphase
       real x_array(*), z_array(*), t_array(*), total_time
 c      write(6,*) 'Now call store_ray'
       if (ray_count_stored .lt. prayt .and. n_pts .gt. 0) then
         ray_count_stored = ray_count_stored + 1
         ray_npt_stored(ray_count_stored) = n_pts
         ray_tt_stored(ray_count_stored) = total_time
+        ray_phase_stored(ray_count_stored) = iphase
         
         do 10 i=1,n_pts
           if (i .le. ppray) then
             ray_x_stored(ray_count_stored, i) = x_array(i)
             ray_z_stored(ray_count_stored, i) = z_array(i)
             ray_t_stored(ray_count_stored, i) = t_array(i)
+c           pltray: vra(i).eq.vpa(i) → P (+1), else S (-1)
+            if (vr(i,2) .eq. vp(i,2)) then
+              ray_ips_stored(ray_count_stored, i) = 1
+            else
+              ray_ips_stored(ray_count_stored, i) = -1
+            endif
           endif
 10      continue
       endif
@@ -267,6 +275,42 @@ c     获取指定射线
         n_points = 0
       endif
       
+      return
+      end
+
+c     获取指定射线各点的 P/S 标志（+1=P, -1=S）
+      subroutine get_stored_ray_ips(ray_idx, ips_arr, n_points, 
+     +                             max_points)
+      include 'rayinvr.par'
+      include 'rayinvr.com'
+      include 'rayinvr_interface.com'
+
+      integer ray_idx, n_points, max_points, i
+      integer ips_arr(*)
+      
+      if (ray_idx .gt. 0 .and. ray_idx .le. ray_count_stored) then
+        n_points = ray_npt_stored(ray_idx)
+        if (n_points .gt. max_points) n_points = max_points
+        do 25 i=1,n_points
+          ips_arr(i) = ray_ips_stored(ray_idx, i)
+25      continue
+      else
+        n_points = 0
+      endif
+      return
+      end
+
+c     获取射线震相号（ivray，与 itxout=2 时 tx.out 的 i 一致）
+      subroutine get_stored_ray_phase(ray_idx, iphase)
+      include 'rayinvr.par'
+      include 'rayinvr.com'
+      include 'rayinvr_interface.com'
+      integer ray_idx, iphase
+      if (ray_idx .gt. 0 .and. ray_idx .le. ray_count_stored) then
+        iphase = ray_phase_stored(ray_idx)
+      else
+        iphase = 0
+      endif
       return
       end
 

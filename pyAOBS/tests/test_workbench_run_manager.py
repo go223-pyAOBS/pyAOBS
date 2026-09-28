@@ -48,6 +48,8 @@ def test_run_command_reuses_node_workspace_and_overwrites(tmp_path: Path) -> Non
     )
     assert run1.run_id == "OBS_node"
     assert run1.run_dir.name == "OBS_node"
+    assert run1.run_dir.parent.name == "runs"
+    assert run1.run_dir.parent.parent.name == "_wb"
     out1 = (run1.logs_dir / "stdout.log").read_text(encoding="utf-8")
     assert "first run" in out1
 

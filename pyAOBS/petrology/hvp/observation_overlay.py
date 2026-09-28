@@ -41,74 +41,60 @@ def plot_observation_on_hvp(
     delta_vp_max_km_s: float = DEFAULT_DELTA_VP_MAX_KM_S,
     h_min_km: float = DEFAULT_THICK_CRUST_H_KM,
     show_read_band: bool = True,
+    color: str | None = None,
+    marker: str | None = None,
+    draw_guides: bool = True,
 ) -> None:
-    """Plot anchor (H, V_LC) with optional Step-2 vertical read band."""
+    """Plot anchor (H, V_LC) with optional Step-2 vertical read band.
+
+    ``color`` / ``marker`` 用于多点叠投时区分；默认厚壳金星 / 薄壳空心圆。
+    """
     thick = obs.thick_crust if obs.thick_crust is not None else is_thick_crust(obs.h_km, h_min_km=h_min_km)
+    face = color or ("gold" if thick else "none")
+    edge = "0.15" if thick else (color or "0.55")
+    mk = marker or ("*" if thick else "o")
+    ms_scatter = 90 if thick else 55
+    ms_err = 12 if thick else 8
 
-    if thick:
-        if show_read_band:
-            v_lo, v_up = bulk_read_band(obs.v_lc_km_s, delta_vp_max_km_s=delta_vp_max_km_s)
-            ax.plot(
-                [obs.h_km, obs.h_km],
-                [v_lo, v_up],
-                color="#3498db",
-                lw=1.4,
-                alpha=0.45,
-                zorder=5,
-            )
-        if obs.v_lc_sigma_km_s is not None and obs.v_lc_sigma_km_s > 0:
-            ax.errorbar(
-                [obs.h_km],
-                [obs.v_lc_km_s],
-                yerr=[obs.v_lc_sigma_km_s],
-                fmt="*",
-                mfc="gold",
-                mec="0.15",
-                mew=1.0,
-                ms=12,
-                capsize=3,
-                zorder=7,
-                label=obs.label or "观测 (厚壳)",
-            )
-        else:
-            ax.scatter(
-                [obs.h_km],
-                [obs.v_lc_km_s],
-                s=90,
-                c="gold",
-                edgecolors="0.15",
-                linewidths=1.0,
-                marker="*",
-                zorder=7,
-                label=obs.label or "观测 (厚壳)",
-            )
+    if thick and show_read_band:
+        v_lo, v_up = bulk_read_band(obs.v_lc_km_s, delta_vp_max_km_s=delta_vp_max_km_s)
+        ax.plot(
+            [obs.h_km, obs.h_km],
+            [v_lo, v_up],
+            color=color or "#3498db",
+            lw=1.4,
+            alpha=0.45,
+            zorder=5,
+        )
+
+    if obs.v_lc_sigma_km_s is not None and obs.v_lc_sigma_km_s > 0:
+        ax.errorbar(
+            [obs.h_km],
+            [obs.v_lc_km_s],
+            yerr=[obs.v_lc_sigma_km_s],
+            fmt=mk,
+            mfc=face if face != "none" else "white",
+            mec=edge,
+            mew=1.0,
+            ms=ms_err,
+            capsize=3,
+            zorder=7,
+            label=obs.label or ("观测 (厚壳)" if thick else "观测 (薄壳)"),
+            color=edge if face == "none" else face,
+        )
     else:
-        if obs.v_lc_sigma_km_s is not None and obs.v_lc_sigma_km_s > 0:
-            ax.errorbar(
-                [obs.h_km],
-                [obs.v_lc_km_s],
-                yerr=[obs.v_lc_sigma_km_s],
-                fmt="o",
-                mfc="none",
-                mec="0.55",
-                mew=1.2,
-                ms=8,
-                capsize=3,
-                zorder=6,
-                label=obs.label or "观测 (薄壳)",
-            )
-        else:
-            ax.scatter(
-                [obs.h_km],
-                [obs.v_lc_km_s],
-                s=55,
-                facecolors="none",
-                edgecolors="0.55",
-                linewidths=1.2,
-                marker="o",
-                zorder=6,
-                label=obs.label or "观测 (薄壳)",
-            )
+        ax.scatter(
+            [obs.h_km],
+            [obs.v_lc_km_s],
+            s=ms_scatter,
+            facecolors=face if face != "none" else "none",
+            edgecolors=edge,
+            linewidths=1.0 if thick else 1.2,
+            marker=mk,
+            zorder=7,
+            label=obs.label or ("观测 (厚壳)" if thick else "观测 (薄壳)"),
+        )
 
-    ax.axhline(obs.v_lc_km_s, color="0.55", ls=":", lw=0.7, alpha=0.6, zorder=3)
-    ax.axvline(obs.h_km, color="0.55", ls="--", lw=0.7, alpha=0.6, zorder=3)
+    if draw_guides:
+        ax.axhline(obs.v_lc_km_s, color="0.55", ls=":", lw=0.7, alpha=0.6, zorder=3)
+        ax.axvline(obs.h_km, color="0.55", ls="--", lw=0.7, alpha=0.6, zorder=3)

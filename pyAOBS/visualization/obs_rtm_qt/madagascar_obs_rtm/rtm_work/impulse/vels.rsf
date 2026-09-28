@@ -1,0 +1,28 @@
+in=/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/obs_rtm_qt/madagascar_obs_rtm/vel.rsf@
+n1=241
+d1=0.25
+o1=0
+label1=Depth
+unit1=km
+n2=821
+d2=0.5
+o2=0
+label2=Distance
+unit2=km
+data_format=native_float
+esize=4
+4.2	sfwindow	madagascar_obs_rtm/rtm_work/impulse:	go223@DESKTOP-11IK6A4	Wed Jul 22 14:36:32 2026
+
+	d2=0.5
+	n2=821
+	o1=0
+	o2=0
+	label1="Depth"
+	data_format="native_float"
+	label2="Distance"
+	esize=4
+	in="/var/tmp/madagascar_obs_rtm/rtm_work/impulse/vels.rsf@"
+	unit1="km"
+	unit2="km"
+	d1=0.25
+	n1=241

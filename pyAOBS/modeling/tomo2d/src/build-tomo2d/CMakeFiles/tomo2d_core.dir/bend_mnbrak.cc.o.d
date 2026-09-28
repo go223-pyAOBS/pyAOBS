@@ -1,8 +1,8 @@
 CMakeFiles/tomo2d_core.dir/bend_mnbrak.cc.o: \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/bend_mnbrak.cc \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/bend_mnbrak.cc \
  /usr/include/stdc-predef.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/bend.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/array.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/bend.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/array.h \
  /usr/include/c++/12/vector /usr/include/c++/12/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/12/bits/os_defines.h \
@@ -155,8 +155,8 @@ CMakeFiles/tomo2d_core.dir/bend_mnbrak.cc.o: \
  /usr/include/c++/12/bits/basic_ios.tcc \
  /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
  /usr/include/c++/12/bits/istream.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/error.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/geom.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/error.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/geom.h \
  /usr/include/c++/12/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
@@ -180,12 +180,12 @@ CMakeFiles/tomo2d_core.dir/bend_mnbrak.cc.o: \
  /usr/include/c++/12/tr1/poly_hermite.tcc \
  /usr/include/c++/12/tr1/poly_laguerre.tcc \
  /usr/include/c++/12/tr1/riemann_zeta.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/smesh.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/smesh.h \
  /usr/include/c++/12/list /usr/include/c++/12/bits/stl_list.h \
  /usr/include/c++/12/bits/allocated_ptr.h \
  /usr/include/c++/12/ext/aligned_buffer.h \
  /usr/include/c++/12/bits/list.tcc \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/heap_deque.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/heap_deque.h \
  /usr/include/c++/12/deque /usr/include/c++/12/bits/stl_deque.h \
  /usr/include/c++/12/bits/deque.tcc /usr/include/c++/12/algorithm \
  /usr/include/c++/12/bits/stl_algo.h \
@@ -204,7 +204,7 @@ CMakeFiles/tomo2d_core.dir/bend_mnbrak.cc.o: \
  /usr/include/c++/12/bits/unordered_map.h \
  /usr/include/c++/12/bits/erase_if.h /usr/include/c++/12/array \
  /usr/include/c++/12/compare \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/index.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/betaspline.h \
- /mnt/d/python-learn/pyAOBS/pyaobs/modeling/tomo2d/src/interface.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/index.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/betaspline.h \
+ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/src/interface.h \
  /usr/include/c++/12/math.h

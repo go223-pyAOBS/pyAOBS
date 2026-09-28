@@ -1,0 +1,11 @@
+in=/mnt/d/python-learn/pyAOBS/pyAOBS/visualization/obs_rtm_qt/madagascar_obs_rtm/rtm_work/impulse/rec_shots.rsf@
+n1=2
+d1=1
+o1=0
+label1=xz
+n2=1
+d2=1
+o2=0
+label2=SHOT_REC
+data_format=native_float
+esize=4

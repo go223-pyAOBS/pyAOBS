@@ -8,10 +8,12 @@ import pytest
 
 from pyAOBS.modeling.tomo2d.tt_inverse_bundle import (
     build_tt_inverse_bundle,
+    classify_tt_inverse_outputs,
     finalize_tt_inverse_manifest,
     make_tt_inverse_run_dir_name,
     write_tt_inverse_manifest,
 )
+from pyAOBS.modeling.tomo2d.gui.services.smesh_ops import find_latest_inverse_smesh
 
 pytestmark = pytest.mark.unit
 
@@ -76,14 +78,90 @@ def test_manifest_roundtrip_and_finalize(tmp_path):
 
     (br.run_dir / "outputs").mkdir(exist_ok=True)
     (br.run_dir / "outputs" / "x.txt").write_text("out", encoding="utf-8")
+    (br.run_dir / "outputs" / "out.smesh.2.1").write_text("m", encoding="utf-8")
+    (br.run_dir / "outputs" / "tt_inverse.log").write_text("log", encoding="utf-8")
+    (br.run_dir / "outputs" / "dws.dat").write_text("dws", encoding="utf-8")
     finalize_tt_inverse_manifest(
         br.manifest_path, result=SimpleNamespace(returncode=0), err=None
     )
     data2 = json.loads(br.manifest_path.read_text(encoding="utf-8"))
     assert data2["post_run"]["status"] == "finished"
     assert data2["post_run"]["exit_code"] == 0
-    assert any(o["path"].startswith("outputs/") for o in data2["post_run"]["output_files"])
+    assert (br.run_dir / "outputs" / "models" / "out.smesh.2.1").is_file()
+    assert (br.run_dir / "outputs" / "logs" / "tt_inverse.log").is_file()
+    assert (br.run_dir / "outputs" / "dws" / "dws.dat").is_file()
+    assert (br.run_dir / "outputs" / "other" / "x.txt").is_file()
+    assert not (br.run_dir / "outputs" / "final.smesh").exists()
+    kinds = {o["path"]: o.get("kind") for o in data2["post_run"]["output_files"]}
+    assert kinds.get("outputs/models/out.smesh.2.1") == "model"
+    assert kinds.get("outputs/logs/tt_inverse.log") == "log"
+    assert "output_layout" in data2["post_run"]
     assert br.kwargs["dws_file"] == "outputs/dws.dat"
+
+
+def test_classify_idempotent_and_find_latest(tmp_path):
+    od = tmp_path / "outputs"
+    od.mkdir()
+    (od / "out.smesh.1.1").write_text("a", encoding="utf-8")
+    (od / "out.smesh.3.2").write_text("b", encoding="utf-8")
+    (od / "out.tres.1.0").write_text("t", encoding="utf-8")
+    (od / "out.outliers.1.1").write_text("#\n", encoding="utf-8")
+    (od / "out.outliers.final").write_text("#\n", encoding="utf-8")
+    (od / "out.ray.1.0").write_text("r", encoding="utf-8")
+    rows = classify_tt_inverse_outputs(od)
+    assert (od / "models" / "out.smesh.3.2").is_file()
+    assert (od / "residuals" / "out.tres.1.0").is_file()
+    assert (od / "residuals" / "out.outliers.1.1").is_file()
+    assert (od / "residuals" / "out.outliers.final").is_file()
+    assert (od / "rays" / "out.ray.1.0").is_file()
+    assert {r["kind"] for r in rows} >= {"model", "residual", "ray"}
+    # 再归类一次应保持稳定
+    rows2 = classify_tt_inverse_outputs(od)
+    assert (od / "models" / "out.smesh.3.2").is_file()
+    assert len([r for r in rows2 if r["kind"] == "model"]) == 2
+    latest = find_latest_inverse_smesh(od / "out")
+    assert latest.name == "out.smesh.3.2"
+    assert not (od / "final.smesh").exists()
+
+
+def test_bundle_strides_refl_into_inputs_without_sN_sidecar(tmp_path):
+    from pyAOBS.modeling.tomo2d.gui.services.refl_stride import STRIDE_KEY
+
+    wd = tmp_path / "work"
+    wd.mkdir()
+    (wd / "m.smesh").write_text("mesh", encoding="utf-8")
+    (wd / "d.dat").write_text("data", encoding="utf-8")
+    (wd / "refl.dat").write_text("".join(f"{i} 30\n" for i in range(5)), encoding="utf-8")
+    kwargs = {"refl_file": "refl.dat", STRIDE_KEY: 2}
+    br = build_tt_inverse_bundle(wd, "m.smesh", "d.dat", kwargs)
+
+    dest = br.run_dir / "inputs" / "refl.dat"
+    assert dest.is_file()
+    kept = [ln.strip() for ln in dest.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    assert kept == ["0 30", "2 30", "4 30"]
+    assert not (wd / "refl_s2.dat").exists()
+    assert STRIDE_KEY not in br.kwargs
+    row = next(r for r in br.inputs_manifest if r["role"] == "refl")
+    assert row.get("refl_stride") == 2
+    assert row["original_path"].endswith("refl.dat")
+
+
+def test_bundle_copies_seafloor_file(tmp_path):
+    wd = tmp_path / "work"
+    wd.mkdir()
+    (wd / "m.smesh").write_text("mesh", encoding="utf-8")
+    (wd / "d.dat").write_text("data", encoding="utf-8")
+    (wd / "sf.dat").write_text("0 2\n", encoding="utf-8")
+    br = build_tt_inverse_bundle(
+        wd, "m.smesh", "d.dat", {"seafloor_file": "sf.dat", "invert_water_only": True}
+    )
+    dest = br.run_dir / br.kwargs["seafloor_file"]
+    assert dest.is_file()
+    assert dest.read_text(encoding="utf-8") == "0 2\n"
+    assert br.kwargs["seafloor_file"].startswith("inputs/")
+    assert br.kwargs["invert_water_only"] is True
+    row = next(r for r in br.inputs_manifest if r["role"] == "seafloor")
+    assert row["original_path"].endswith("sf.dat")
 
 
 def test_bundle_gravity_default_grav_dws(tmp_path):

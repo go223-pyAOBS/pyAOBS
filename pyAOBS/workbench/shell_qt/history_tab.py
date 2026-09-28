@@ -23,6 +23,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from pyAOBS.utils.qt_combo import connect_combo_deferred
+
 from ..shell.logic.helpers import with_text_padding
 from .styles import (
     hint_label,
@@ -57,13 +59,13 @@ class RunHistoryTab(QWidget):
         filt.addWidget(QLabel("Status"))
         self._filter_status = QComboBox()
         self._filter_status.addItem("全部")
-        self._filter_status.currentIndexChanged.connect(self._apply_filter)
+        connect_combo_deferred(self._filter_status, lambda *_a: self._apply_filter())
         filt.addWidget(self._filter_status)
 
         filt.addWidget(QLabel("Node"))
         self._filter_node = QComboBox()
         self._filter_node.addItem("全部")
-        self._filter_node.currentIndexChanged.connect(self._apply_filter)
+        connect_combo_deferred(self._filter_node, lambda *_a: self._apply_filter())
         filt.addWidget(self._filter_node)
 
         filt.addWidget(QLabel("关键词"))

@@ -1063,7 +1063,8 @@ c              if(irs.eq.0.and.vr(npt,2).gt.0.) then
 c
                 if (vr(npt,2).gt.0.) then
                   total_traveltime = timer
-                  call store_ray(npt, xr, zr, tr, total_traveltime)
+                  call store_ray(npt, xr, zr, tr, total_traveltime,
+     +                           ivraya(ifam))
                 endif
 c                
                if(((iray.eq.1.or.(iray.eq.2.and.vr(npt,2).gt.0.)).

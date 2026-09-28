@@ -55,7 +55,7 @@ What is included
      - ``python -m pyAOBS.modeling.tomo2d.gui``
    * - imodel
      - Velocity-model interpretation (Qt)
-     - ``python -m pyAOBS.visualization.imodel_qt``
+     - ``python -m pyAOBS.visualization.imodel.gui``
    * - iphase
      - ``tx.in`` phase tools
      - ``python -m pyAOBS.visualization.iphase.iphase_gui``

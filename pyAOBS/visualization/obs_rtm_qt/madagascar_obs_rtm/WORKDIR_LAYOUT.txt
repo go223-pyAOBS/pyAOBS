@@ -1,0 +1,33 @@
+OBS RTM 工区 — 完整分层（最终）
+==============================
+
+CLI 在包内 scripts/（工区零脚本）:
+  su_to_shots.py       数据导入
+  rtm_shot_loop.py     custom_bin
+
+权威逻辑: obs_rtm_qt/services/
+
+目录树
+------
+  meta/                      obs_rtm_project.json
+  inputs/
+    raw/                     *.su, v.in, shots 备份
+    shots/                   按炮 RSF
+  prep/
+    geom/                    shots_xz / obs_xz / offsets / bath_x
+    vel/                     tomo_vel / ss / rr
+    shots_mute/  shots_proc/
+  rtm_in/                    vel.rsf  bath1d.rsf   ← scons 读 ../rtm_in/
+  rtm_work/                  SConstruct + 波场 + 成像
+  diag/                      检查报告、su_summary
+  examples/                  *.example
+  cache/                     _su_work、.obs_rtm_preview_cache
+
+正式流程
+--------
+  SU → inputs/shots + prep/geom
+     → prep/shots_* 
+     → rtm_in/vel + bath1d
+     → rtm_work/（scons 或 custom_bin）
+
+打开旧工区时 GUI 会自动迁移根上散落文件到上表路径。

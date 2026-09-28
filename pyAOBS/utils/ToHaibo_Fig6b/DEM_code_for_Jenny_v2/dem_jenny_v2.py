@@ -40,7 +40,7 @@ def dem(k1, mu1, k2, mu2, asp, phic):
     # 创建ODE求解器
     # 使用Runge-Kutta 4/5阶方法（dopri5），匹配MATLAB的ode45
     solver = ode(demyprime)
-    solver.set_integrator('dopri5', atol=1e-10, rtol=1e-10)
+    solver.set_integrator('dopri5', atol=1e-10, rtol=1e-10, nsteps=50000)
     
     # 设置初始条件
     y0 = np.array([k1, mu1])

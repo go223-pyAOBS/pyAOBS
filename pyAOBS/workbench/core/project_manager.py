@@ -15,22 +15,28 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .project_layout import (
+    DEFAULT_LAYOUT_DIRS,
+    DEFAULT_WORKSPACES,
+    LAYOUT_V2,
+    TOOL_SLOTS,
+    detect_layout,
+    path_for_registry,
+    required_layout_dirs,
+    workspaces_from_metadata,
+)
+
 
 PROJECT_META_FILE = "project.yaml"
 
-# Note: JSON text is a valid YAML 1.2 subset. We keep .yaml extension to align
-# with workbench design while avoiding a hard dependency on pyyaml.
-DEFAULT_LAYOUT_DIRS = (
-    "datasets/raw",
-    "datasets/processed",
-    "picks",
-    "models",
-    "interpretation",
-    "workflows",
-    "runs",
-    "state",
-    "reports",
-)
+# Re-exported for tests / callers that imported from this module.
+__all__ = [
+    "PROJECT_META_FILE",
+    "DEFAULT_LAYOUT_DIRS",
+    "ProjectError",
+    "ProjectContext",
+    "ProjectManager",
+]
 
 
 class ProjectError(RuntimeError):
@@ -51,12 +57,16 @@ class ProjectContext:
     def resolve(self, relative_path: str | Path) -> Path:
         return self.root / Path(relative_path)
 
+    @property
+    def workspaces(self) -> dict[str, str]:
+        return workspaces_from_metadata(self.metadata)
+
 
 class ProjectManager:
     """Create, open, and validate workbench projects."""
 
-    def __init__(self, layout_dirs: tuple[str, ...] = DEFAULT_LAYOUT_DIRS) -> None:
-        self.layout_dirs = layout_dirs
+    def __init__(self, layout_dirs: tuple[str, ...] | None = None) -> None:
+        self.layout_dirs = layout_dirs if layout_dirs is not None else DEFAULT_LAYOUT_DIRS
 
     def create_project(
         self,
@@ -79,11 +89,13 @@ class ProjectManager:
 
         now = _utc_now_iso()
         metadata: dict[str, Any] = {
-            "schema_version": 1,
+            "schema_version": 2,
+            "layout": LAYOUT_V2,
             "name": name or root_path.name,
             "created_at": now,
             "updated_at": now,
             "tool": "pyAOBS-workbench",
+            "workspaces": dict(DEFAULT_WORKSPACES),
         }
         self._write_metadata(project_file, metadata)
         return ProjectContext(root=root_path, metadata=metadata)
@@ -110,7 +122,7 @@ class ProjectManager:
 
         missing_dirs = [
             str(root_path / rel)
-            for rel in self.layout_dirs
+            for rel in required_layout_dirs(root_path)
             if not (root_path / rel).exists()
         ]
         if missing_dirs:
@@ -125,9 +137,36 @@ class ProjectManager:
         self._write_metadata(context.project_file, metadata)
         return ProjectContext(root=context.root, metadata=metadata)
 
+    def set_workspace(
+        self,
+        context: ProjectContext,
+        plugin_id: str,
+        path: str | Path,
+    ) -> ProjectContext:
+        """Register a tool workspace path (relative to the workbench root when possible)."""
+        pid = str(plugin_id or "").strip()
+        if not pid:
+            raise ProjectError("plugin_id is required to register a workspace.")
+        rel = path_for_registry(context.root, path)
+        metadata = dict(context.metadata)
+        workspaces = dict(metadata.get("workspaces") or {})
+        if not isinstance(workspaces, dict):
+            workspaces = {}
+        workspaces[pid] = rel
+        metadata["workspaces"] = workspaces
+        metadata["updated_at"] = _utc_now_iso()
+        if "layout" not in metadata:
+            metadata["layout"] = detect_layout(context.root)
+        self._write_metadata(context.project_file, metadata)
+        return ProjectContext(root=context.root, metadata=metadata)
+
     def _ensure_layout(self, root_path: Path) -> None:
-        for rel in self.layout_dirs:
+        dirs = self.layout_dirs if self.layout_dirs is not None else DEFAULT_LAYOUT_DIRS
+        for rel in dirs:
             (root_path / rel).mkdir(parents=True, exist_ok=True)
+        if dirs == DEFAULT_LAYOUT_DIRS or "tools" in dirs:
+            for slot in TOOL_SLOTS:
+                (root_path / "tools" / slot).mkdir(parents=True, exist_ok=True)
 
     @staticmethod
     def _read_metadata(path: Path) -> dict[str, Any]:
@@ -146,4 +185,3 @@ class ProjectManager:
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-

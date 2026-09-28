@@ -7,6 +7,7 @@ from pathlib import Path
 import shlex
 
 from .base import PluginCommandSpec, PluginValidationError
+from ..core.project_layout import node_id_from_work_dir
 
 
 class _PythonModuleGuiPlugin:
@@ -21,8 +22,12 @@ class _PythonModuleGuiPlugin:
     def build_spec(self, project_root: Path, payload: dict) -> PluginCommandSpec:
         executable = str(payload.get("executable", "")).strip() or "python"
         args_text = str(payload.get("args", "")).strip()
-        node_id = str(payload.get("node_id", "")).strip() or self.default_node
         cwd_text = str(payload.get("cwd", "")).strip()
+        node_id = (
+            str(payload.get("node_id", "")).strip()
+            or node_id_from_work_dir(cwd_text)
+            or self.default_node
+        )
         env_text = str(payload.get("env_text", "")).strip()
         inputs_text = str(payload.get("inputs_text", "")).strip()
 
@@ -66,7 +71,7 @@ class ZplotpyGuiPlugin(_PythonModuleGuiPlugin):
     name = "ZPlotPy GUI"
     description = "启动震相拾取 GUI（zplotpy）"
     module = "pyAOBS.workbench.gui_audit_launchers.zplotpy_gui"
-    default_node = "zplotpy_gui"
+    default_node = "workspace"
 
 
 class ImodelGuiPlugin(_PythonModuleGuiPlugin):
@@ -74,7 +79,7 @@ class ImodelGuiPlugin(_PythonModuleGuiPlugin):
     name = "iModel GUI"
     description = "启动速度模型解释 GUI（imodel，Qt / PySide6）"
     module = "pyAOBS.workbench.gui_audit_launchers.imodel_gui"
-    default_node = "imodel_gui"
+    default_node = "workspace"
 
 
 class IphaseGuiPlugin(_PythonModuleGuiPlugin):
@@ -82,15 +87,15 @@ class IphaseGuiPlugin(_PythonModuleGuiPlugin):
     name = "iPhase GUI"
     description = "启动震相分析 GUI（iphase）"
     module = "pyAOBS.workbench.gui_audit_launchers.iphase_gui"
-    default_node = "iphase_gui"
+    default_node = "workspace"
 
 
 class Tomo2dGuiPlugin(_PythonModuleGuiPlugin):
     id = "tomo2d.gui"
     name = "TOMO2D GUI"
-    description = "启动 TOMO2D 图形界面"
-    module = "pyAOBS.modeling.tomo2d.gui"
-    default_node = "tomo2d_gui"
+    description = "启动 TOMO2D 图形界面（Qt / PySide6）"
+    module = "pyAOBS.workbench.gui_audit_launchers.tomo2d_gui"
+    default_node = "workspace"
 
 
 class PetrologyLipGuiPlugin(_PythonModuleGuiPlugin):
@@ -99,6 +104,14 @@ class PetrologyLipGuiPlugin(_PythonModuleGuiPlugin):
     description = "启动 LIP 地幔熔融解释 GUI（REEBOX + 岩性预设，PySide6）"
     module = "pyAOBS.workbench.gui_audit_launchers.lip_gui"
     default_node = "lip_petrology_gui"
+
+
+class VeditGuiPlugin(_PythonModuleGuiPlugin):
+    id = "vedit.gui"
+    name = "vedit GUI"
+    description = "启动 RAYINVR v.in 编辑器（vedit，Qt / PySide6）"
+    module = "pyAOBS.workbench.gui_audit_launchers.vedit_gui"
+    default_node = "workspace"
 
 
 class ObemTsmToSacPlugin(_PythonModuleGuiPlugin):
@@ -128,18 +141,22 @@ class Raw2SacPlugin(_PythonModuleGuiPlugin):
 class DataGuiPlugin:
     id = "data.gui"
     name = "idata 数据转换节点"
-    description = "启动统一数据转换 UI（idata）"
-    default_node = "data_gui"
+    description = "启动 idata（PySide6：转换 + 全字段道头编辑 + 几何核对）"
+    default_node = "workspace"
 
     def build_spec(self, project_root: Path, payload: dict) -> PluginCommandSpec:
         executable = str(payload.get("executable", "")).strip() or "python"
         args_text = str(payload.get("args", "")).strip()
-        node_id = str(payload.get("node_id", "")).strip() or self.default_node
         cwd_text = str(payload.get("cwd", "")).strip()
+        node_id = (
+            str(payload.get("node_id", "")).strip()
+            or node_id_from_work_dir(cwd_text)
+            or self.default_node
+        )
         env_text = str(payload.get("env_text", "")).strip()
         inputs_text = str(payload.get("inputs_text", "")).strip()
 
-        script_path = Path(__file__).resolve().parents[2] / "processors" / "raw2sac" / "idata.py"
+        script_path = Path(__file__).resolve().parents[2] / "processors" / "idata" / "run.py"
         if not script_path.exists():
             raise PluginValidationError(f"idata 启动脚本不存在：{script_path}")
 

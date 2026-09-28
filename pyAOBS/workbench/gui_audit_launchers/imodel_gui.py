@@ -1,4 +1,4 @@
-"""审计包装启动：工作台中的 imodel 入口（现已指向 Qt 版 `visualization.imodel_qt`）。"""
+"""审计包装启动：工作台中的 imodel 入口（`visualization.imodel.gui`）。"""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from ._common import AuditRuntimeHooks, write_audit
 
 
 def main() -> int:
-    target = "pyAOBS.visualization.imodel_qt"
+    target = "pyAOBS.visualization.imodel.gui"
     old_argv = list(sys.argv)
     hooks = AuditRuntimeHooks()
     try:
@@ -29,4 +29,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

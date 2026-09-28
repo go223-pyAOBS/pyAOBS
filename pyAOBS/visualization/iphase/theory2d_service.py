@@ -12,11 +12,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Optional, Sequence
-import hashlib
 import re
 import shutil
-import subprocess
-import sys
 import time
 
 import numpy as np
@@ -26,60 +23,14 @@ try:
 except Exception:
     RayinvrWrapper = None  # type: ignore[assignment]
 
-
-def _find_rayinvr_executable() -> str | None:
-    """在 PATH 中查找原生 rayinvr 可执行文件。"""
-    try:
-        r = subprocess.run(
-            ["rayinvr"],
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            timeout=3,
-        )
-        return "rayinvr"
-    except FileNotFoundError:
-        return None
-    except Exception:
-        return "rayinvr"
-
-
-def _run_wrapper_in_subprocess(working_dir: Path, *, timeout_s: int = 120) -> tuple[bool, str]:
-    """
-    在子进程中执行 RayinvrWrapper，避免共享库状态残留。
-    """
-    repo_root = Path(__file__).resolve().parents[3]
-    code = (
-        "import sys;"
-        "from pathlib import Path;"
-        "wd=Path(sys.argv[1]);"
-        "root=Path(sys.argv[2]);"
-        "sys.path.insert(0, str(root));"
-        "from pyAOBS.modeling.rayinvr.rayinvr_wrapper import RayinvrWrapper;"
-        "ok=bool(RayinvrWrapper(working_dir=str(wd)).run_rayinvr());"
-        "raise SystemExit(0 if ok else 2)"
-    )
-    try:
-        proc = subprocess.run(
-            [sys.executable, "-c", code, str(working_dir), str(repo_root)],
-            cwd=str(working_dir),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            timeout=timeout_s,
-            text=True,
-            encoding="utf-8",
-            errors="ignore",
-        )
-    except subprocess.TimeoutExpired:
-        return False, "RayinvrWrapper 子进程超时"
-    except Exception as e:
-        return False, f"RayinvrWrapper 子进程异常: {e}"
-    if proc.returncode == 0:
-        return True, ""
-    msg = (proc.stdout or "").strip()
-    if msg:
-        msg = msg[-300:]
-    return False, f"RayinvrWrapper 子进程失败 code={proc.returncode}; {msg}"
+# 公用 RAYINVR 调用层（与 vedit / zplotpy 共用）
+from ...modeling.rayinvr.service import (  # noqa: E402
+    RayinvrInputSpec as _SharedInputSpec,
+    hash_file as _shared_hash_file,
+    parse_rin_input_files as _shared_parse_rin,
+    run_rayinvr as _shared_run_rayinvr,
+    validate_rayinvr_inputs as _shared_validate,
+)
 
 
 @dataclass
@@ -118,73 +69,23 @@ class Theory2DBundle:
         return len(self.curves)
 
 
-@dataclass
-class RayinvrInputSpec:
-    r_file: Path
-    t_file: Path
-    v_file: Path
-    tfile_from_rin: bool = False
-    vfile_from_rin: bool = False
+# 兼容旧 import：类型与函数均委托公用层
+RayinvrInputSpec = _SharedInputSpec
 
 
 def hash_file(path: Path) -> str:
-    if not path.exists():
-        return "missing"
-    h = hashlib.sha1()
-    with open(path, "rb") as f:
-        while True:
-            b = f.read(1024 * 1024)
-            if not b:
-                break
-            h.update(b)
-    return h.hexdigest()
+    return _shared_hash_file(path)
 
 
 def parse_rin_input_files(working_dir: str | Path) -> RayinvrInputSpec:
-    """
-    从 r.in 解析 tfile/vfile；若缺失则回退默认 tx.in/v.in。
-    """
-    wd = Path(working_dir)
-    r_file = wd / "r.in"
-    t_name = "tx.in"
-    v_name = "v.in"
-    if r_file.exists():
-        txt = r_file.read_text(encoding="utf-8", errors="ignore")
-        m_t = re.search(r"\btfile\s*=\s*(?:\"([^\"]+)\"|'([^']+)'|([^,\s]+))", txt, flags=re.IGNORECASE)
-        if m_t:
-            t_name = (m_t.group(1) or m_t.group(2) or m_t.group(3) or t_name).strip()
-            t_from = True
-        else:
-            t_from = False
-        m_v = re.search(r"\bvfile\s*=\s*(?:\"([^\"]+)\"|'([^']+)'|([^,\s]+))", txt, flags=re.IGNORECASE)
-        if m_v:
-            v_name = (m_v.group(1) or m_v.group(2) or m_v.group(3) or v_name).strip()
-            v_from = True
-        else:
-            v_from = False
-    else:
-        t_from = False
-        v_from = False
-    return RayinvrInputSpec(
-        r_file=r_file,
-        t_file=(wd / t_name),
-        v_file=(wd / v_name),
-        tfile_from_rin=t_from,
-        vfile_from_rin=v_from,
-    )
+    """从 r.in 解析 tfile/vfile；若缺失则回退默认 tx.in/v.in。"""
+    return _shared_parse_rin(working_dir)
 
 
-def validate_rayinvr_inputs(working_dir: str | Path) -> tuple[bool, tuple[str, ...], RayinvrInputSpec]:
-    spec = parse_rin_input_files(working_dir)
-    miss: list[str] = []
-    if not spec.r_file.exists():
-        miss.append(str(spec.r_file.name))
-    if not spec.v_file.exists():
-        miss.append(str(spec.v_file.name))
-    if not spec.t_file.exists():
-        miss.append(str(spec.t_file.name))
-    miss_t = tuple(miss)
-    return len(miss_t) == 0, miss_t, spec
+def validate_rayinvr_inputs(
+    working_dir: str | Path,
+) -> tuple[bool, tuple[str, ...], RayinvrInputSpec]:
+    return _shared_validate(working_dir, require_tx=True)
 
 
 def update_rin_shots_from_receivers_and_depth(
@@ -366,6 +267,7 @@ def write_pois_full_to_rin(r_in_path: str | Path, pois_full_str: str) -> tuple[b
     """
     将完整 pois 字符串写回 r.in（用于左支或右支单独写回）。
     pois_full_str 为整行取值，如 "0.5,0.44,0.4"。
+    若文件中尚无 pois= 行，则在 vfile=/tfile= 之前插入。
     """
     r_path = Path(r_in_path)
     if not r_path.exists():
@@ -384,21 +286,34 @@ def write_pois_full_to_rin(r_in_path: str | Path, pois_full_str: str) -> tuple[b
         text = r_path.read_text(encoding="utf-8", errors="replace")
     except Exception as e:
         return False, f"读取 r.in 失败: {e}"
-    # 仅匹配 pois 的值，不含换行，避免吃掉 vfile/tfile 行
-    new_text = re.sub(
-        r"(pois\s*=\s*)[\d., \t]+",
-        lambda m: m.group(1) + new_val + "\n           ",
-        text,
-        flags=re.IGNORECASE,
-    )
-    if new_text == text:
-        return False, "未找到 pois= 行"
+
+    pois_pat = re.compile(r"(?i)pois\s*=\s*")
+    m = pois_pat.search(text)
+    if m:
+        # 替换 pois= 后到行末的内容
+        line_end = text.find("\n", m.end())
+        if line_end < 0:
+            line_end = len(text)
+        new_text = text[: m.end()] + new_val + text[line_end:]
+    else:
+        insert_line = f"             pois={new_val}\n"
+        m_vf = re.search(r"(?im)^([ \t]*)(vfile\s*=)", text)
+        m_tf = re.search(r"(?im)^([ \t]*)(tfile\s*=)", text)
+        m_ins = m_vf or m_tf
+        if m_ins:
+            new_text = text[: m_ins.start()] + insert_line + text[m_ins.start() :]
+        else:
+            m_end = re.search(r"(?im)^([ \t]*)&end\b", text)
+            if not m_end:
+                return False, f"未找到 pois= 且无法插入（无 vfile/tfile/&end）: {r_path}"
+            new_text = text[: m_end.start()] + insert_line + text[m_end.start() :]
+
     new_text = _ensure_rin_tfile_vfile_quoted(new_text)
     try:
         r_path.write_text(new_text, encoding="utf-8")
     except Exception as e:
         return False, f"写入 r.in 失败: {e}"
-    return True, "已写回 pois 到 r.in"
+    return True, f"已写回 pois 到 {r_path}"
 
 
 def write_pois_to_rin(
@@ -410,9 +325,6 @@ def write_pois_to_rin(
     将 pois= 写回 r.in：pois=first_value,<rest_str 解析后的值>,。
     rest_str 为逗号分隔的数字字符串（从第二个值起）。
     """
-    r_path = Path(r_in_path)
-    if not r_path.exists():
-        return False, f"r.in 不存在: {r_path}"
     rest_parts = [p.strip() for p in rest_str.split(",") if p.strip()]
     rest_vals: list[float] = []
     for p in rest_parts:
@@ -420,25 +332,10 @@ def write_pois_to_rin(
             rest_vals.append(float(p))
         except ValueError:
             return False, f"pois 含非数字: {p!r}"
-    try:
-        text = r_path.read_text(encoding="utf-8", errors="replace")
-    except Exception as e:
-        return False, f"读取 r.in 失败: {e}"
-    new_val = f"{first_value:.3f}," + ",".join(f"{v:.3f}" for v in rest_vals) + ","
-    new_text = re.sub(
-        r"(pois\s*=\s*)[\d., \t]+",
-        lambda m: m.group(1) + new_val + "\n           ",
-        text,
-        flags=re.IGNORECASE,
-    )
-    if new_text == text:
-        return False, "未找到 pois= 行"
-    new_text = _ensure_rin_tfile_vfile_quoted(new_text)
-    try:
-        r_path.write_text(new_text, encoding="utf-8")
-    except Exception as e:
-        return False, f"写入 r.in 失败: {e}"
-    return True, "已写回 pois 到 r.in"
+    full = f"{float(first_value):.3f}"
+    if rest_vals:
+        full += "," + ",".join(f"{v:.3f}" for v in rest_vals)
+    return write_pois_full_to_rin(r_in_path, full)
 
 
 def run_rayinvr_forward(
@@ -448,202 +345,41 @@ def run_rayinvr_forward(
     tx_in_override: str | Path | None = None,
     sync_override_to_tfile: bool = True,
 ) -> ForwardRunResult:
-    wd = Path(working_dir)
-    tx_out = wd / "tx.out"
-    t0 = time.time()
-    ok, miss, spec = validate_rayinvr_inputs(wd)
-    # 可选：把当前打开的 in 文件同步到 r.in 指定的 tfile
-    if tx_in_override is not None and sync_override_to_tfile:
-        src = Path(tx_in_override)
-        if src.exists():
-            try:
-                spec.t_file.parent.mkdir(parents=True, exist_ok=True)
-                # 源与目标相同文件时无需 copy（否则 Windows/WSL 路径混用下可能抛 samefile）
-                src_r = src.resolve()
-                dst_r = spec.t_file.resolve()
-                if src_r != dst_r:
-                    shutil.copy2(src, spec.t_file)
-                ok, miss, spec = validate_rayinvr_inputs(wd)
-            except Exception as e:
-                return ForwardRunResult(
-                    success=False,
-                    code="sync_tfile_failed",
-                    message=f"同步 tfile 失败: {e}",
-                    working_dir=str(wd),
-                    tx_out_path=str(tx_out) if tx_out.exists() else None,
-                    elapsed_s=time.time() - t0,
-                    ran_forward=False,
-                    used_existing_txout=False,
-                )
-    if not ok:
-        return ForwardRunResult(
-            success=False,
-            code="missing_inputs",
-            message=f"缺少输入文件: {', '.join(miss)}",
-            working_dir=str(wd),
-            tx_out_path=str(tx_out) if tx_out.exists() else None,
-            elapsed_s=time.time() - t0,
-            ran_forward=False,
-            used_existing_txout=False,
-            missing_inputs=miss,
-        )
-
-    if tx_out.exists() and not force_run:
-        return ForwardRunResult(
-            success=True,
-            code="ok",
-            message="使用现有 tx.out",
-            working_dir=str(wd),
-            tx_out_path=str(tx_out),
-            elapsed_s=time.time() - t0,
-            ran_forward=False,
-            used_existing_txout=True,
-        )
-
-    # 运行前删除旧 tx.out，确保全新输出
-    if tx_out.exists():
-        try:
-            tx_out.unlink()
-        except Exception:
-            pass
-
-    # 优先用原生 rayinvr 可执行文件（subprocess，每次全新进程，无状态残留）
-    exe = _find_rayinvr_executable()
-    if exe is not None:
-        try:
-            proc = subprocess.run(
-                [exe],
-                cwd=str(wd),
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                timeout=120,
-            )
-            if proc.returncode != 0 and not tx_out.exists():
-                return ForwardRunResult(
-                    success=False,
-                    code="run_failed",
-                    message=f"rayinvr 退出码={proc.returncode}",
-                    working_dir=str(wd),
-                    tx_out_path=None,
-                    elapsed_s=time.time() - t0,
-                    ran_forward=True,
-                    used_existing_txout=False,
-                )
-        except subprocess.TimeoutExpired:
-            return ForwardRunResult(
-                success=False,
-                code="run_timeout",
-                message="rayinvr 运行超时(120s)",
-                working_dir=str(wd),
-                tx_out_path=str(tx_out) if tx_out.exists() else None,
-                elapsed_s=time.time() - t0,
-                ran_forward=True,
-                used_existing_txout=False,
-            )
-        except Exception as e:
-            return ForwardRunResult(
-                success=False,
-                code="run_exception",
-                message=f"rayinvr 异常: {e}",
-                working_dir=str(wd),
-                tx_out_path=str(tx_out) if tx_out.exists() else None,
-                elapsed_s=time.time() - t0,
-                ran_forward=True,
-                used_existing_txout=False,
-            )
-    else:
-        # 回退：在子进程中执行 RayinvrWrapper（方案2）
-        ok_run, msg = _run_wrapper_in_subprocess(wd, timeout_s=120)
-        if not ok_run:
-            return ForwardRunResult(
-                success=False,
-                code="run_exception",
-                message=msg or "RayinvrWrapper 子进程运行失败",
-                working_dir=str(wd),
-                tx_out_path=str(tx_out) if tx_out.exists() else None,
-                elapsed_s=time.time() - t0,
-                ran_forward=True,
-                used_existing_txout=False,
-            )
-
-    if not tx_out.exists():
-        return ForwardRunResult(
-            success=False,
-            code="txout_missing",
-            message="RAYINVR 完成但未生成 tx.out",
-            working_dir=str(wd),
-            tx_out_path=None,
-            elapsed_s=time.time() - t0,
-            ran_forward=True,
-            used_existing_txout=False,
-        )
-
+    """委托 ``modeling.rayinvr.service.run_rayinvr``（保持原 ForwardRunResult API）。"""
+    r = _shared_run_rayinvr(
+        working_dir,
+        force_run=force_run,
+        require_tx=True,
+        collect_rays=False,
+        collect_obs=False,
+        timeout_s=120,
+        backend="auto",
+        tx_in_override=tx_in_override,
+        sync_override_to_tfile=sync_override_to_tfile,
+    )
+    code = r.code
+    if not r.success and "超时" in (r.message or ""):
+        code = "run_timeout"
+    elif not r.success and r.code == "run_failed":
+        code = "run_exception" if "异常" in (r.message or "") or "子进程" in (r.message or "") else "run_failed"
     return ForwardRunResult(
-        success=True,
-        code="ok",
-        message="RAYINVR 正演完成",
-        working_dir=str(wd),
-        tx_out_path=str(tx_out),
-        elapsed_s=time.time() - t0,
-        ran_forward=True,
-        used_existing_txout=False,
+        success=r.success,
+        code=code,
+        message=r.message,
+        working_dir=r.working_dir,
+        tx_out_path=r.tx_out_path,
+        elapsed_s=r.elapsed_s,
+        ran_forward=r.ran_forward,
+        used_existing_txout=r.used_existing_txout,
+        missing_inputs=r.missing_inputs,
     )
 
 
 def _parse_tx_file_by_shot(tx_path: str | Path) -> list[dict]:
-    """
-    读取 tx.in/tx.out（format(3f10.3,i10)）并按 shot 分组。
+    """读取 tx.in/tx.out 并按 shot 分组（委托 ``modeling.rayinvr.tx_io``）。"""
+    from ...modeling.rayinvr.tx_io import parse_tx_file_by_shot
 
-    解析方式：优先固定列宽（col 0-10, 10-20, 20-30, 30-40），
-    若行太短或固定列宽失败则回退 split()。
-    """
-    p = Path(tx_path)
-    shots: list[dict] = []
-    cur: dict | None = None
-    with open(p, "r", encoding="utf-8", errors="ignore") as f:
-        for line in f:
-            raw = line.rstrip("\n\r")
-            if not raw.strip():
-                continue
-            x: float | None = None
-            t: float | None = None
-            u: float | None = None
-            ipf: int | None = None
-            if len(raw) >= 40:
-                try:
-                    x = float(raw[0:10])
-                    t = float(raw[10:20])
-                    u = float(raw[20:30])
-                    ipf = int(raw[30:40])
-                except Exception:
-                    pass
-            if x is None or t is None or ipf is None:
-                parts = raw.split()
-                if len(parts) < 4:
-                    continue
-                try:
-                    x = float(parts[0])
-                    t = float(parts[1])
-                    u = float(parts[2])
-                    ipf = int(parts[3])
-                except Exception:
-                    continue
-            if u is None:
-                u = 0.0
-            if ipf == -1:
-                break
-            if ipf <= 0:
-                if cur is not None:
-                    shots.append(cur)
-                cur = {"shot_x": x, "obs": []}
-                continue
-            if cur is None:
-                cur = {"shot_x": 0.0, "obs": []}
-            cur["obs"].append((x, t, u, ipf))
-    if cur is not None:
-        shots.append(cur)
-    return shots
+    return parse_tx_file_by_shot(tx_path)
 
 
 def _phase_curve_in_shot(shot: dict, phase_id: int) -> tuple[np.ndarray, np.ndarray]:
@@ -704,6 +440,64 @@ def collect_phase_points_from_txout(
             continue
         arr = np.asarray(rows, dtype=float)
         out[pid] = (arr[:, 0], arr[:, 1], arr[:, 2])
+    return out
+
+
+def split_phase_points_by_offset_side(
+    phase_pts: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
+) -> tuple[
+    dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
+    dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
+]:
+    """按 offset=x-shot_x 将理论点拆成左支(offset<0) / 右支(offset>0)。"""
+    left: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]] = {}
+    right: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]] = {}
+    for pid, (xh, th, sh) in phase_pts.items():
+        xh = np.asarray(xh, dtype=float)
+        th = np.asarray(th, dtype=float)
+        sh = np.asarray(sh, dtype=float)
+        if xh.size == 0:
+            continue
+        off = xh - sh
+        ml = off < 0
+        mr = off > 0
+        if np.any(ml):
+            left[int(pid)] = (xh[ml], th[ml], sh[ml])
+        if np.any(mr):
+            right[int(pid)] = (xh[mr], th[mr], sh[mr])
+    return left, right
+
+
+def merge_phase_points_sides(
+    left: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]] | None,
+    right: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]] | None,
+) -> dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]]:
+    """合并左右支理论点（同相位拼接）。"""
+    out: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]] = {}
+    pids = set()
+    if left:
+        pids.update(int(k) for k in left)
+    if right:
+        pids.update(int(k) for k in right)
+    for pid in pids:
+        chunks_x: list[np.ndarray] = []
+        chunks_t: list[np.ndarray] = []
+        chunks_s: list[np.ndarray] = []
+        for side in (left, right):
+            if not side or pid not in side:
+                continue
+            xh, th, sh = side[pid]
+            if np.asarray(xh).size:
+                chunks_x.append(np.asarray(xh, dtype=float))
+                chunks_t.append(np.asarray(th, dtype=float))
+                chunks_s.append(np.asarray(sh, dtype=float))
+        if not chunks_x:
+            continue
+        x = np.concatenate(chunks_x)
+        t = np.concatenate(chunks_t)
+        s = np.concatenate(chunks_s)
+        so = np.argsort(x)
+        out[pid] = (x[so], t[so], s[so])
     return out
 
 

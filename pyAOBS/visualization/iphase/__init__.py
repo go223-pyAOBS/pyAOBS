@@ -6,9 +6,13 @@ iphase - 拾取震相（tx.in 格式）处理与可视化
 
 用法:
   from pyAOBS.visualization.iphase import read_tx, write_tx, select_phases, combine_ppp_pps_pss
+  python -m pyAOBS.visualization.iphase.gui
   python -m pyAOBS.visualization.iphase select tx.in -o tx.out --phases 1 2 3
   python -m pyAOBS.visualization.iphase combine tx1.in tx2.in tx3.in --ip1 1 --ip2 2 --ip3 3 --ip4 10 --ip5 11
   python -m pyAOBS.visualization.iphase info tx.in
+
+帮助文档:
+  visualization/iphase/docs/HELP.md（GUI 内 F1 / 工具栏「帮助」）
 """
 
 from .models import Pick, Shot, PhaseDataset

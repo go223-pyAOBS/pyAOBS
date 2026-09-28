@@ -1,0 +1,40 @@
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water | 开始记录 2026-08-27 13:46:54 ========
+[2026-08-27 13:46:54] 已新建工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 13:50:57] 开始 tt_forward @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 13:50:57] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-27 13:50:57] tt_forward 完成
+[2026-08-27 13:50:57] [tt_forward] 耗时 0.2s
+[2026-08-27 13:54:32] [绘制 smesh] tt_forward ← water.smesh · 界面 seafloor.refl
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water | 开始记录 2026-08-27 20:57:12 ========
+[2026-08-27 20:57:12] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 21:00:52] [绘制 smesh] tt_forward ← water.smesh
+[2026-08-27 21:16:44] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water | 开始记录 2026-08-27 21:17:23 ========
+[2026-08-27 21:17:23] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 21:18:24] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water | 开始记录 2026-08-27 21:18:45 ========
+[2026-08-27 21:18:45] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 21:18:53] 开始 tt_forward @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 21:18:53] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-27 21:18:53] tt_forward 完成
+[2026-08-27 21:18:53] [tt_forward] 耗时 0.2s
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water | 开始记录 2026-08-27 21:27:53 ========
+[2026-08-27 21:27:53] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 21:28:00] 开始 tt_forward @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 21:28:00] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-27 21:28:00] tt_forward 完成
+[2026-08-27 21:28:00] [tt_forward] 耗时 0.2s
+[2026-08-27 23:06:06] 开始 tt_forward @ /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-08-27 23:06:06] 并行: OMP_NUM_THREADS=10 · tt_inverse并行=开 · tt_forward并行=开 · Legacy
+[2026-08-27 23:06:06] tt_forward 完成
+[2026-08-27 23:06:06] [tt_forward] 耗时 0.1s
+[2026-08-28 00:15:26] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water/meta/tomo2d_project.json
+
+======== TOMO2D GUI | 工作目录 /mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water | 开始记录 2026-09-02 09:45:45 ========
+[2026-09-02 09:45:45] 已打开工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water
+[2026-09-02 09:47:44] 已保存工区：/mnt/d/python-learn/pyAOBS/pyAOBS/modeling/tomo2d/example_water/meta/tomo2d_project.json

@@ -25,6 +25,20 @@ except ImportError:
     print("Error: Cannot import ieee_to_ibm_float_vectorized from format_utils")
     raise
 
+# 道头字节偏移与 segy.h / SEGY 标准一致（勿再手写魔法偏移）
+try:
+    from segy_trace_header import (
+        SEGY_TRACE_HEADER_BYTES,
+        SEGY_TRACE_OFFSET,
+        pack_trace_header,
+    )
+except ImportError:
+    from processors.raw2sac.segy_trace_header import (
+        SEGY_TRACE_HEADER_BYTES,
+        SEGY_TRACE_OFFSET,
+        pack_trace_header,
+    )
+
 
 # ============================================================================
 # SEGY头写入函数
@@ -133,53 +147,59 @@ def create_segy_trace_header(shot_info: Dict, sx: float, sy: float,
                             ns: int, dt: int, tracl: int, tracr: int,
                             year: int, day: int, hour: int, minute: int,
                             sec: int, timbas: int) -> Dict:
-    """创建SEGY道头
-    
-    对应C代码的segy结构
-    
+    """创建 SEGY 道头（SEGY 字面装填）。
+
+    字节布局同 segy.h；约定：
+
+      - sx,sy = 炮点 UTM（米）
+      - gx,gy = OBS / 检波 UTM（米）
+      - 参数 ``gelev``：OBS 高程 → 道头 **gelev**
+      - 参数 ``swdep``：炮点水深 → 道头 **swdep**
+      - 道头 selev（炮高程）、gwdep（OBS 水深）未知时置 0
+      - scalel / scalco = -1（不缩放，整型即米）
+
     Args:
         shot_info: 炮点信息字典
-        sx, sy: 炮点坐标（UTM）
-        gx, gy: 接收点坐标（UTM）
-        offset: 偏移距（米）
-        gelev: 接收点高程
-        swdep: 炮点水深
+        sx, sy: 炮点坐标（UTM，米）
+        gx, gy: OBS 坐标（UTM，米）
+        offset: 偏移距（米，可带符号；不受 scalco）
+        gelev: OBS 高程（写入 gelev）
+        swdep: 炮点水深（写入 swdep）
         delrt: 延迟记录时间（毫秒）
-        ns: 采样点数
-        dt: 采样间隔（微秒）
-        tracl: 道序号（线内）
-        tracr: 道序号（文件内）
-        year, day, hour, minute, sec, timbas: 时间信息
-    
+        ns / dt / tracl / tracr / 时间字段: 同 SEGY 惯例
+
     Returns:
-        道头字典
+        道头字典（键名同 segy.h；字节偏移见 SEGY_TRACE_OFFSET）
     """
+    # 注释中的字节范围为 SEGY 标准，与 SEGY_TRACE_OFFSET 一致
+    obs_elev = int(gelev if np.isfinite(gelev) else 0)
+    shot_wdep = int(swdep if np.isfinite(swdep) else 0)
     trace_header = {
-        'tracl': tracl,                    # 0-3: 道序号（线内）
-        'tracr': tracr,                    # 4-7: 道序号（文件内）
-        'fldr': shot_info['field_record'], # 8-11: 野外记录号
-        'tracf': 1,                        # 12-15: 道号（记录内）
-        'ep': shot_info['shot_number'],    # 16-19: 震源点号
-        'cdp': shot_info['shot_number'],   # 20-23: CDP号
-        'cdpt': 1,                         # 24-27: CDP内道号
-        'trid': 1,                         # 28-29: 道标识（1=地震数据）
-        'nvs': 1,                          # 30-31: 垂直叠加数
-        'nhs': 1,                          # 32-33: 水平叠加数
-        'duse': 1,                         # 34-35: 数据用途（1=生产）
-        'offset': int(np.clip(offset if np.isfinite(offset) else 0, -2e9, 2e9) + 0.5),  # 36-39: 偏移距
-        'gelev': int(gelev if np.isfinite(gelev) else 0),               # 40-43: 接收点高程
-        'selev': 0,                        # 44-47: 震源高程
-        'sdepth': 0,                       # 48-51: 震源深度
-        'gdel': 0,                         # 52-55: 接收点基准面
-        'sdel': 0,                         # 56-59: 震源基准面
-        'swdep': int(swdep if np.isfinite(swdep) else 0),                    # 60-63: 震源水深
-        'gwdep': 0,                        # 64-67: 接收点水深
-        'scalel': 0,                       # 68-69: 高程比例因子
-        'scalco': -1,                      # 70-71: 坐标比例因子
-        'sx': int(np.clip(sx if np.isfinite(sx) else 0, -2e9, 2e9) + 0.5),  # 72-75: 震源X坐标
-        'sy': int(np.clip(sy if np.isfinite(sy) else 0, -2e9, 2e9) + 0.5),  # 76-79: 震源Y坐标
-        'gx': int(np.clip(gx if np.isfinite(gx) else 0, -2e9, 2e9) + 0.5),  # 80-83: 接收点X坐标
-        'gy': int(np.clip(gy if np.isfinite(gy) else 0, -2e9, 2e9) + 0.5),  # 84-87: 接收点Y坐标
+        'tracl': tracl,                    # SEGY_TRACE_OFFSET['tracl']
+        'tracr': tracr,
+        'fldr': shot_info['field_record'],
+        'tracf': 1,
+        'ep': shot_info['shot_number'],
+        'cdp': shot_info['shot_number'],
+        'cdpt': 1,
+        'trid': 1,                         # 标准：1=地震道
+        'nvs': 1,
+        'nhs': 1,
+        'duse': 1,
+        'offset': int(np.clip(offset if np.isfinite(offset) else 0, -2e9, 2e9) + 0.5),
+        'gelev': obs_elev,                 # OBS / 检波高程
+        'selev': 0,                        # 炮点高程（未知）
+        'sdepth': 0,
+        'gdel': 0,
+        'sdel': 0,
+        'swdep': shot_wdep,                # 炮点水深
+        'gwdep': 0,                        # OBS 处水深（未知）
+        'scalel': -1,                      # 与 scalco 一致：不缩放（高程/水深整型即米）
+        'scalco': -1,
+        'sx': int(np.clip(sx if np.isfinite(sx) else 0, -2e9, 2e9) + 0.5),
+        'sy': int(np.clip(sy if np.isfinite(sy) else 0, -2e9, 2e9) + 0.5),
+        'gx': int(np.clip(gx if np.isfinite(gx) else 0, -2e9, 2e9) + 0.5),
+        'gy': int(np.clip(gy if np.isfinite(gy) else 0, -2e9, 2e9) + 0.5),
         'counit': 1,                       # 88-89: 坐标单位（1=米）
         'wevel': 0,                        # 90-91: 风化层速度
         'swevel': 0,                       # 92-93: 次风化层速度
@@ -232,92 +252,12 @@ def create_segy_trace_header(shot_info: Dict, sx: float, sy: float,
 
 
 def write_trace_header(f, trace_header: Dict) -> None:
-    """写入SEGY道头（240字节，big-endian）
-    
-    Args:
-        f: 文件对象（二进制写入模式）
-        trace_header: 道头字典
+    """写入 SEGY 道头（240 字节，big-endian）。
+
+    字段偏移与 ``segy.h`` / ``segy_trace_header.SEGY_TRACE_FIELDS`` 一致。
     """
-    # 创建240字节缓冲区
-    header_bytes = bytearray(240)
-    
-    # 按SEGY标准格式写入各个字段（big-endian）
-    struct.pack_into('>i', header_bytes, 0, trace_header['tracl'])       # 0-3
-    struct.pack_into('>i', header_bytes, 4, trace_header['tracr'])       # 4-7
-    struct.pack_into('>i', header_bytes, 8, trace_header['fldr'])        # 8-11
-    struct.pack_into('>i', header_bytes, 12, trace_header['tracf'])      # 12-15
-    struct.pack_into('>i', header_bytes, 16, trace_header['ep'])         # 16-19
-    struct.pack_into('>i', header_bytes, 20, trace_header['cdp'])        # 20-23
-    struct.pack_into('>i', header_bytes, 24, trace_header['cdpt'])       # 24-27
-    struct.pack_into('>h', header_bytes, 28, trace_header['trid'])       # 28-29
-    struct.pack_into('>h', header_bytes, 30, trace_header['nvs'])        # 30-31
-    struct.pack_into('>h', header_bytes, 32, trace_header['nhs'])        # 32-33
-    struct.pack_into('>h', header_bytes, 34, trace_header['duse'])       # 34-35
-    struct.pack_into('>i', header_bytes, 36, trace_header['offset'])     # 36-39
-    struct.pack_into('>i', header_bytes, 40, trace_header['gelev'])      # 40-43
-    struct.pack_into('>i', header_bytes, 44, trace_header['selev'])      # 44-47
-    struct.pack_into('>i', header_bytes, 48, trace_header['sdepth'])     # 48-51
-    struct.pack_into('>i', header_bytes, 52, trace_header['gdel'])       # 52-55
-    struct.pack_into('>i', header_bytes, 56, trace_header['sdel'])       # 56-59
-    struct.pack_into('>i', header_bytes, 60, trace_header['swdep'])      # 60-63
-    struct.pack_into('>i', header_bytes, 64, trace_header['gwdep'])      # 64-67
-    struct.pack_into('>h', header_bytes, 68, trace_header['scalel'])     # 68-69
-    struct.pack_into('>h', header_bytes, 70, trace_header['scalco'])     # 70-71
-    struct.pack_into('>i', header_bytes, 72, trace_header['sx'])         # 72-75
-    struct.pack_into('>i', header_bytes, 76, trace_header['sy'])         # 76-79
-    struct.pack_into('>i', header_bytes, 80, trace_header['gx'])         # 80-83
-    struct.pack_into('>i', header_bytes, 84, trace_header['gy'])         # 84-87
-    struct.pack_into('>h', header_bytes, 88, trace_header['counit'])     # 88-89
-    struct.pack_into('>h', header_bytes, 90, trace_header['wevel'])      # 90-91
-    struct.pack_into('>h', header_bytes, 92, trace_header['swevel'])     # 92-93
-    struct.pack_into('>h', header_bytes, 94, trace_header['sut'])        # 94-95
-    struct.pack_into('>h', header_bytes, 96, trace_header['gut'])        # 96-97
-    struct.pack_into('>h', header_bytes, 98, trace_header['sstat'])      # 98-99
-    struct.pack_into('>h', header_bytes, 100, trace_header['gstat'])     # 100-101
-    struct.pack_into('>h', header_bytes, 102, trace_header['tstat'])     # 102-103
-    struct.pack_into('>h', header_bytes, 104, trace_header['laga'])      # 104-105
-    struct.pack_into('>h', header_bytes, 106, trace_header['lagb'])      # 106-107
-    struct.pack_into('>h', header_bytes, 108, trace_header['delrt'])     # 108-109
-    struct.pack_into('>h', header_bytes, 110, trace_header['muts'])      # 110-111
-    struct.pack_into('>h', header_bytes, 112, trace_header['mute'])      # 112-113
-    struct.pack_into('>H', header_bytes, 114, trace_header['ns'])        # 114-115
-    struct.pack_into('>H', header_bytes, 116, trace_header['dt'])        # 116-117
-    struct.pack_into('>h', header_bytes, 118, trace_header['gain'])      # 118-119
-    struct.pack_into('>h', header_bytes, 120, trace_header['igc'])       # 120-121
-    struct.pack_into('>h', header_bytes, 122, trace_header['igi'])       # 122-123
-    struct.pack_into('>h', header_bytes, 124, trace_header['corr'])      # 124-125
-    struct.pack_into('>h', header_bytes, 126, trace_header['sfs'])       # 126-127
-    struct.pack_into('>h', header_bytes, 128, trace_header['sfe'])       # 128-129
-    struct.pack_into('>h', header_bytes, 130, trace_header['slen'])      # 130-131
-    struct.pack_into('>h', header_bytes, 132, trace_header['styp'])      # 132-133
-    struct.pack_into('>h', header_bytes, 134, trace_header['stas'])      # 134-135
-    struct.pack_into('>h', header_bytes, 136, trace_header['stae'])      # 136-137
-    struct.pack_into('>h', header_bytes, 138, trace_header['tatyp'])     # 138-139
-    struct.pack_into('>h', header_bytes, 140, trace_header['afilf'])     # 140-141
-    struct.pack_into('>h', header_bytes, 142, trace_header['afils'])     # 142-143
-    struct.pack_into('>h', header_bytes, 144, trace_header['nofilf'])    # 144-145
-    struct.pack_into('>h', header_bytes, 146, trace_header['nofils'])    # 146-147
-    struct.pack_into('>h', header_bytes, 148, trace_header['lcf'])       # 148-149
-    struct.pack_into('>h', header_bytes, 150, trace_header['hcf'])       # 150-151
-    struct.pack_into('>h', header_bytes, 152, trace_header['lcs'])       # 152-153
-    struct.pack_into('>h', header_bytes, 154, trace_header['hcs'])       # 154-155
-    struct.pack_into('>h', header_bytes, 156, trace_header['year'])      # 156-157
-    struct.pack_into('>h', header_bytes, 158, trace_header['day'])       # 158-159
-    struct.pack_into('>h', header_bytes, 160, trace_header['hour'])      # 160-161
-    struct.pack_into('>h', header_bytes, 162, trace_header['minute'])    # 162-163
-    struct.pack_into('>h', header_bytes, 164, trace_header['sec'])       # 164-165
-    struct.pack_into('>h', header_bytes, 166, trace_header['timbas'])    # 166-167
-    struct.pack_into('>h', header_bytes, 168, trace_header['trwf'])      # 168-169
-    struct.pack_into('>h', header_bytes, 170, trace_header['grnors'])    # 170-171
-    struct.pack_into('>h', header_bytes, 172, trace_header['grnofr'])    # 172-173
-    struct.pack_into('>h', header_bytes, 174, trace_header['grnlof'])    # 174-175
-    struct.pack_into('>h', header_bytes, 176, trace_header['gaps'])      # 176-177
-    struct.pack_into('>h', header_bytes, 178, trace_header['otrav'])     # 178-179
-    # 剩余字节填充0
-    struct.pack_into('>h', header_bytes, 180, 0)                         # 180-181
-    # ... 继续填充到240字节
-    
-    # 写入文件
+    header_bytes = pack_trace_header(trace_header, endian="big")
+    assert len(header_bytes) == SEGY_TRACE_HEADER_BYTES
     f.write(header_bytes)
 
 

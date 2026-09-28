@@ -47,5 +47,14 @@ void printCurve(ostream& os,
 		const Array1d<Point2d>& orig, const BetaSpline2d& bs);
 void printCurve(ostream& os,
 		const list<Point2d>& orig, const BetaSpline2d& bs);
+// Independent splines on [1,iu1], [iu1,id0], [id1,np] so P/S hinges are not rounded.
+void printCurve(ostream& os,
+		const Array1d<Point2d>& orig, const BetaSpline2d& bs,
+		int iu1, int id0, int id1);
+
+class Interface2d;
+void printCurve(ostream& os,
+		const Array1d<Point2d>& orig, const BetaSpline2d& bs,
+		const Interface2d& z_lo, const Interface2d& z_hi);
     
 #endif /* _TOMO_BETASPLINE_H_ */
