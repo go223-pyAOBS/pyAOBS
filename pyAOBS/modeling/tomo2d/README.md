@@ -54,21 +54,24 @@ GUI：**新建工区** / **打开工区** / **保存工区**（顶栏常显按�
 
 ```text
 tomo2d/
-  tomand.py              # CLI 封装
+  tomand.py              # CLI 封装（含 -U vsmesh、-A、-X/-B/-Y）
   help_docs.py           # 程序内帮助文案
   tt_inverse_*.py / tx2tomo2d.py
   gui/                   # Qt（PySide6）
     app.py / main_window.py
     state/ FormState
-    services/            # 无 UI：路径、收集参数、审计、workflow
+    services/            # 无 UI：路径、收集参数、审计、workflow、wave2d
     panels/ dialogs/ plots/ workers/
+  docs/HELP.md           # GUI 操作（含 13) wave2d）
+../wave2d/               # 独立 2D 弹性道集（GUI 第 13 页调用）
 ```
 
 ## 测试
 
 ```bash
 pytest pyAOBS/tests/test_tomo2d.py pyAOBS/tests/test_tomo2d_gui_smoke.py \
-       pyAOBS/tests/test_tomo2d_gui_services.py pyAOBS/tests/test_tomo2d_project.py -q
+       pyAOBS/tests/test_tomo2d_gui_services.py pyAOBS/tests/test_tomo2d_project.py \
+       pyAOBS/tests/test_tomo2d_workflow_bridge.py -q
 ```
 
 ## 交互约定
@@ -77,4 +80,5 @@ pytest pyAOBS/tests/test_tomo2d.py pyAOBS/tests/test_tomo2d_gui_smoke.py \
 - 分析图 / 集合统计：右键**点一下**出菜单（保存或日志操作），右键**拖**仍为缩放
 - 子窗口：非模态（短交互如文件框、Yes/No 除外）
 - GUI 操作说明：F1 或顶栏「帮助」（`docs/HELP.md`）
-- 水层多次波正演（未实现，策略草稿）：`docs/WATER_MULTIPLES.md`
+- 水层 raytype 2/3、台侧多次 4/5：正演 `-B` / 反演 `-Y`（策略笔记 `docs/WATER_MULTIPLES.md`）
+- 弹性波场对照：GUI「13) wave2d」或 [`../wave2d/README.md`](../wave2d/README.md)

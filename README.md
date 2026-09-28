@@ -266,7 +266,19 @@ python -m pyAOBS.modeling.tomo2d.gui
 ```
 
 Python 包装类 `TomoAnd`：`gen_smesh`、`tt_forward`、`tt_inverse`、`edit_smesh` 等。  
+GUI：F1 / [`modeling/tomo2d/docs/HELP.md`](pyAOBS/modeling/tomo2d/docs/HELP.md)；水层 2/3 与台侧多次见 [`WATER_MULTIPLES.md`](pyAOBS/modeling/tomo2d/docs/WATER_MULTIPLES.md)。  
+常用开关：`-U` 独立 Vs、`-A` 贴面反射（改路径）、正演 `-B` / 反演 `-Y` 海底、`-X`/`-B` 转换面。  
 编译与 OMP：[`modeling/tomo2d/src/README_OMP_BUILD.md`](pyAOBS/modeling/tomo2d/src/README_OMP_BUILD.md)。
+
+### wave2d（弹性 OBS 道集）
+
+```bash
+python -m pyAOBS.modeling.wave2d.run_gather_017 --work <工区> --skip-ray
+# 或在 TOMO2D GUI 左侧「13) wave2d」
+```
+
+Virieux P–SV；默认互易几何（OBS 源、水中记压力）；折合剖面 0–12 s，叠水柱理论曲线。  
+说明：[`modeling/wave2d/README.md`](pyAOBS/modeling/wave2d/README.md)。
 
 ### RAYINVR
 
@@ -428,6 +440,7 @@ pyAOBS/
 | zplot | `python -m pyAOBS.visualization.zplotpy.gui` |
 | iphase GUI | `python -m pyAOBS.visualization.iphase.gui` |
 | TOMO2D GUI | `python -m pyAOBS.modeling.tomo2d.gui` |
+| wave2d 道集 | `python -m pyAOBS.modeling.wave2d.run_gather_017 --work <工区>` |
 | LIP Petrology | `python -m pyAOBS.petrology.gui` |
 | idata | `python pyAOBS/processors/raw2sac/idata.py` |
 | vedit | `python pyAOBS/modeling/vedit/main.py` |
@@ -440,6 +453,9 @@ pyAOBS/
 |------|------|
 | [CHANGELOG.md](CHANGELOG.md) | 版本变更 |
 | [pyAOBS/workbench/README.md](pyAOBS/workbench/README.md) | Workbench 全手册 |
+| [pyAOBS/modeling/tomo2d/README.md](pyAOBS/modeling/tomo2d/README.md) | TOMO2D GUI / 工区 |
+| [pyAOBS/modeling/tomo2d/docs/HELP.md](pyAOBS/modeling/tomo2d/docs/HELP.md) | TOMO2D GUI 操作（含 wave2d） |
+| [pyAOBS/modeling/wave2d/README.md](pyAOBS/modeling/wave2d/README.md) | 弹性 OBS 道集正演 |
 | [pyAOBS/petrology/README.md](pyAOBS/petrology/README.md) | KKHS02 双轨与验收 |
 | [pyAOBS/utils/README.md](pyAOBS/utils/README.md) | 岩性 API |
 | [pyAOBS/visualization/IMODEL_README.md](pyAOBS/visualization/IMODEL_README.md) | imodel 能力 |

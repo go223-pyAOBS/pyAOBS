@@ -51,8 +51,11 @@ What is included
      - Phase picking / section viewer
      - ``python -m pyAOBS.visualization.zplotpy.gui``
    * - tomo2d
-     - Traveltime forward / inversion
+     - Traveltime forward / inversion (GUI tab 13: wave2d)
      - ``python -m pyAOBS.modeling.tomo2d.gui``
+   * - wave2d
+     - 2D elastic OBS gather (reciprocal default)
+     - ``python -m pyAOBS.modeling.wave2d.run_gather_017``
    * - imodel
      - Velocity-model interpretation (Qt)
      - ``python -m pyAOBS.visualization.imodel.gui``

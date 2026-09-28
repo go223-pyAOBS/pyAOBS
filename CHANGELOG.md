@@ -5,6 +5,17 @@ All notable changes to **pyAOBS** are documented in this file.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [SemVer](https://semver.org/) (major bumps may skip intermediate public majors when the product milestone warrants it).
 
+## [Unreleased]
+
+### Added
+
+- **wave2d**：2D 弹性 OBS 道集正演（Virieux P–SV；默认互易几何）；TOMO2D GUI「13) wave2d」；说明见 `pyAOBS/modeling/wave2d/README.md`
+- **文档**：根 README / tomo2d HELP·README / Sphinx 索引补充 wave2d、`-U`/`-A`、水层海底开关与正演→反演桥接说明
+
+### Changed
+
+- tomo2d GUI：正演→反演写回含转换面、`-U`/`-k`；`-A` 明确为贴面路径（非精度开关）
+
 ## [3.0.0rc2] — 2026-07-13
 
 First tag that includes full workbench/petrology/imodel source tree on GitHub.

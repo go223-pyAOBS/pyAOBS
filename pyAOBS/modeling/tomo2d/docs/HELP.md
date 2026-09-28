@@ -39,8 +39,9 @@ Workbench：插件 **tomo2d.gui**。
 - **右侧**：命令预览 + 执行日志（勾选「写 tomo2d_gui.log」时摘要写入工作目录）
 - **参数说明**：鼠标悬停**左侧命令**或表单控件查看（`param_hints`）；移开即消失。F1 打开完整帮助
 - **正演/反演页**：默认只展开「常用」；射线弯曲、更多输出、反射/正则/联合重力等收在折叠组里，按需展开
-- **其它命令页**：同样按「常用 / 高级」折叠（gen_*、edit/stat、pipeline、tx、棋盘格、蒙特卡洛）
+- **其它命令页**：同样按「常用 / 高级」折叠（gen_*、edit/stat、pipeline、tx、棋盘格、蒙特卡洛、**wave2d**）
 - **9) tx.in→tomo2d**：支持**多个** tx.in 合并为同一对 `ttimes.dat` / `geom.dat`（共用 `station.lis`；「添加多个…」或多行路径）。OBS 列表与「预览 tx.in」共用，勾选同时用于显示与转换
+- **13) wave2d**：OBS 弹性道集正演（独立模块，不改射线核）。默认互易几何：OBS 竖力源、水中记压力；折合图 0–12 s，并叠水柱理论曲线 \(t=\sqrt{x^2+(nH)^2}/v\)（\(n=1,3,5\)）。详见 [`../wave2d/README.md`](../wave2d/README.md)
 
 ### 并行与策略（顶栏）
 
@@ -179,8 +180,29 @@ smesh / 监视 / 挑选 / 差值 / 集合统计：Matplotlib `imshow`。速度�
 - **主路径**：实测数据 →「6) tt_inverse」（内部每轮已做正演）。不必先跑 tt_forward。
 - **tt_forward**：独立工具（算走时/射线）。合成数据时展开页内折叠区「合成数据（可选）」：可勾选写入反演空位，或手动「写入 inv.mesh / inv.data」（默认不自动写回）。
 - **tt_inverse**：「上游填充」、监视就绪检查、跳转 gen_damp/vcorr/dcorr；「同步 -N」仅在与正演页对齐参数时用。
+- **正演 → 反演写回**（合成流程）：除 `smesh` / `out_ttime` / `-N` / `-F` / 海底（正演 `-B` → 反演 `-Y`）外，还会把空位填上 **转换面**（正演 `-X` → 反演 `-B`）、**Vs 网格 `-U`** 与 **`-k`**。
+- **`-A`（贴面反射）**：勾选后反射**沿界面贴面**走；不勾时远偏移反射可以**穿幔成初至**。改的是路径，不是算得更细；正演开 `-A` 时 OpenMP 会退回串行。
+- **`-U`（vsmesh）**：独立 Vs，与 `-M` 同维。6/7/8 真双场时 P 段读 `-M`、S 段读 `-U`；有 `-U` 可不传 `-k`。
 - **pipeline**：可选 `gen_smesh -> tt_forward -> tt_inverse`（合成链）；Pipeline 内反演暂不挂运行包监视。
 - **右侧「输出」页**：浏览 `outputs/`、`runs/`，任务结束后自动刷新
+- **13) wave2d**：波场对照用；不参与走时反演方程。输出目录默认 `wave_fwd/`（相对工区）。
+
+## 13) wave2d（弹性 OBS 道集）
+
+独立模块 `pyAOBS.modeling.wave2d`，经本页调用 `run_obs_gather`；**不改** tomo2d 射线/反演核。
+
+| 区 | 要点 |
+|----|------|
+| **模型** | `Vp`/`Vs` smesh、`seafloor.refl`；输出目录默认 `wave_fwd`；可选 `syn` 叠射线到时 |
+| **OBS / 水柱** | OBS 坐标与源深；偏移与道距；水深 \(H\)、水速 \(v\)（理论曲线） |
+| **正演与显示** | `dx`/`tmax`/`f0`；折合速度与 **0→tred_max**（默认 12 s）；`layout=reciprocal`（默认）或 `water-obs`；吸收 `pml`/`cerjan` |
+
+- **reciprocal**：源在 OBS 海底竖力，检波在浅水压力（走时 ≡ 浅水炮→OBS）。
+- **water-obs**：浅水多炮 → 单台 OBS（慢）。
+- 图上水柱曲线：\(t=\sqrt{x^2+(nH)^2}/v+\mathrm{delay}\)，\(n=1,3,5\)。
+- 勾选「不重跑 tt_forward」时若已有 `syn` 仍叠点；「快速」会放粗 `dx`、缩短 `tmax`。
+
+CLI：`python -m pyAOBS.modeling.wave2d.run_gather_017 --work <工区>`。详见 [`../wave2d/README.md`](../wave2d/README.md)。
 
 ## gen_smesh：从 v.in 做 topo=0（水+壳）
 
