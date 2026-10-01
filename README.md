@@ -255,6 +255,28 @@ python -m pyAOBS.visualization.imodel_qt
 
 能力概要：网格/Zelt 模型交互、剖面、物性与岩性、重力工具、向 petrology 导出观测/沿迹、Fig.12a / 15c 预览、Workbench 状态回写。
 
+**Rocks 工具窗**（Vp–Vs / Vp/Vs–Vp）：岩性库散点、蛇纹石化含水量参考点、DEM 孔隙度曲线与纵横比曲线（宿主可选 dunite / gabbro / basalt / clip / clip_hill）。
+
+<p align="center">
+  <img src="images/examples/imodel_vpvs_rocks_water_porosity.png" alt="imodel Vp/Vs-Vp rocks water DEM porosity" width="820"/><br/>
+  <em>Vp/Vs–Vp：岩性库 + 含水量参考点（% H₂O / β）+ DEM 等孔隙度曲线（dunite 宿主）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/imodel_vp_vs_lithology.png" alt="imodel Vp-Vs lithology" width="720"/><br/>
+  <em>Vp–Vs：岩石数据库岩性散点（玄武岩 / 蛇纹岩 / 辉长岩 / 纯橄岩 / 花岗岩等）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/imodel_vpvs_rocks_aspect.png" alt="imodel DEM aspect ratio" width="780"/><br/>
+  <em>Vp/Vs–Vp：岩性库 + DEM 裂纹纵横比（aspect ratio）曲线族</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/imodel_dem_clip_voigt_hill.png" alt="CLIP Voigt vs Hill DEM" width="640"/><br/>
+  <em>CLIP 辉长质上地壳 DEM：Voigt vs Hill 宿主对比（水充填裂纹）</em>
+</p>
+
 更多：[`imodel/README.md`](pyAOBS/visualization/imodel/README.md) / [`IMODEL_README.md`](pyAOBS/visualization/IMODEL_README.md)
 
 ### zplotpy（震相拾取）
