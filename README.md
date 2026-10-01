@@ -22,21 +22,22 @@
 ## 目录
 
 1. [功能总览](#功能总览)
-2. [推荐工作流](#推荐工作流)
-3. [安装](#安装)
-4. [快速开始](#快速开始)
-5. [Workbench](#workbench)
-6. [可视化 GUI](#可视化-gui)
-7. [速度模型（model_building）](#速度模型-model_building)
-8. [正演 / 反演（modeling）](#正演--反演-modeling)
-9. [数据处理（processors）](#数据处理-processors)
-10. [岩性与物性（utils）](#岩性与物性-utils)
-11. [岩石学 / LIP（petrology）](#岩石学--lip-petrology)
-12. [野外站位工具（field）](#野外站位工具-field)
-13. [包结构](#包结构)
-14. [启动命令速查](#启动命令速查)
-15. [更多文档](#更多文档)
-16. [许可与引用](#许可与引用)
+2. [图例速览](#图例速览)
+3. [推荐工作流](#推荐工作流)
+4. [安装](#安装)
+5. [快速开始与示例](#快速开始与示例)
+6. [Workbench](#workbench)
+7. [可视化 GUI](#可视化-gui)
+8. [速度模型（model_building）](#速度模型-model_building)
+9. [正演 / 反演（modeling）](#正演--反演-modeling)
+10. [数据处理（processors）](#数据处理-processors)
+11. [岩性与物性（utils）](#岩性与物性-utils)
+12. [岩石学 / LIP（petrology）](#岩石学--lip-petrology)
+13. [野外站位工具（field）](#野外站位工具-field)
+14. [包结构](#包结构)
+15. [启动命令速查](#启动命令速查)
+16. [更多文档](#更多文档)
+17. [许可与引用](#许可与引用)
 
 ---
 
@@ -48,14 +49,45 @@
 | **idata / raw2sac** | OBS 数据格式统一转换（RAW/OBEM/SAC/SEGY） | Workbench `data.gui` |
 | **zplotpy** | 震相拾取、剖面浏览、叠加与去噪 | `python -m pyAOBS.visualization.zplotpy.gui` |
 | **tomo2d** | 首达/反射走时正演与层析反演（Python 包装 + C++ 内核） | `python -m pyAOBS.modeling.tomo2d.gui` |
-| **imodel (Qt)** | 二维速度模型交互解释、物性/岩性、重力、petrology 导出 | `python -m pyAOBS.visualization.imodel.gui` |
-| **iphase** | `tx.in` 震相选择、合并、QC（兼容 txphase/txconv 思路） | `python -m pyAOBS.visualization.iphase.gui` |
+| **imodel (Qt)** | 二维速度模型交互解释、物性/岩性、重力、petrology 导出 | `python -m pyAOBS.visualization.imodel_qt` |
+| **iphase** | `tx.in` 震相选择、合并、QC（兼容 txphase/txconv 思路） | `python -m pyAOBS.visualization.iphase.iphase_gui` |
 | **model_building** | Zelt `v.in` 读写、插值、TOMO2D 慢度网格 | Python API |
 | **rayinvr / vedit** | 射线追踪库；`v.in` Tk 编辑器 | API / `modeling/vedit/main.py` |
 | **utils（岩性）** | 岩石数据库、温压校正、速度→岩性分类 | imodel 内嵌；`classify_velocity_model` |
 | **petrology** | KKHS02 式熔融柱 / H–Vp / 分离结晶 ΔVp / 反演界 | `python -m pyAOBS.petrology.gui` |
 | **field** | OBS 站位布设与回收路径规划 | `field/*_gui.py` |
 | **SU / denoise / relocation** | SU 读写、去噪管线、OBS 定向与水深辅助 | API / CLI |
+
+---
+
+## 图例速览
+
+以下图片来自仓库内示例输出（`images/examples/`）。完整原始图件另见 `pyAOBS/modeling/tomo2d/example_water/`、`pyAOBS/petrology/figures/`。
+
+<p align="center">
+  <img src="images/examples/tomo2d_inv_models.png" alt="TOMO2D crust inversion" width="820"/><br/>
+  <em>TOMO2D：壳层反演诊断（初值 / 反演 / 真值模型、射线与台下剖面）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/tomo2d_rays.png" alt="TOMO2D ray paths" width="720"/><br/>
+  <em>TOMO2D：弯曲射线正演（P / 转换 S、海底与转换面）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/petrology_fig12_hvp.png" alt="KKHS02 H-Vp" width="560"/><br/>
+  <em>Petrology：H–Vp（KKHS02 Fig.12 风格；χ / b 曲线与等温线）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/petrology_melting_schematic.png" alt="Active vs passive melting" width="820"/><br/>
+  <em>Petrology：被动 vs 主动熔融示意（Modern / REEBOX 轨）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/field_deploy.png" alt="OBS station deployment path" width="640"/><br/>
+  <em>Field：OBS 站位分布与布设路径规划</em>
+</p>
 
 ---
 
@@ -125,7 +157,7 @@ numpy、xarray、scipy、matplotlib、pandas、scikit-learn、seaborn、openpyxl
 
 ---
 
-## 快速开始
+## 快速开始与示例
 
 ### 打开工作台
 
@@ -141,29 +173,79 @@ $env:PYAOBS_WORKBENCH_UI="tk"
 python -m pyAOBS.workbench.app
 ```
 
-### Zelt 速度模型（API）
+### 示例 1：读 Zelt 模型并抽样速度
 
 ```python
 from pyAOBS.model_building import ZeltVelocityModel2d, EnhancedZeltModel
 
 model = ZeltVelocityModel2d("velocity.in")
-v = model.at(100.0, 1.5)  # x (km), z (km) → Vp
+print(model.at(100.0, 1.5))          # x (km), z (km) → Vp (km/s)
 
 enhanced = EnhancedZeltModel("velocity.in")
-avg = enhanced.compute_average_velocities()
+print(enhanced.compute_average_velocities())
 ```
 
-### SU 读写
+### 示例 2：绘制 Zelt 速度模型
+
+```python
+from pyAOBS.model_building import ZeltVelocityModel2d
+from pyAOBS.visualization import ZeltModelVisualizer
+
+model = ZeltVelocityModel2d("velocity.in")
+viz = ZeltModelVisualizer(model)
+viz.plot_zeltmodel(
+    output_file="velocity_model.png",
+    title="Velocity Model",
+    colorbar_label="Velocity (km/s)",
+)
+```
+
+### 示例 3：SU 读写与快速浏览
 
 ```python
 from pyAOBS import readsu, writesu, plotsu
+
+section = readsu("shot.su")
+plotsu(section)                 # 快速显示
+writesu(section, "out.su")
 ```
 
-### 岩性分类（简化 API）
+### 示例 4：岩性分类（简化 API）
 
 ```python
 from pyAOBS.utils.simple_rock_classifier import classify_velocity_model
-# 详见 pyAOBS/utils/README.md
+
+# 输入速度 / 深度数组或模型对象；详见 pyAOBS/utils/README.md
+# labels = classify_velocity_model(...)
+```
+
+### 示例 5：KKHS02 方程 (1) 与 H–Vp 扫描（API）
+
+```python
+from petrology.vp_regression import predict_vp_km_s
+from petrology.active_upwelling import solve_active_upwelling, sweep_hvp
+
+# 参考态 600 MPa / 400°C 下的 bulk Vp(P̄, F̄)
+vp = predict_vp_km_s(pbar_gpa=1.0, fbar=0.15)
+
+# 单点主动上涌 → 壳厚 H、平均熔融量等
+col = solve_active_upwelling(tp_c=1400.0, chi=4.0, b=0.0)
+print(col.h_km, col.vp_bulk_km_s)
+
+# 扫 χ / Tp 得到 Fig.12 风格 H–Vp 曲线族（GUI 内一键可画）
+# curves = sweep_hvp(...)
+```
+
+对应图件见下方 [岩石学 / LIP](#岩石学--lip-petrology) 与仓库 `pyAOBS/petrology/figures/`。
+
+### 示例 6：独立启动各 GUI
+
+```bash
+python -m pyAOBS.visualization.imodel_qt
+python -m pyAOBS.visualization.zplotpy.gui
+python -m pyAOBS.visualization.iphase.iphase_gui
+python -m pyAOBS.modeling.tomo2d.gui
+python -m pyAOBS.petrology.gui
 ```
 
 ---
@@ -193,12 +275,14 @@ from pyAOBS.utils.simple_rock_classifier import classify_velocity_model
 ### imodel（速度模型解释）— 默认 Qt
 
 ```bash
-python -m pyAOBS.visualization.imodel.gui
+python -m pyAOBS.visualization.imodel_qt
+# 若包内入口为 imodel.gui，亦可：
+# python -m pyAOBS.visualization.imodel.gui
 ```
 
 能力概要：网格/Zelt 模型交互、剖面、物性与岩性、重力工具、向 petrology 导出观测/沿迹、Fig.12a / 15c 预览、Workbench 状态回写。
 
-更多：[`imodel/README.md`](pyAOBS/visualization/imodel/README.md)
+更多：[`imodel/README.md`](pyAOBS/visualization/imodel/README.md) / [`IMODEL_README.md`](pyAOBS/visualization/IMODEL_README.md)
 
 ### zplotpy（震相拾取）
 
@@ -269,6 +353,15 @@ Python 包装类 `TomoAnd`：`gen_smesh`、`tt_forward`、`tt_inverse`、`edit_s
 GUI：F1 / [`modeling/tomo2d/docs/HELP.md`](pyAOBS/modeling/tomo2d/docs/HELP.md)；水层 2/3 与台侧多次见 [`WATER_MULTIPLES.md`](pyAOBS/modeling/tomo2d/docs/WATER_MULTIPLES.md)。  
 常用开关：`-U` 独立 Vs、`-A` 贴面反射（改路径）、正演 `-B` / 反演 `-Y` 海底、`-X`/`-B` 转换面。  
 编译与 OMP：[`modeling/tomo2d/src/README_OMP_BUILD.md`](pyAOBS/modeling/tomo2d/src/README_OMP_BUILD.md)。
+
+示例工区输出（`example_water`）：
+
+<p align="center">
+  <img src="images/examples/tomo2d_ttimes.png" alt="TOMO2D traveltimes" width="520"/><br/>
+  <em>正演走时检查</em>
+</p>
+
+更多图件：`pyAOBS/modeling/tomo2d/example_water/**/check_*.png`。
 
 ### wave2d（弹性 OBS 道集）
 
@@ -375,6 +468,21 @@ python -m pyAOBS.petrology.gui
 
 GUI 内含：H–Vp 扫描、经典曲线、公式查阅、读者指南（F1）、分离结晶 Fig.2/Fig.5 预览等。
 
+<p align="center">
+  <img src="images/examples/petrology_fig2_fc.png" alt="Fig.2 crystallization" width="780"/><br/>
+  <em>Fig.2：分离结晶路径（Vp / 密度 / 相比例）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/petrology_fig5_dvp.png" alt="Fig.5 delta Vp" width="720"/><br/>
+  <em>Fig.5：\(V_{\mathrm{LC}}\)/\(V_{\mathrm{UC}}\) vs \(\Delta V_p\)（四联图）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/petrology_fig15c.png" alt="Fig.15c Greenland" width="560"/><br/>
+  <em>Fig.15c 风格：格陵兰沿迹约束示例</em>
+</p>
+
 ### 科学链（四步）
 
 | Step | 内容 | 主要模块 |
@@ -408,6 +516,12 @@ python pyAOBS/field/station_path_optimizer_gui.py
 ```
 
 库：`RecoveryStationPlanner`、`load_stations_file` 等。
+
+<p align="center">
+  <img src="images/examples/field_deploy.png" alt="deploy path" width="560"/>
+  <img src="images/examples/field_recovery.png" alt="recovery path" width="560"/><br/>
+  <em>左：布设路径；右：回收路径示例</em>
+</p>
 
 ---
 
