@@ -22,22 +22,21 @@
 ## 目录
 
 1. [功能总览](#功能总览)
-2. [图例速览](#图例速览)
-3. [推荐工作流](#推荐工作流)
-4. [安装](#安装)
-5. [快速开始与示例](#快速开始与示例)
-6. [Workbench](#workbench)
-7. [可视化 GUI](#可视化-gui)
-8. [速度模型（model_building）](#速度模型-model_building)
-9. [正演 / 反演（modeling）](#正演--反演-modeling)
-10. [数据处理（processors）](#数据处理-processors)
-11. [岩性与物性（utils）](#岩性与物性-utils)
-12. [岩石学 / LIP（petrology）](#岩石学--lip-petrology)
-13. [野外站位工具（field）](#野外站位工具-field)
-14. [包结构](#包结构)
-15. [启动命令速查](#启动命令速查)
-16. [更多文档](#更多文档)
-17. [许可与引用](#许可与引用)
+2. [推荐工作流](#推荐工作流)
+3. [安装](#安装)
+4. [快速开始与示例](#快速开始与示例)
+5. [Workbench](#workbench)
+6. [可视化 GUI](#可视化-gui)
+7. [速度模型（model_building）](#速度模型-model_building)
+8. [正演 / 反演（modeling）](#正演--反演-modeling)
+9. [数据处理（processors）](#数据处理-processors)
+10. [岩性与物性（utils）](#岩性与物性-utils)
+11. [岩石学 / LIP（petrology）](#岩石学--lip-petrology)
+12. [野外站位工具（field）](#野外站位工具-field)
+13. [包结构](#包结构)
+14. [启动命令速查](#启动命令速查)
+15. [更多文档](#更多文档)
+16. [许可与引用](#许可与引用)
 
 ---
 
@@ -58,36 +57,7 @@
 | **field** | OBS 站位布设与回收路径规划 | `field/*_gui.py` |
 | **SU / denoise / relocation** | SU 读写、去噪管线、OBS 定向与水深辅助 | API / CLI |
 
----
-
-## 图例速览
-
-以下图片来自仓库内示例输出（`images/examples/`）。完整原始图件另见 `pyAOBS/modeling/tomo2d/example_water/`、`pyAOBS/petrology/figures/`。
-
-<p align="center">
-  <img src="images/examples/tomo2d_inv_models.png" alt="TOMO2D crust inversion" width="820"/><br/>
-  <em>TOMO2D：壳层反演诊断（初值 / 反演 / 真值模型、射线与台下剖面）</em>
-</p>
-
-<p align="center">
-  <img src="images/examples/tomo2d_rays.png" alt="TOMO2D ray paths" width="720"/><br/>
-  <em>TOMO2D：弯曲射线正演（P / 转换 S、海底与转换面）</em>
-</p>
-
-<p align="center">
-  <img src="images/examples/petrology_fig12_hvp.png" alt="KKHS02 H-Vp" width="560"/><br/>
-  <em>Petrology：H–Vp（KKHS02 Fig.12 风格；χ / b 曲线与等温线）</em>
-</p>
-
-<p align="center">
-  <img src="images/examples/petrology_melting_schematic.png" alt="Active vs passive melting" width="820"/><br/>
-  <em>Petrology：被动 vs 主动熔融示意（Modern / REEBOX 轨）</em>
-</p>
-
-<p align="center">
-  <img src="images/examples/field_deploy.png" alt="OBS station deployment path" width="640"/><br/>
-  <em>Field：OBS 站位分布与布设路径规划</em>
-</p>
+各模块示例图见下文对应章节（图件副本在 `images/examples/`，原始输出另见各子包 `example*` / `figures/`）。
 
 ---
 
@@ -236,7 +206,10 @@ print(col.h_km, col.vp_bulk_km_s)
 # curves = sweep_hvp(...)
 ```
 
-对应图件见下方 [岩石学 / LIP](#岩石学--lip-petrology) 与仓库 `pyAOBS/petrology/figures/`。
+<p align="center">
+  <img src="images/examples/petrology_fig12_hvp.png" alt="KKHS02 H-Vp from API / GUI" width="480"/><br/>
+  <em>示例 5 对应输出风格：H–Vp（详解见 <a href="#岩石学--lip-petrology">岩石学 / LIP</a>）</em>
+</p>
 
 ### 示例 6：独立启动各 GUI
 
@@ -354,14 +327,24 @@ GUI：F1 / [`modeling/tomo2d/docs/HELP.md`](pyAOBS/modeling/tomo2d/docs/HELP.md)
 常用开关：`-U` 独立 Vs、`-A` 贴面反射（改路径）、正演 `-B` / 反演 `-Y` 海底、`-X`/`-B` 转换面。  
 编译与 OMP：[`modeling/tomo2d/src/README_OMP_BUILD.md`](pyAOBS/modeling/tomo2d/src/README_OMP_BUILD.md)。
 
-示例工区输出（`example_water`）：
+示例工区输出（`example_water`，副本在 `images/examples/`）：
+
+<p align="center">
+  <img src="images/examples/tomo2d_inv_models.png" alt="TOMO2D crust inversion" width="820"/><br/>
+  <em>壳层反演诊断：初值 / 反演 / 真值模型、射线覆盖与台下剖面</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/tomo2d_rays.png" alt="TOMO2D ray paths" width="720"/><br/>
+  <em>弯曲射线正演（P / 转换 S、海底与转换面）</em>
+</p>
 
 <p align="center">
   <img src="images/examples/tomo2d_ttimes.png" alt="TOMO2D traveltimes" width="520"/><br/>
   <em>正演走时检查</em>
 </p>
 
-更多图件：`pyAOBS/modeling/tomo2d/example_water/**/check_*.png`。
+更多原图：`pyAOBS/modeling/tomo2d/example_water/**/check_*.png`。
 
 ### wave2d（弹性 OBS 道集）
 
@@ -376,6 +359,11 @@ Virieux P–SV；默认互易几何（OBS 源、水中记压力）；折合剖�
 ### RAYINVR
 
 库：`VelocityModel`、`RayTracer`、`RayTracerConfig`、`RayinvrWrapper`（无独立 `-m` GUI）。
+
+<p align="center">
+  <img src="images/examples/rayinvr_multiple_rays.png" alt="RAYINVR multiple rays" width="640"/><br/>
+  <em>RAYINVR：多射线路径示例（`modeling/rayinvr/multiple_rays.png`）</em>
+</p>
 
 ### vedit（v.in 编辑器）
 
@@ -468,6 +456,20 @@ python -m pyAOBS.petrology.gui
 
 GUI 内含：H–Vp 扫描、经典曲线、公式查阅、读者指南（F1）、分离结晶 Fig.2/Fig.5 预览等。
 
+#### 熔融柱与 H–Vp
+
+<p align="center">
+  <img src="images/examples/petrology_melting_schematic.png" alt="Active vs passive melting" width="820"/><br/>
+  <em>被动 vs 主动熔融示意（Modern / REEBOX 轨）</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/petrology_fig12_hvp.png" alt="KKHS02 H-Vp" width="560"/><br/>
+  <em>H–Vp（KKHS02 Fig.12 风格：χ / b 曲线与等温线）</em>
+</p>
+
+#### 分离结晶与沿迹约束
+
 <p align="center">
   <img src="images/examples/petrology_fig2_fc.png" alt="Fig.2 crystallization" width="780"/><br/>
   <em>Fig.2：分离结晶路径（Vp / 密度 / 相比例）</em>
@@ -482,6 +484,8 @@ GUI 内含：H–Vp 扫描、经典曲线、公式查阅、读者指南（F1）�
   <img src="images/examples/petrology_fig15c.png" alt="Fig.15c Greenland" width="560"/><br/>
   <em>Fig.15c 风格：格陵兰沿迹约束示例</em>
 </p>
+
+原图目录：`pyAOBS/petrology/figures/`。
 
 ### 科学链（四步）
 
@@ -518,10 +522,16 @@ python pyAOBS/field/station_path_optimizer_gui.py
 库：`RecoveryStationPlanner`、`load_stations_file` 等。
 
 <p align="center">
-  <img src="images/examples/field_deploy.png" alt="deploy path" width="560"/>
-  <img src="images/examples/field_recovery.png" alt="recovery path" width="560"/><br/>
-  <em>左：布设路径；右：回收路径示例</em>
+  <img src="images/examples/field_deploy.png" alt="deploy path" width="640"/><br/>
+  <em>OBS 站位分布与布设路径规划</em>
 </p>
+
+<p align="center">
+  <img src="images/examples/field_recovery.png" alt="recovery path" width="640"/><br/>
+  <em>OBS 回收路径规划示例</em>
+</p>
+
+原图：`pyAOBS/field/tests/`。
 
 ---
 
