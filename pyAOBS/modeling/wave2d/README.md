@@ -17,6 +17,25 @@ python -m pyAOBS.modeling.tomo2d.gui
 
 API：`run_obs_gather(...)`（`run_gather_017.py`）。
 
+## 示例图
+
+工区：`tomo2d/example_water/.../lvz2d/`（输出在 `wave_fwd/`，大体积 `.npz` 默认不进 git）。
+
+<p align="center">
+  <img src="../../../images/examples/wave2d_gather_recip_vred8.png" alt="wave2d reciprocal gather" width="820"/><br/>
+  <em>互易折合道集：OBS 竖力源、水中压力；叠 PPP/PmP/PPS 与水柱理论曲线</em>
+</p>
+
+<p align="center">
+  <img src="../../../images/examples/wave2d_model_rays.png" alt="wave2d model rays" width="820"/><br/>
+  <em>Vp / Vs 模型 + Pg / PmP / PPS 射线</em>
+</p>
+
+<p align="center">
+  <img src="../../../images/examples/wave2d_gather_p_vx_vred8.png" alt="wave2d pressure vs vx" width="820"/><br/>
+  <em>水中压力 vs 互易水平 \(v_x\)</em>
+</p>
+
 ## 默认几何（互易）
 
 | | |

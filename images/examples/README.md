@@ -8,6 +8,9 @@ Curated copies of in-repo demo outputs. Each figure is embedded in the **matchin
 | `tomo2d_rays.png` | 正演 / 反演 → TOMO2D | `.../converse_fwd/check_rays.png` |
 | `tomo2d_ttimes.png` | 正演 / 反演 → TOMO2D | `.../converse_fwd/check_ttimes.png` |
 | `rayinvr_multiple_rays.png` | 正演 / 反演 → RAYINVR | `modeling/rayinvr/multiple_rays.png` |
+| `wave2d_gather_recip_vred8.png` | 正演 / 反演 → wave2d | `example_water/.../lvz2d/wave_fwd/gather_obs50_off80_d0.2_f3_recip_017_vred8.png` |
+| `wave2d_model_rays.png` | 正演 / 反演 → wave2d | `.../wave_fwd/model_rays_obs50_017.png` |
+| `wave2d_gather_p_vx_vred8.png` | 正演 / 反演 → wave2d | `.../wave_fwd/gather_obs50_01768_vred8.png` |
 | `imodel_vpvs_rocks_water_porosity.png` | 可视化 GUI → imodel | `vp_vs_ratio_dem` + 岩石库离线生成 |
 | `imodel_vp_vs_lithology.png` | 可视化 GUI → imodel | 同上（Vp–Vs 岩性散点） |
 | `imodel_vpvs_rocks_aspect.png` | 可视化 GUI → imodel | 同上（DEM aspect-ratio） |

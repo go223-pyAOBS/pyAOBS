@@ -375,7 +375,24 @@ python -m pyAOBS.modeling.wave2d.run_gather_017 --work <工区> --skip-ray
 # 或在 TOMO2D GUI 左侧「13) wave2d」
 ```
 
-Virieux P–SV；默认互易几何（OBS 源、水中记压力）；折合剖面 0–12 s，叠水柱理论曲线。  
+Virieux P–SV；默认互易几何（OBS 源、水中记压力）；折合剖面 0–12 s，叠水柱理论曲线与射线到时。  
+示例来自 `example_water/.../lvz2d/wave_fwd/`（默认不进 git 的 npz 可本地重跑）。
+
+<p align="center">
+  <img src="images/examples/wave2d_gather_recip_vred8.png" alt="wave2d reciprocal gather" width="820"/><br/>
+  <em>互易几何折合道集：OBS 竖力源、水中压力；叠 PPP/PmP/PPS 与水柱 \(n=1,3\) 理论曲线</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/wave2d_model_rays.png" alt="wave2d model rays PPP PmP PPS" width="820"/><br/>
+  <em>模型 + 射线：上 Vp（Pg / PmP），下 Vs（PPS）；虚线海底、点划转换面</em>
+</p>
+
+<p align="center">
+  <img src="images/examples/wave2d_gather_p_vx_vred8.png" alt="wave2d pressure vs vx" width="820"/><br/>
+  <em>互易对照：水中压力（上）与水平 \(v_x\)（下），同一折合到时</em>
+</p>
+
 说明：[`modeling/wave2d/README.md`](pyAOBS/modeling/wave2d/README.md)。
 
 ### RAYINVR
