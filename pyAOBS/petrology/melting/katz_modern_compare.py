@@ -1,8 +1,9 @@
 """
-Overlay Katz (2003) Table 2 (``katz2003.py``) vs Modern LIP peridotite melting (pyMelt ``katz_lherzolite``).
+Overlay Katz (2003) Table 2 (``katz2003.py``) vs pyMelt ``katz_lherzolite``.
 
-Modern track here = the default LIP lithology backend (``pymelt`` + ``katz_lherzolite``),
-not the full REEBOX column (no isentropic path / H / Vp).
+Explicit Katz case: both sides are the Katz parameterization. The modern reebox
+default peridotite is ``matthews_klb1``; pass ``peridotite_lith="katz_lherzolite"``
+to select this lithology. This module does not run the full REEBOX column.
 
 Fig. 1–6 comparison figures for validation.
 
@@ -71,7 +72,7 @@ def build_compare_katz_modern_fig1_figure(
     ax.set_xlabel("Temperature (°C)")
     ax.set_ylabel("Pressure (GPa)")
     ax.set_title(
-        "Fig. 1 compare — Katz (2003) native vs Modern pyMelt katz_lherzolite\n"
+        "Fig. 1 compare — Katz (2003) native vs pyMelt katz_lherzolite\n"
         f"pyMelt Mcpx={100 * _MODERN_CPX_MASS:g} wt%"
     )
     ax.set_xlim(float(t_min_c), float(t_max_c))
@@ -307,7 +308,7 @@ def max_abs_diff_dry_f(p_gpa: float, t_c: np.ndarray, *, katz_cpx_mass: float) -
 def print_compare_summary(*, katz_cpx_mass: float = katz._DEFAULT_CPX_MASS) -> None:
     """Console spot-check: max |ΔF| and |ΔT| between native Katz and Modern pyMelt."""
     t_scan = np.linspace(1100.0, 1700.0, 121)
-    print("Katz (2003) native vs Modern pyMelt katz_lherzolite")
+    print("Katz (2003) native vs pyMelt katz_lherzolite (explicit; default peridotite is matthews_klb1)")
     print(f"  Katz Mcpx={100 * katz_cpx_mass:g}%  Modern Mcpx={100 * _MODERN_CPX_MASS:g}%")
     print()
 

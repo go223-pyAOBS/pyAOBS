@@ -27,6 +27,7 @@ from petrology.active_upwelling import (
 from petrology.vp_regression import predict_vp_km_s
 
 from .kinzler1997_batch import HZ_DEP1_WT
+from .lithology import DEFAULT_PYMELT_PERIDOTITE_LITH
 from .melt_chemistry import ChemistryBackend, melt_oxides
 
 # G2-like enriched melt end-member (wt%) for pyroxenite contribution (MVP).
@@ -148,7 +149,7 @@ def forward_melting_column(
     cipw_backend: str | None = None,
     mineral_backend: str | None = None,
     lithology_backend: str = "native",
-    peridotite_lith: str = "katz_lherzolite",
+    peridotite_lith: str = DEFAULT_PYMELT_PERIDOTITE_LITH,
     pyroxenite_lith: str = "pertermann_g2",
     peridotite_h2o_wt: float = 0.0,
     pyroxenite_h2o_wt: float = 0.0,
@@ -167,6 +168,11 @@ def forward_melting_column(
         ``kinzler_linear`` (default) or ``reebox`` (isentropic heterogeneous).
     lithology_backend
         ``native`` or ``pymelt`` (pyMelt lithology registry).
+    peridotite_lith
+        pyMelt peridotite key when ``lithology_backend="pymelt"`` on the reebox
+        engine. Default ``matthews_klb1`` (Matthews et al. 2021, G³,
+        doi:10.1029/2020GC009157). ``katz_lherzolite`` and ``ball_*`` stay valid.
+        Native backend ignores the key.
     compute_norm_vp
         If True, run Pyrolite CIPW + BurnMan on pooled melt (slower).
     """

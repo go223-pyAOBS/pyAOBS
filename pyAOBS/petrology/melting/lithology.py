@@ -26,6 +26,12 @@ RHO_KG_M3 = 3300.0
 DELTA_S_PERIDOTITE = 300.0  # J/kg/K
 DELTA_S_PYROXENITE = 240.0
 
+# Modern reebox track when lithology_backend="pymelt".
+# Matthews et al. (2021), Geochem. Geophys. Geosyst., doi:10.1029/2020GC009157.
+# Native backend ignores this key and keeps analytic Katz (dry_peridotite_lithology).
+# katz_lherzolite and ball_* remain in the pyMelt registry.
+DEFAULT_PYMELT_PERIDOTITE_LITH = "matthews_klb1"
+
 # G2 pyroxenite bulk (Pertermann & Hirschmann 2003) wt%.
 G2_BULK_WT: dict[str, float] = {
     "SiO2": 51.87,
@@ -193,7 +199,7 @@ def heterogeneous_source(
     *,
     pyroxenite_frac: float,
     backend: str = "native",
-    peridotite_key: str = "katz_lherzolite",
+    peridotite_key: str = DEFAULT_PYMELT_PERIDOTITE_LITH,
     pyroxenite_key: str = "pertermann_g2",
     peridotite_h2o_wt: float = 0.0,
     pyroxenite_h2o_wt: float = 0.0,
@@ -202,8 +208,8 @@ def heterogeneous_source(
     """
     Two-lithology source (peridotite + pyroxenite/enriched end-member).
 
-    ``backend="native"`` — analytic Katz + G2 (REEBOX default).
-    ``backend="pymelt"`` — pyMelt lithology curves via ``pymelt_lithology_adapter``.
+    ``backend="native"`` — analytic Katz + G2 (``peridotite_key`` ignored).
+    ``backend="pymelt"`` — pyMelt curves; default peridotite is ``matthews_klb1``.
     """
     phi = float(np.clip(pyroxenite_frac, 0.0, 0.99))
     if backend == "pymelt":

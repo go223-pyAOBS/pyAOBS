@@ -53,7 +53,7 @@ def main() -> None:
         chi=8.0,
         pyroxenite_frac=0.0,
         lithology_backend="pymelt",
-        peridotite_lith="katz_lherzolite",
+        peridotite_lith="katz_lherzolite",  # explicit Katz column; default is matthews_klb1
         compute_norm_vp=True,
     )
     print()

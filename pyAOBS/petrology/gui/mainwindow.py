@@ -55,6 +55,7 @@ from petrology.gui.preset_compare import (
     preset_compare_hints,
 )
 from petrology.melting.column import forward_melting_column
+from petrology.melting.lithology import DEFAULT_PYMELT_PERIDOTITE_LITH
 from petrology.melting.hvp_scan import scan_hvp_lip
 from petrology.melting.lip_scan import scan_hvp_lip_phi
 from petrology.fc.delta_vp import R3_DELTA_VP_WL_KW
@@ -704,6 +705,8 @@ class LipMainWindow(QMainWindow):
         self._per_combo = QComboBox()
         self._per_combo.setEditable(True)
         self._per_combo.addItems(peridotite_lithology_keys())
+        if self._per_combo.findText(DEFAULT_PYMELT_PERIDOTITE_LITH) >= 0:
+            self._per_combo.setCurrentText(DEFAULT_PYMELT_PERIDOTITE_LITH)
         self._pyr_combo = QComboBox()
         self._pyr_combo.setEditable(True)
         self._pyr_combo.addItems(enriched_lithology_keys())
@@ -755,17 +758,18 @@ class LipMainWindow(QMainWindow):
         h_split.setStretchFactor(0, 2)
         h_split.setStretchFactor(1, 3)
         h_split.setStretchFactor(2, 5)
-        self._apply_greenland_startup_defaults()
+        self._apply_modern_startup_defaults()
 
-    def _apply_greenland_startup_defaults(self) -> None:
-        """Defaults from Greenland anchor K-section (greenland_kg1 + pymelt)."""
+    def _apply_modern_startup_defaults(self) -> None:
+        """Modern reebox GUI: pymelt + lip_default (Matthews KLB-1 + G2)."""
         self._backend_combo.setCurrentText("pymelt")
         self._on_backend_changed()
-        idx = self._preset_combo.findText("greenland_kg1")
+        idx = self._preset_combo.findText("lip_default")
         if idx >= 0:
+            self._preset_combo.blockSignals(True)
             self._preset_combo.setCurrentIndex(idx)
-        else:
-            self._on_preset_changed("greenland_kg1")
+            self._preset_combo.blockSignals(False)
+        self._on_preset_changed("lip_default")
 
     def _build_status(self) -> None:
         sb = QStatusBar()

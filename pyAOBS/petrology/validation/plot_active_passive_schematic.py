@@ -20,6 +20,7 @@ from matplotlib.patches import FancyArrowPatch, Polygon
 import numpy as np
 
 from petrology.active_upwelling import solve_active_upwelling
+from petrology.melting.lithology import DEFAULT_PYMELT_PERIDOTITE_LITH
 from petrology.fractionation import delta_vp_km_s
 from petrology.gui.hvp_plot import (
     FIG12_CHI1_B_VALUES_KM,
@@ -144,7 +145,7 @@ def _liths_from_kw(col_kw: dict, phi: float = 0.10) -> list:
     return heterogeneous_source(
         pyroxenite_frac=phi,
         backend=col_kw.get("lithology_backend", "pymelt"),
-        peridotite_key=col_kw.get("peridotite_lith", "katz_lherzolite"),
+        peridotite_key=col_kw.get("peridotite_lith", DEFAULT_PYMELT_PERIDOTITE_LITH),
         pyroxenite_key=col_kw.get("pyroxenite_lith", "pertermann_g2"),
         peridotite_h2o_wt=col_kw.get("peridotite_h2o_wt", 0.0),
         pyroxenite_h2o_wt=col_kw.get("pyroxenite_h2o_wt", 0.0),

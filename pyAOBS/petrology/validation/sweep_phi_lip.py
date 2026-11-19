@@ -16,6 +16,7 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from petrology.melting.lip_scan import scan_hvp_lip_phi
+from petrology.melting.lithology import DEFAULT_PYMELT_PERIDOTITE_LITH
 from petrology.melting.pymelt_lithology_adapter import add_lithology_cli, lithology_kwargs_from_args, print_lithology_catalog
 
 
@@ -38,7 +39,7 @@ def run(
     save_figure: Path | None = None,
     show: bool = False,
     lithology_backend: str = "native",
-    peridotite_lith: str = "katz_lherzolite",
+    peridotite_lith: str = DEFAULT_PYMELT_PERIDOTITE_LITH,
     pyroxenite_lith: str = "pertermann_g2",
     peridotite_h2o_wt: float = 0.0,
     pyroxenite_h2o_wt: float = 0.0,

@@ -74,7 +74,7 @@ KKHS02 的 **问题结构** 在 Modern 路线中仍保留：
 | **矿物组合** | **平衡矿物** 替代纯 CIPW 名义矿物（bulk / 熔体端元） | `equilibrate` / Perple_X；协议见 **[M2 对照协议](#modern-m2热力学-bulk-vp-与-cipw-对照协议)** |
 | **分离结晶** | **热力学 FC 路径**（成分–压力依赖液相线） | 自研 W&L (`fc/wl1990.py`) + BurnMan / Pyrolite |
 | **熔体成分** | (P,F,源区) → 成分 **正演**，方程 (1) 降为快速近似或 lookup | Katz / pMELTS / pyrolite |
-| **熔融 / H** | **Katz** 或改进参数化；χ 保留；可选源区 heterogeneity (pyrolite) | `melting/katz.py` |
+| **熔融 / H** | 默认 **Matthews KLB-1**（`matthews_klb1`）；Katz 与 ball_* 可选；χ 保留 | `melting/`（reebox + pymelt） |
 | **壳体** | **孔隙–速度** 校正（Mavko）；Vp–ρ 与 imodel 重力联合 | `porosity.py` |
 | **反演** | **蒙特卡洛 / 可行域带**（H、V_LC 误差传播） | `invert.py` v2 |
 
@@ -92,7 +92,7 @@ KKHS02 的 **问题结构** 在 Modern 路线中仍保留：
 | Bulk 固相组合 | CIPW norm | 热力学平衡 | 矿物比例更物理 |
 | 堆晶 V_LC | W&L FC | 热力学 FC | 路径与 Fo/An 演化更细 |
 | Vp(P,F) | 方程 (1) | 全正演 或 eq.(1) 作 surrogate | 少经验窗函数 |
-| 1D 熔融 | 线性 F(P), TK 固相线 | Katz / 多阶段 F(P) | H、F̄ 更可靠 |
+| 1D 熔融 | 线性 F(P), TK 固相线 | 默认 Matthews KLB-1；Katz / ball_* 可选 | H、F̄ 更可靠 |
 | 反演输出 | 标准 H–Vp 等值线 | **H–Vp 带** + 后验可行域 | 显式不确定性 |
 | 主要风险 | 锚点依赖、CIPW 局限 | 参数多、可识别性下降 | 需约束源区与路径 |
 
@@ -1191,7 +1191,7 @@ equilibrate 失败 / 非物理相组合
 | FC（备选） | 自研 `fc/wl1990.py` |
 | 数值求根 | `scipy` |
 | Modern 相平衡 | BurnMan `equilibrate`；可选 Perple_X |
-| Modern 熔融 | Katz 参数化；可选 pMELTS |
+| Modern 熔融 | 默认 Matthews KLB-1（pyMelt）；Katz 可选；熔体化学 pMELTS KLB-1 |
 | Modern 地球化学 | `pyrolite` |
 
 **非必需**：MELTS、pMELTS（Modern M4+ 可选；Reproduction 作 Kinzler 对照）。
@@ -1253,6 +1253,7 @@ petrology/
 
 - Korenaga, J., Kelemen, P. B., Holbrook, W. S., & Sobolev, S. V. (2002). Methods for resolving the origin of large igneous provinces from crustal seismology. *JGR*, 107(B9). [doi:10.1029/2001JB001030](https://doi.org/10.1029/2001JB001030)
 - Katz, R. F., Spiegelman, M., & Langmuir, C. H. (2003). A new parameterization of hydrous mantle melting. *Geochemistry, Geophysics, Geosystems*, 4(9), 1073. [doi:10.1029/2002GC000433](https://doi.org/10.1029/2002GC000433)
+- Matthews, S., Wong, K., Shorttle, O., Edmonds, M., & Maclennan, J. (2021). Do olivine crystallization temperatures faithfully record mantle temperature variability? *Geochemistry, Geophysics, Geosystems*, 22(4), e2020GC009157. [doi:10.1029/2020GC009157](https://doi.org/10.1029/2020GC009157) — 现代 reebox 默认橄榄岩 `matthews_klb1`。
 - Brown, E. L., & Lesher, C. E. (2014). North Atlantic magmatism controlled by temperature, mantle composition and buoyancy. *Nature Geoscience*, 7(11), 901–905. [doi:10.1038/ngeo2264](https://doi.org/10.1038/ngeo2264) — active source buoyancy, active (Brown & Lesher) RMC.
 - Brown, E. L., & Lesher, C. E. (2016). REEBOX PRO: A forward model simulating melting of thermally and lithologically variable upwelling mantle. *Geochemistry, Geophysics, Geosystems*, 17, 3929–3968. [doi:10.1002/2016GC006579](https://doi.org/10.1002/2016GC006579) — 增量等熵熔融 eq. (2)–(3)、Appendix A Katz 参数化、Table 1 热力学常数；**编译 MATLAB 应用**（非 Python）。
 - Pertermann, M., & Hirschmann, M. M. (2003). Partial melting experiments on a MORB-like pyroxenite … *JGR*, 108(B4). — G2 辉石岩固相线（REEBOX 默认 pyroxenite 端元）。

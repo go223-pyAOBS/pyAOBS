@@ -43,15 +43,23 @@ def main() -> None:
     kw = dict(tp_c=1350.0, b_km=0.0, chi=4.0, pyroxenite_frac=0.10, n_isentropic_steps=48)
 
     print("\n" + "=" * 60)
-    print("REEBOX forward (native vs pymelt katz+g2)")
+    print("REEBOX forward (native vs pymelt lip_default = matthews_klb1+g2)")
     print("=" * 60)
     nat = forward_heterogeneous_column(**kw, lithology_backend="native")
     pml = forward_heterogeneous_column(
         **kw,
         **resolve_lithology_col_kwargs(lithology_preset="lip_default"),
     )
+    if not pml.lithologies[0].name.startswith("matthews_klb1"):
+        raise AssertionError(
+            f"lip_default peridotite is {pml.lithologies[0].name}, expected matthews_klb1"
+        )
+    if pml.lithologies[0].chemistry_backend != "pmelts_klb1":
+        raise AssertionError(
+            f"lip_default chemistry is {pml.lithologies[0].chemistry_backend}, expected pmelts_klb1"
+        )
     _forward_summary("native", nat)
-    _forward_summary("pymelt", pml)
+    _forward_summary("pymelt lip_default", pml)
 
     print("\n" + "=" * 60)
     print("Ball primitive mantle + G2 (preset lip_ball)")

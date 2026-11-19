@@ -72,7 +72,7 @@ def _core_concept_html() -> str:
         + "<h3>不同之处（只换熔融 / 厚度，不换 Vp 公式）</h3>"
         '<table class="cmp">'
         "<thead><tr>"
-        "<th>项目</th><th>默认「H–Vp 图」（线性）</th><th>Modern（Katz）</th>"
+        "<th>项目</th><th>默认「H–Vp 图」（线性）</th><th>Modern（Matthews KLB-1）</th>"
         "</tr></thead>"
         f"<tbody>{rows}</tbody>"
         "</table>"
@@ -249,7 +249,7 @@ def format_reader_guide_html() -> str:
             _ul(
                 [
                     "<b>Tp、χ</b> — 正演单点潜在温度与柱形状参数。",
-                    "<b>engine</b> — <span class='mono'>reebox</span>（Katz/pyMelt+REEBOX，推荐 LIP）"
+                    "<b>engine</b> — <span class='mono'>reebox</span>（默认 Matthews KLB-1 / pyMelt + REEBOX，推荐 LIP）"
                     "或 <span class='mono'>kinzler_linear</span>（§4 线性几何，较快）。",
                     "<b>Tp scan / step / χ list</b> — 扫描网格。",
                     "<b>快速扫描</b> — 跳过 BurnMan；关则更准更慢。",
@@ -265,8 +265,10 @@ def format_reader_guide_html() -> str:
             _p("engine=reebox 且 backend=pymelt 时生效。")
             + _ul(
                 [
-                    "<b>preset</b> — 如 greenland_kg1，填充橄榄石/辉石岩端元与 H₂O。",
-                    "<b>per / pyr</b> — pMELTS 岩性键；Φ 控制混合比。",
+                    "<b>preset</b> — 启动默认 lip_default（matthews_klb1 + G2）；"
+                    "greenland_kg1 仍为 Katz + KG-1。",
+                    "<b>per / pyr</b> — pyMelt 岩性键；默认 per 为 matthews_klb1，"
+                    "katz_lherzolite 与 ball_* 仍可选。Φ 控制混合比。",
                     "「岩性说明…」— preset/端元组成与选用时机。",
                     "native backend — Kinzler 线性端元，忽略 preset。",
                 ]

@@ -99,7 +99,8 @@ KKHS02_STEPS: tuple[Kkhs02StepSpec, ...] = (
             "(9) P̄=∫P F dP/∫F dP（线性实现取 (P₀+P_f)/2）；"
             "(10) H=30 χ (P₀−P_f) F̄；(11) 线性时 P_f 闭式。"
             "实现 active_upwelling.solve_active_upwelling → predict_v_bulk_km_s。"
-            "**Modern REEBOX**：不用 (4)–(11) 线性闭式，改 Katz/REEBOX 几何算 (H,P̄,F̄)，"
+            "**Modern REEBOX**：不用 (4)–(11) 线性闭式，默认用 Matthews KLB-1"
+            "（pyMelt matthews_klb1；Katz 与 ball_* 仍可选）+ REEBOX 几何算 (H,P̄,F̄)，"
             "再经 **同一方程 (1)** 得 Vp。"
             "图面可与 Fig.12 同布局；数值曲线不必与印刷 Fig.12 重合。"
         ),
@@ -135,7 +136,9 @@ TRACK_TERMINOLOGY: tuple[tuple[str, str], ...] = (
     ),
     (
         TRACK_MODERN_LABEL,
-        "熔融与厚度用 Katz/pyMelt + REEBOX 柱几何（engine=reebox）；"
+        "熔融与厚度默认用 Matthews et al. (2021) KLB-1"
+        "（pyMelt matthews_klb1，doi:10.1029/2020GC009157）+ REEBOX 柱几何（engine=reebox）；"
+        "Katz 与 ball_* 仍可在岩性里选用。"
         "Vp 仍查同一方程 (1)（快速扫描）；「bulk 界精修」才用 CIPW+BurnMan。"
         "曲线常高于线性轨 — 因 F̄ 通常更大，属预期，非方程 (1) 算错。",
     ),
@@ -159,7 +162,11 @@ HVP_SHARED_INTERFACE_NOTE = (
 )
 
 HVP_TRACK_COMPARE_ROWS: tuple[tuple[str, str, str], ...] = (
-    ("固相线 / F(P,T)", "TK83 + 线性 F=α(P₀−P)，α≈12%/GPa", "Katz / pyMelt 真实 F(P,T)"),
+    (
+        "固相线 / F(P,T)",
+        "TK83 + 线性 F=α(P₀−P)，α≈12%/GPa",
+        "默认 Matthews KLB-1 / pyMelt F(P,T)（可改 Katz、ball_*）",
+    ),
     ("壳厚 H 与柱几何", "§4 方程 (7)–(11) 闭式", "REEBOX 三角积分 + 主动权重"),
     ("(P̄, F̄)", "线性柱平均", "RMC / 柱内平均"),
     ("V_bulk（纵轴）", "方程 (1)", "同一方程 (1)"),
@@ -205,7 +212,7 @@ def format_track_terminology_text() -> str:
         parts.append("")
     parts.append("对照（熔融侧不同，Vp 接口相同）：")
     parts.append("")
-    parts.append(f"{'项目':<14}  {'默认 H–Vp 图（线性）':<36}  {'Modern（Katz）'}")
+    parts.append(f"{'项目':<14}  {'默认 H–Vp 图（线性）':<36}  {'Modern（Matthews KLB-1）'}")
     parts.append("-" * 72)
     for item, linear, modern in HVP_TRACK_COMPARE_ROWS:
         parts.append(f"{item:<14}  {linear:<36}  {modern}")
@@ -221,5 +228,6 @@ def format_workflow_summary_short() -> str:
         "Step 3：分离结晶 ΔVp(F)  |  "
         "Step 4：上涌 → H、(P̄,F̄) → 再经 Step 1。"
         " 默认「H–Vp 图」= §4 线性轨 + 方程 (1)；"
-        "Modern = Katz 熔融 + 同一方程 (1)（图面同 Fig.12，数值不必重合）。"
+        "Modern = 默认 Matthews KLB-1（pyMelt）熔融 + 同一方程 (1)"
+        "（图面同 Fig.12，数值不必重合；Katz 与 ball_* 仍可选）。"
     )

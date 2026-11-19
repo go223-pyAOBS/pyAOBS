@@ -31,7 +31,7 @@ def _column(tp: float, chi: float, b: float, *, backend: str):
         chi=chi,
         pyroxenite_frac=0.0,
         lithology_backend=backend,
-        peridotite_lith="katz_lherzolite",
+        peridotite_lith="katz_lherzolite",  # explicit Katz; default is matthews_klb1
         peridotite_chemistry=chem if backend == "pymelt" else None,
         compute_norm_vp=True,
     )

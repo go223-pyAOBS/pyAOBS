@@ -403,6 +403,25 @@ def main() -> None:
         rep.print_line(v_j2, "G2 Tsol (native is Katz-150 approximation)")
         rep.add("J", "g2_tsol", v_j2, f"native={g2_native:.1f} pymelt={g2_pm:.1f}")
 
+        katz_pm = forward_heterogeneous_column(
+            tp_c=1350,
+            b_km=0,
+            chi=4,
+            pyroxenite_frac=0.10,
+            n_isentropic_steps=48,
+            lithology_backend="pymelt",
+            peridotite_lith="katz_lherzolite",
+            pyroxenite_lith="pertermann_g2",
+        )
+        dh_katz = katz_pm.h_km - col.h_km
+        print(
+            f"  explicit katz_lherzolite vs native H: {katz_pm.h_km:.1f} vs {col.h_km:.1f} "
+            f"(ΔH={dh_katz:+.1f} km)"
+        )
+        v_j3: Verdict = "PASS" if abs(dh_katz) < 5.0 else "WARN"
+        rep.print_line(v_j3, "explicit pyMelt katz_lherzolite H within 5 km of native")
+        rep.add("J", "katz_dH", v_j3, f"ΔH={dh_katz:+.1f} km")
+
         pml = forward_heterogeneous_column(
             tp_c=1350,
             b_km=0,
@@ -411,11 +430,21 @@ def main() -> None:
             n_isentropic_steps=48,
             **resolve_lithology_col_kwargs(lithology_preset="lip_default"),
         )
-        dh = pml.h_km - col.h_km
-        print(f"  lip_default vs native H: {pml.h_km:.1f} vs {col.h_km:.1f} (ΔH={dh:+.1f} km)")
-        v_j3: Verdict = "PASS" if abs(dh) < 5.0 else "WARN"
-        rep.print_line(v_j3, "pymelt lip_default H within 5 km of native")
-        rep.add("J", "lip_default_dH", v_j3, f"ΔH={dh:+.1f} km")
+        per_name = pml.lithologies[0].name
+        chem = pml.lithologies[0].chemistry_backend
+        print(
+            f"  lip_default lith={per_name} chem={chem} H={pml.h_km:.1f} "
+            f"Vp_eq1={pml.vp_bulk_eq1_km_s:.3f}"
+        )
+        ok_default = (
+            per_name.startswith("matthews_klb1")
+            and chem == "pmelts_klb1"
+            and pml.h_km > 5
+            and 6.5 < pml.vp_bulk_eq1_km_s < 8.5
+        )
+        v_j3b: Verdict = "PASS" if ok_default else "FAIL"
+        rep.print_line(v_j3b, "lip_default is matthews_klb1, pMELTS chemistry, physical H/Vp")
+        rep.add("J", "lip_default", v_j3b, f"lith={per_name} chem={chem} H={pml.h_km:.1f}")
 
         kg1 = forward_heterogeneous_column(
             tp_c=1350,

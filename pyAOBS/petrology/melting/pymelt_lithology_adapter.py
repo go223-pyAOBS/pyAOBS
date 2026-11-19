@@ -22,7 +22,14 @@ import numpy as np
 
 from .kinzler1997_batch import HZ_DEP1_WT
 from .melt_chemistry import ChemistryBackend, default_chemistry_for_lithology, melt_oxides
-from .lithology import DELTA_S_PERIDOTITE, DELTA_S_PYROXENITE, G2_BULK_WT, Lithology, RHO_KG_M3
+from .lithology import (
+    DEFAULT_PYMELT_PERIDOTITE_LITH,
+    DELTA_S_PERIDOTITE,
+    DELTA_S_PYROXENITE,
+    G2_BULK_WT,
+    Lithology,
+    RHO_KG_M3,
+)
 from .pymelt_bridge import _import_pymelt, _instantiate_lithology, ensure_pymelt_scipy_compat
 
 # module path, constructor name(s)
@@ -74,9 +81,9 @@ class LithologyPreset:
 
 LITHOLOGY_PRESETS: dict[str, LithologyPreset] = {
     "lip_default": LithologyPreset(
-        "katz_lherzolite",
+        DEFAULT_PYMELT_PERIDOTITE_LITH,
         "pertermann_g2",
-        description="Katz peridotite + G2 pyroxenite (REEBOX default pair)",
+        description="Matthews KLB-1 peridotite + G2 pyroxenite (modern reebox default)",
     ),
     "lip_kg1": LithologyPreset(
         "katz_lherzolite",
@@ -219,7 +226,7 @@ def resolve_lithology_col_kwargs(
     *,
     lithology_backend: str = "native",
     lithology_preset: str | None = None,
-    peridotite_lith: str = "katz_lherzolite",
+    peridotite_lith: str = DEFAULT_PYMELT_PERIDOTITE_LITH,
     pyroxenite_lith: str = "pertermann_g2",
     peridotite_h2o_wt: float = 0.0,
     pyroxenite_h2o_wt: float = 0.0,
@@ -274,7 +281,14 @@ def add_lithology_cli(parser: argparse.ArgumentParser) -> None:
         metavar="NAME",
         help=f"Named pair (implies --lithology-backend pymelt): {preset_help}",
     )
-    g.add_argument("--peridotite-lith", default="katz_lherzolite")
+    g.add_argument(
+        "--peridotite-lith",
+        default=DEFAULT_PYMELT_PERIDOTITE_LITH,
+        help=(
+            "pyMelt peridotite key (default matthews_klb1, Matthews et al. 2021). "
+            "katz_lherzolite and ball_* remain valid."
+        ),
+    )
     g.add_argument("--pyroxenite-lith", default="pertermann_g2")
     g.add_argument("--peridotite-h2o", type=float, default=0.0, metavar="WT")
     g.add_argument("--pyroxenite-h2o", type=float, default=0.0, metavar="WT")
@@ -403,7 +417,7 @@ def pymelt_lithology(
 def heterogeneous_source_pymelt(
     *,
     pyroxenite_frac: float,
-    peridotite_key: str = "katz_lherzolite",
+    peridotite_key: str = DEFAULT_PYMELT_PERIDOTITE_LITH,
     pyroxenite_key: str = "pertermann_g2",
     peridotite_h2o_wt: float = 0.0,
     pyroxenite_h2o_wt: float = 0.0,

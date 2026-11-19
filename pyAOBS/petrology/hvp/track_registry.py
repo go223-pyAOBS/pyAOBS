@@ -44,7 +44,10 @@ TRACK_REGISTRY: dict[str, TrackSpec] = {
     TRACK_MODERN_ID: TrackSpec(
         id="modern",
         label=TRACK_MODERN_LABEL,
-        melting="Katz / pymelt REEBOX + isentropic decompression（Step 4 Modern 轨）",
+        melting=(
+            "默认 Matthews KLB-1 / pyMelt REEBOX + 等熵减压"
+            "（Katz 与 ball_* 仍可选；Step 4 Modern 轨）"
+        ),
         vp_model="快速扫描：方程 (1)；精修：CIPW+BurnMan norm Vp（Step 1）",
         h_geometry="triangular_crust_thickness_km (χ, b)",
         reference="README Modern M1–M3",

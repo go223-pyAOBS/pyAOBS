@@ -65,7 +65,7 @@ PARAM_LABEL_TIPS: dict[str, str] = {
     "H–Vp": (
         "H–Vp 左图曲线来源：\n"
         f"• {TRACK_FIG12_LINEAR_LABEL} — 默认；方程 (1) 计算（方法源自 KKHS02 Fig.12）\n"
-        f"• {TRACK_MODERN_LABEL} — Step 4 Katz/REEBOX 正演\n"
+        f"• {TRACK_MODERN_LABEL} — Step 4 默认 Matthews KLB-1 / REEBOX 正演\n"
         "• 双轨 — 计算轨与 Modern 并排对比\n"
         "印刷数字化 Fig.12a 仅 validation/ 保留，不在 GUI。"
     ),
@@ -83,12 +83,15 @@ PARAM_LABEL_TIPS: dict[str, str] = {
         "• native — Kinzler 线性端元，不读 preset / per / pyr"
     ),
     "preset": (
-        "岩性预设名（如 greenland_kg1）。\n"
-        "选中后自动填充橄榄石 / 辉石岩键名与 H₂O；选 (custom) 可手动编辑。"
+        "岩性预设名。启动默认 lip_default（matthews_klb1 + G2）。\n"
+        "选中后自动填充橄榄岩 / 辉石岩键名与 H₂O；选 (custom) 可手动编辑。"
+        "greenland_kg1 仍是 Katz + KG-1。"
     ),
     "per": (
-        "橄榄石 / 橄榄岩 pMELTS 岩性键（如 katz_lherzolite）。\n"
-        "与 pyroxenite 端元按 Φ 混合参与 REEBOX 等温熔融。"
+        "橄榄岩 pyMelt 岩性键。现代 reebox 默认 matthews_klb1"
+        "（Matthews et al. 2021, doi:10.1029/2020GC009157）。\n"
+        "仍可选 katz_lherzolite 与 ball_*。"
+        "与辉石岩端元按 Φ 混合参与 REEBOX 等熵熔融。"
     ),
     "pyr": (
         "辉石岩 / 富集端元 pMELTS 岩性键（如 pertermann_g2）。\n"

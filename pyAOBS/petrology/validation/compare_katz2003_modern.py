@@ -1,8 +1,9 @@
 """
-Compare Katz (2003) native (Table 2) vs Modern LIP pyMelt katz_lherzolite for Fig. 1–6.
+Compare Katz (2003) native (Table 2) vs explicit pyMelt ``katz_lherzolite`` for Fig. 1–6.
 
-Modern here = peridotite melting backend used in LIP GUI (``pymelt`` + ``katz_lherzolite``),
-not the full REEBOX column forward model.
+This overlay stays on Katz. The modern reebox default peridotite is
+``matthews_klb1``; select Katz with ``peridotite_lith="katz_lherzolite"``.
+Not the full REEBOX column forward model.
 
   python petrology/validation/compare_katz2003_modern.py
   python petrology/validation/compare_katz2003_modern.py --only fig2,fig6 --show
@@ -32,7 +33,7 @@ OUT_NAMES = {
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Overlay Katz native vs Modern pyMelt for Fig. 1–6"
+        description="Overlay Katz native vs explicit pyMelt katz_lherzolite for Fig. 1–6"
     )
     parser.add_argument("-o", "--out-dir", type=Path, default=FIG_DIR)
     parser.add_argument(
