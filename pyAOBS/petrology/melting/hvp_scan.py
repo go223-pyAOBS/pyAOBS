@@ -16,6 +16,7 @@ from petrology.invert import bulk_vp_bounds
 from petrology.fc.delta_vp import R3_DELTA_VP_WL_KW
 
 from .column import forward_melting_column
+from .lithology import DEFAULT_PYMELT_PERIDOTITE_LITH
 from .vp_fast import vp_from_melt_proxy
 from ..thread_env import limit_native_parallelism
 
@@ -238,7 +239,7 @@ def scan_hvp_lip(
     norm_mineral_backend: str | None = None,
     norm_cipw_backend: str | None = None,
     lithology_backend: str = "native",
-    peridotite_lith: str = "katz_lherzolite",
+    peridotite_lith: str = DEFAULT_PYMELT_PERIDOTITE_LITH,
     pyroxenite_lith: str = "pertermann_g2",
     peridotite_h2o_wt: float = 0.0,
     pyroxenite_h2o_wt: float = 0.0,

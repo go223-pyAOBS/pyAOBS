@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from petrology.vp_regression import predict_vp_km_s
 
 from .isentropic import IsentropicPath, integrate_isentropic_path
-from .lithology import Lithology, heterogeneous_source
+from .lithology import DEFAULT_PYMELT_PERIDOTITE_LITH, Lithology, heterogeneous_source
 from .melt_chemistry import ChemistryBackend
 from .reebox_geometry import build_reebox_column
 from .rmc import RmcMeltResult, accumulate_column_melt
@@ -54,7 +54,7 @@ def forward_heterogeneous_column(
     mineral_backend: str | None = None,
     geometry: str = "reebox",
     lithology_backend: str = "native",
-    peridotite_lith: str = "katz_lherzolite",
+    peridotite_lith: str = DEFAULT_PYMELT_PERIDOTITE_LITH,
     pyroxenite_lith: str = "pertermann_g2",
     peridotite_h2o_wt: float = 0.0,
     pyroxenite_h2o_wt: float = 0.0,
@@ -66,6 +66,7 @@ def forward_heterogeneous_column(
     ``geometry="reebox"`` (default): Katz solidus P0, path Pf, triangular H (χ).
     ``geometry="kkhs02"``: legacy KKHS02 linear F(P) column bounds (reproduction only).
     ``lithology_backend="pymelt"`` — pyMelt lithology curves (see ``list_pymelt_lithology_keys``).
+    Default peridotite on that path is ``matthews_klb1``.
     """
     liths = heterogeneous_source(
         pyroxenite_frac=pyroxenite_frac,

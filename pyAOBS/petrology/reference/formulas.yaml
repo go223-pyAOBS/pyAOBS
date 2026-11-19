@@ -7,7 +7,7 @@ workflow_overview: >
   正演链 Step 4 → (P̄,F̄,H) → Step 1 方程 (1) → V_bulk → Step 3 给出 ΔVp → Step 2 与 V_LC 比较。
   默认「H–Vp 图」= KKHS02 §4「Mantle Melting Model With Active Upwelling」方程 (4)–(11)
   + Step 1 方程 (1)（方法源自 Fig.12；实现 petrology/active_upwelling.py + vp_regression.py）。
-  Modern = Katz/REEBOX 几何 + 同一方程 (1)。印刷数字化 Fig.12a 仅 validation/ 保留。
+  Modern = 默认 Matthews KLB-1 / REEBOX 几何 + 同一方程 (1)（Katz 与 ball_* 仍可选）。印刷数字化 Fig.12a 仅 validation/ 保留。
   观测 H、V_LC 为读图坐标，不对应论文 Step 编号。
 
 # 默认参数表：label = 与正文/公式一致的符号；meaning = 物理含义
@@ -368,7 +368,7 @@ steps:
           （FIG12_DFDP_PER_GPA = FIG11 = 0.12）。Fig.13 灵敏度示例为 16 %/GPa。
           实现：melt_fraction_linear / LinearMeltingLaw。
         usage: >
-          仅默认「H–Vp 图」轨；Modern 轨用 Katz/REEBOX F(P,T)，不用本式。
+          仅默认「H–Vp 图」轨；Modern 轨用默认 Matthews KLB-1 / REEBOX F(P,T)，不用本式。
         gui: >
           「H–Vp 显示」→ H–Vp 图时启用；与 Modern 对照见双轨。
         defaults:
@@ -560,7 +560,7 @@ steps:
         purpose: >
           固定方程 (6) 的等熵产率，与 KKHS02 §4 标准模型及 Fig.11/Fig.12 一致。
         principle: >
-          与完整 Katz/REEBOX 产率不同；仅用于默认「H–Vp 图」轨。
+          与现代 REEBOX（默认 Matthews KLB-1）产率不同；仅用于默认「H–Vp 图」轨。
           Fig.12 与 Fig.11 共用同一线性产率 12%/GPa（非另设 14%）。
         usage: >
           build_fig12_linear_curves(..., dfdp_per_gpa=0.12)；reproduce_fig12 / check_fig11。
@@ -612,14 +612,15 @@ steps:
       - id: track_modern
         name: "Modern REEBOX"
         purpose: >
-          默认 **现代正演轨**：Katz/pymelt 熔融 + REEBOX 主动上涌几何，物性用 pymelt 岩性预设。
+          默认 **现代正演轨**：Matthews KLB-1（pyMelt matthews_klb1；Katz 与 ball_* 仍可选）
+          + REEBOX 主动上涌几何。熔体主量仍为 pMELTS KLB-1。
         principle: >
           保留 KKHS02 四步边界框架（V_LC 上界、ΔVp 带、H–Vp 解释），替换 TK83 线性 F(P) 等为现代参数化。
           三角积分求 H 后按方程 (7) 取 P_f=(H+b)/30，等熵路径截断至该 P_f（Pf–H 自洽）。
         usage: >
           新项目解释建议用此轨；可与默认「H–Vp 图」双轨对比。
         gui: >
-          「H–Vp 显示」→ Modern REEBOX；engine=reebox；岩性 preset 如 greenland_kg1。
+          「H–Vp 显示」→ Modern REEBOX；engine=reebox；启动预设 lip_default（matthews_klb1）。
         prev:
           - id: track_fig12
             blurb: "对照：默认 H–Vp 图 = §4 (4)–(11)+方程 (1)"

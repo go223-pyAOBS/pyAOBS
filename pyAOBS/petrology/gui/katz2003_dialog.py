@@ -36,7 +36,8 @@ class Katz2003Dialog(TabbedFigureDialog):
 
     def _build_hint(self) -> QLabel:
         ctx_parts = [
-            "Katz et al. (2003) Table 2 参数化 — 对应 LIP 橄榄石端元 (katz_lherzolite)。",
+            "Katz et al. (2003) Table 2 参数化 — 可选端元 katz_lherzolite。"
+            "现代 reebox 默认橄榄岩是 matthews_klb1。",
             "CLI: petrology/validation/katz2003_workflow.py",
         ]
         if self._tp_c is not None:

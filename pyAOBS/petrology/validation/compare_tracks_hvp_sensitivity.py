@@ -3,7 +3,8 @@ Compare Reproduction vs Modern H–Vp scans: feasible (Tp, chi) region and best-
 
 Runs ``scan_hvp_lip`` on a shared (Tp, chi) grid for:
   - ``repro_reebox``  — REEBOX + native Katz Table 2 + Kinzler + norm Vp
-  - ``modern_reebox`` — REEBOX + pyMelt Katz + pMELTS chemistry + norm Vp
+  - ``modern_reebox`` — REEBOX + explicit pyMelt katz_lherzolite + pMELTS chemistry + norm Vp
+    (Katz case kept; library default peridotite is matthews_klb1)
   - ``repro_linear``  — KKHS02 linear F(P) + eq.(1) Vp (optional, ``--include-linear``)
 
 Usage::
@@ -454,7 +455,7 @@ def main() -> None:
     )
     modern = _run_scan(
         "modern_reebox",
-        "REEBOX pyMelt Katz + pMELTS + norm Vp",
+        "REEBOX explicit pyMelt katz_lherzolite + pMELTS + norm Vp",
         melting_engine="reebox",
         lithology_backend="pymelt",
         vp_mode="norm",

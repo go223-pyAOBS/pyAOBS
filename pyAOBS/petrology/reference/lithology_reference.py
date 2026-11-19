@@ -42,7 +42,8 @@ LITHOLOGY_NOTES: dict[str, LithologyNote] = {
         "干地幔 **固/液相线** F(P,T) 由 pyMelt 提供；"
         "源区 solid 化学默认 HZ-Dep1（高 MgO、低 SiO₂，**不是熔体**）。"
         "熔体主量由 Kinzler batch 或 pMELTS KLB-1 在 (P,F) 上算出。",
-        "一般 LIP 地幔柱正演、Greenland 类 K 剖面；preset 中最常用 per 端元。",
+        "显式选用 Katz 曲线时（lip_kg1、greenland_kg1）。"
+        "现代 reebox 默认橄榄岩是 matthews_klb1。",
         "Katz et al. 2003; Kinzler 1997 HZ-Dep1",
     ),
     "mckenzie_lherzolite": LithologyNote(
@@ -53,9 +54,12 @@ LITHOLOGY_NOTES: dict[str, LithologyNote] = {
     ),
     "matthews_klb1": LithologyNote(
         "Matthews KLB-1 橄榄岩",
-        "基于 KLB-1 成分的 pyMelt 曲线；可与 0.1 wt% H₂O 联用模拟含水地幔。",
-        "lip_klb1_hydrous 预设；需模拟源区水时选用。",
-        "Matthews et al.; pyMelt klb1",
+        "Matthews et al. (2021) KLB-1 的 pyMelt 固/液相线；"
+        "可与 0.1 wt% H₂O 联用模拟含水地幔。"
+        "熔体主量仍走 pMELTS KLB-1。",
+        "现代 reebox + pymelt 的默认橄榄岩（预设 lip_default）。"
+        "含水试验用 lip_klb1_hydrous。",
+        "Matthews et al. 2021, G³, doi:10.1029/2020GC009157",
     ),
     "ball_depleted_mantle": LithologyNote(
         "Ball 亏损地幔",
@@ -104,8 +108,9 @@ LITHOLOGY_NOTES: dict[str, LithologyNote] = {
 PRESET_NOTES: dict[str, LithologyNote] = {
     "lip_default": LithologyNote(
         "LIP 默认对",
-        "Katz 橄榄岩 + G2 辉石岩；REEBOX 文档默认双端元；Φ 控制 G2 体积分数。",
-        "无特定剖面约束时的基线；与 native Kinzler 化学近似配对。",
+        "Matthews KLB-1 橄榄岩 + G2 辉石岩；现代 reebox / GUI 启动默认。"
+        "Φ 控制 G2 体积分数。熔体主量仍为 pMELTS KLB-1。",
+        "无特定剖面约束时的基线。要 Katz 橄榄岩请改 per 或选 greenland_kg1 / lip_kg1。",
     ),
     "lip_kg1": LithologyNote(
         "K 剖面 KG-1 对",
@@ -129,7 +134,7 @@ PRESET_NOTES: dict[str, LithologyNote] = {
     ),
     "greenland_kg1": LithologyNote(
         "Greenland K 剖面（推荐）",
-        "Katz + KG-1；GUI 启动默认；与 README / Fig.15 类 Greenland 锚点一致。",
+        "Katz + KG-1；Greenland 锚点预设，在 preset 中选择 greenland_kg1。",
         "Greenland 类 LIP 剖面解释的首选起点；可用「预设对比」与其它 preset 比。",
     ),
 }

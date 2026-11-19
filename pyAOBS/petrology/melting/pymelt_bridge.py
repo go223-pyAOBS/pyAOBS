@@ -14,6 +14,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from .lithology import DEFAULT_PYMELT_PERIDOTITE_LITH
+
 _pymelt_compat_applied = False
 
 
@@ -140,7 +142,7 @@ def _crust_from_spreading_centre(geosettings, col, *, p_lith_gpa: float):
 def build_mantle(
     *,
     pyroxenite_frac: float = 0.0,
-    peridotite_key: str = "katz_lherzolite",
+    peridotite_key: str = DEFAULT_PYMELT_PERIDOTITE_LITH,
     pyroxenite_key: str = "pertermann_g2",
     peridotite_h2o_wt: float = 0.0,
     pyroxenite_h2o_wt: float = 0.0,

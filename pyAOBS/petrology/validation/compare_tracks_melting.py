@@ -4,7 +4,8 @@ Compare Reproduction vs Modern melting tracks (F, melt chemistry, Vp/H).
 Cases:
   - ``repro_linear``       — KKHS02 Step-4 linear F(P) on **native** KKHS02 geometry
   - ``repro_reebox``       — REEBOX isentropic + Katz Table 2 native F(P,T), Kinzler chemistry
-  - ``modern_reebox``      — REEBOX isentropic + pyMelt Katz F(P,T), pMELTS chemistry
+  - ``modern_reebox``      — REEBOX isentropic + explicit pyMelt katz_lherzolite F(P,T), pMELTS chemistry
+    (Katz case kept for the matched-Mcpx panel; library default peridotite is matthews_klb1)
   - ``linear_on_reebox``   — same linear F(P) law, evaluated on **REEBOX** P0–Pf (shape only)
 
 F(P) and P–T plots:
@@ -497,7 +498,7 @@ def main() -> None:
         label="modern_reebox",
         track="modern",
         chemistry="pmelts_klb1",
-        melting_f="isentropic pyMelt Katz F(P,T)",
+        melting_f="isentropic explicit pyMelt katz_lherzolite F(P,T)",
     )
 
     ref_name = str(args.ref_geom)

@@ -23,9 +23,10 @@ het = forward_heterogeneous_column(
     tp_c=1450,
     chi=8.0,
     lithology_backend="pymelt",
-    peridotite_lith="katz_lherzolite",
+    # peridotite_lith defaults to matthews_klb1 (Matthews et al. 2021)
     compute_norm_vp=True,
 )
+# Katz remains selectable: peridotite_lith="katz_lherzolite"
 ```
 
 Peridotite chemistry defaults to pMELTS when `lithology_backend="pymelt"`.
